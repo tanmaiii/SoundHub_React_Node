@@ -1,0 +1,23 @@
+@forward "./variables";
+@forward "./mixin";
+@forward "./breakpoint";
+@forward "./grid";
+
+@use "./variables" as *;
+@use "./mixin" as *;
+@use "./breakpoint" as *;
+@use "./grid" as *;
+
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    @include tablet {
+      width: 100%;
+      padding: 0 20px;
+    }
+    @include mobile {
+      width: 100%;
+      padding: 0 20px;
+    }
+  }
