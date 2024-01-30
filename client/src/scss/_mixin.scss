@@ -2,26 +2,16 @@
 
 $themes: (
   light: (
-    text1: $color-txt-light,
-    text2: $color-txt-light-extra,
-    bg1: $color-body-light,
-    bg2: $color-main-light,
-    bg3: $color-bg3-light,
-    rgba: $rgba-light,
-    primary: $color-primary,
-    border: #e8e8e8,
-    box-shadow: $box-shadow-light,
+    bg-main: $color-bg-main,
+    bg-second: $color-bg-second,
+    txt-main: $color-txt-main,
+    txt-second: $color-txt-second,
   ),
   dark: (
-    text1: $color-txt-dark,
-    text2: $color-txt-dark-extra,
-    bg1: $color-body-dark,
-    bg2: $color-main-dark,
-    bg3: $color-bg3-dark,
-    rgba: $rgba-dark,
-    primary: $color-primary,
-    border: #383838,
-    box-shadow: $box-shadow-dark,
+    bg-main: $color-bg-main-dark,
+    bg-second: $color-bg-second-dark,
+    txt-main: $color-txt-main-dark,
+    txt-second: $color-txt-second-dark,
   ),
 );
 
@@ -76,7 +66,7 @@ $themes: (
   background-color: $bg;
   color: $color;
   font-weight: 500;
-  border-radius: $border-radius-10;
+  border-radius: $radius_10;
   font-size: $font-size-s;
   cursor: pointer;
   transition: all 0.3s;
@@ -89,4 +79,10 @@ $themes: (
     white-space: pre;
     color: $color;
   }
+}
+
+@mixin text-gradient($color) {
+  background: $color;
+  color: transparent;
+  -webkit-background-clip: text; /* Cho Safari/Chrome */
 }

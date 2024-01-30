@@ -1,0 +1,8 @@
+@use "../../scss" as *;
+
+.MainLayout {
+  @include flex(unset, unset);
+  &_main{
+    flex: 1;
+  }
+}

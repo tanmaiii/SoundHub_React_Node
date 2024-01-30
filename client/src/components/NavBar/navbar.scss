@@ -1,0 +1,91 @@
+@use "../../scss/" as *;
+
+.navbar {
+  @include themify($themes) {
+    height: 100vh;
+    width: $width-navbar;
+    background-color: themed("bg-second");
+    padding: $space-24;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    @include tablet {
+      width: $width-navbar-tablet;
+      padding: $space-8;
+    }
+    &__logo {
+      padding: $space-10 $space-24;
+      font-weight: $font-bold;
+      @include text-gradient($color-gradient);
+      @include flex(center, center);
+      gap: $space-4;
+      flex-direction: row;
+      i {
+        font-size: $size-30;
+      }
+      h2 {
+        font-size: $size-30;
+        @include tablet {
+          display: none;
+        }
+      }
+    }
+    &__content {
+      &__group {
+        padding: $space-4 0;
+
+        &:not(:first-child) {
+          @include tablet {
+            border-top: 1px solid themed("txt-second");
+          }
+        }
+        &__title {
+          font-size: $size-18;
+          color: themed("txt-main");
+          font-weight: $font-bold;
+          margin-bottom: $space-8;
+          @include tablet {
+            display: none;
+          }
+        }
+        &__list {
+          &__item {
+            @include flex(center, unset);
+            gap: 10px;
+            padding: $space-14 $space-18;
+            color: themed("txt-second");
+            border-radius: $radius-12;
+            transition: $transition;
+            margin-bottom: $space-8;
+            cursor: pointer;
+            @include tablet {
+              justify-content: center;
+            }
+            &:hover {
+              background-color: themed("bg-main");
+            }
+            &.active {
+              background: $color-gradient;
+              color: $color-bg-main;
+            }
+            &__icon {
+              --size: 20px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+            }
+            &__title {
+              font-size: $size-16;
+              font-weight: $font-light;
+              @include tablet {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

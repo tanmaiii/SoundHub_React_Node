@@ -1,5 +1,8 @@
 $mobile-width: 700px;
-$tablet-width: 1366px;
+$tablet-width: 1133px;
+
+$width-navbar: 300px;
+$width-navbar-tablet: 70px;
 
 $transition: all 0.3s;
 
@@ -22,19 +25,19 @@ $color-black: #0000;
 $color-grey: #ccc;
 $color-primary: #007aff;
 
-$color-body-light: #f3f4fa;
-$color-main-light: #fff;
-$color-bg3-light: #f9fcff;
-$color-txt-light: #2d2d2d;
-$color-txt-light-extra: #6a6a6a;
+$color-bg-main: #ffffff;
+$color-bg-second: #f9f9f9;
+$color-txt-main: #121212;
+$color-txt-second: #6b6b6b;
 
-$color-body-dark: #121212;
-$color-main-dark: #202020;
-$color-bg3-dark: #323232;
-$color-txt-dark: #fff;
-$color-txt-dark-extra: #cacaca;
+$color-bg-main-dark: #121212;
+$color-bg-second-dark: #252525;
+$color-txt-main-dark: #f5f5f5;
+$color-txt-second-dark: #868686;
 
-$font-bold: 800;
+$color-gradient: linear-gradient(90deg, #3dc3c0 -15.19%, #8568f5 111.92%);
+
+$font-bold: 900;
 $font-mediun: 600;
 $font-light: 400;
 
@@ -42,9 +45,10 @@ $size-16: 16px;
 $size-18: 18px;
 $size-30: 30px;
 
-$radius_4: 4;
-$radius_8: 8;
-$radius_10: 10;
-$radius_15: 15;
-$radius_20: 20;
-$radius_25: 25;
+$radius-4: 4px;
+$radius-8: 8px;
+$radius-10: 10px;
+$radius-12: 12px;
+$radius-16: 16px;
+$radius-20: 20px;
+$radius-25: 25px;

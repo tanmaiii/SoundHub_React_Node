@@ -1,62 +1,18 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addNewHobby, setActiveHobby } from "../../actions/hobby";
+import PropTypes from "prop-types";
+import { ExampleReduxToolkit } from "../ExampleReduxToolkit/ExampleReduxToolkit";
+import './homePage.scss'
 
-const randomNumber = () => {
-  return 1000 + Math.trunc(Math.random() * 9000);
-};
-
-export default function HomePage(props: any) {
-  const hobbyList = useSelector((state: any) => state.hobby.list);
-  const activeId = useSelector((state: any) => state.hobby.activeId);
-
-  const dispatch = useDispatch();
-
-  console.log(hobbyList, activeId);
-
-  const handleClick = () => {
-    const newId = randomNumber();
-
-    const newHobby = {
-      id: newId,
-      title: `Hobby ${newId}`,
-    };
-
-    const action = addNewHobby(newHobby);
-    dispatch(action);
-  };
-
-  const handleHobbyClick = (hobby: any) => {
-    const action = setActiveHobby(hobby);
-    dispatch(action);
-  };
-
+function HomePage(props: any) {
   return (
-    <div>
-      <button onClick={() => handleClick()}>Add hobbyList</button>
-      <HobbyList hobbyList={hobbyList} activeId={activeId} handleHobbyClick={handleHobbyClick} />
+    <div className="home">
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia corrupti vitae blanditiis
+      consequuntur id placeat asperiores, esse voluptatum deleniti aut dicta magni quam fugiat
+      dolorum soluta, sequi sunt! Voluptatem, facilis.
     </div>
   );
 }
 
-const HobbyList = (props: any) => {
-  const handleClick = (hobby: any) => {
-    console.log(hobby);
-    props.handleHobbyClick(hobby);
-  };
+HomePage.propTypes = {};
 
-  return (
-    <ul>
-      {props.hobbyList.map((hobby: any) => (
-        <li
-          key={hobby?.id}
-          className={hobby?.id === props?.activeId ? "active" : "active"}
-          style={hobby?.id === props?.activeId ? { color: "red" } : { color: "black" }}
-          onClick={() => handleClick(hobby)}
-        >
-          {hobby.title}
-        </li>
-      ))}
-    </ul>
-  );
-};
+export default HomePage;

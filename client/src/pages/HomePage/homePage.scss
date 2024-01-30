@@ -1,0 +1,14 @@
+@use "../../scss/" as *;
+
+.home {
+  @include themify($themes) {
+    margin-left: $width-navbar;
+    padding: $space-32;
+
+    min-height: 1000px;
+
+    @include tablet {
+      margin-left: $width-navbar-tablet;
+    }
+  }
+}

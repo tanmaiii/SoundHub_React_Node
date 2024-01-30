@@ -1,0 +1,32 @@
+@use "./scss/" as *;
+
+html {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #cacaca;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #7f7f7f;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #676767;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  line-height: 1.42857143;
+}
