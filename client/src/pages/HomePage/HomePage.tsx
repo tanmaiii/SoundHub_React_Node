@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ExampleReduxToolkit } from "../ExampleReduxToolkit/ExampleReduxToolkit";
-import './homePage.scss'
+import "./homePage.scss";
+import Header from "../../components/Header/Header";
+import Section from "../../components/Section/Section";
 
 function HomePage(props: any) {
   return (
     <div className="home">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia corrupti vitae blanditiis
-      consequuntur id placeat asperiores, esse voluptatum deleniti aut dicta magni quam fugiat
-      dolorum soluta, sequi sunt! Voluptatem, facilis.
+      <Header />
+      <Section title={"Recommended"} />
     </div>
   );
 }

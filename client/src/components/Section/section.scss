@@ -1,0 +1,33 @@
+@use "../../scss/" as *;
+
+.section {
+  @include themify($themes) {
+    &__header {
+      @include flex(center, space-between);
+      padding: $space-24 0;
+      &__title {
+        font-size: $size-24;
+        font-weight: $font-light;
+      }
+      &__button {
+        @include flex(center, space-between);
+        gap: $space-8;
+        @include text-gradient($color-gradient);
+        transition: $transition;
+        a {
+          font-size: $size-16;
+          font-weight: $font-mediun;
+        }
+        i {
+          font-size: $size-18;
+        }
+      }
+    }
+    &__main {
+      &__slide {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

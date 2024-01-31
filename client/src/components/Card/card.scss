@@ -1,0 +1,62 @@
+@use "../../scss/" as *;
+
+.card {
+  @include themify($themes) {
+    &__container {
+      padding: $space-14;
+      border-radius: $radius-12;
+      cursor: pointer;
+      transition: $transition;
+      //  / box-shadow: $box-shadow-light;
+      &:hover {
+        background-color: $color-primary;
+      }
+      &__image {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        img {
+          border-radius: $radius-12;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          object-fit: cover;
+        }
+        &__button {
+          position: absolute;
+          bottom: $space-10;
+          right: $space-10;
+          background-color: $color-rgba-black;
+          padding: $space-14;
+          border-radius: 50%;
+          transition: $transition;
+          &:hover{
+            transform: scale(1.09);
+          }
+          i {
+            color: $color-white;
+            font-size: $size-30;
+            --size: 24px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+          }
+        }
+      }
+      &__desc {
+        padding: $space-8 0;
+        &__title {
+          font-size: $size-16;
+          font-weight: $font-light;
+          color: themed("txt-main");
+        }
+        &__info {
+          font-size: $size-16;
+          font-weight: $font-light;
+          color: themed("txt-second");
+        }
+      }
+    }
+  }
+}

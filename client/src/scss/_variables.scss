@@ -23,8 +23,7 @@ $space-36: 36px;
 $color-white: #fff;
 $color-black: #0000;
 $color-grey: #ccc;
-$color-primary: #007aff;
-
+$color-primary: rgba(124, 116, 238, 0.1);
 $color-bg-main: #ffffff;
 $color-bg-second: #f9f9f9;
 $color-txt-main: #121212;
@@ -35,14 +34,19 @@ $color-bg-second-dark: #252525;
 $color-txt-main-dark: #f5f5f5;
 $color-txt-second-dark: #868686;
 
+$color-rgba-black: rgba(18, 18, 18, 0.50);
+
+$color-border: #b9b9b9;
+
 $color-gradient: linear-gradient(90deg, #3dc3c0 -15.19%, #8568f5 111.92%);
 
 $font-bold: 900;
 $font-mediun: 600;
-$font-light: 400;
+$font-light: 500;
 
 $size-16: 16px;
 $size-18: 18px;
+$size-24: 24px;
 $size-30: 30px;
 
 $radius-4: 4px;
@@ -52,3 +56,5 @@ $radius-12: 12px;
 $radius-16: 16px;
 $radius-20: 20px;
 $radius-25: 25px;
+
+$box-shadow-light: 0 5px 20px 0 #ccd1d6;
