@@ -6,12 +6,14 @@ $themes: (
     bg-second: $color-bg-second,
     txt-main: $color-txt-main,
     txt-second: $color-txt-second,
+    box-shadow: $box-shadow
   ),
   dark: (
     bg-main: $color-bg-main-dark,
     bg-second: $color-bg-second-dark,
     txt-main: $color-txt-main-dark,
     txt-second: $color-txt-second-dark,
+    box-shadow: $box-shadow-dark
   ),
 );
 

@@ -1,0 +1,26 @@
+@use "../../scss/" as *;
+
+.HeaderSection {
+  @include themify($themes) {
+    @include flex(center, space-between);
+    padding: $space-18 0;
+    &__title {
+      font-size: $size-24;
+      font-weight: $font-light;
+      color: themed('txt-main')
+    }
+    &__button {
+      @include flex(center, space-between);
+      gap: $space-8;
+      @include text-gradient($color-gradient);
+      transition: $transition;
+      a {
+        font-size: $size-16;
+        font-weight: $font-mediun;
+      }
+      i {
+        font-size: $size-18;
+      }
+    }
+  }
+}

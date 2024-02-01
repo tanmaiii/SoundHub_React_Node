@@ -68,18 +68,19 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar">
+    <aside className="navbar">
       <div className="navbar__logo">
         <i className="fa-regular fa-headphones-simple"></i>
-        <h2>SOUND HUB</h2>
+        <h2>SOUND</h2>
       </div>
       <div className="navbar__content">
-        {navbar.map((navbar) => (
-          <div className="navbar__content__group">
+        {navbar.map((navbar, index) => (
+          <div key={index} className="navbar__content__group">
             <h4 className="navbar__content__group__title">{navbar.title}</h4>
             <div className="navbar__content__group__list">
-              {navbar.items.map((item) => (
+              {navbar.items.map((item, index) => (
                 <Link
+                  key={index}
                   to={item.path}
                   className={`navbar__content__group__list__item ${
                     path === item.path ? "active" : ""
@@ -94,6 +95,6 @@ export default function Navbar() {
           </div>
         ))}
       </div>
-    </div>
+    </aside>
   );
 }

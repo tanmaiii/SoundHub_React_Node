@@ -2,7 +2,7 @@ import React from "react";
 import { Routes } from "./routes";
 import "./App.scss";
 
-import '../src/assets/font-awesome-6-pro/css/all.css'
+import "../src/assets/font-awesome-6-pro/css/all.css";
 
 function App() {
   const darkMode = false;

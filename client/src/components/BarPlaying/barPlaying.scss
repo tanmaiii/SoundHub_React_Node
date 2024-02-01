@@ -1,0 +1,34 @@
+@use "../../scss/" as *;
+
+.barPlaying {
+  height: $height-barPlaying;
+  width: 100%;
+  z-index: 9;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.5));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  padding: 0 $space-12;
+
+  @include flex(center, space-between);
+  &__left {
+    width: 30%;
+    height: 100%;
+    background-color: aliceblue;
+  }
+  &__center {
+    width: 40%;
+    height: 100%;
+    background-color: red;
+  }
+  &__right {
+    height: 100%;
+    width: 30%;
+    background-color: aliceblue;
+  }
+}

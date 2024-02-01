@@ -1,8 +1,10 @@
 $mobile-width: 700px;
 $tablet-width: 1133px;
 
-$width-navbar: 300px;
+$width-navbar: 240px;
 $width-navbar-tablet: 70px;
+
+$height-barPlaying: 72px;
 
 $transition: all 0.3s;
 
@@ -20,10 +22,13 @@ $space-28: 28px;
 $space-32: 32px;
 $space-36: 36px;
 
+$color-primary1: #8568f5;
+$color-primary2: #3dc3c0;
+$color-hover: rgba(124, 116, 238, 0.1);
+
 $color-white: #fff;
 $color-black: #0000;
 $color-grey: #ccc;
-$color-primary: rgba(124, 116, 238, 0.1);
 $color-bg-main: #ffffff;
 $color-bg-second: #f9f9f9;
 $color-txt-main: #121212;
@@ -34,15 +39,19 @@ $color-bg-second-dark: #252525;
 $color-txt-main-dark: #f5f5f5;
 $color-txt-second-dark: #868686;
 
-$color-rgba-black: rgba(18, 18, 18, 0.50);
+$color-rgba-black: rgba(18, 18, 18, 0.5);
 
 $color-border: #b9b9b9;
 
-$color-gradient: linear-gradient(90deg, #3dc3c0 -15.19%, #8568f5 111.92%);
+$box-shadow: 0 5px 20px 0 #ccd1d6;
+$box-shadow-dark: 0 5px 20px 0 #2c2c2c;
+
+
+$color-gradient: linear-gradient(90deg, $color-primary2 -15.19%, $color-primary1 111.92%);
 
 $font-bold: 900;
 $font-mediun: 600;
-$font-light: 500;
+$font-light: 400;
 
 $size-16: 16px;
 $size-18: 18px;
@@ -57,4 +66,3 @@ $radius-16: 16px;
 $radius-20: 20px;
 $radius-25: 25px;
 
-$box-shadow-light: 0 5px 20px 0 #ccd1d6;

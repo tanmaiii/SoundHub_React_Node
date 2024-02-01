@@ -2,14 +2,16 @@
 
 .navbar {
   @include themify($themes) {
-    height: 100vh;
+    height: calc(100vh - $height-barPlaying);
     width: $width-navbar;
     background-color: themed("bg-second");
     padding: $space-24;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     overflow: auto;
+    box-shadow: themed("box-shadow");
+    z-index: 9;
     @include tablet {
       width: $width-navbar-tablet;
       padding: $space-8;

@@ -1,25 +1,59 @@
 import React from "react";
 import Card from "../Card/Card";
-import img from "../../assets/images/1.png";
+import img from "../../assets/images/poster2.png";
 import "./section.scss";
+import HeaderSection from "../HeaderSection/HeaderSection";
 
 function Section(props: any) {
   return (
     <div className="section">
-      <div className="section__header">
-        <h4 className="section__header__title">{props?.title}</h4>
-        <button className="section__header__button">
-          <a href="">View all</a>
-          <i className="fa-solid fa-angle-right"></i>
-        </button>
-      </div>
+      <HeaderSection title={props.title} />
       <div className="section__main">
-        <div className="section__main__slide row">
-          <Card image={img} title={"Nấu ăn cho em"} artist={"Đen"} className={"col pc-2"} />
-          <Card image={img} title={"Nấu ăn cho em"} artist={"Đen"} className={"col pc-2"} />
-          <Card image={img} title={"Nấu ăn cho em"} artist={"Đen"} className={"col pc-2"} />
-          <Card image={img} title={"Nấu ăn cho em"} artist={"Đen"} className={"col pc-2"} />
-          <Card image={img} title={"Nấu ăn cho em"} artist={"Đen"} className={"col pc-2"} />
+        <div className="section__main__slide">
+          <div className="row">
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+            <Card
+              title={"Nấu ăn cho em"}
+              artist={"Đen"}
+              image={img}
+              className={"col pc-2 t-4 m-6"}
+            />
+          </div>
         </div>
       </div>
     </div>

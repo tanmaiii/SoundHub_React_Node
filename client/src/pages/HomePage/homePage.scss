@@ -2,13 +2,17 @@
 
 .home {
   @include themify($themes) {
-    margin-left: $width-navbar;
     padding: $space-32;
-
+    background-color: themed("bg-main");
     min-height: 1000px;
-
+    overflow: hidden;
+    max-width: 100%;
+    position: relative;
     @include tablet {
-      margin-left: $width-navbar-tablet;
+      padding: $space_12;
+    }
+    @include mobile {
+      padding: $space-8;
     }
   }
 }

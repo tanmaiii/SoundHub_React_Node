@@ -4,6 +4,13 @@ import avt from "../../assets/images/avatar.jpg";
 import "./header.scss";
 
 export default function Header() {
+
+  const BoxUser = (
+      <div>
+        
+      </div>
+  )
+
   return (
     <div className="header">
       <div className="header__left">
