@@ -4,7 +4,7 @@ $tablet-width: 1133px;
 $width-navbar: 240px;
 $width-navbar-tablet: 70px;
 
-$height-barPlaying: 72px;
+$height-barPlaying: 82px;
 
 $transition: all 0.3s;
 
@@ -28,7 +28,7 @@ $color-hover: rgba(124, 116, 238, 0.1);
 
 $color-white: #fff;
 $color-black: #0000;
-$color-grey: #ccc;
+$color-gray: #dadada;
 $color-bg-main: #ffffff;
 $color-bg-second: #f9f9f9;
 $color-txt-main: #121212;
@@ -50,9 +50,10 @@ $box-shadow-dark: 0 5px 20px 0 #2c2c2c;
 $color-gradient: linear-gradient(90deg, $color-primary2 -15.19%, $color-primary1 111.92%);
 
 $font-bold: 900;
-$font-mediun: 600;
+$font-mediun: 500;
 $font-light: 400;
 
+$size-14: 14px;
 $size-16: 16px;
 $size-18: 18px;
 $size-24: 24px;

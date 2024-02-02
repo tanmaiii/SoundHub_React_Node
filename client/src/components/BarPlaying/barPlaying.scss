@@ -1,34 +1,220 @@
 @use "../../scss/" as *;
 
 .barPlaying {
-  height: $height-barPlaying;
-  width: 100%;
-  z-index: 9;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.5));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  @include themify($themes) {
+    height: $height-barPlaying;
+    width: 100%;
+    z-index: 9;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(themed("bg-main"), 0.4),
+      rgba(themed("bg-main"), 0.5)
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 0 $space-12;
+    @include flex(center, space-between);
+    &__left {
+      // width: 30%;
+      flex: 1;
+      height: 100%;
+      @include flex(center, start);
+    }
+    &__center {
+      // width: 40%;
+      flex-grow: 1; /* Chiếm toàn bộ diện tích còn trống */
+      flex-shrink: 0; /* Không co lại khi không đủ không gian */
+      height: 100%;
+      @include flex(center, center);
+    }
+    &__right {
+      // width: 30%;
+      flex: 1;
 
-  padding: 0 $space-12;
+      height: 100%;
+      @include flex(center, end);
+    }
+  }
+}
 
-  @include flex(center, space-between);
-  &__left {
-    width: 30%;
+.CardSong {
+  @include themify($themes) {
     height: 100%;
-    background-color: aliceblue;
+    @include flex(center, unset);
+    padding: $space-8 0;
+    gap: $space-12;
+    &__image {
+      height: 100%;
+      img {
+        border-radius: $radius-4;
+        overflow: hidden;
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+      }
+    }
+    &__desc {
+      padding: $space-8 0;
+      @include mobile {
+        display: none;
+      }
+      &__title {
+        font-size: $size-16;
+        font-weight: $font-light;
+        color: themed("txt-main");
+        @include text(1);
+      }
+      &__info {
+        a {
+          @include text(1);
+          font-size: $size-16;
+          font-weight: $font-light;
+          color: themed("txt-second");
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    &__control {
+      @include mobile {
+        display: none;
+      }
+      button {
+        padding: $space-8;
+        color: themed("txt-second");
+        cursor: pointer;
+        transition: $transition;
+        &:hover {
+          color: themed("txt-main");
+        }
+        i {
+          font-size: 1.4rem;
+        }
+      }
+    }
   }
-  &__center {
-    width: 40%;
-    height: 100%;
-    background-color: red;
+}
+
+.ControlsBar {
+  @include themify($themes) {
+    flex-direction: column;
+    width: 100%;
+    &__actions {
+      @include flex(center, center);
+      gap: $space-18;
+      button:not(.btn_play) {
+        padding: $space-8;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: $transition;
+        color: themed('txt-main');
+        &:hover {
+          background-color: $color-hover;
+        }
+        &.active {
+          color: $color-primary1;
+        }
+        i {
+          --size: 24px;
+          width: var(--size);
+          height: var(--size);
+          font-size: $size-24;
+          @include flex(center, center);
+        }
+      }
+      .btn_play {
+        padding: $space-8;
+        background-color: $color-primary1;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: $transition;
+        color: $color-white;
+        &:hover {
+          transform: scale(1.06);
+        }
+        i {
+          @include flex(center, center);
+          --size: 30px;
+          width: var(--size);
+          height: var(--size);
+          font-size: $size-24;
+        }
+      }
+    }
+    &__bar {
+      @include flex(center, center);
+      gap: $space-12;
+      width: 100%;
+      span {
+        font-size: $size-14;
+        color: themed("txt-main");
+      }
+      .progressbar {
+        flex: 1;
+        width: 100%;
+        height: 6px;
+        border-radius: $radius-4;
+        background-color: $color-gray;
+      }
+    }
   }
-  &__right {
-    height: 100%;
-    width: 30%;
-    background-color: aliceblue;
+}
+
+.ControlsRight {
+  @include themify($themes) {
+    @include flex(center, unset);
+    gap: $space-12;
+    &__volume {
+      @include flex(center, center);
+      gap: $space-4;
+      button {
+        cursor: pointer;
+        transition: $transition;
+        border-radius: 50%;
+        &:hover {
+          background-color: $color-hover;
+        }
+        i {
+          @include flex(center, center);
+          font-size: $size-18;
+          --size: 30px;
+          width: var(--size);
+          height: var(--size);
+          color: themed("txt-main");
+        }
+      }
+      &__progressbar {
+        width: 70px;
+        height: 6px;
+        background-color: $color-gray;
+        border-radius: $radius-4;
+      }
+    }
+    &__list {
+      cursor: pointer;
+      transition: $transition;
+      border-radius: 50%;
+      color: themed("txt-main");
+      &:hover {
+        background-color: $color-hover;
+      }
+      &.active {
+        color: $color-primary1;
+      }
+      i {
+        @include flex(center, center);
+        font-size: $size-18;
+        --size: 30px;
+        width: var(--size);
+        height: var(--size);
+      }
+    }
   }
 }

@@ -1,14 +1,18 @@
 @use "../../scss" as *;
 
 .MainLayout {
-  @include flex(unset, unset);
-  &_main {
-    flex: 1;
-    // margin-left: $width-navbar;
-    // max-width: calc(100vw - $width-navbar);
-    @include tablet {
-      // margin-left: $width-navbar-tablet;
-      // max-width: calc(100vw - $width-navbar-tablet);
+  @include themify($themes) {
+    @include flex(unset, unset);
+    background-color: themed("bg-main");
+
+    &_main {
+      flex: 1;
+      // margin-left: $width-navbar;
+      // max-width: calc(100vw - $width-navbar);
+      @include tablet {
+        // margin-left: $width-navbar-tablet;
+        // max-width: calc(100vw - $width-navbar-tablet);
+      }
     }
   }
 }
