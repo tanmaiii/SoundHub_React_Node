@@ -2,19 +2,21 @@
 
 .navbar {
   @include themify($themes) {
-    height: calc(100vh - $height-barPlaying);
-    width: $width-navbar;
+    // height: calc(100vh - $height-barPlaying);
+    height: 100vh;
+    min-width: $width-navbar;
     background-color: themed("bg-second");
-    padding: $space-24;
-    position: sticky;
+    padding: $space-24 $space-24 $height-barPlaying $space-24;
+    position: fixed;
     top: 0;
     left: 0;
-    overflow: auto;
+    overflow-y: auto;
     box-shadow: themed("box-shadow");
     z-index: 9;
     @include tablet {
+      min-width: $width-navbar-tablet;
       width: $width-navbar-tablet;
-      padding: $space-8;
+      padding: $space-8 $space-8 $height-barPlaying $space-8;
     }
     &__logo {
       padding: $space-10 $space-24;

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./navbar.scss";
 import { PATH } from "../../constants/paths";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changePath } from "./navbarSlide";
@@ -35,7 +35,12 @@ const navbar = [
     title: "Library",
     items: [
       { id: 1, title: "Recent", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
-      { id: 2, title: "Favourit", icon: <i className="fa-light fa-heart"></i>, path: PATH.ARTIST },
+      {
+        id: 2,
+        title: "Favourit",
+        icon: <i className="fa-light fa-heart"></i>,
+        path: PATH.FAVOURITE,
+      },
       { id: 3, title: "Playlist", icon: <i className="fa-light fa-music"></i>, path: PATH.ARTIST },
     ],
   },
@@ -63,12 +68,19 @@ export default function Navbar() {
   const path = useSelector((state: RootState) => state.navbar.value);
   const dispatch = useDispatch();
 
+  const { pathname } = useLocation();
+
   const handleClick = (PATH: string) => {
     dispatch(changePath(PATH));
   };
 
+  useEffect(() => {
+    dispatch(changePath(pathname));
+  }, [pathname]);
+
   return (
     <aside className="navbar">
+      
       <div className="navbar__logo">
         <i className="fa-regular fa-headphones-simple"></i>
         <h2>SOUND</h2>

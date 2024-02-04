@@ -34,7 +34,7 @@ const CardSong = (props: any) => {
         </div>
       </div>
       <div className="CardSong__control">
-        <button>
+        <button data-tooltip={"Save to your library"}>
           <i className="fa-light fa-heart"></i>
         </button>
       </div>
@@ -46,7 +46,7 @@ const ControlsBar = (props: any) => {
   return (
     <div className="ControlsBar">
       <div className="ControlsBar__actions">
-        <button className="active">
+        <button className="btn-random active" data-tooltip={"Play randomly"}>
           <i className="fa-light fa-shuffle"></i>
         </button>
         <button>
@@ -59,7 +59,7 @@ const ControlsBar = (props: any) => {
         <button>
           <i className="fa-solid fa-forward-step"></i>
         </button>
-        <button className="">
+        <button className="btn-replay" data-tooltip={"Replay"}>
           <i className="fa-light fa-repeat"></i>
         </button>
       </div>
@@ -76,13 +76,13 @@ const ControlsRight = (props: any) => {
   return (
     <div className="ControlsRight">
       <div className="ControlsRight__volume">
-        <button>
+        <button className="btn__volume" data-tooltip={"Mute"}>
           <i className="fa-light fa-volume"></i>
           {/* <i className="fa-light fa-volume-xmark"></i> */}
         </button>
         <div className="ControlsRight__volume__progressbar"></div>
       </div>
-      <button className="ControlsRight__list">
+      <button className="ControlsRight__list" data-tooltip={"Playlist"}>
         <i className="fa-duotone fa-list"></i>
       </button>
     </div>

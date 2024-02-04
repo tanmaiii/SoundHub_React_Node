@@ -1,0 +1,66 @@
+@use "../../scss/" as *;
+
+.CardArtist {
+  @include themify($themes) {
+    padding: 0 $space-4;
+
+    &__container {
+      padding: $space-14;
+      border-radius: $radius-12;
+      cursor: pointer;
+      transition: $transition;
+      // width: 100%;
+      // height: 100%;
+      // background-color: $color-hover;
+      @include mobile {
+        padding: $space-4;
+      }
+      &:hover {
+        background-color: $color-hover;
+      }
+      &__image {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        img {
+          border-radius: 50%;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          object-fit: cover;
+        }
+      }
+      &__desc {
+        padding: $space-8 0;
+        @include flex(center, center);
+        flex-direction: column;
+        gap: $space-4;
+        &__name {
+          font-size: $size-16;
+          color: themed("txt-main");
+        }
+        &__followers {
+          font-size: $size-14;
+          color: themed("txt-second");
+        }
+        &__button {
+          background: $color-gradient;
+          padding: $space-8 $space-14;
+          border-radius: $radius-16;
+          @include flex(center, center);
+          flex-direction: row;
+          gap: $space-8;
+          font-size: $size-14;
+          color: $color-white;
+          cursor: pointer;
+          transition: $transition;
+
+          &:hover {
+           opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+}

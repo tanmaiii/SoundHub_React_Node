@@ -2,11 +2,9 @@
 
 .home {
   @include themify($themes) {
-    padding: $space-32;
-    background-color: themed("bg-main");
+    padding: 0 $space-32;
     min-height: 1000px;
     overflow: hidden;
-    max-width: 100%;
     position: relative;
     @include tablet {
       padding: $space_12;

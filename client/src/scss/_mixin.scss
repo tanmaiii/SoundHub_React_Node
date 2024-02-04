@@ -6,14 +6,14 @@ $themes: (
     bg-second: $color-bg-second,
     txt-main: $color-txt-main,
     txt-second: $color-txt-second,
-    box-shadow: $box-shadow
+    box-shadow: $box-shadow,
   ),
   dark: (
     bg-main: $color-bg-main-dark,
     bg-second: $color-bg-second-dark,
     txt-main: $color-txt-main-dark,
     txt-second: $color-txt-second-dark,
-    box-shadow: $box-shadow-dark
+    box-shadow: $box-shadow-dark,
   ),
 );
 
@@ -87,4 +87,50 @@ $themes: (
   background: $color;
   color: transparent;
   -webkit-background-clip: text; /* Cho Safari/Chrome */
+}
+
+@mixin tooltip($place1, $place2) {
+  position: relative;
+
+  &:hover {
+    &[data-tooltip]::after {
+      scale: 1;
+    }
+  }
+
+  &[data-tooltip]::after {
+    position: absolute;
+
+    @if $place1 == top {
+      bottom: calc(100% + 4px);
+    }
+
+    @if $place1 == bottom {
+      top: calc(100% + 4px);
+    }
+
+    @if $place2 == center {
+      transform: translateX(-50%);
+      left: 50%;
+    }
+    @if $place2 == left {
+      left: 0;
+    }
+    @if $place2 == right {
+      right: 0;
+    }
+
+    content: attr(data-tooltip);
+    width: max-content;
+    height: max-content;
+    padding: $space-8 $space-12;
+    border-radius: 12px;
+    color: $color-black;
+    background-color: $color-gray;
+    font-size: $size-14;
+    font-weight: $font-light;
+    transition: all 0.2;
+    transform-origin: left bottom;
+    scale: 0;
+  }
 }

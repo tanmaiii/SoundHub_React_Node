@@ -9,14 +9,9 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(themed("bg-main"), 0.4),
-      rgba(themed("bg-main"), 0.5)
-    );
+    background: linear-gradient(135deg, rgba(themed("bg-main"), 0.4), rgba(themed("bg-main"), 0.5));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     border-top: 1px solid rgba(255, 255, 255, 0.4);
     padding: 0 $space-12;
     @include flex(center, space-between);
@@ -91,6 +86,7 @@
         color: themed("txt-second");
         cursor: pointer;
         transition: $transition;
+        @include tooltip(top, center);
         &:hover {
           color: themed("txt-main");
         }
@@ -109,12 +105,13 @@
     &__actions {
       @include flex(center, center);
       gap: $space-18;
+
       button:not(.btn_play) {
         padding: $space-8;
         border-radius: 50%;
         cursor: pointer;
         transition: $transition;
-        color: themed('txt-main');
+        color: themed("txt-main");
         &:hover {
           background-color: $color-hover;
         }
@@ -129,6 +126,15 @@
           @include flex(center, center);
         }
       }
+
+      .btn-random {
+        @include tooltip(top, center);
+      }
+
+      .btn-replay {
+        @include tooltip(top, center);
+      }
+
       .btn_play {
         padding: $space-8;
         background-color: $color-primary1;
@@ -174,13 +180,15 @@
     &__volume {
       @include flex(center, center);
       gap: $space-4;
-      button {
+      .btn__volume {
         cursor: pointer;
         transition: $transition;
         border-radius: 50%;
+        position: relative;
         &:hover {
           background-color: $color-hover;
         }
+        @include tooltip(top, center);
         i {
           @include flex(center, center);
           font-size: $size-18;
@@ -202,6 +210,7 @@
       transition: $transition;
       border-radius: 50%;
       color: themed("txt-main");
+      @include tooltip(top, right);
       &:hover {
         background-color: $color-hover;
       }

@@ -1,59 +1,73 @@
-import React from "react";
+import React, { Children } from "react";
 import Card from "../Card/Card";
 import img from "../../assets/images/poster2.png";
 import "./section.scss";
 import HeaderSection from "../HeaderSection/HeaderSection";
 
-function Section(props: any) {
+import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
+import "./slick-theme.scss";
+import "./slick.scss";
+
+import Slider from "react-slick";
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 6, // Số lượng hiển thị item mỗi lần
+  slidesToScroll: 6,
+  nextArrow: <></>,
+  prevArrow: <></>,
+  responsive: [
+    {
+      breakpoint: 1300,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        infinite: true,
+        dots: true,
+      },
+    },
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true,
+      },
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        initialSlide: 2,
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
+
+interface SectionProps {
+  children: React.ReactNode;
+  title: string;
+}
+
+function Section({ children, title }: SectionProps) {
   return (
     <div className="section">
-      <HeaderSection title={props.title} />
+      <HeaderSection title={title} />
       <div className="section__main">
         <div className="section__main__slide">
-          <div className="row">
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-            <Card
-              title={"Nấu ăn cho em"}
-              artist={"Đen"}
-              image={img}
-              className={"col pc-2 t-4 m-6"}
-            />
-          </div>
+          <Slider {...settings}>{children}</Slider>
         </div>
       </div>
     </div>

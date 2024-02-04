@@ -4,7 +4,7 @@ import "./card.scss";
 
 function Card(props: any) {
   return (
-    <div className={`card, ${props?.className}`}>
+    <div className={`card ${props?.className}`}>
       <div className="card__container">
         <div className="card__container__image">
           <img src={props?.image} alt="" />

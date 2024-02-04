@@ -4,20 +4,26 @@ html {
   ::-webkit-scrollbar {
     width: 10px;
   }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10rem;
+    border: 1px solid #fff;
+  }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #cacaca;
+    position: absolute;
+    right: -3rem;
+    top: -50rem;
+    background: transparent;
   }
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #7f7f7f;
+  ::-webkit-scrollbar-track-piece:start {
+    background: transparent;
   }
 
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #676767;
+  ::-webkit-scrollbar-track-piece:end {
+    background: transparent;
   }
 }
 
@@ -60,7 +66,11 @@ input {
 }
 
 body {
-  max-width: 100vw; 
-  margin: 0 auto; 
-  // overflow-x: hidden;
+  max-width: 100vw;
+  margin: 0 auto;
+  // overflow-y: overlay;
+}
+
+html {
+  // overflow-y: overlay;
 }
