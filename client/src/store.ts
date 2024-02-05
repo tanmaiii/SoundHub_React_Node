@@ -9,11 +9,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./pages/ExampleReduxToolkit/counterSlide";
 import navbarReducer from "../src/components/Navbar/navbarSlide";
+import darkModeReducer from "../src/components/UserSetting/UserSettingSlide";
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
-    navbar: navbarReducer
+    navbar: navbarReducer,
+    darkMode: darkModeReducer,
   },
 });
 

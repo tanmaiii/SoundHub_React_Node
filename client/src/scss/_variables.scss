@@ -2,12 +2,10 @@ $mobile-width: 700px;
 $tablet-width: 1133px;
 
 $width-navbar: 240px;
-$width-navbar-tablet: 70px;
-
+$width-navbar-hide: 70px;
 
 $height-header: 80px;
 $height-barPlaying: 82px;
-
 
 $transition: all 0.3s;
 
@@ -46,10 +44,9 @@ $color-rgba-black: rgba(18, 18, 18, 0.5);
 
 $color-border: #b9b9b9;
 
-$box-shadow: 0 5px 20px 0 #ccd1d6;
-$box-shadow-dark: 0 5px 20px 0 #2c2c2c;
-
-
+$box-shadow-light: 0 -4px 32px rgba(0,0,0,.2);
+$box-shadow-dark: 0 -4px 32px rgba(0,0,0,.8);
+ 
 $color-gradient: linear-gradient(90deg, $color-primary2 -15.19%, $color-primary1 111.92%);
 
 $font-bold: 900;
@@ -69,4 +66,3 @@ $radius-12: 12px;
 $radius-16: 16px;
 $radius-20: 20px;
 $radius-25: 25px;
-

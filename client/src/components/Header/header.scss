@@ -8,6 +8,14 @@
     // background-color: themed('bg-second');
     background-color: transparent;
     gap: $space-12;
+
+    position: sticky;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1;
+
+
     &.shrink {
       background-color: rgba($color: themed("bg-main"), $alpha: 0.8);
       -webkit-backdrop-filter: blur(50px);

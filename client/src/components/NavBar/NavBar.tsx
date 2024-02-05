@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./navbar.scss";
 import { PATH } from "../../constants/paths";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changePath } from "./navbarSlide";
+import { changeOpen, changePath } from "./navbarSlide";
 
 const navbar = [
   {
@@ -52,7 +52,7 @@ const navbar = [
         id: 2,
         title: "Account",
         icon: <i className="fa-light fa-circle-user"></i>,
-        path: PATH.ARTIST,
+        path: PATH.LOGIN,
       },
       {
         id: 3,
@@ -65,10 +65,16 @@ const navbar = [
 ];
 
 export default function Navbar() {
-  const path = useSelector((state: RootState) => state.navbar.value);
+  const path = useSelector((state: RootState) => state.navbar.path);
+  const closeMenu = useSelector((state: RootState) => state.navbar.closeMenu);
+
   const dispatch = useDispatch();
 
   const { pathname } = useLocation();
+
+  const handleSetOpen = () => {
+    dispatch(changeOpen(!closeMenu));
+  };
 
   const handleClick = (PATH: string) => {
     dispatch(changePath(PATH));
@@ -79,34 +85,45 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <aside className="navbar">
-      
-      <div className="navbar__logo">
-        <i className="fa-regular fa-headphones-simple"></i>
-        <h2>SOUND</h2>
-      </div>
-      <div className="navbar__content">
-        {navbar.map((navbar, index) => (
-          <div key={index} className="navbar__content__group">
-            <h4 className="navbar__content__group__title">{navbar.title}</h4>
-            <div className="navbar__content__group__list">
-              {navbar.items.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.path}
-                  className={`navbar__content__group__list__item ${
-                    path === item.path ? "active" : ""
-                  }`}
-                  onClick={() => handleClick(item.path)}
-                >
-                  <div className="navbar__content__group__list__item__icon">{item.icon}</div>
-                  <h4 className="navbar__content__group__list__item__title">{item.title}</h4>
-                </Link>
-              ))}
-            </div>
+    <div className={`navbar  ${closeMenu ? "closeMenu" : ""}`}>
+      <div className="navbar__container">
+        <div className="navbar__container__top">
+          <button className="navbar__container__top__menu" onClick={() => handleSetOpen()}>
+            <i className="fa-regular fa-bars"></i>
+          </button>
+          <div className={`navbar__container__top__logo ${closeMenu ? "closeMenu" : ""}`}>
+            <i className="fa-regular fa-headphones-simple"></i>
+            <h2>Sound</h2>
           </div>
-        ))}
+        </div>
+
+        <div className={`navbar__container__content ${closeMenu ? "closeMenu" : ""}`}>
+          {navbar.map((navbar, index) => (
+            <div key={index} className="navbar__container__content__group">
+              <h4 className="navbar__container__content__group__title">{navbar.title}</h4>
+              <div className="navbar__container__content__group__list">
+                {navbar.items.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    className={`navbar__container__content__group__list__item ${
+                      path === item.path ? "active" : ""
+                    }`}
+                    onClick={() => handleClick(item.path)}
+                  >
+                    <div className="navbar__container__content__group__list__item__icon">
+                      {item.icon}
+                    </div>
+                    <h4 className={`navbar__container__content__group__list__item__title`}>
+                      {item.title}
+                    </h4>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </aside>
+    </div>
   );
 }

@@ -8,9 +8,6 @@
       border-radius: $radius-12;
       cursor: pointer;
       transition: $transition;
-      // width: 100%;
-      // height: 100%;
-      // background-color: $color-hover;
       @include mobile {
         padding: $space-4;
       }

@@ -1,6 +1,7 @@
 import React from "react";
 import img from "../../assets/images/poster.png";
 import "./sectionChartItem.scss";
+import Skeleton from "react-loading-skeleton";
 
 const listMusic = [
   {
@@ -33,14 +34,24 @@ const listMusic = [
   },
 ];
 
-export default function SectionChartItem(props: any) {
+interface SectionChartItemProps {
+  title: string;
+  className: string;
+  loading?: boolean;
+}
+
+export default function SectionChartItem({
+  className,
+  title,
+  loading = false,
+}: SectionChartItemProps) {
   return (
-    <div className={`SectionChartItem ${props?.className}`}>
+    <div className={`SectionChartItem ${className}`}>
       <div className="SectionChartItem__banner ">
         <div className="SectionChartItem__banner__image">
-          <img src={listMusic[0]?.Poster} alt="" />
+          {loading ? <Skeleton height="100%" /> : <img src={listMusic[0]?.Poster} alt="" />}
         </div>
-        <h4 className="SectionChartItem__banner__title">{props?.title}</h4>
+        <h4 className="SectionChartItem__banner__title">{title}</h4>
       </div>
       <div className="SectionChartItem__list ">
         {listMusic.map((item, index) => (
@@ -52,15 +63,21 @@ export default function SectionChartItem(props: any) {
               <span>{index + 1}</span>
             </div>
             <div className="SectionChartItem__list__item__image">
-              <img src={item?.Poster} alt="" />
+              {loading ? <Skeleton height="100%" /> : <img src={item?.Poster} alt="" />}
             </div>
             <div className="SectionChartItem__list__item__main">
-              <h4 className="SectionChartItem__list__item__main__title">{item.Title}</h4>
-              <div className="SectionChartItem__list__item__main__desc">
-                <span>{item.Artist}</span>
-                <i className="fa-solid fa-circle"></i>
-                <span>{item.Time}</span>
-              </div>
+              <h4 className="SectionChartItem__list__item__main__title">
+                {loading ? <Skeleton count={1} /> : item.Title}
+              </h4>
+              {loading ? (
+                <Skeleton count={1} />
+              ) : (
+                <div className="SectionChartItem__list__item__main__desc">
+                  <span>{item.Artist}</span>
+                  <i className="fa-solid fa-circle"></i>
+                  <span>{item.Time}</span>
+                </div>
+              )}
             </div>
             <div className="SectionChartItem__list__item__control">
               <button>

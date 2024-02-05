@@ -17,6 +17,7 @@ import CardArtist from "../../components/CardArtist/CardArtist";
 function HomePage(props: any) {
   return (
     <div className="home">
+
       <Section title={"Recommended"}>
         <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
         <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
@@ -31,28 +32,26 @@ function HomePage(props: any) {
         <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
       </Section>
 
-      {/* <SectionChartHome title={"Top Chart This Week"} /> */}
-      {/* <BarPlaying /> */}
-
-      {/* <Section title={"Artist hot"}>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-        <CardArtist name={"Mono"} image={avt} followers={"3456K"}/>
-      </Section> */}
-
+      <SectionChartHome title={"Top Chart This Week"} />
+      
+      <Section title={"Artist hot"}>
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+        <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+      </Section>
     </div>
   );
 }

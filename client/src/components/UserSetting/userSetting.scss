@@ -1,0 +1,164 @@
+@use "../../scss/" as *;
+
+.UserSetting {
+  @include themify($themes) {
+    position: relative;
+    &__avt {
+      --size: 52px;
+      width: var(--size);
+      height: var(--size);
+      position: relative;
+      background-clip: padding-box;
+      background-image: linear-gradient(to right top, $color-primary1, $color-primary2);
+      border-radius: 50%;
+      cursor: pointer;
+
+      @include tooltip(bottom, center);
+
+      &:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        margin: -10px;
+        border-radius: inherit;
+      }
+
+      img {
+        z-index: 1;
+        border: 3px solid transparent;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        overflow: hidden;
+      }
+    }
+
+    &__dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background-color: themed("bg-main");
+      padding: $space-4;
+      border-radius: $space-12;
+      box-shadow: themed("box-shadow");
+      width: 230px;
+      display: none;
+
+      &.active {
+        display: block;
+      }
+
+      
+
+      &__user {
+        @include flex(center, unset);
+        gap: $space-8;
+        padding: $space-14;
+
+        img {
+          --size: 60px;
+          width: var(--size);
+          height: var(--size);
+          border-radius: 50%;
+        }
+
+        &__desc {
+          h4 {
+            font-size: $size-16;
+            color: themed("txt-main");
+            margin-bottom: $space-4;
+          }
+          span {
+            font-size: $size-16;
+            background-color: $color-gray;
+            color: $color-white;
+            border-radius: $radius-8;
+            padding: 0 $space-8;
+          }
+        }
+      }
+
+      &__list {
+        li {
+          padding: $space-14;
+          @include flex(center, unset);
+          cursor: pointer;
+          margin-bottom: $space-8;
+          &:hover {
+            background-color: $color-hover;
+            border-radius: $space-8;
+          }
+          i {
+            margin-right: $space-12;
+            font-size: $size-18;
+            color: themed("txt-main");
+          }
+          span {
+            margin-right: $space-12;
+            font-size: $size-16;
+            color: themed("txt-main");
+          }
+        }
+      }
+
+      &__darkMode {
+        @include flex(center, unset);
+        padding: $space-14;
+        i {
+          margin-right: $space-12;
+          font-size: $size-18;
+          color: themed("txt-main");
+        }
+        span {
+          margin-right: $space-12;
+          font-size: $size-16;
+          color: themed("txt-main");
+        }
+        button {
+          text-align: right;
+          .switch {
+            position: relative;
+            cursor: pointer;
+            width: 48px;
+            height: 24px;
+            display: block;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+            background: $color-rgba-black;
+            border-radius: 100rem;
+            transition: background-color 0.25s linear;
+          }
+
+          .switch:after {
+            --size: 20px;
+            content: "";
+            position: absolute;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            background-color: #fff;
+            top: 2px;
+            left: 2px;
+            transition: background-color 0.25s linear, transform 0.25s linear;
+          }
+
+          .switch-input {
+            display: none;
+          }
+
+          .switch-input:checked + .switch {
+            background: $color-gradient;
+          }
+
+          .switch-input:checked + .switch:after {
+            transform: translateX(24px);
+            background-color: white;
+          }
+        }
+      }
+    }
+  }
+}

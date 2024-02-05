@@ -2,89 +2,142 @@
 
 .navbar {
   @include themify($themes) {
-    // height: calc(100vh - $height-barPlaying);
     height: 100vh;
-    min-width: $width-navbar;
+    max-width: $width-navbar;
+    width: $width-navbar;
     background-color: themed("bg-second");
-    padding: $space-24 $space-24 $height-barPlaying $space-24;
-    position: fixed;
+    padding: $space-24 $space-24;
+    position: sticky;
     top: 0;
     left: 0;
-    overflow-y: auto;
     box-shadow: themed("box-shadow");
     z-index: 9;
-    @include tablet {
-      min-width: $width-navbar-tablet;
-      width: $width-navbar-tablet;
-      padding: $space-8 $space-8 $height-barPlaying $space-8;
-    }
-    &__logo {
-      padding: $space-10 $space-24;
-      font-weight: $font-bold;
-      @include text-gradient($color-gradient);
-      @include flex(center, center);
-      gap: $space-4;
-      flex-direction: row;
-      i {
-        font-size: $size-30;
-      }
-      h2 {
-        font-size: $size-30;
-        @include tablet {
-          display: none;
-        }
-      }
-    }
-    &__content {
-      &__group {
-        padding: $space-4 0;
+    @include flex(unset, space-between);
+    flex-direction: column;
 
-        &:not(:first-child) {
-          @include tablet {
-            border-top: 1px solid themed("txt-second");
+    @include tablet {
+      position: fixed;
+      &.closeMenu {
+        position: fixed;
+      }
+    }
+
+    &.closeMenu {
+      max-width: $width-navbar-hide;
+      width: $width-navbar-hide;
+      padding: $space-24 $space-8;
+    }
+
+    &__container {
+      overflow-y: auto;
+      &__top {
+        @include flex(center, unset);
+        flex: row;
+        gap: $space-8;
+        margin-bottom: $space-12;
+
+        &__menu {
+          padding: $space-14 $space-18;
+          border-radius: $space-8;
+          cursor: pointer;
+          color: themed("txt-second");
+
+          i {
+            @include flex(center, center);
+            font-size: $size-24;
+            --size: 18px;
+            width: var(--size);
+            height: var(--size);
+          }
+
+          &:hover {
+            background-color: $color-hover;
+            color: themed("txt-main");
           }
         }
-        &__title {
-          font-size: $size-18;
-          color: themed("txt-main");
+
+        &__logo {
           font-weight: $font-bold;
-          margin-bottom: $space-8;
-          @include tablet {
+          @include text-gradient($color-gradient);
+          @include flex(center, center);
+
+          gap: $space-4;
+          flex-direction: row;
+
+          &.closeMenu {
             display: none;
           }
+
+          i {
+            font-size: $size-30;
+          }
+          h2 {
+            font-size: $size-30;
+          }
         }
-        &__list {
-          &__item {
-            @include flex(center, unset);
-            gap: 10px;
-            padding: $space-14 $space-18;
-            color: themed("txt-second");
-            border-radius: $radius-12;
-            transition: $transition;
+      }
+
+      &__content {
+        &.closeMenu {
+          .navbar__container__content__group__title {
+            display: none;
+          }
+          .navbar__container__content__group__list__item__title {
+            display: none;
+          }
+
+          .navbar__container__content__group {
+            &:not(:first-child) {
+              border-top: 1.2px solid rgba(0, 0, 0, 0.05);
+            }
+          }
+        }
+
+        &__group {
+          padding: $space-4 0;
+
+          &__title {
+            font-size: $size-18;
+            color: themed("txt-main");
+            font-weight: $font-bold;
             margin-bottom: $space-8;
-            cursor: pointer;
-            @include tablet {
-              justify-content: center;
-            }
-            &:hover {
-              background-color: themed("bg-main");
-            }
-            &.active {
-              background: $color-gradient;
-              color: $color-bg-main;
-            }
-            &__icon {
-              --size: 20px;
-              width: var(--size);
-              height: var(--size);
-              @include flex(center, center);
-              font-size: $size-18;
-            }
-            &__title {
-              font-size: $size-16;
-              font-weight: $font-light;
-              @include tablet {
-                display: none;
+            // @include tablet {
+            //   display: none;
+            // }
+          }
+          &__list {
+            &__item {
+              @include flex(center, unset);
+              gap: 10px;
+              padding: $space-14 $space-18;
+              color: themed("txt-second");
+              border-radius: $radius-12;
+              transition: $transition;
+              margin-bottom: $space-8;
+              cursor: pointer;
+
+              &:hover {
+                background-color: $color-hover;
+                color: themed("txt-main");
+              }
+              &.active {
+                background: $color-gradient;
+                color: $color-bg-main;
+              }
+              &__icon {
+                --size: 20px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                font-size: $size-18;
+              }
+              &__title {
+                font-size: $size-16;
+                font-weight: $font-light;
+
+                // @include tablet {
+                //   display: none;
+                // }
               }
             }
           }

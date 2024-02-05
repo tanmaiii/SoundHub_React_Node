@@ -33,16 +33,20 @@
       }
       &__desc {
         padding: $space-8 0;
-        @include flex(center, center);
+        @include flex(unset, center);
         flex-direction: column;
         gap: $space-4;
         &__name {
           font-size: $size-16;
           color: themed("txt-main");
+          @include text(1);
+          text-align: center;
         }
         &__followers {
           font-size: $size-14;
           color: themed("txt-second");
+          @include text(1);
+          text-align: center;
         }
         &__button {
           background: $color-gradient;
@@ -55,9 +59,10 @@
           color: $color-white;
           cursor: pointer;
           transition: $transition;
-
+          width: max-content;
+          margin: 0 auto;
           &:hover {
-           opacity: 0.9;
+            opacity: 0.9;
           }
         }
       }

@@ -3,33 +3,25 @@
 .MainLayout {
   @include themify($themes) {
     @include flex(unset, unset);
-    background-color: themed('bg-main');
+    flex-direction: row;
+    background-color: themed("bg-main");
 
-    
-    @include tablet {
-      margin-left: $width-navbar-tablet;
-    }
     &__main {
-      flex: 1;
       position: relative;
-      margin-left: calc($width-navbar - 12px);
-      margin-bottom: $height-barPlaying;
-      &__header {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: calc(100% - $width-navbar);
-        z-index: 1;
-        @include tablet {
-          width: calc(100% - $width-navbar-tablet);
-        }
+      width: 100%;
+      max-width: calc(100% - $width-navbar);
+
+      &.closeMenu {
+        max-width: calc(100% - $width-navbar-hide);
       }
+
+      @include tablet {
+        max-width: calc(100% - $width-navbar-hide);
+        margin-left: $width-navbar-hide;
+      }
+
       &__content {
-        margin-top: $height-header;
-        width: calc(100vw - $width-navbar);
-        @include tablet {
-          width: calc(100vw - $width-navbar-tablet);
-        }
+        min-height: 100vh;
       }
     }
   }

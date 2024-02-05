@@ -2,7 +2,7 @@
 
 html {
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.4);
@@ -68,9 +68,12 @@ input {
 body {
   max-width: 100vw;
   margin: 0 auto;
-  // overflow-y: overlay;
+  overflow-y: auto;
+  overflow-x: unset;
 }
 
-html {
-  // overflow-y: overlay;
+hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  margin: 2px 0;
 }
