@@ -2,59 +2,57 @@
 
 .navbar {
   @include themify($themes) {
+    background-color: themed("bg-second");
     height: 100vh;
     max-width: $width-navbar;
     width: $width-navbar;
-    background-color: themed("bg-second");
-    padding: $space-24 $space-24;
     position: sticky;
     top: 0;
     left: 0;
     box-shadow: themed("box-shadow");
-    z-index: 9;
+    z-index: 99;
     @include flex(unset, space-between);
     flex-direction: column;
 
     @include tablet {
       position: fixed;
-      &.closeMenu {
-        position: fixed;
+      transform: translateY(-100%);
+      &.openMenu {
+        transform: translateY(0);
       }
-    }
-
-    &.closeMenu {
-      max-width: $width-navbar-hide;
-      width: $width-navbar-hide;
-      padding: $space-24 $space-8;
     }
 
     &__container {
       overflow-y: auto;
+      // padding: $space-14;
+
       &__top {
         @include flex(center, unset);
         flex: row;
         gap: $space-8;
-        margin-bottom: $space-12;
+        // height: $height-header;
+        padding: $space-24 $space-24;
 
-        &__menu {
-          padding: $space-14 $space-18;
-          border-radius: $space-8;
-          cursor: pointer;
-          color: themed("txt-second");
+        // &__menu {
+        //   padding: $space-12 $space-14;
+        //   border-radius: $space-8;
+        //   cursor: pointer;
+        //   color: themed("txt-second");
+        //   border: 1px solid #ccc;
 
-          i {
-            @include flex(center, center);
-            font-size: $size-24;
-            --size: 18px;
-            width: var(--size);
-            height: var(--size);
-          }
+        //   i {
+        //     @include flex(center, center);
+        //     font-size: $size-24;
+        //     --size: 18px;
+        //     width: var(--size);
+        //     height: var(--size);
+        //   }
 
-          &:hover {
-            background-color: $color-hover;
-            color: themed("txt-main");
-          }
-        }
+        //   &:hover {
+        //     background-color: $color-hover;
+        //     color: themed("txt-main");
+        //   }
+        // }
 
         &__logo {
           font-weight: $font-bold;
@@ -78,20 +76,7 @@
       }
 
       &__content {
-        &.closeMenu {
-          .navbar__container__content__group__title {
-            display: none;
-          }
-          .navbar__container__content__group__list__item__title {
-            display: none;
-          }
-
-          .navbar__container__content__group {
-            &:not(:first-child) {
-              border-top: 1.2px solid rgba(0, 0, 0, 0.05);
-            }
-          }
-        }
+        padding: 0 $space-24;
 
         &__group {
           padding: $space-4 0;

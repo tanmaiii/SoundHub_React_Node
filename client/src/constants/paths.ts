@@ -14,7 +14,7 @@ const PATH = {
   REGISTER: "/signup",
   CONTACT: "/contact",
   PROFILE: "/profile",
-  SONG: "/SONG",
+  SONG: "/songs",
   SONG_SHOW: "/song/:id",
 };
 

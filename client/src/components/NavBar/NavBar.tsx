@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from "react";
 import "./navbar.scss";
 import { PATH } from "../../constants/paths";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -44,37 +44,16 @@ const navbar = [
       { id: 3, title: "Playlist", icon: <i className="fa-light fa-music"></i>, path: PATH.ARTIST },
     ],
   },
-  {
-    title: "More",
-    items: [
-      { id: 1, title: "Setting", icon: <i className="fa-light fa-gear"></i>, path: PATH.ARTIST },
-      {
-        id: 2,
-        title: "Account",
-        icon: <i className="fa-light fa-circle-user"></i>,
-        path: PATH.LOGIN,
-      },
-      {
-        id: 3,
-        title: "Logout",
-        icon: <i className="fa-light fa-right-from-bracket"></i>,
-        path: PATH.ARTIST,
-      },
-    ],
-  },
 ];
 
 export default function Navbar() {
   const path = useSelector((state: RootState) => state.navbar.path);
-  const closeMenu = useSelector((state: RootState) => state.navbar.closeMenu);
+  const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
+  const navbarRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
 
   const { pathname } = useLocation();
-
-  const handleSetOpen = () => {
-    dispatch(changeOpen(!closeMenu));
-  };
 
   const handleClick = (PATH: string) => {
     dispatch(changePath(PATH));
@@ -84,20 +63,28 @@ export default function Navbar() {
     dispatch(changePath(pathname));
   }, [pathname]);
 
+  useEffect(() => {
+    function handleMousedown(event: MouseEvent) {
+      const node = event.target as Node;
+      if (!navbarRef.current?.contains(node)) {
+        dispatch(changeOpen(false));
+      }
+    }
+    document.addEventListener("mousedown", (event) => handleMousedown(event));
+    return () => document.removeEventListener("mousedown", (event) => handleMousedown(event));
+  });
+
   return (
-    <div className={`navbar  ${closeMenu ? "closeMenu" : ""}`}>
+    <div ref={navbarRef} className={`navbar ${openMenu ? "openMenu" : ""}`}>
       <div className="navbar__container">
         <div className="navbar__container__top">
-          <button className="navbar__container__top__menu" onClick={() => handleSetOpen()}>
-            <i className="fa-regular fa-bars"></i>
-          </button>
-          <div className={`navbar__container__top__logo ${closeMenu ? "closeMenu" : ""}`}>
+          <div className={`navbar__container__top__logo`}>
             <i className="fa-regular fa-headphones-simple"></i>
             <h2>Sound</h2>
           </div>
         </div>
 
-        <div className={`navbar__container__content ${closeMenu ? "closeMenu" : ""}`}>
+        <div className={`navbar__container__content`}>
           {navbar.map((navbar, index) => (
             <div key={index} className="navbar__container__content__group">
               <h4 className="navbar__container__content__group__title">{navbar.title}</h4>

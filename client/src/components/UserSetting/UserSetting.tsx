@@ -10,6 +10,7 @@ import { changeDarkMode } from "./UserSettingSlide";
 export default function UserSetting() {
   const [active, setActive] = useState(false);
   const dropdownRef = useRef<HTMLInputElement>(null);
+  const darkMode = useSelector((state: RootState) => state.darkMode.state);
   const dispatch = useDispatch();
 
   const handleClick = (checked: boolean) => {
@@ -74,6 +75,7 @@ export default function UserSetting() {
           <span>Dark Mode</span>
           <button>
             <input
+              checked={darkMode}
               type="checkbox"
               id="switch"
               className="switch-input"

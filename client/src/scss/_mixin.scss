@@ -7,6 +7,7 @@ $themes: (
     txt-main: $color-txt-main,
     txt-second: $color-txt-second,
     box-shadow: $box-shadow-light,
+    bg-rgba: $color-rgba-white,
   ),
   dark: (
     bg-main: $color-bg-main-dark,
@@ -14,6 +15,7 @@ $themes: (
     txt-main: $color-txt-main-dark,
     txt-second: $color-txt-second-dark,
     box-shadow: $box-shadow-dark,
+    bg-rgba: $color-rgba-black,
   ),
 );
 

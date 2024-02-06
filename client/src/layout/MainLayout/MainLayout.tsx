@@ -14,14 +14,12 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  const closeMenu = useSelector((state: RootState) => state.navbar.closeMenu);
-
   return (
     <div className="MainLayout">
       <NavBar />
-      <div className={`MainLayout__main ${closeMenu ? "closeMenu" : ""}`}>
+      <div className={`MainLayout__main`}>
         <Header />
-        <div className={`MainLayout__main__content ${closeMenu ? "closeMenu" : ""}`}>{children}</div>
+        <div className={`MainLayout__main__content`}>{children}</div>
         <BarPlaying />
       </div>
     </div>

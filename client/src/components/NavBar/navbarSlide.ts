@@ -5,12 +5,12 @@ import { act } from "react-dom/test-utils";
 
 export interface navbarState {
   path: string;
-  closeMenu: boolean;
+  openMenu: boolean;
 }
 
 const initialState: navbarState = {
   path: "/",
-  closeMenu: false,
+  openMenu: false,
 };
 
 export const navbarSlide = createSlice({
@@ -21,7 +21,7 @@ export const navbarSlide = createSlice({
       state.path = action.payload;
     },
     changeOpen: (state, action) => {
-      state.closeMenu = action.payload;
+      state.openMenu = action.payload;
     },
   },
 });

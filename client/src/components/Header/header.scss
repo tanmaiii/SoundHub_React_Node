@@ -9,22 +9,36 @@
     background-color: transparent;
     gap: $space-12;
 
-    position: sticky;
+    position: fixed;
     top: 0;
     right: 0;
-    width: 100%;
-    z-index: 1;
+    width: calc(100% - $width-navbar);
+    z-index: 9;
 
+    @include tablet {
+      width: 100%;
+      padding: 0 $space-14;
+    }
 
     &.shrink {
       background-color: rgba($color: themed("bg-main"), $alpha: 0.8);
-      -webkit-backdrop-filter: blur(50px);
-      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
     }
+
     &__left {
       @include flex(center, unset);
       gap: $space-12;
+      &__menu {
+        display: none;
+      }
+
+      @include tablet {
+        &__menu {
+          display: block;
+        }
+      }
       button {
         border-radius: 50%;
         padding: $space-4;
@@ -56,27 +70,35 @@
         }
       }
     }
+
     &__center {
       flex: 1;
       &__search {
-        border-radius: $radius-12;
-        border: 1px solid $color-border;
+        border-radius: $radius-20;
+        // border: 1px solid $color-border;
         max-width: 600px;
         padding: $space-12 $size-18;
         @include flex(center, unset);
         gap: $space-8;
         color: themed("txt-main");
+        // background-color: rgba($color: themed('bg-main'), $alpha: 0.6) ;
+        background-color: themed("bg-rgba");
+
         i {
           font-size: $size-18;
+          color: themed("txt-main");
         }
+
         input {
           flex: 1;
           border: none;
           outline: none;
           font-size: $size-16;
+          color: themed("txt-main");
         }
       }
     }
+
     &__right {
       &__avt {
         --size: 52px;

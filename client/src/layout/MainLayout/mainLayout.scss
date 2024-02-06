@@ -11,13 +11,8 @@
       width: 100%;
       max-width: calc(100% - $width-navbar);
 
-      &.closeMenu {
-        max-width: calc(100% - $width-navbar-hide);
-      }
-
       @include tablet {
-        max-width: calc(100% - $width-navbar-hide);
-        margin-left: $width-navbar-hide;
+        max-width: calc(100%);
       }
 
       &__content {

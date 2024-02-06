@@ -21,19 +21,21 @@ function Card({ className, image, title, artist, loading = false }: CardProps) {
           {loading ? (
             <Skeleton height={200} />
           ) : (
-            <>
+            <Link target="_blank" to={`/song/${"12312"}`}>
               <img src={image} alt="" />
               <div className="card__container__image__button">
                 <i className="fa-solid fa-play"></i>
               </div>
-            </>
+            </Link>
           )}
         </div>
 
         <div className="card__container__desc">
-          <span className="card__container__desc__title">{loading ? <Skeleton /> : title}</span>
+          <Link target="_blank" to={`/song/${"12312"}`}>
+            <span className="card__container__desc__title">{loading ? <Skeleton /> : title}</span>
+          </Link>
           <div className="card__container__desc__info">
-            <Link to={"/"}>
+            <Link target="_blank" to={`/artist/${"123123"}`}>
               <span>{loading ? <Skeleton /> : artist}</span>
             </Link>
           </div>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface navbarState {
   state: boolean;
@@ -9,12 +9,20 @@ const initialState: navbarState = {
   state: false,
 };
 
+const loadDarkModeState = (): boolean => {
+  const darkModeState = localStorage.getItem("darkModeState");
+  return darkModeState ? JSON.parse(darkModeState) : initialState.state;
+};
+
 export const darkModeSlide = createSlice({
   name: "darkMode",
-  initialState,
+  initialState: {
+    state: loadDarkModeState(),
+  },
   reducers: {
     changeDarkMode: (state, action: PayloadAction<boolean>) => {
       state.state = action.payload;
+      localStorage.setItem("darkModeState", JSON.stringify(action.payload));
     },
   },
 });

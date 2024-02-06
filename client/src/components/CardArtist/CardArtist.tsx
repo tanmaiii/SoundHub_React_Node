@@ -3,6 +3,8 @@ import { Interface } from "readline";
 import "./cardArtist.scss";
 
 import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router-dom";
+import { PATH } from "../../constants/paths";
 
 interface CardProps {
   image: string;
@@ -15,11 +17,17 @@ export default function CardArtist({ name, image, followers, loading = false }: 
   return (
     <div className="CardArtist">
       <div className="CardArtist__container">
-        <div className="CardArtist__container__image">
-          {loading ? <Skeleton circle height={200} /> : <img src={image} alt="" />}
-        </div>
+        <Link target="_blank" to={`/artist/${"12312"}`}>
+          <div className="CardArtist__container__image">
+            {loading ? <Skeleton circle height={200} /> : <img src={image} alt="" />}
+          </div>
+        </Link>
         <div className="CardArtist__container__desc">
-          <span className="CardArtist__container__desc__name">{loading ? <Skeleton /> : name}</span>
+          <Link target="_blank" to={`/artist/${"12312"}`}>
+            <span className="CardArtist__container__desc__name">
+              {loading ? <Skeleton /> : name}
+            </span>
+          </Link>
           <span className="CardArtist__container__desc__followers">
             {loading ? <Skeleton /> : `${followers} Follower`}
           </span>

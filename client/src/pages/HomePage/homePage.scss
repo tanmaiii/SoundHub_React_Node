@@ -6,6 +6,7 @@
     min-height: 1000px;
     overflow: hidden;
     position: relative;
+    padding-top: $height-header;
 
     @include tablet {
       padding: $space_12;
@@ -13,6 +14,5 @@
     @include mobile {
       padding: $space-8;
     }
-
   }
 }
