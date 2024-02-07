@@ -5,9 +5,9 @@ import "./section.scss";
 import HeaderSection from "../HeaderSection/HeaderSection";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
-import "./slick-theme.scss";
-import "./slick.scss";
+import "swiper/css";
+// import "./slick-theme.scss";
+// import "./slick.scss";
 
 import Slider from "react-slick";
 
@@ -59,12 +59,13 @@ const settings = {
 interface SectionProps {
   children: React.ReactNode;
   title: string;
+  to?: string,
 }
 
-function Section({ children, title }: SectionProps) {
+function Section({ children, title, to }: SectionProps) {
   return (
     <div className="section">
-      <HeaderSection title={title} />
+      <HeaderSection title={title} to={to} />
       <div className="section__main">
         <div className="section__main__slide">
           <Slider {...settings}>{children}</Slider>

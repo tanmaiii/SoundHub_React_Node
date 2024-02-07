@@ -1,12 +1,18 @@
 import React from "react";
-import './headerSection.scss'
+import "./headerSection.scss";
+import { Link } from "react-router-dom";
 
-export default function HeaderSection(props: any) {
+interface HeaderSectionProps {
+  title: string;
+  to?: string;
+}
+
+export default function HeaderSection({ title, to }: HeaderSectionProps) {
   return (
     <div className="HeaderSection">
-      <h4 className="HeaderSection__title">{props?.title}</h4>
+      <h4 className="HeaderSection__title">{title}</h4>
       <button className="HeaderSection__button">
-        <a href="">View all</a>
+        <Link to={`${to}`}>View all</Link>
         <i className="fa-solid fa-angle-right"></i>
       </button>
     </div>

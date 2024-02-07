@@ -81,8 +81,8 @@
         @include flex(center, unset);
         gap: $space-8;
         color: themed("txt-main");
-        // background-color: rgba($color: themed('bg-main'), $alpha: 0.6) ;
-        background-color: themed("bg-rgba");
+        background-color: themed("bg-second");
+        // background-color: themed("bg-rgba");
 
         i {
           font-size: $size-18;

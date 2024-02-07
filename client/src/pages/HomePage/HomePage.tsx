@@ -19,17 +19,17 @@ function HomePage(props: any) {
     <div className="home">
 
       <Section title={"Recommended"}>
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={"Đen"} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
       </Section>
 
       <SectionChartHome title={"Top Chart This Week"} />

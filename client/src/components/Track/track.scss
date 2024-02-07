@@ -1,0 +1,143 @@
+@use "../../scss/" as *;
+
+.track {
+  @include themify($themes) {
+    &__wrapper {
+      @include flex(center, space-between);
+      padding: $space-8 $space-14;
+      border-radius: $radius-8;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-hover;
+        & .button-play {
+          display: block;
+        }
+
+        & .item__default {
+          display: none;
+        }
+
+        & .item__hover {
+          display: flex;
+        }
+      }
+      &__left {
+        @include flex(center, unset);
+        gap: $space-8;
+        &__image {
+          --size: 50px;
+          width: var(--size);
+          height: var(--size);
+          position: relative;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            overflow: hidden;
+            border-radius: $radius-8;
+          }
+          .button-play {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            @include flex(center, center);
+            background-color: themed("bg-rgba");
+            cursor: pointer;
+            display: none;
+            i {
+              color: themed("txt-main");
+              font-size: $size-24;
+            }
+          }
+        }
+        &__desc {
+          h4 {
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            @include text(1);
+          }
+          &__artist {
+            @include flex(center, unset);
+            @include text(1);
+            a {
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              position: relative;
+              padding-right: 4px;
+              display: inline-block;
+              &:not(:last-child)::after {
+                content: ", ";
+              }
+              &:hover {
+                text-decoration: underline;
+                color: $color-primary1;
+              }
+            }
+          }
+        }
+      }
+
+      &__right {
+        @include flex(center, center);
+        gap: $space-8;
+
+        & > .item__default {
+          span {
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-second");
+          }
+        }
+
+        & > .item__hover {
+          @include flex(center, center);
+          display: none;
+          gap: $space-8;
+          .button-like {
+            cursor: pointer;
+            color: themed("txt-main");
+            padding: $space-8;
+            border-radius: 50%;
+            &.active {
+              color: $color-red;
+            }
+            &:hover {
+              background-color: $color-hover;
+            }
+            i {
+              --size: 20px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+            }
+          }
+
+          .button-edit {
+            cursor: pointer;
+            color: themed("txt-main");
+            padding: $space-8;
+            border-radius: 50%;
+            &.active {
+              color: $color-red;
+            }
+            &:hover {
+              background-color: $color-hover;
+            }
+            i {
+              --size: 20px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+            }
+          }
+        }
+      }
+    }
+  }
+}

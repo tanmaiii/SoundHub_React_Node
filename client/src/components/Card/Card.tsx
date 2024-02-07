@@ -1,19 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./card.scss";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { PATH } from "../../constants/paths";
 
 export interface CardProps {
   className?: string;
   image: string;
   title: string;
-  artist: string;
+  artist: string[];
   loading?: boolean;
 }
 
 function Card({ className, image, title, artist, loading = false }: CardProps) {
+  const navigate = useNavigate();
+
   return (
     <div className={`card ${className}`}>
       <div className="card__container">
@@ -21,7 +24,7 @@ function Card({ className, image, title, artist, loading = false }: CardProps) {
           {loading ? (
             <Skeleton height={200} />
           ) : (
-            <Link target="_blank" to={`/song/${"12312"}`}>
+            <Link target="_blank" to={`${PATH.SONG}/${"123123"}`}>
               <img src={image} alt="" />
               <div className="card__container__image__button">
                 <i className="fa-solid fa-play"></i>
@@ -31,13 +34,19 @@ function Card({ className, image, title, artist, loading = false }: CardProps) {
         </div>
 
         <div className="card__container__desc">
-          <Link target="_blank" to={`/song/${"12312"}`}>
+          <Link target="_blank" to={`${PATH.SONG}/${"123123"}`}>
             <span className="card__container__desc__title">{loading ? <Skeleton /> : title}</span>
           </Link>
           <div className="card__container__desc__info">
-            <Link target="_blank" to={`/artist/${"123123"}`}>
-              <span>{loading ? <Skeleton /> : artist}</span>
-            </Link>
+            {loading ? (
+              <Skeleton />
+            ) : (
+              <div className="card__container__desc__info__artist">
+                {artist.map((artist) => (
+                  <Link to={"/"}>{artist}</Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

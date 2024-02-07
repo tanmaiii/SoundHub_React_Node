@@ -55,12 +55,23 @@
           color: themed("txt-main");
         }
         &__info {
-          a {
-            font-size: $size-16;
-            font-weight: $font-light;
-            color: themed("txt-second");
-            &:hover {
-              text-decoration: underline;
+          &__artist {
+            @include flex(center, unset);
+            @include text(1);
+            a {
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              position: relative;
+              padding-right: 4px;
+              display: inline-block;
+              &:not(:last-child)::after {
+                content: ", ";
+              }
+              &:hover {
+                text-decoration: underline;
+                color: $color-primary1;
+              }
             }
           }
         }
