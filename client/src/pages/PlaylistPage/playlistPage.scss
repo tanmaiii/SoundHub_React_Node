@@ -1,0 +1,37 @@
+@use "../../scss/" as *;
+
+.playlistPage {
+  @include themify($themes) {
+    &__content {
+      padding: 0 $space-32;
+      @include mobile {
+        padding: 0 $space-12;
+      }
+      &__header {
+        padding: $space-32 0;
+        gap: $space-8;
+        @include flex(center, start);
+        button {
+          cursor: pointer;
+          background-color: themed("bg-second");
+          border-radius: 50%;
+          padding: $space-4;
+          &:hover {
+            background-color: $color-hover;
+          }
+          i {
+            --size: 40px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-24;
+            color: themed("txt-main");
+          }
+        }
+      }
+      &__tracklist {
+        padding: $space-32 0;
+      }
+    }
+  }
+}

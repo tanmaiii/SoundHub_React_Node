@@ -7,12 +7,15 @@
     overflow: hidden;
     position: relative;
     padding-top: $height-header;
+    margin-bottom: $space-32;
 
     @include tablet {
-      padding: $space_12;
+      padding: 0 $space_12;
+      padding-top: $height-header;
     }
     @include mobile {
-      padding: $space-8;
+      padding: 0 $space-8;
+      padding-top: $height-header;
     }
   }
 }

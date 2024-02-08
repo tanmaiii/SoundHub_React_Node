@@ -8,6 +8,8 @@
       border-radius: $radius-12;
       cursor: pointer;
       transition: $transition;
+      // background-color: themed("bg-second");
+
       @include mobile {
         padding: $space-4;
       }

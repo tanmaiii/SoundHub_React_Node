@@ -20,7 +20,6 @@ const PATH = {
   SONG: "/song",
   SONG_SHOW: "/song/:id",
   FAVOURITE: "/favourite",
-
   LOGIN: "/login",
   REGISTER: "/signup",
 };
@@ -31,6 +30,7 @@ const publicRoutes = [
   { path: PATH.ARTIST_SHOW, layout: null, component: ArtistPage },
   { path: PATH.DISCOGRAPHY_SHOW, layout: null, component: DiscographyPage },
   { path: PATH.PLAYLIST_SHOW, layout: null, component: PlaylistPage },
+  { path: PATH.FAVOURITE, layout: null, component: PlaylistPage },
   { path: PATH.SONG_SHOW, layout: null, component: SongPage },
   { path: "*", layout: null, component: NotFoundPage },
 ];

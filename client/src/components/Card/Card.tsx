@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./card.scss";
 
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
 import { PATH } from "../../constants/paths";
 
 export interface CardProps {

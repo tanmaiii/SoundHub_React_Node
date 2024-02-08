@@ -35,17 +35,25 @@
           padding: $space-32;
           @include flex(center, unset);
           gap: $space-20;
+          @include mobile {
+            padding: $space-12;
+          }
           .avatar {
             --size: 180px;
+            min-width: var(--size);
+            min-height: var(--size);
             width: var(--size);
             height: var(--size);
             border-radius: 50%;
             overflow: hidden;
             box-shadow: themed("box-shadow");
+            @include mobile {
+              --size: 120px;
+            }
             img {
               width: 100%;
               height: 100%;
-              object-fit: contain;
+              object-fit: cover;
             }
           }
 
@@ -69,6 +77,7 @@
               font-size: 60px;
               font-weight: $font-bold;
               color: themed("txt-main");
+              @include text(1);
             }
             &__desc {
               @include flex(center, unset);
@@ -100,37 +109,39 @@
           }
         }
       }
-    }
-
-    &__content {
-      padding: $space-32;
-      &__top__section {
-        @include flex(start, unset);
-        flex-wrap: wrap;
-
-        & > .top__section__new {
-          & > h4 {
-            font-size: $size-18;
-            color: themed("txt-main");
-            font-weight: $font-mediun;
-            margin-bottom: $space-18;
-          }
-          & > .top__section__new__list {
-            width: 100%;
-            flex-wrap: wrap;
-          }
+      &__content {
+        padding: $space-32;
+        @include mobile {
+          padding: $space-12;
         }
-        & > .top__section__popular {
-          & > h4 {
-            font-size: $size-18;
-            color: themed("txt-main");
-            font-weight: $font-mediun;
-            margin-bottom: $space-18;
-          }
+        &__top__section {
+          @include flex(start, unset);
+          flex-wrap: wrap;
 
-          & > .top__section__popular__list {
-            width: 100%;
-            flex-wrap: wrap;
+          & > .top__section__new {
+            & > h4 {
+              font-size: $size-18;
+              color: themed("txt-main");
+              font-weight: $font-mediun;
+              margin-bottom: $space-18;
+            }
+            & > .top__section__new__list {
+              width: 100%;
+              flex-wrap: wrap;
+            }
+          }
+          & > .top__section__popular {
+            & > h4 {
+              font-size: $size-18;
+              color: themed("txt-main");
+              font-weight: $font-mediun;
+              margin-bottom: $space-18;
+            }
+
+            & > .top__section__popular__list {
+              width: 100%;
+              flex-wrap: wrap;
+            }
           }
         }
       }

@@ -3,6 +3,7 @@ import { Routes } from "./routes/routes";
 import "./App.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import "../src/assets/font-awesome-6-pro/css/all.css";
 import { useSelector } from "react-redux";

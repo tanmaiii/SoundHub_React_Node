@@ -7,7 +7,7 @@
       padding: $space-8 $space-14;
       border-radius: $radius-8;
       cursor: pointer;
-
+      margin-bottom: $space-8;
       &:hover {
         background-color: $color-hover;
         & .button-play {
@@ -15,18 +15,33 @@
         }
 
         & .item__default {
-          display: none;
+          // visibility: hidden;
         }
 
         & .item__hover {
-          display: flex;
+          visibility: visible;
         }
       }
       &__left {
         @include flex(center, unset);
         gap: $space-8;
+        &__number {
+          padding: 0 $space-4;
+          @include flex(center, center);
+          width: 20px;
+          position: relative;
+          h4 {
+            position: absolute;
+            right: 0;
+            font-size: $size-18;
+            color: themed("txt-main");
+            font-weight: $font-light;
+          }
+        }
         &__image {
           --size: 50px;
+          min-width: var(--size);
+          min-height: var(--size);
           width: var(--size);
           height: var(--size);
           position: relative;
@@ -81,11 +96,21 @@
         }
       }
 
+      &__center {
+        &__date {
+          font-size: $size-16;
+          color: themed("txt-second");
+          font-weight: $font-light;
+          @include text(1);
+        }
+      }
+
       &__right {
         @include flex(center, center);
         gap: $space-8;
 
         & > .item__default {
+          visibility: visible;
           span {
             font-size: $size-16;
             font-weight: $font-light;
@@ -95,7 +120,7 @@
 
         & > .item__hover {
           @include flex(center, center);
-          display: none;
+          visibility: hidden;
           gap: $space-8;
           .button-like {
             cursor: pointer;

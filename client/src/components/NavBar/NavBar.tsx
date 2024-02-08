@@ -19,30 +19,16 @@ const navbar = [
       },
       {
         id: 3,
-        title: "Album",
-        icon: <i className="fa-light fa-album-collection"></i>,
-        path: PATH.ARTIST,
-      },
-      {
-        id: 4,
-        title: "Podcast",
-        icon: <i className="fa-light fa-microphone"></i>,
-        path: PATH.ARTIST,
-      },
-    ],
-  },
-  {
-    title: "Library",
-    items: [
-      { id: 1, title: "Recent", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
-      {
-        id: 2,
         title: "Favourit",
         icon: <i className="fa-light fa-heart"></i>,
         path: PATH.FAVOURITE,
       },
-      { id: 3, title: "Playlist", icon: <i className="fa-light fa-music"></i>, path: PATH.ARTIST },
+      { id: 4, title: "Recent", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
     ],
+  },
+  {
+    title: "Playlist",
+    items: [],
   },
 ];
 

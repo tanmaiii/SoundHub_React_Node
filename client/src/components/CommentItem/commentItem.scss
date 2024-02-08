@@ -1,0 +1,88 @@
+@use "../../scss/" as *;
+
+.comment__item {
+  @include themify($themes) {
+    @include flex(start, unset);
+    // gap: $space-12;
+    &__avatar {
+      --size: 40px;
+      width: var(--size);
+      height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: $space-12;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__content {
+      flex: 1;
+      &__top {
+        @include flex(center, space-between);
+        gap: $space-12;
+        &__info {
+          background-color: themed("bg-second");
+          padding: $space-8 $space-12;
+          border-radius: $space-14;
+          a {
+            font-size: $size-16;
+            color: themed("txt-main");
+            font-weight: $font-mediun;
+            display: block;
+          }
+          span {
+            font-size: $size-16;
+            color: themed("txt-main");
+            font-weight: $font-light;
+          }
+        }
+        &__like {
+          @include flex(center, unset);
+          flex-direction: column;
+          button {
+            cursor: pointer;
+            &:hover {
+              i {
+                color: themed("txt-main");
+              }
+            }
+            i {
+              color: themed("txt-second");
+              font-size: $size-18;
+            }
+          }
+          span {
+            color: themed("txt-second");
+            font-size: $size-14;
+          }
+        }
+      }
+
+      &__bottom {
+        @include flex(start, unset);
+        gap: $space-12;
+        padding-left: $space-12;
+        margin-top: $space-4;
+        &__time {
+          font-size: $size-16;
+          color: themed("txt-second");
+          font-weight: $font-light;
+        }
+
+        &__reply {
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-light;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}

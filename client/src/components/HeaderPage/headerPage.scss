@@ -1,0 +1,114 @@
+@use "../../scss/" as *;
+
+.HeaderPage {
+  @include themify($themes) {
+    padding-top: 145px;
+    position: relative;
+    overflow: hidden;
+
+    &__blur {
+      .blur {
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: 50% center;
+        background-size: cover;
+        filter: blur(50px);
+        position: absolute;
+        inset: 0px;
+        display: block;
+      }
+      .bg-alpha {
+        background-color: themed("bg-rgba");
+        height: 100%;
+        z-index: 1;
+        position: absolute;
+        inset: 0px;
+        display: block;
+      }
+    }
+
+    &__body {
+      z-index: 2;
+      position: relative;
+      padding: $space-32;
+      @include flex(end, unset);
+      gap: $space-20;
+      @include mobile {
+        padding: $space-12;
+      }
+      .avatar {
+        --size: 180px;
+        min-width: var(--size);
+        min-height: var(--size);
+        width: var(--size);
+        height: var(--size);
+        border-radius: $radius-8;
+        overflow: hidden;
+        box-shadow: themed("box-shadow");
+        @include mobile {
+          --size: 120px;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .info {
+        @include flex(unset, unset);
+        flex-direction: column;
+        // gap: $space-8;
+        min-width: 200px;
+        &__category {
+          font-size: $size-16;
+          color: themed("txt-main");
+        }
+
+        &__title {
+          font-size: 60px;
+          font-weight: $font-bold;
+          color: themed("txt-main");
+          @include text(1);
+        }
+        &__desc {
+          @include flex(center, unset);
+          gap: $space-12;
+          &__author {
+            @include flex(center, unset);
+            gap: $space-8;
+            &:hover {
+              a {
+                text-decoration: underline;
+              }
+            }
+            img {
+              --size: 24px;
+              width: var(--size);
+              height: var(--size);
+              overflow: hidden;
+              border-radius: 50%;
+            }
+            a {
+              font-size: $size-16;
+              font-weight: $font-mediun;
+              color: themed("txt-main");
+            }
+          }
+          &__time,
+          &__listen {
+            i {
+              font-size: $size-18;
+              color: themed("txt-main");
+              margin-right: $space-8;
+            }
+            span {
+              font-size: $size-16;
+              color: themed("txt-main");
+            }
+          }
+        }
+      }
+    }
+  }
+}

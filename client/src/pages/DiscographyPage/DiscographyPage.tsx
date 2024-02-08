@@ -5,7 +5,7 @@ import img from "../../assets/images/artistHoa.jpg";
 import Card from "../../components/Card/Card";
 
 export default function DiscographyPage() {
-  const [activeDropdown, setActiveDropdown] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState(false);
 
   return (
     <div className="discography">
@@ -21,7 +21,7 @@ export default function DiscographyPage() {
                 <span>Mới nhất</span>
                 <i className="fa-light fa-chevron-down"></i>
               </div>
-              <div className={`dropdown__content ${activeDropdown ? 'active' : ''}`}>
+              <div className={`dropdown__content ${activeDropdown ? "active" : ""}`}>
                 <ul>
                   <li>Mới nhất</li>
                   <li>Phổ biến</li>

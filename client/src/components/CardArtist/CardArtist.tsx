@@ -31,14 +31,14 @@ export default function CardArtist({ name, image, followers, loading = false }: 
           <span className="CardArtist__container__desc__followers">
             {loading ? <Skeleton /> : `${followers} Follower`}
           </span>
-          {loading ? (
+          {/* {loading ? (
             <Skeleton />
           ) : (
             <button className="CardArtist__container__desc__button">
               <i className="fa-regular fa-user-plus"></i>
               <span>Follow</span>
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

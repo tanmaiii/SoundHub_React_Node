@@ -82,8 +82,11 @@
         gap: $space-8;
         color: themed("txt-main");
         background-color: themed("bg-second");
+        flex: 1;
         // background-color: themed("bg-rgba");
-
+        @include mobile {
+          display: none;
+        }
         i {
           font-size: $size-18;
           color: themed("txt-main");

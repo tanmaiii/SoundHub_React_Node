@@ -1,0 +1,173 @@
+@use "../../scss/" as *;
+
+.songPage {
+  @include themify($themes) {
+    &__content {
+      padding: 0 $space-32;
+      margin-bottom: $space-32;
+      &__header {
+        padding: $space-16 0;
+        gap: $space-8;
+        @include flex(center, start);
+        button {
+          cursor: pointer;
+          background-color: themed("bg-second");
+          border-radius: 50%;
+          padding: $space-4;
+          &:hover {
+            background-color: $color-hover;
+          }
+          i {
+            --size: 40px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-24;
+            color: themed("txt-main");
+          }
+        }
+      }
+
+      &__body {
+        padding: $space-14 0;
+        @include flex(start, unset);
+        flex-wrap: wrap-reverse;
+
+        &__comment {
+          width: 100%;
+          &__form {
+            @include flex(center, unset);
+            width: 100%;
+            gap: $space-12;
+            --size: 46px;
+            padding: $size-14 0;
+            & > .commentForm__avatar {
+              width: var(--size);
+              height: var(--size);
+              overflow: hidden;
+              border-radius: 50%;
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+            .commentForm__input {
+              width: 100%;
+              flex: 1;
+              position: relative;
+              input {
+                height: var(--size);
+                background-color: themed("bg-second");
+                font-size: $space-16;
+                padding: $space-12 $space-16;
+                border-radius: $radius-25;
+                color: themed("txt-main");
+                position: relative;
+                width: 100%;
+              }
+              .btn__clear {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 2;
+                i {
+                  font-size: $size-18;
+                  color: themed("txt-main");
+                }
+              }
+            }
+            .commentForm__btn__submit {
+              width: var(--size);
+              height: var(--size);
+              border-radius: 50%;
+              padding: $space-4;
+              cursor: pointer;
+              transition: $transition;
+              background-color: themed("bg-second");
+              &:hover {
+                opacity: 1;
+                background-color: themed("bg-second");
+                i {
+                  color: themed("txt-main");
+                }
+              }
+
+              i {
+                color: themed("txt-second");
+                @include flex(center, center);
+                font-size: $size-24;
+              }
+            }
+          }
+
+          &__header {
+            @include flex(center, space-between);
+            margin-bottom: $space-12;
+            .quantity {
+              color: themed("txt-main");
+              i {
+                font-size: $size-18;
+                margin-right: $space-12;
+              }
+              span {
+                font-size: $size-16;
+              }
+            }
+            .dropdown {
+              position: relative;
+              .dropdown__header {
+                //   border: 1px solid $color-border;
+                background-color: themed("bg-second");
+                padding: $space-8 $space-14;
+                border-radius: $radius-20;
+                @include flex(center, center);
+                gap: $space-8;
+                cursor: pointer;
+                color: themed("txt-main");
+                i {
+                  font-size: $size-16;
+                }
+              }
+              .dropdown__content {
+                background-color: themed("bg-second");
+                position: absolute;
+                top: calc(100% + $space-8);
+                width: 100%;
+                z-index: 2;
+                padding: $space-4;
+                border-radius: $radius-4;
+                display: none;
+                &.active {
+                  display: block;
+                }
+                ul {
+                  li {
+                    padding: $space-8 $space-10;
+                    color: themed("txt-main");
+                    cursor: pointer;
+                    border-radius: $radius-4;
+                    &:hover {
+                      background-color: $color-hover;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          &__list {
+            @include flex(start, unset);
+            flex-wrap: wrap;
+            gap: $space-12;
+          }
+        }
+
+        &__artist {
+          @include flex(center, unset);
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+}
