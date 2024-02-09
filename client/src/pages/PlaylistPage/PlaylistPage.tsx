@@ -17,6 +17,8 @@ export default function PlaylistPage() {
         time="2022"
         // listen="18,714,210"
         category="Playlist"
+        like="23,123"
+        song="20 songs"
       />
       <div className="playlistPage__content">
         <div className="playlistPage__content__header">

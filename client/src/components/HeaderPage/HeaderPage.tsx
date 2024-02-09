@@ -11,6 +11,8 @@ interface HeaderPageProps {
   time?: string;
   listen?: string;
   loading?: boolean;
+  like?: string;
+  song?: string;
 }
 
 export default function HeaderPage({
@@ -22,6 +24,8 @@ export default function HeaderPage({
   time,
   listen,
   loading = false,
+  like,
+  song,
 }: HeaderPageProps) {
   return (
     <div className="HeaderPage">
@@ -45,14 +49,26 @@ export default function HeaderPage({
                 <img src={avtAuthor} alt="" />
                 <a href="">{author}</a>
               </div>
-              <div className="info__desc__time">
+              <div className="info__desc__item">
                 <i className="fa-light fa-clock"></i>
                 <span>{time}</span>
               </div>
               {listen && (
-                <div className="info__desc__listen">
+                <div className="info__desc__item">
                   <i className="fa-light fa-headphones"></i>
                   <span>{listen}</span>
+                </div>
+              )}
+              {like && (
+                <div className="info__desc__item">
+                  <i className="fa-light fa-heart"></i>
+                  <span>{like}</span>
+                </div>
+              )}
+              {song && (
+                <div className="info__desc__item">
+                  <i className="fa-thin fa-album"></i>
+                  <span>{song}</span>
                 </div>
               )}
             </div>

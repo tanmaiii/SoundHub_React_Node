@@ -75,7 +75,7 @@ export default function UserSetting() {
           <span>Dark Mode</span>
           <button>
             <input
-              checked={darkMode}
+              defaultChecked={darkMode}
               type="checkbox"
               id="switch"
               className="switch-input"

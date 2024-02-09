@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
+import Loading from "./components/Loading/Loading";
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
@@ -21,6 +22,7 @@ function App() {
         highlightColor={darkMode ? "#121212" : "#f5f5f5"}
         duration={2}
       >
+        {/* <Loading /> */}
         <Routes />
       </SkeletonTheme>
     </div>
