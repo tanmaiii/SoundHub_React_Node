@@ -1,0 +1,97 @@
+@use "../../scss/" as *;
+
+.Modal {
+  @include themify($themes) {
+    width: 100%;
+    height: 100%;
+    background-color: $color-overlay;
+    position: fixed;
+    top: 0;
+    left: 0;
+    @include flex(center, center);
+    z-index: 99;
+    transform: translateY(-100%);
+    display: none;
+    transition: all 0.1s;
+    &.active {
+      transform: translateY(0);
+      display: flex;
+    }
+
+    &__wrapper {
+      background-color: themed("bg-main");
+      border-radius: $radius-12;
+      width: max-content;
+      min-height: 400px;
+      min-width: 400px;
+      overflow: hidden;
+      animation: fadeIn linear 0.1s;
+      position: relative;
+
+      @include mobile {
+        width: 100%;
+        border-radius: 0;
+        max-height: 100%;
+        height: 100%;
+        min-width: 100%;
+      }
+
+      &__bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 10rem;
+        width: 100%;
+        z-index: 100;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &__body {
+        position: relative;
+        padding: 10rem 24px 24px;
+        z-index: 101;
+      }
+
+      .btn_close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        cursor: pointer;
+        background-color: rgba($color: $color-black, $alpha: 0.4);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        padding: $space-8;
+        color: $color-white;
+        transition: $transition;
+        z-index: 101;
+
+        &:hover {
+          background-color: rgba($color: $color-black, $alpha: 0.6);
+        }
+
+        i {
+          @include flex(center, center);
+          --size: 20px;
+          width: var(--size);
+          height: var(--size);
+          font-size: $size-24;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

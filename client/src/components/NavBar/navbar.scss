@@ -27,7 +27,7 @@
       // padding: $space-14;
 
       &__top {
-        @include flex(center, unset);
+        @include flex(center, center);
         flex: row;
         gap: $space-8;
         // height: $height-header;
@@ -56,8 +56,9 @@
 
         &__logo {
           font-weight: $font-bold;
-          @include text-gradient($color-gradient);
+          // @include text-gradient($color-gradient);
           @include flex(center, center);
+          color: $color-primary1;
 
           gap: $space-4;
           flex-direction: row;
@@ -106,7 +107,7 @@
                 color: themed("txt-main");
               }
               &.active {
-                background: $color-gradient;
+                background-color: $color-primary1;
                 color: $color-bg-main;
               }
               &__icon {

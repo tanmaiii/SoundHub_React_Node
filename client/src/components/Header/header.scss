@@ -103,31 +103,35 @@
     }
 
     &__right {
-      &__avt {
-        --size: 52px;
-        width: var(--size);
-        height: var(--size);
+      @include flex(center, unset);
+      gap: $space-12;
 
-        position: relative;
-        background-clip: padding-box;
-        background-image: linear-gradient(to right top, $color-primary1, $color-primary2);
-        border-radius: 50%;
-        :before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          z-index: -1;
-          margin: -10px;
-          border-radius: inherit;
+      button {
+        padding: $space-12 $space-14;
+        border-radius: $radius-25;
+        font-size: $size-16;
+        font-weight: $font-light;
+        cursor: pointer;
+        transition: $transition;
+        &:hover {
+          scale: 1.02;
         }
+      }
 
-        img {
-          z-index: 1;
-          border: 3px solid transparent;
-          border-radius: 50%;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+      &__signup {
+        button {
+          background-color: transparent;
+          color: $color-primary1;
+          &:hover {
+            background-color: $color-hover;
+          }
+        }
+      }
+
+      &__login {
+        button {
+          background-color: $color-primary1;
+          color: $color-bg-main;
         }
       }
     }

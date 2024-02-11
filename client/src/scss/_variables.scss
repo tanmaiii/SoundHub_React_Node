@@ -27,12 +27,13 @@ $color-primary1: #8568f5;
 $color-primary2: #3dc3c0;
 $color-hover: rgba(124, 116, 238, 0.1);
 
+$color-overlay : rgba(0, 0, 0, 0.4);
+
 $color-white: #fff;
 $color-black: #000000;
 $color-gray: #dadada;
 $color-blue: #007aff;
 $color-red: #ff3333;
-
 
 $color-bg-main: #ffffff;
 $color-bg-second: #f9f9f9;
@@ -49,9 +50,9 @@ $color-rgba-white: rgba(255, 255, 255, 0.8);
 
 $color-border: #878787;
 
-$box-shadow-light: 0 -4px 32px rgba(0,0,0,.2);
-$box-shadow-dark: 0 9px 32px rgba(0,0,0,.8);
- 
+$box-shadow-light: 0 -4px 32px rgba(0, 0, 0, 0.2);
+$box-shadow-dark: 0 9px 32px rgba(0, 0, 0, 0.8);
+
 $color-gradient: linear-gradient(90deg, $color-primary2 -15.19%, $color-primary1 111.92%);
 
 $font-bold: 900;

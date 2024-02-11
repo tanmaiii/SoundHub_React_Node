@@ -1,0 +1,139 @@
+@use "../../scss/" as *;
+
+.auth {
+  @include themify($themes) {
+    &__container {
+      width: 400px;
+      @include mobile {
+        width: 100%;
+      }
+      &__title {
+        h2 {
+          @include flex(center, center);
+          font-size: $size-24;
+          color: themed("txt-main");
+          margin-bottom: $space-24;
+          font-weight: $font-bold;
+        }
+      }
+      &__group {
+        margin-bottom: $space-12;
+        @include flex(unset, unset);
+        flex-direction: column;
+        gap: $space-12;
+        & > .title {
+          font-size: $size-16;
+          font-weight: $font-mediun;
+          color: themed("txt-main");
+        }
+
+        & > .input {
+          background-color: themed("bg-second");
+          padding: $space-12 $space-14;
+          border-radius: $radius-8;
+          position: relative;
+          &.error {
+            border: 1px solid $color-red;
+          }
+          input {
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            width: 100%;
+          }
+          .tooglePassword {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 10px;
+            cursor: pointer;
+          }
+        }
+
+        & > .error {
+          i {
+            font-size: $size-18;
+            margin-right: $space-8;
+            color: $color-red;
+          }
+          span {
+            font-size: $size-16;
+            color: $color-red;
+          }
+        }
+
+        & > .desc {
+          h4 {
+            font-size: $size-16;
+            font-weight: $font-mediun;
+            color: themed("txt-main");
+            margin-bottom: $space-4;
+          }
+
+          ul {
+            li {
+              @include flex(center, unset);
+              gap: $space-8;
+              margin-bottom: $space-4;
+              color: themed("txt-second");
+              span {
+                font-size: $size-16;
+                font-weight: $font-light;
+              }
+              i {
+                font-size: $size-16;
+              }
+            }
+          }
+        }
+
+        & > .btn_submit {
+          background-color: $color-primary1;
+          width: 100%;
+          padding: $space-12 $space-14;
+          border-radius: $radius-25;
+          font-size: $size-16;
+          color: $color-white;
+          font-weight: $font-mediun;
+          cursor: pointer;
+          transition: $transition;
+          &:hover {
+            transform: scale(1.01);
+          }
+        }
+
+        & > .forgot {
+          //   text-align: right;
+          @include flex(center, center);
+          font-size: $size-14;
+          color: themed("txt-second");
+          font-weight: $font-light;
+          text-decoration: underline;
+          cursor: pointer;
+          display: block;
+          &:hover {
+            color: $color-primary1;
+          }
+        }
+
+        & > .auth__navigation {
+          text-align: right;
+          font-size: $size-14;
+          color: themed("txt-second");
+          font-weight: $font-light;
+          display: block;
+          @include flex(center, center);
+          gap: $space-8;
+          a {
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover {
+              color: $color-primary1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

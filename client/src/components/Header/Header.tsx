@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import avt from "../../assets/images/avatar.jpg";
 
 import UserSetting from "../UserSetting/UserSetting";
@@ -7,12 +7,17 @@ import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../Navbar/navbarSlide";
-import { log } from "console";
+import Modal from "../Modal/Modal";
+import Login from "../Auth/Login";
+import Signup from "../Auth/Signup";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
   const headerRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
+  const currentUser = [undefined];
+  const [openModalLogin, setOpenModalLogin] = useState(false);
+  const [openModalSignup, setOpenModalSignup] = useState(false);
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -32,37 +37,48 @@ export default function Header() {
 
   const handleClickMenu = () => {
     console.log(openMenu);
-    
+
     dispatch(changeOpen(!openMenu));
   };
 
   return (
-    <div className="header" ref={headerRef}>
-      <div className="header__left">
-        <button className="header__left__menu" onClick={() => handleClickMenu()}>
-          <i className="fa-regular fa-bars"></i>
-        </button>
-        <button disabled data-tooltip={"Go back"}>
-          <i className="fa-solid fa-angle-left"></i>
-        </button>
-        <button data-tooltip={"Go next"}>
-          <i className="fa-solid fa-angle-right"></i>
-        </button>
-      </div>
-      <div className="header__center">
-        <div className="header__center__search">
-          <i className="fa-thin fa-magnifying-glass"></i>
-          <input type="text" placeholder="Search artist, title, ablum,..." />
+    <>
+      <div className="header" ref={headerRef}>
+        <div className="header__left">
+          <button className="header__left__menu" onClick={() => handleClickMenu()}>
+            <i className="fa-regular fa-bars"></i>
+          </button>
+          <button disabled data-tooltip={"Go back"}>
+            <i className="fa-solid fa-angle-left"></i>
+          </button>
+          <button data-tooltip={"Go next"}>
+            <i className="fa-solid fa-angle-right"></i>
+          </button>
+        </div>
+        <div className="header__center">
+          <div className="header__center__search">
+            <i className="fa-thin fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search artist, title, ablum,..." />
+          </div>
+        </div>
+        <div className="header__right">
+          {/* <UserSetting /> */}
+          <div className="header__right__signup">
+            <button onClick={() => setOpenModalSignup(true)}>Sign up</button>
+          </div>
+          <div className="header__right__login">
+            <button onClick={() => setOpenModalLogin(true)}>Log in</button>
+          </div>
         </div>
       </div>
-      <div className="header__right">
-        <div className="header__right__darkMode"></div>
 
-        <UserSetting />
-        {/* <div className="header__right__avt">
-          <img src={avt} alt="" />
-        </div> */}
-      </div>
-    </div>
+      <Modal title="Log in" openModal={openModalLogin} setOpenModal={setOpenModalLogin}>
+        <Login />
+      </Modal>
+
+      <Modal title="Sign up" openModal={openModalSignup} setOpenModal={setOpenModalSignup}>
+        <Signup />
+      </Modal>
+    </>
   );
 }

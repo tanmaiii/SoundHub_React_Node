@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { stat } from "fs";
-import { act } from "react-dom/test-utils";
+
 
 export interface navbarState {
   path: string;
