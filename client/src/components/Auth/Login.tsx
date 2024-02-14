@@ -14,6 +14,7 @@ export default function Login() {
           <div className="input">
             <input type="text" placeholder="Email or username" />
           </div>
+       
           {/* <div className="error">
             <i className="fa-sharp fa-light fa-circle-exclamation"></i>
             <span>Please enter your Spotify username or email address</span>
@@ -22,7 +23,7 @@ export default function Login() {
         <div className="auth__container__group">
           <h4 className="title">Password</h4>
           <div className="input">
-            <input type={`${show ? 'text' : 'password'}`} placeholder="Password" />
+            <input type={`${show ? "text" : "password"}`} placeholder="Password" />
             <span className="tooglePassword" onClick={() => setShow(!show)}>
               {show ? (
                 <i className="fa-light fa-eye"></i>
