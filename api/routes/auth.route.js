@@ -5,5 +5,6 @@ import authValidation from "../validations/auth.validation.js";
 
 router.post("/signin", authValidation.signin, authController.signin);
 router.post("/signup", authValidation.signup, authController.signup);
+router.get("/signout", authController.signout);
 
 export default router;

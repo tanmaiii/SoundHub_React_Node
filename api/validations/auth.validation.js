@@ -11,17 +11,17 @@ export const signup = (req, res, next) => {
     }),
     password: Joi.string()
       .min(6)
-      .max(255)
+      .max(50)
       .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
       .required()
       .messages({
         "string.string": `Password phải là chữ`,
         "string.base": `Password should be a type of 'text'`,
         "string.min": `Password ít nhất 6 kí tự`,
-        "string.max": `Trường này không quá 255 kí tự`,
+        "string.max": `Trường này không quá 50 kí tự`,
         "any.required": "Password là trường bắt buộc",
       }),
-    name: Joi.string().empty().max(255).required().messages({
+    name: Joi.string().empty().max(50).required().messages({
       "string.string": `Tên phải là chữ`,
       "string.empty": "Tên không được bỏ trống",
       "string.max": `Trường này không quá 255 kí tự`,
@@ -52,16 +52,35 @@ export const signin = (req, res, next) => {
     }),
     password: Joi.string()
       .min(6)
-      .max(255)
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+      .max(50)
+      // .pattern(
+      //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
+      // )
       .required()
       .messages({
         "string.string": `Password phải là chữ`,
         "string.base": `Password should be a type of 'text'`,
         "string.min": `Password ít nhất 6 kí tự`,
-        "string.min": `Password không quá 255 kí tự`,
+        "string.max": `Password không quá 50 kí tự`,
         "any.required": "Password là trường bắt buộc",
       }),
+  });
+
+  const { error, value } = schema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.body = value;
+
+  next();
+};
+
+export const getUser = (req, res, next) => {
+  const schema = Joi.object({
+    userId: Joi.string(),
   });
 
   const { error, value } = schema.validate(req.body);
@@ -79,4 +98,5 @@ export const signin = (req, res, next) => {
 export default {
   signup,
   signin,
+  getUser,
 };
