@@ -59,8 +59,8 @@ export const signin = async (req, res) => {
               .json(others);
           } else {
             // A user with that email address does not exists
-            const conflictError = "User credentials are not valid.";
-            res.json({ user, conflictError });
+            const conflictError = "Wrong password";
+            res.status(401).json({ conflictError });
           }
         });
       }

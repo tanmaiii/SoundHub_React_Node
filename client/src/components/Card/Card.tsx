@@ -42,8 +42,10 @@ function Card({ className, image, title, artist, loading = false }: CardProps) {
               <Skeleton />
             ) : (
               <div className="card__container__desc__info__artist">
-                {artist.map((artist) => (
-                  <Link to={"/"}>{artist}</Link>
+                {artist.map((artist, index) => (
+                  <Link key={index} to={"/"}>
+                    {artist}
+                  </Link>
                 ))}
               </div>
             )}

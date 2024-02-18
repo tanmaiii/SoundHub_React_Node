@@ -1,8 +1,36 @@
 import React, { useState } from "react";
 import "./auth.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { loginSuccess, loginFailure } from "./authSlide";
+
+import userApi from "../../api/userApi";
+import authApi from "../../api/authApi";
 
 export default function Login() {
   const [show, setShow] = useState(false);
+  const auth = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    try {
+      const getList = async () => {
+        const res = await authApi.signin("tanmai3@gmail.com", "1232456");
+        // console.log(res);
+        if ("conflictError" in res) {
+          console.log(res.conflictError);
+
+          dispatch(loginSuccess(res.conflictError));
+        } else {
+          dispatch(loginFailure(res));
+        }
+      };
+      getList();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="auth">
       <div className="auth__container">
@@ -14,7 +42,7 @@ export default function Login() {
           <div className="input">
             <input type="text" placeholder="Email or username" />
           </div>
-       
+
           {/* <div className="error">
             <i className="fa-sharp fa-light fa-circle-exclamation"></i>
             <span>Please enter your Spotify username or email address</span>
@@ -35,7 +63,9 @@ export default function Login() {
         </div>
         <div className="auth__container__group">
           <a className="forgot">Forgot your password ?</a>
-          <button className="btn_submit">Log in</button>
+          <button className="btn_submit" onClick={() => handleClick()}>
+            Log in
+          </button>
           <span className="auth__navigation">
             Don't have an account?
             <a href="">Sign up for Spotify</a>
