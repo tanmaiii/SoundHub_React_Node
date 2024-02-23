@@ -15,14 +15,12 @@ export default function Login() {
   const handleClick = () => {
     try {
       const getList = async () => {
-        const res = await authApi.signin("tanmai3@gmail.com", "1232456");
+        const res = await authApi.signin("tanmai3@gmail.com", "123457");
         // console.log(res);
         if ("conflictError" in res) {
-          console.log(res.conflictError);
-
-          dispatch(loginSuccess(res.conflictError));
+          dispatch(loginFailure(res.conflictError));
         } else {
-          dispatch(loginFailure(res));
+          dispatch(loginSuccess(res));
         }
       };
       getList();
