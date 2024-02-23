@@ -12,7 +12,7 @@ export default function HeaderSection({ title, to }: HeaderSectionProps) {
     <div className="HeaderSection">
       <h4 className="HeaderSection__title">{title}</h4>
       <button className="HeaderSection__button">
-        <Link to={`${to}`}>View all</Link>
+        <Link to={`${to}`}>Tất cả</Link>
         <i className="fa-solid fa-angle-right"></i>
       </button>
     </div>

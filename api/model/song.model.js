@@ -1,4 +1,4 @@
-import { db } from "../config/connect.js";
+import { db, promiseDb } from "../config/connect.js";
 
 const Song = (song) => {
   this.title = song.title;
@@ -19,8 +19,8 @@ Song.create = (newSong, result) => {
   });
 };
 
-User.findById = (id, result) => {
-  db.query(`SELECT * from songs WHERE id = '${id}'`, (err, res) => {
+Song.findById = (songId, result) => {
+  db.query(`SELECT * from songs WHERE id = '${songId}'`, (err, res) => {
     if (err) {
       result(err, null);
       return;
@@ -33,19 +33,33 @@ User.findById = (id, result) => {
   });
 };
 
-Song.getAll = (result) => {
-  db.query(`SELECT * from songs`, (err, res) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
-    }
-    if (res.length > 0) {
-      result(null, res);
-      return;
-    }
-    result(null, null);
-  });
+Song.getAll = async (query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sortBy = query?.sortBy;
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(`SELECT * FROM songs limit ${+limit} offset ${+offset}`);
+
+  const [totalCount] = await promiseDb.query(`SELECT COUNT(*) AS totalCount FROM songs`);
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+      },
+    });
+    return;
+  }
+  result(null, null);
 };
 
 export default Song;

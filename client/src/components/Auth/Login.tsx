@@ -15,7 +15,7 @@ export default function Login() {
   const handleClick = () => {
     try {
       const getList = async () => {
-        const res = await authApi.signin("tanmai3@gmail.com", "123457");
+        const res = await authApi.signin("tanmai3@gmail.com", "123456");
         // console.log(res);
         if ("conflictError" in res) {
           dispatch(loginFailure(res.conflictError));

@@ -15,7 +15,7 @@ export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
   const headerRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const currentUser = [undefined];
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   const [openModalLogin, setOpenModalLogin] = useState(false);
   const [openModalSignup, setOpenModalSignup] = useState(false);
 
@@ -36,8 +36,6 @@ export default function Header() {
   });
 
   const handleClickMenu = () => {
-    console.log(openMenu);
-
     dispatch(changeOpen(!openMenu));
   };
 
@@ -62,13 +60,18 @@ export default function Header() {
           </div>
         </div>
         <div className="header__right">
-          {/* <UserSetting /> */}
-          <div className="header__right__signup">
-            <button onClick={() => setOpenModalSignup(true)}>Sign up</button>
-          </div>
-          <div className="header__right__login">
-            <button onClick={() => setOpenModalLogin(true)}>Log in</button>
-          </div>
+          {currentUser ? (
+            <UserSetting />
+          ) : (
+            <>
+              <div className="header__right__signup">
+                <button onClick={() => setOpenModalSignup(true)}>Sign up</button>
+              </div>
+              <div className="header__right__login">
+                <button onClick={() => setOpenModalLogin(true)}>Log in</button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

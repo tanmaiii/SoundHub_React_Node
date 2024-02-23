@@ -18,7 +18,7 @@ function HomePage(props: any) {
   return (
     <div className="home">
 
-      <Section title={"Recommended"}>
+      <Section title={"Gợi ý"}>
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
@@ -32,9 +32,9 @@ function HomePage(props: any) {
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
       </Section>
 
-      <SectionChartHome title={"Top Chart This Week"} />
+      <SectionChartHome title={"Top nhạc trong tuần"} />
       
-      <Section title={"Artist hot"}>
+      <Section title={"Ca sĩ phổ biến"}>
         <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
         <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
         <CardArtist name={"Mono"} image={avt} followers={"3456K"} />

@@ -1,27 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-// export interface IUser {
-//   id: string;
-//   name: string;
-//   email: string;
-// }
-
-// const userInfo: IUser = {
-//   id: "",
-//   name: "",
-//   email: "",
-// };
-
 const initialState = {
   user: undefined,
   isLoggedIn: false,
   error: null,
 };
 
+const loadAuthState = () => {
+  const userInfo = localStorage.getItem("userInfo");
+  if (userInfo) {
+    const user = JSON.parse(userInfo);
+    return {
+      ...initialState,
+      user,
+      isLoggedIn: true,
+    };
+  } else {
+    return initialState;
+  }
+};
+
 export const authSlide = createSlice({
   name: "auth",
-  initialState,
+  initialState: loadAuthState(),
   reducers: {
     loginSuccess: (state, action) => {
       state.isLoggedIn = true;

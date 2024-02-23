@@ -10,20 +10,20 @@ const navbar = [
   {
     title: "Discover",
     items: [
-      { id: 1, title: "Home", icon: <i className="fa-light fa-house-blank"></i>, path: PATH.HOME },
+      { id: 1, title: "Trang chủ", icon: <i className="fa-light fa-house-blank"></i>, path: PATH.HOME },
       {
         id: 2,
-        title: "Artist",
+        title: "Ca sĩ",
         icon: <i className="fa-light fa-user-music"></i>,
         path: PATH.ARTIST,
       },
       {
         id: 3,
-        title: "Favourit",
+        title: "Yêu thích",
         icon: <i className="fa-light fa-heart"></i>,
         path: PATH.FAVOURITE,
       },
-      { id: 4, title: "Recent", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
+      { id: 4, title: "Gần đây", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
     ],
   },
   {
