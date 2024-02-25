@@ -106,7 +106,7 @@
       @include flex(center, unset);
       gap: $space-12;
 
-      button {
+      .btn__auth {
         padding: $space-12 $space-14;
         border-radius: $radius-25;
         font-size: $size-16;
@@ -119,7 +119,7 @@
       }
 
       &__signup {
-        button {
+        & > button {
           background-color: transparent;
           color: $color-primary1;
           &:hover {
@@ -129,7 +129,7 @@
       }
 
       &__login {
-        button {
+        & > button {
           background-color: $color-primary1;
           color: $color-bg-main;
         }

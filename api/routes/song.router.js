@@ -5,5 +5,6 @@ import songValidation from "../validations/song.validation.js";
 
 router.get("/:songId", songValidation.getSong, songController.getSong);
 router.get("/", songValidation.getAllSong, songController.getAllSong);
+router.post("/", songValidation.createSong,songController.createSong);
 
 export default router;

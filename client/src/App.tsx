@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes } from "./routes/routes";
 import "./App.scss";
 import "slick-carousel/slick/slick.css";
@@ -11,9 +11,18 @@ import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
 import Loading from "./components/Loading/Loading";
+import songApi from "./api/songApi";
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
+
+  useEffect(() => {
+    // songApi.getAll().then((res) => console.log(res.data.map(x => x.title)))
+  })
+
+  useEffect(() => {
+    
+  })
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>

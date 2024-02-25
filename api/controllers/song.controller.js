@@ -4,7 +4,7 @@ export const getSong = (req, res) => {
   try {
     Song.findById(req.params.songId, (err, song) => {
       if (!song) {
-        return res.json("Không tìm thấy");
+        return res.status(401).json("Không tìm thấy");
       } else {
         return res.json(song);
       }
@@ -18,7 +18,7 @@ export const getAllSong = (req, res) => {
   try {
     Song.getAll(req.query, (err, data) => {
       if (!data) {
-        return res.json("Không tìm thấy");
+        return res.status(401).json("Không tìm thấy");
       } else {
         return res.json(data);
       }
@@ -28,16 +28,30 @@ export const getAllSong = (req, res) => {
   }
 };
 
-
-export const addSong = (req, res)  => {
+export const createSong = (req, res) => {
   try {
-    
+    console.log(req.body);
+    Song.create(req.body, (err, data) => {
+      if (err) {
+        const conflictError = "Lỗi !";
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
   } catch (error) {
-    
+    res.status(401).json(error);
   }
-}
+};
+
+export const updateSong = (req, res) => {
+  try {
+  } catch (error) {}
+};
 
 export default {
   getSong,
   getAllSong,
+  createSong,
+  updateSong,
 };

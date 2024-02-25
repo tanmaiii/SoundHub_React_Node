@@ -1,15 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import avt from "../../assets/images/avatar.jpg";
+import apiConfig from '../../api/apiConfig'
 
 import "./userSetting.scss";
 import { log } from "console";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeDarkMode } from "./UserSettingSlide";
+import { logout } from "../Auth/authSlide";
+
+import authApi from "../../api/authApi";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
   const dropdownRef = useRef<HTMLInputElement>(null);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
   const dispatch = useDispatch();
 
@@ -28,17 +33,22 @@ export default function UserSetting() {
     return () => document.removeEventListener("mousedown", (event) => handleMousedown(event));
   });
 
+  const handleClickLogout = () => {
+    dispatch(logout());
+    logout();
+  };
+
   return (
     <div ref={dropdownRef} className="UserSetting">
       <div className="UserSetting__avt" onClick={() => setActive(!active)} data-tooltip="Tấn Mãi">
-        <img src={avt} alt="" />
+        <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
       </div>
 
       <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
         <div className="UserSetting__dropdown__user">
-          <img src={avt} alt="" />
+          <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
           <div className="UserSetting__dropdown__user__desc">
-            <h4>TanMai</h4>
+            <h4>{currentUser.name}</h4>
             <span>Basic</span>
           </div>
         </div>
@@ -62,7 +72,7 @@ export default function UserSetting() {
             <span>Setting</span>
           </li>
 
-          <li>
+          <li onClick={() => handleClickLogout()}>
             <i className="fa-light fa-right-from-bracket"></i>
             <span>Logout</span>
           </li>
@@ -71,15 +81,17 @@ export default function UserSetting() {
         <hr />
 
         <div className="UserSetting__dropdown__darkMode">
-          <i className="fa-light fa-moon"></i>
-          <span>Dark Mode</span>
+          <div className="UserSetting__dropdown__darkMode__label">
+            <i className="fa-light fa-moon"></i>
+            <span>Dark Mode</span>
+          </div>
           <button>
             <input
               defaultChecked={darkMode}
               type="checkbox"
               id="switch"
               className="switch-input"
-              onClick={(e) => handleClick(e.currentTarget.checked)}
+              onClick={() => handleClick(!darkMode)}
             />
             <label htmlFor="switch" className="switch"></label>
           </button>

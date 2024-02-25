@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import "./auth.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -8,24 +8,33 @@ import userApi from "../../api/userApi";
 import authApi from "../../api/authApi";
 
 export default function Login() {
-  const [show, setShow] = useState(false);
-  const auth = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
+  const [err, setErr] = useState("");
+  const currentUser = useSelector((state: RootState) => state.auth.user);
+
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleClick = () => {
     try {
       const getList = async () => {
-        const res = await authApi.signin("tanmai3@gmail.com", "123456");
-        // console.log(res);
-        if ("conflictError" in res) {
-          dispatch(loginFailure(res.conflictError));
-        } else {
-          dispatch(loginSuccess(res));
-        }
+        const res = await authApi.signin(inputs.email, inputs.password);
+        console.log(res);
+        
+        if (res) dispatch(loginSuccess(res));
       };
       getList();
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      setErr(err.response.data);
+      // console.log(err.response.data);
     }
   };
 
@@ -35,21 +44,37 @@ export default function Login() {
         <div className="auth__container__title">
           <h2>Log in on Sound</h2>
         </div>
-        <div className="auth__container__group">
-          <h4 className="title">Email or username</h4>
-          <div className="input">
-            <input type="text" placeholder="Email or username" />
-          </div>
 
-          {/* <div className="error">
+        {err && (
+          <div className="error">
             <i className="fa-sharp fa-light fa-circle-exclamation"></i>
-            <span>Please enter your Spotify username or email address</span>
-          </div> */}
+            <span>{err}</span>
+          </div>
+        )}
+        <div className="auth__container__group">
+          <h4 className="title">Email</h4>
+          <div className="input">
+            <input
+              autoComplete="off"
+              type="text"
+              name="email"
+              placeholder="Email"
+              onChange={(e) => handleChange(e)}
+              defaultValue={"tanmai3@gmail.com"}
+            />
+          </div>
         </div>
         <div className="auth__container__group">
           <h4 className="title">Password</h4>
           <div className="input">
-            <input type={`${show ? "text" : "password"}`} placeholder="Password" />
+            <input
+              autoComplete="off"
+              type={`${show ? "text" : "password"}`}
+              name="password"
+              placeholder="Password"
+              onChange={(e) => handleChange(e)}
+              defaultValue={"123456"}
+            />
             <span className="tooglePassword" onClick={() => setShow(!show)}>
               {show ? (
                 <i className="fa-light fa-eye"></i>

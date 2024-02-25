@@ -4,14 +4,15 @@ import Joi from "joi";
 export const createSong = (req, res, next) => {
   const schema = Joi.object({
     title: Joi.string().min(0).max(255).required(),
-    genreId: Joi.number().required(),
-    imagePath: Joi.string().min(0).max(255).required(),
-    mp3Path: Joi.string().min(0).max(255).required(),
+    user_id: Joi.number().min(0).max(255).required(),
+    genre_id: Joi.number().required(),
+    image_path: Joi.string().min(0).max(255).required(),
+    song_path: Joi.string().min(0).max(255).required(),
     private: Joi.string().min(0).max(10),
   });
   const { error, value } = schema.validate(req.body);
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ conflictError: error.details[0].message });
   }
   // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
   req.body = value;
@@ -28,7 +29,7 @@ export const getSong = (req, res, next) => {
   });
   const { error, value } = schema.validate(req.params);
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ conflictError: error.details[0].message });
   }
   // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
   req.params = value;
@@ -44,7 +45,7 @@ export const getAllSong = (req, res, next) => {
   });
   const { error, value } = schema.validate(req.query);
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ conflictError: error.details[0].message });
   }
   // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
   req.query = value;
@@ -52,6 +53,7 @@ export const getAllSong = (req, res, next) => {
 };
 
 export default {
+  createSong,
   getSong,
-  getAllSong
+  getAllSong,
 };

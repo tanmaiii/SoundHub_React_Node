@@ -8,7 +8,7 @@ export const signup = async (req, res) => {
     User.findByEmail(req.body.email, (err, user) => {
       if (err || user) {
         const conflictError = "User credentials are exist.";
-        res.status(401).json({ user, conflictError });
+        res.status(401).json({ conflictError });
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(req.body.password, salt);
@@ -56,9 +56,9 @@ export const signin = async (req, res) => {
                 expires: new Date(Date.now() + 900000),
                 maxAge: 24 * 60 * 60 * 1000,
               })
+              .status(200)
               .json(others);
           } else {
-            // A user with that email address does not exists
             const conflictError = "Wrong password";
             res.status(401).json({ conflictError });
           }
