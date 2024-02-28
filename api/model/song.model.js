@@ -127,7 +127,7 @@ Song.like = (songId, userId, result) => {
 
     if (!song) {
       console.log("Song not found");
-      result({ message: "Song not found" }, null);
+      result("Bài hát không tồn tại", null);
       return;
     }
 
@@ -144,8 +144,8 @@ Song.like = (songId, userId, result) => {
 
         // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
         if (rows.length > 0) {
-          console.log("Song already liked by the user");
-          result({ message: "Song already liked by the user" }, null);
+          console.log("Bài hát đã được thích bởi người dùng");
+          result("Bài hát đã được thích bởi người dùng", null);
           return;
         }
 
@@ -168,7 +168,6 @@ Song.like = (songId, userId, result) => {
   });
 };
 
-
 Song.unlike = (songId, userId, result) => {
   // Kiểm tra xem bài hát đã được yêu thích bởi người dùng chưa
   db.query(
@@ -183,8 +182,8 @@ Song.unlike = (songId, userId, result) => {
 
       // Nếu không tìm thấy bài hát trong danh sách yêu thích của người dùng, trả về lỗi
       if (rows.length === 0) {
-        console.log("Song not liked by the user");
-        result({ message: "Song not liked by the user" }, null);
+        console.log("Bài hát không được thích bởi người dùng");
+        result("Bài hát không được thích bởi người dùng", null);
         return;
       }
 

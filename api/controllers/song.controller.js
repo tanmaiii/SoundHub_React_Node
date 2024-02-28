@@ -11,7 +11,7 @@ export const getSong = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -25,7 +25,7 @@ export const getAllSong = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -39,7 +39,7 @@ export const getAllSongByPlaylist = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -54,7 +54,7 @@ export const createSong = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -69,7 +69,7 @@ export const updateSong = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -88,16 +88,15 @@ export const likeSong = (req, res) => {
       }
       Song.like(req.params.songId, user.id, (err, data) => {
         if (err) {
-          const conflictError = "Lỗi !";
+          const conflictError = err;
           return res.status(401).json({ conflictError });
         } else {
           return res.json(data);
         }
       });
     });
-
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -116,16 +115,15 @@ export const unLikeSong = (req, res) => {
       }
       Song.unlike(req.params.songId, user.id, (err, data) => {
         if (err) {
-          const conflictError = "Lỗi !";
+          const conflictError = err;
           return res.status(401).json({ conflictError });
         } else {
           return res.json(data);
         }
       });
     });
-    
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -136,5 +134,5 @@ export default {
   createSong,
   updateSong,
   likeSong,
-  unLikeSong
+  unLikeSong,
 };

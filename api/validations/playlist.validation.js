@@ -72,8 +72,66 @@ export const createPlaylist = (req, res, next) => {
   next();
 };
 
+export const like = (req, res, next) => {
+  const schema = Joi.object({
+    playlistId: Joi.number().min(1).max(255),
+  });
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
+export const unLike = (req, res, next) => {
+  const schema = Joi.object({
+    playlistId: Joi.number().min(1).max(255),
+  });
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
+export const addSong = (req, res, next) => {
+  const schema = Joi.object({
+    playlist_id: Joi.number().min(1).max(255).required(),
+    song_id: Joi.number().min(1).max(255).required(),
+  });
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
+export const unAddSong = (req, res, next) => {
+  const schema = Joi.object({
+    playlist_id: Joi.number().min(1).max(255).required(),
+    song_id: Joi.number().min(1).max(255).required(),
+  });
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
 export default {
   getPlaylist,
   getAllPlaylist,
   createPlaylist,
+  like,
+  unLike,
+  addSong,
+  unAddSong,
 };

@@ -99,8 +99,8 @@ Playlist.like = (playlistId, userId, result) => {
     }
 
     if (!playlist) {
-      console.log("playlist not found");
-      result({ message: "playlist not found" }, null);
+      console.log("playlist không tồn tại");
+      result("playlist không tồn tại", null);
       return;
     }
 
@@ -117,8 +117,8 @@ Playlist.like = (playlistId, userId, result) => {
 
         // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
         if (rows.length > 0) {
-          console.log("playlist already liked by the user");
-          result({ message: "playlist already liked by the user" }, null);
+          console.log("playlist đã được thích bởi người dùng");
+          result("playlist đã được thích bởi người dùng", null);
           return;
         }
 
@@ -141,7 +141,6 @@ Playlist.like = (playlistId, userId, result) => {
   });
 };
 
-
 Playlist.unlike = (playlistId, userId, result) => {
   // Kiểm tra xem bài hát đã được yêu thích bởi người dùng chưa
   db.query(
@@ -156,8 +155,8 @@ Playlist.unlike = (playlistId, userId, result) => {
 
       // Nếu không tìm thấy bài hát trong danh sách yêu thích của người dùng, trả về lỗi
       if (rows.length === 0) {
-        console.log("Playlist not liked by the user");
-        result({ message: "Playlist not liked by the user" }, null);
+        console.log("Playlist không được thích bởi người dùng");
+        result("Playlist không được thích bởi người dùng", null);
         return;
       }
 
@@ -179,5 +178,94 @@ Playlist.unlike = (playlistId, userId, result) => {
   );
 };
 
+Playlist.addSong = (playlistId, songId, userId, result) => {
+  Playlist.findById(playlistId, (err, playlist) => {
+    if (err) {
+      console.log("ERROR", err);
+      result(err, null);
+      return;
+    }
+
+    if (!playlist) {
+      result("Playlist không tồn tại", null);
+      return;
+    }
+
+    if (playlist.user_id != userId) {
+      result(`Playlist không thuộc sở hữu của người dùng`, null);
+      return;
+    }
+
+    db.query(
+      "SELECT * FROM playlist_songs WHERE song_id = ? AND playlist_id = ?",
+      [songId, playlistId],
+      (queryErr, rows) => {
+        if (queryErr) {
+          console.log("ERROR", queryErr);
+          result(queryErr, null);
+          return;
+        }
+
+        // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
+        if (rows.length > 0) {
+          console.log("ERROR: Bài hát đã tồn tại trong Playlist");
+          result("Bài hát đã tồn tại trong Playlist", null);
+          return;
+        }
+
+        // Thêm bài hát vào danh sách bài hát yêu thích của người dùng
+        db.query(
+          "INSERT INTO playlist_songs SET `song_id` = ?, `playlist_id`= ?",
+          [songId, playlistId],
+          (insertErr, insertRes) => {
+            if (insertErr) {
+              console.log("ERROR", insertErr);
+              result(insertErr, null);
+              return;
+            }
+            // Trả về thông tin bài hát đã được thêm vào danh sách yêu thích
+            result(null, { playlist_id: playlistId, song_id: songId });
+          }
+        );
+      }
+    );
+  });
+};
+
+Playlist.unAddSong = (playlistId, songId, userId, result) => {
+  db.query(
+    "SELECT * FROM playlist_songs WHERE song_id = ? AND playlist_id = ?",
+    [songId, playlistId],
+    (queryErr, rows) => {
+      if (queryErr) {
+        console.log("ERROR", queryErr);
+        result(queryErr, null);
+        return;
+      }
+
+      // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
+      if (rows.length === 0) {
+        console.log("Bài hát không tồn tại trong playlist");
+        result("Bài hát không tồn tại trong playlist", null);
+        return;
+      }
+
+      // Thêm bài hát vào danh sách bài hát yêu thích của người dùng
+      db.query(
+        "DELETE FROM playlist_songs WHERE song_id = ? and playlist_id= ?",
+        [songId, playlistId],
+        (insertErr, insertRes) => {
+          if (insertErr) {
+            console.log("ERROR", insertErr);
+            result(insertErr, null);
+            return;
+          }
+          // Trả về thông tin bài hát đã được thêm vào danh sách yêu thích
+          result(null, { playlist_id: playlistId, song_id: songId });
+        }
+      );
+    }
+  );
+};
 
 export default Playlist;

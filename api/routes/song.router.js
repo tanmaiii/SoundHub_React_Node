@@ -9,8 +9,8 @@ router.get(
   songController.getAllSongByPlaylist
 );
 router.get("/detail/:songId", songValidation.getSong, songController.getSong);
-router.post("/like/:songId", songController.likeSong);
-router.delete("/like/:songId", songController.unLikeSong);
+router.post("/like/:songId",songValidation.like, songController.likeSong);
+router.delete("/like/:songId",songValidation.unLike, songController.unLikeSong);
 router.put("/:songId", songValidation.updateSong, songController.updateSong);
 router.post("/", songValidation.createSong, songController.createSong);
 router.get("/", songValidation.getAllSong, songController.getAllSong);

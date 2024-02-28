@@ -11,7 +11,7 @@ export const getPlaylist = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -25,7 +25,7 @@ export const getPlaylistByUser = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -40,7 +40,7 @@ export const createPlaylist = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -55,7 +55,7 @@ export const updatePlaylist = (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -66,7 +66,7 @@ export const likePlaylist = (req, res) => {
       const conflictError = "Không tìm thấy token !";
       return res.status(401).json({ conflictError });
     }
-    
+
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       console.log(req.params.playlistId, user.id);
       if (err) {
@@ -75,16 +75,15 @@ export const likePlaylist = (req, res) => {
       }
       Playlist.like(req.params.playlistId, user.id, (err, data) => {
         if (err) {
-          const conflictError = "Lỗi !";
+          const conflictError = err;
           return res.status(401).json({ conflictError });
         } else {
           return res.json(data);
         }
       });
     });
-
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -103,16 +102,69 @@ export const unLikePlaylist = (req, res) => {
       }
       Playlist.unlike(req.params.playlistId, user.id, (err, data) => {
         if (err) {
-          const conflictError = "Lỗi !";
+          const conflictError = err;
           return res.status(401).json({ conflictError });
         } else {
           return res.json(data);
         }
       });
     });
-
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
+  }
+};
+
+export const addSongPlaylist = (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      const conflictError = "Không tìm thấy token !";
+      return res.status(401).json({ conflictError });
+    }
+
+    jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+      if (err) {
+        const conflictError = "Token không hợp lệ !";
+        return res.status(401).json({ conflictError });
+      }
+      Playlist.addSong(req.body.playlist_id, req.body.song_id, user.id, (err, data) => {
+        if (err) {
+          const conflictError = err;
+          return res.status(401).json({ conflictError });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const unAddSongPlaylist = (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      const conflictError = "Không tìm thấy token !";
+      return res.status(401).json({ conflictError });
+    }
+
+    jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+      if (err) {
+        const conflictError = "Token không hợp lệ !";
+        return res.status(401).json({ conflictError });
+      }
+      Playlist.unAddSong(req.body.playlist_id, req.body.song_id, user.id, (err, data) => {
+        if (err) {
+          const conflictError = err;
+          return res.status(401).json({ conflictError });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
   }
 };
 
@@ -122,5 +174,7 @@ export default {
   createPlaylist,
   updatePlaylist,
   likePlaylist,
-  unLikePlaylist
+  unLikePlaylist,
+  addSongPlaylist,
+  unAddSongPlaylist
 };

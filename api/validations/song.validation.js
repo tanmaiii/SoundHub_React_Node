@@ -90,10 +90,38 @@ export const getAllSongByPlaylist = (req, res, next) => {
   next();
 };
 
+export const like = (req, res, next) => {
+  const schema = Joi.object({
+    songId: Joi.number().min(1).max(255),
+  });
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
+export const unLike = (req, res, next) => {
+  const schema = Joi.object({
+    songId: Joi.number().min(1).max(255),
+  });
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).json({ conflictError: error.details[0].message });
+  }
+  // Nếu dữ liệu hợp lệ, gán giá trị đã được xác thực vào req.body và chuyển sang middleware tiếp theo
+  req.query = value;
+  next();
+};
+
 export default {
   createSong,
   updateSong,
   getSong,
   getAllSong,
   getAllSongByPlaylist,
+  like,
+  unLike,
 };

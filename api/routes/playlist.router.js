@@ -10,8 +10,12 @@ router.get(
   playlistController.getPlaylistByUser
 );
 router.post("/", playlistValidation.createPlaylist, playlistController.createPlaylist);
-router.post("/like/:playlistId", playlistController.likePlaylist);
-router.delete("/like/:playlistId", playlistController.unLikePlaylist);
 router.put("/:userId", playlistValidation.createPlaylist, playlistController.updatePlaylist);
+
+router.post("/like/:playlistId", playlistValidation.like, playlistController.likePlaylist);
+router.delete("/like/:playlistId", playlistValidation.unLike, playlistController.unLikePlaylist);
+
+router.post("/song", playlistValidation.addSong, playlistController.addSongPlaylist);
+router.delete("/song", playlistValidation.unAddSong, playlistController.unAddSongPlaylist);
 
 export default router;
