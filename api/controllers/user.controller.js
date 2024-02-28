@@ -5,7 +5,8 @@ export const getUser = async (req, res) => {
   try {
     User.findById(req.params.userId, (err, user) => {
       if (!user) {
-        return res.status(401).json("Không tìm thấy!");
+        const conflictError = "Không tìm thấy!";
+        return res.status(401).json({ conflictError });
       } else {
         const { password, ...others } = user;
         return res.json(others);
@@ -16,21 +17,24 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const getOwnerUser = (req, res) => {
+export const getMe = (req, res) => {
   const token = req.cookies?.accessToken;
-  if (!token) return res.status(401).json("Không tìm thấy token!");
+
+  if (!token) {
+    const conflictError = "Không tìm thấy token!";
+    return res.status(401).json({ conflictError });
+  }
 
   try {
     jwt.verify(token, process.env.MY_SECRET, (err, userInfo) => {
       User.findById(userInfo.id, (err, user) => {
-
         if (!user) {
-          return res.status(401).json("Không tìm thấy 123");
+          const conflictError = "Không tìm thấy";
+          return res.status(401).json({ conflictError });
         } else {
           const { password, ...others } = user;
           return res.json(others);
         }
-
       });
     });
   } catch (error) {
@@ -40,9 +44,10 @@ export const getOwnerUser = (req, res) => {
 
 export const getAllUser = async (req, res) => {
   try {
-    User.getAll((err, user) => {
+    User.getAll(req ,(err, user) => {
       if (!user) {
-        return res.status(401).json("Không tìm thấy");
+        const conflictError = "Không tìm thấy";
+        return res.status(401).json({ conflictError });
       } else {
         return res.json(user);
       }
@@ -54,6 +59,6 @@ export const getAllUser = async (req, res) => {
 
 export default {
   getUser,
-  getOwnerUser,
+  getMe,
   getAllUser,
 };
