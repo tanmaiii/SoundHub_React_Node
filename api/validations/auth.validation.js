@@ -2,31 +2,15 @@ import Joi from "joi";
 
 export const signup = (req, res, next) => {
   const schema = Joi.object({
-    email: Joi.string().email().max(255).empty().required().messages({
-      "string.string": `Email phải là chữ`,
-      "string.email": `Email không hợp lệ`,
-      "string.empty": "Email không được bỏ trống",
-      "string.max": `Trường này không quá 255 kí tự`,
-      "any.required": `Email là trường bắt buộc`,
-    }),
+    email: Joi.string().email().max(255).empty().required(),
     password: Joi.string()
       .min(6)
       .max(50)
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      .required()
-      .messages({
-        "string.string": `Password phải là chữ`,
-        "string.base": `Password should be a type of 'text'`,
-        "string.min": `Password ít nhất 6 kí tự`,
-        "string.max": `Trường này không quá 50 kí tự`,
-        "any.required": "Password là trường bắt buộc",
-      }),
-    name: Joi.string().empty().max(50).required().messages({
-      "string.string": `Tên phải là chữ`,
-      "string.empty": "Tên không được bỏ trống",
-      "string.max": `Trường này không quá 255 kí tự`,
-      "any.required": `Tên là trường bắt buộc`,
-    }),
+      // .pattern(
+      //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
+      // )
+      .required(),
+    name: Joi.string().empty().max(50).required(),
   });
 
   const { error, value } = schema.validate(req.body);
@@ -43,27 +27,14 @@ export const signup = (req, res, next) => {
 
 export const signin = (req, res, next) => {
   const schema = Joi.object({
-    email: Joi.string().email().max(255).empty().required().messages({
-      "string.string": `Email phải là chữ`,
-      "string.email": `Email không hợp lệ`,
-      "string.max": `Email không quá 255 kí tự`,
-      "string.empty": "Email không được bỏ trống",
-      "any.required": `Email là trường bắt buộc`,
-    }),
+    email: Joi.string().email().max(255).empty().required(),
     password: Joi.string()
       .min(6)
       .max(50)
       // .pattern(
       //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
       // )
-      .required()
-      .messages({
-        "string.string": `Password phải là chữ`,
-        "string.base": `Password should be a type of 'text'`,
-        "string.min": `Password ít nhất 6 kí tự`,
-        "string.max": `Password không quá 50 kí tự`,
-        "any.required": "Password là trường bắt buộc",
-      }),
+      .required(),
   });
 
   const { error, value } = schema.validate(req.body);

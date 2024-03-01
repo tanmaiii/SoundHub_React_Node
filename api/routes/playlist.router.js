@@ -6,9 +6,11 @@ import playlistValidation from "../validations/playlist.validation.js";
 router.get("/detail/:playlistId", playlistValidation.getPlaylist, playlistController.getPlaylist);
 router.get(
   "/user/:userId",
-  playlistValidation.getAllPlaylist,
-  playlistController.getPlaylistByUser
+  playlistValidation.getAllPlaylistByUser,
+  playlistController.getAllPlaylistByUser
 );
+router.get("/me", playlistValidation.getAllPlaylistByMe, playlistController.getAllPlaylistByMe);
+router.get("/", playlistValidation.getAllPlaylist, playlistController.getAllPlaylist);
 router.post("/", playlistValidation.createPlaylist, playlistController.createPlaylist);
 router.put("/:userId", playlistValidation.createPlaylist, playlistController.updatePlaylist);
 

@@ -7,8 +7,8 @@ const Song = (song) => {
   this.private = song.private;
 };
 
-Song.create = (newSong, result) => {
-  db.query("insert into songs set ? ", newSong, (err, res) => {
+Song.create = (userId, newSong, result) => {
+  db.query(`insert into songs set ? ,user_id = ${userId}`, newSong, (err, res) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -19,57 +19,67 @@ Song.create = (newSong, result) => {
   });
 };
 
-Song.update = (songId, newSong, result) => {
-  Song.findById(songId, (err, song) => {
+Song.update = (songId, userId, newSong, result) => {
+  Song.findById(songId, userId, (err, song) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
       return;
-    } else {
-      db.query(`update songs set ? where id = ${song?.id}`, newSong, (err, res) => {
-        if (err) {
-          console.log("ERROR", err);
-          result(err, null);
-          return;
-        }
-        console.log("CREATE : ", { res });
-        result(null, { id: songId, ...newSong });
-      });
     }
+    if (song.user_id !== userId) {
+      result("Không có quyền sửa", null);
+      return;
+    }
+    db.query(`update songs set ? where id = ${song?.id}`, newSong, (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      console.log("CREATE : ", { res });
+      result(null, { id: songId, ...newSong });
+    });
   });
 };
 
-Song.findById = (songId, result) => {
-  db.query(`SELECT * from songs WHERE id = '${songId}'`, (err, res) => {
+Song.findById = (songId, userId, result) => {
+  db.query(`SELECT * from songs WHERE id = '${songId}'`, (err, song) => {
     if (err) {
       result(err, null);
       return;
     }
-    if (res.length) {
-      result(null, res[0]);
+    if (song[0].private === 1 && song[0].user_id !== userId) {
+      result("Bài hát đang ẩn", null);
+      return;
+    }
+    if (song.length) {
+      result(null, song[0]);
       return;
     }
     result(null, null);
   });
 };
 
-Song.findByPlaylistId = async (req, result) => {
-  const q = req.query?.q;
-  const page = req.query?.page;
-  const limit = req.query?.limit;
-  const sortBy = req.query?.sortBy;
+Song.findByPlaylistId = async (playlistId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
 
   const offset = (page - 1) * limit;
 
-  const playlistId = req.params.playlistId;
-  console.log(playlistId);
-
   const [data] = await promiseDb.query(
-    `SELECT * FROM music.playlist_songs as pvs , music.songs as s WHERE pvs.playlist_id = ${playlistId} and pvs.song_id = s.id ` +
-      `limit ${+limit} offset ${+offset}`
+    `SELECT * FROM playlist_songs as pvs , songs as s WHERE ${
+      q ? ` s.title LIKE "%${q}%" AND` : ""
+    }  pvs.playlist_id = ${playlistId} and pvs.song_id = s.id and s.private = 0 ` +
+      `ORDER BY pvs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
-  const [totalCount] = await promiseDb.query(`SELECT COUNT(*) AS totalCount FROM songs`);
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM playlist_songs as pvs , songs as s WHERE ${
+      q ? ` s.title LIKE "%${q}%" AND` : ""
+    } pvs.playlist_id = ${playlistId} and pvs.song_id = s.id  and s.private = 0 `
+  );
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
 
@@ -80,6 +90,84 @@ Song.findByPlaylistId = async (req, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        sort,
+      },
+    });
+    return;
+  }
+  result(null, null);
+};
+
+Song.findByFavorite = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(
+    `SELECT * FROM favourite_songs as fs , songs as s WHERE ${
+      q ? ` s.title LIKE "%${q}%" AND` : ""
+    } fs.user_id = ${userId} and fs.song_id = s.id and s.private = 0 ` +
+      `ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM favourite_songs as fs , songs as s WHERE ${
+      q ? ` s.title LIKE "%${q}%" AND` : ""
+    } fs.user_id = ${userId} and fs.song_id = s.id and s.private = 0`
+  );
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+        sort,
+      },
+    });
+    return;
+  }
+  result(null, null);
+};
+
+Song.findByUserId = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(
+    `SELECT * FROM songs WHERE ${
+      q ? ` title LIKE "%${q}%" AND` : ""
+    } user_id = ${userId} AND private = 0 ` +
+      `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM songs WHERE ${
+      q ? ` title LIKE "%${q}%" AND` : ""
+    } user_id = ${userId} AND private = 0`
+  );
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+        sort,
       },
     });
     return;
@@ -91,13 +179,20 @@ Song.getAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sortBy = query?.sortBy;
+  const sort = query?.sortBy || "new";
 
   const offset = (page - 1) * limit;
 
-  const [data] = await promiseDb.query(`SELECT * FROM songs limit ${+limit} offset ${+offset}`);
+  const [data] = await promiseDb.query(
+    `SELECT * FROM songs WHERE ${q ? ` title LIKE "%${q}%" AND` : ""} private = 0 ` +
+      `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
 
-  const [totalCount] = await promiseDb.query(`SELECT COUNT(*) AS totalCount FROM songs`);
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM songs WHERE ${
+      q ? ` title LIKE "%${q}%" AND` : ""
+    } private = 0 `
+  );
 
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
@@ -118,7 +213,7 @@ Song.getAll = async (query, result) => {
 
 Song.like = (songId, userId, result) => {
   // Tìm kiếm bài hát theo id
-  Song.findById(songId, (err, song) => {
+  Song.findById(songId, userId, (err, song) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);

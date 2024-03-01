@@ -5,7 +5,7 @@ export const getPlaylist = (req, res) => {
   try {
     Playlist.findById(req.params.playlistId, (err, playlist) => {
       if (!playlist) {
-        return res.status(401).json("Không tìm thấy 123");
+        return res.status(401).json("Không tìm thấy !");
       } else {
         return res.json(playlist);
       }
@@ -15,9 +15,41 @@ export const getPlaylist = (req, res) => {
   }
 };
 
-export const getPlaylistByUser = (req, res) => {
+export const getAllPlaylist = (req, res) => {
   try {
-    Playlist.findByUserId(req, (err, playlist) => {
+    Playlist.getAll(req.query, (err, playlist) => {
+      if (!playlist) {
+        return res.status(401).json("Không tìm thấy");
+      } else {
+        return res.json(playlist);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const getAllPlaylistByMe = (req, res) => {
+  const token = req.cookies.accessToken;
+
+  jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+    if (err) {
+      return res.status(401).json({ conflictError: "Token không hợp lệ !" });
+    }
+    Playlist.getMe(user.id, req.query, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  });
+};
+
+export const getAllPlaylistByUser = (req, res) => {
+  try {
+    Playlist.findByUserId(req.params.userId, req.query, (err, playlist) => {
       if (!playlist) {
         return res.status(401).json("Không tìm thấy");
       } else {
@@ -62,13 +94,8 @@ export const updatePlaylist = (req, res) => {
 export const likePlaylist = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
-      console.log(req.params.playlistId, user.id);
       if (err) {
         const conflictError = "Token không hợp lệ !";
         return res.status(401).json({ conflictError });
@@ -90,10 +117,6 @@ export const likePlaylist = (req, res) => {
 export const unLikePlaylist = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       if (err) {
@@ -117,10 +140,6 @@ export const unLikePlaylist = (req, res) => {
 export const addSongPlaylist = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       if (err) {
@@ -144,10 +163,6 @@ export const addSongPlaylist = (req, res) => {
 export const unAddSongPlaylist = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       if (err) {
@@ -170,11 +185,13 @@ export const unAddSongPlaylist = (req, res) => {
 
 export default {
   getPlaylist,
-  getPlaylistByUser,
+  getAllPlaylist,
+  getAllPlaylistByMe,
+  getAllPlaylistByUser,
   createPlaylist,
   updatePlaylist,
   likePlaylist,
   unLikePlaylist,
   addSongPlaylist,
-  unAddSongPlaylist
+  unAddSongPlaylist,
 };

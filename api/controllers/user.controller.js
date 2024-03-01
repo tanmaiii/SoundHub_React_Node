@@ -1,7 +1,7 @@
 import User from "../model/user.model.js";
 import jwt from "jsonwebtoken";
 
-export const getUser = async (req, res) => {
+export const getUser = (req, res) => {
   try {
     User.findById(req.params.userId, (err, user) => {
       if (!user) {
@@ -13,18 +13,12 @@ export const getUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
 export const getMe = (req, res) => {
   const token = req.cookies?.accessToken;
-
-  if (!token) {
-    const conflictError = "Không tìm thấy token!";
-    return res.status(401).json({ conflictError });
-  }
-
   try {
     jwt.verify(token, process.env.MY_SECRET, (err, userInfo) => {
       User.findById(userInfo.id, (err, user) => {
@@ -38,11 +32,11 @@ export const getMe = (req, res) => {
       });
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
-export const getAllUser = async (req, res) => {
+export const getAllUser = (req, res) => {
   try {
     User.getAll(req, (err, user) => {
       if (!user) {
@@ -53,17 +47,43 @@ export const getAllUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
+  }
+};
+
+export const getFollowed = (req, res) => {
+  try {
+    User.findFollowed(req.params.userId, req.query, (err, data) => {
+      if (!data) {
+        const conflictError = "Không tìm thấy";
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const getFollower = (req, res) => {
+  try {
+    User.findFollower(req.params.userId, req.query, (err, data) => {
+      if (!data) {
+        const conflictError = "Không tìm thấy";
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
   }
 };
 
 export const addFollow = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       if (err) {
@@ -81,17 +101,13 @@ export const addFollow = (req, res) => {
       });
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
 export const removeFollow = (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
-      const conflictError = "Không tìm thấy token !";
-      return res.status(401).json({ conflictError });
-    }
 
     jwt.verify(token, process.env.MY_SECRET, (err, user) => {
       if (err) {
@@ -109,7 +125,7 @@ export const removeFollow = (req, res) => {
       });
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -119,4 +135,6 @@ export default {
   getAllUser,
   addFollow,
   removeFollow,
+  getFollowed,
+  getFollower
 };

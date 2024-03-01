@@ -20,7 +20,7 @@ Playlist.create = (newPlaylist, result) => {
   });
 };
 
-Playlist.update = async (playlistId, newPlaylist, result) => {
+Playlist.update = (playlistId, newPlaylist, result) => {
   Playlist.findById(playlistId, (err, playlist) => {
     if (err) {
       console.log("ERROR", err);
@@ -40,36 +40,21 @@ Playlist.update = async (playlistId, newPlaylist, result) => {
   });
 };
 
-Playlist.findById = (playlistId, result) => {
-  db.query(`SELECT * from playlists WHERE id = '${playlistId}'`, (err, res) => {
-    if (err) {
-      result(err, null);
-      return;
-    }
-    if (res.length) {
-      result(null, res[0]);
-      return;
-    }
-    result(null, null);
-  });
-};
-
-Playlist.findByUserId = async (req, result) => {
-  const q = req.query?.q;
-  const page = req.query?.page;
-  const limit = req.query?.limit;
-  const sortBy = req.query?.sortBy;
+Playlist.getAll = async (query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sortBy || "new";
 
   const offset = (page - 1) * limit;
 
-  const userId = req.params.userId;
-
   const [data] = await promiseDb.query(
-    `SELECT * FROM playlists WHERE user_id = '${userId}' limit ${+limit} offset ${+offset}`
+    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} private = 0 ` +
+      `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM playlists WHERE user_id = '${userId}'`
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} private = 0`
   );
 
   if (data && totalCount) {
@@ -82,6 +67,91 @@ Playlist.findByUserId = async (req, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        sort,
+      },
+    });
+    return;
+  }
+  result(null, null);
+};
+
+Playlist.getMe = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sortBy || "new";
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(
+    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} user_id = ${userId} ` +
+      `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} user_id = ${userId}`
+  );
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+        sort,
+      },
+    });
+    return;
+  }
+  result(null, null);
+};
+
+Playlist.findById = (playlistId, result) => {
+  db.query(`SELECT * from playlists WHERE id = '${playlistId}' and private = 0`, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    if (res.length) {
+      result(null, res[0]);
+      return;
+    }
+    result(null, null);
+  });
+};
+
+Playlist.findByUserId = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort;
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(
+    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and ` : ""} user_id = ${userId} and private = 0` +
+      ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and ` : ""} user_id = ${userId} and private = 0`
+  );
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+        sort,
       },
     });
     return;
@@ -179,7 +249,7 @@ Playlist.unlike = (playlistId, userId, result) => {
 };
 
 Playlist.addSong = (playlistId, songId, userId, result) => {
-  Playlist.findById(playlistId, (err, playlist) => {
+  db.query(`SELECT * from playlists WHERE id = '${playlistId}' `, (err, playlist) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -191,7 +261,7 @@ Playlist.addSong = (playlistId, songId, userId, result) => {
       return;
     }
 
-    if (playlist.user_id != userId) {
+    if (playlist[0].user_id != userId) {
       result(`Playlist không thuộc sở hữu của người dùng`, null);
       return;
     }
@@ -206,14 +276,12 @@ Playlist.addSong = (playlistId, songId, userId, result) => {
           return;
         }
 
-        // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
         if (rows.length > 0) {
           console.log("ERROR: Bài hát đã tồn tại trong Playlist");
           result("Bài hát đã tồn tại trong Playlist", null);
           return;
         }
 
-        // Thêm bài hát vào danh sách bài hát yêu thích của người dùng
         db.query(
           "INSERT INTO playlist_songs SET `song_id` = ?, `playlist_id`= ?",
           [songId, playlistId],
@@ -233,39 +301,57 @@ Playlist.addSong = (playlistId, songId, userId, result) => {
 };
 
 Playlist.unAddSong = (playlistId, songId, userId, result) => {
-  db.query(
-    "SELECT * FROM playlist_songs WHERE song_id = ? AND playlist_id = ?",
-    [songId, playlistId],
-    (queryErr, rows) => {
-      if (queryErr) {
-        console.log("ERROR", queryErr);
-        result(queryErr, null);
-        return;
-      }
-
-      // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
-      if (rows.length === 0) {
-        console.log("Bài hát không tồn tại trong playlist");
-        result("Bài hát không tồn tại trong playlist", null);
-        return;
-      }
-
-      // Thêm bài hát vào danh sách bài hát yêu thích của người dùng
-      db.query(
-        "DELETE FROM playlist_songs WHERE song_id = ? and playlist_id= ?",
-        [songId, playlistId],
-        (insertErr, insertRes) => {
-          if (insertErr) {
-            console.log("ERROR", insertErr);
-            result(insertErr, null);
-            return;
-          }
-          // Trả về thông tin bài hát đã được thêm vào danh sách yêu thích
-          result(null, { playlist_id: playlistId, song_id: songId });
-        }
-      );
+  db.query(`SELECT * from playlists WHERE id = '${playlistId}' `, (err, playlist) => {
+    if (err) {
+      console.log("ERROR", err);
+      result(err, null);
+      return;
     }
-  );
+
+    if (!playlist) {
+      result("Playlist không tồn tại", null);
+      return;
+    }
+
+    if (playlist[0].user_id != userId) {
+      result(`Playlist không thuộc sở hữu của người dùng`, null);
+      return;
+    }
+
+    db.query(
+      "SELECT * FROM playlist_songs WHERE playlist_id = ? AND song_id = ?",
+      [playlistId, songId],
+      (queryErr, rows) => {
+        if (queryErr) {
+          console.log("ERROR", queryErr);
+          result(queryErr, null);
+          return;
+        }
+
+        // Nếu người dùng đã thích bài hát này trước đó, không thực hiện thêm
+        if (rows.length === 0) {
+          console.log("Bài hát không tồn tại trong playlist");
+          result("Bài hát không tồn tại trong playlist", null);
+          return;
+        }
+
+        // Thêm bài hát vào danh sách bài hát yêu thích của người dùng
+        db.query(
+          "DELETE FROM playlist_songs WHERE playlist_id= ? AND song_id = ? ",
+          [playlistId, songId],
+          (insertErr, insertRes) => {
+            if (insertErr) {
+              console.log("ERROR", insertErr);
+              result(insertErr, null);
+              return;
+            }
+            // Trả về thông tin bài hát đã được thêm vào danh sách yêu thích
+            result(null, { playlist_id: playlistId, song_id: songId });
+          }
+        );
+      }
+    );
+  });
 };
 
 export default Playlist;

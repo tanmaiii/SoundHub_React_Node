@@ -8,9 +8,11 @@ router.get(
   songValidation.getAllSongByPlaylist,
   songController.getAllSongByPlaylist
 );
+router.get("/user/:userId", songValidation.getAllSongByUser, songController.getAllSongByUser);
 router.get("/detail/:songId", songValidation.getSong, songController.getSong);
-router.post("/like/:songId",songValidation.like, songController.likeSong);
-router.delete("/like/:songId",songValidation.unLike, songController.unLikeSong);
+router.get("/like", songValidation.getAllFavoritesByUser, songController.getAllFavoritesByUser);
+router.post("/like/:songId", songValidation.like, songController.likeSong);
+router.delete("/like/:songId", songValidation.unLike, songController.unLikeSong);
 router.put("/:songId", songValidation.updateSong, songController.updateSong);
 router.post("/", songValidation.createSong, songController.createSong);
 router.get("/", songValidation.getAllSong, songController.getAllSong);
