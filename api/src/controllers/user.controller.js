@@ -1,5 +1,23 @@
 import User from "../model/user.model.js";
-import jwt from "jsonwebtoken";
+import jwtService from "../services/jwtService/index.js";
+
+export const updateUser = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    User.update(userInfo.id, req.body, (err, data) => {
+      if (!data) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 
 export const getUser = (req, res) => {
   try {
@@ -17,19 +35,20 @@ export const getUser = (req, res) => {
   }
 };
 
-export const getMe = (req, res) => {
-  const token = req.cookies?.accessToken;
+export const getMe = async (req, res) => {
   try {
-    jwt.verify(token, process.env.MY_SECRET, (err, userInfo) => {
-      User.findById(userInfo.id, (err, user) => {
-        if (!user) {
-          const conflictError = "Không tìm thấy";
-          return res.status(401).json({ conflictError });
-        } else {
-          const { password, ...others } = user;
-          return res.json(others);
-        }
-      });
+    const token = req.cookies?.accessToken;
+
+    const userInfo = await jwtService.verifyToken(token);
+
+    User.findById(userInfo.id, (err, user) => {
+      if (!user) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        const { password, ...others } = user;
+        return res.json(others);
+      }
     });
   } catch (error) {
     res.status(400).json(error);
@@ -38,9 +57,9 @@ export const getMe = (req, res) => {
 
 export const getAllUser = (req, res) => {
   try {
-    User.getAll(req, (err, user) => {
+    User.getAll(req.query, (err, user) => {
       if (!user) {
-        const conflictError = "Không tìm thấy";
+        const conflictError = err;
         return res.status(401).json({ conflictError });
       } else {
         return res.json(user);
@@ -81,48 +100,36 @@ export const getFollower = (req, res) => {
   }
 };
 
-export const addFollow = (req, res) => {
+export const addFollow = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
 
-    jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+    User.addFollow(userInfo.id, req.params.userId, (err, data) => {
       if (err) {
-        const conflictError = "Token không hợp lệ !";
+        const conflictError = err;
         return res.status(401).json({ conflictError });
+      } else {
+        return res.json("Thành công !");
       }
-
-      User.addFollow(user.id, req.params.userId, (err, data) => {
-        if (err) {
-          const conflictError = err;
-          return res.status(401).json({ conflictError });
-        } else {
-          return res.json(data);
-        }
-      });
     });
   } catch (error) {
     res.status(400).json(error);
   }
 };
 
-export const removeFollow = (req, res) => {
+export const removeFollow = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
 
-    jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+    User.removeFollow(userInfo.id, req.params.userId, (err, data) => {
       if (err) {
-        const conflictError = "Token không hợp lệ !";
+        const conflictError = err;
         return res.status(401).json({ conflictError });
+      } else {
+        return res.json("Thành công !");
       }
-
-      User.removeFollow(user.id, req.params.userId, (err, data) => {
-        if (err) {
-          const conflictError = err;
-          return res.status(401).json({ conflictError });
-        } else {
-          return res.json(data);
-        }
-      });
     });
   } catch (error) {
     res.status(400).json(error);
@@ -132,9 +139,10 @@ export const removeFollow = (req, res) => {
 export default {
   getUser,
   getMe,
+  updateUser,
   getAllUser,
   addFollow,
   removeFollow,
   getFollowed,
-  getFollower
+  getFollower,
 };

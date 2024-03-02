@@ -4,8 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import path from "path";
-import { db } from "./config/connect.js";
-import routes from "./routes/index.js";
+import { db } from "./src/config/connect.js";
+import routes from "./src/routes/index.js";
 
 const app = express();
 
@@ -14,8 +14,8 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use("/mp3", express.static(path.join(__dirname, "/data/mp3")));
-app.use("/image", express.static(path.join(__dirname, "/data/images")));
+app.use("/mp3", express.static(path.join(__dirname, "/src/data/mp3")));
+app.use("/image", express.static(path.join(__dirname, "/src/data/images")));
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", true);

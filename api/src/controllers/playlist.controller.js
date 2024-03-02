@@ -1,0 +1,184 @@
+import Playlist from "../model/playlist.model.js";
+// import jwt from "jsonwebtoken";
+import jwtService from "../services/jwtService/index.js";
+
+export const getPlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const user = await jwtService.verifyToken(token);
+
+    Playlist.findById(req.params.playlistId, user.id, (err, playlist) => {
+      if (!playlist) {
+        return res.status(401).json({ conflictError: err });
+      } else {
+        return res.json(playlist);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const getAllPlaylist = (req, res) => {
+  try {
+    Playlist.getAll(req.query, (err, playlist) => {
+      if (!playlist) {
+        return res.status(401).json("Không tìm thấy");
+      } else {
+        return res.json(playlist);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const getAllPlaylistByMe = async (req, res) => {
+  const token = req.cookies.accessToken;
+  const userInfo = await jwtService.verifyToken(token);
+
+  Playlist.getMe(userInfo.id, req.query, (err, data) => {
+    if (err) {
+      const conflictError = err;
+      return res.status(401).json({ conflictError });
+    } else {
+      return res.json(data);
+    }
+  });
+};
+
+export const getAllPlaylistByUser = (req, res) => {
+  try {
+    Playlist.findByUserId(req.params.userId, req.query, (err, playlist) => {
+      if (!playlist) {
+        return res.status(401).json("Không tìm thấy");
+      } else {
+        return res.json(playlist);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const createPlaylist = (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+      if (err) {
+        return res.status(401).json({ conflictError: "Token không hợp lệ !" });
+      }
+      Playlist.create(user.id, req.body, (err, data) => {
+        if (err) {
+          const conflictError = "Tạo playlist không thành công !";
+          return res.status(401).json({ conflictError });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const updatePlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Playlist.update(req.params.playlistId, userInfo.id, req.body, (err, data) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const likePlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+    Playlist.like(req.params.playlistId, userInfo.id, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const unLikePlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Playlist.unlike(req.params.playlistId, userInfo.id, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const addSongPlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Playlist.addSong(req.body.playlist_id, req.body.song_id, userInfo.id, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const unAddSongPlaylist = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Playlist.unAddSong(req.body.playlist_id, req.body.song_id, userInfo.id, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export default {
+  getPlaylist,
+  getAllPlaylist,
+  getAllPlaylistByMe,
+  getAllPlaylistByUser,
+  createPlaylist,
+  updatePlaylist,
+  likePlaylist,
+  unLikePlaylist,
+  addSongPlaylist,
+  unAddSongPlaylist,
+};

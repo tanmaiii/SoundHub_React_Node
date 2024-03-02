@@ -2,6 +2,48 @@ import { promiseDb, db } from "../config/connect.js";
 import User from "../model/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import jwtService from "../services/jwtService/index.js";
+
+
+export const signin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    User.findByEmail(email, (err, user) => {
+      if (!user) {
+        const conflictError = "User does not exist";
+        res.status(401).json({ conflictError });
+      } else {
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (result == true) {
+
+            // const token = jwt.sign({ id: user.id }, process.env.MY_SECRET, { expiresIn: "7d" });
+            const token = jwtService.generateToken({id: user.id})
+
+            const { password, ...others } = user;
+
+            res
+              .cookie("accessToken", token, {
+                httpOnly: true,
+                sameSite: "none",
+                secure: true,
+                expires: new Date(Date.now() + 900000),
+                maxAge: 24 * 60 * 60 * 1000,
+              })
+              .status(200)
+              .json(others);
+          } else {
+            const conflictError = "Wrong password";
+            res.status(401).json({ conflictError });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    const conflictError = "User credentials are not valid.";
+    res.status(401).json({ conflictError });
+  }
+};
 
 export const signup = async (req, res) => {
   try {
@@ -33,43 +75,6 @@ export const signup = async (req, res) => {
   }
 };
 
-export const signin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    User.findByEmail(email, (err, user) => {
-      if (!user) {
-        const conflictError = "User does not exist";
-        res.status(401).json({ conflictError });
-      } else {
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (result == true) {
-            const token = jwt.sign({ id: user.id }, process.env.MY_SECRET, { expiresIn: "7d" });
-
-            const { password, ...others } = user;
-
-            res
-              .cookie("accessToken", token, {
-                httpOnly: true,
-                sameSite: "none",
-                secure: true,
-                expires: new Date(Date.now() + 900000),
-                maxAge: 24 * 60 * 60 * 1000,
-              })
-              .status(200)
-              .json(others);
-          } else {
-            const conflictError = "Wrong password";
-            res.status(401).json({ conflictError });
-          }
-        });
-      }
-    });
-  } catch (error) {
-    const conflictError = "User credentials are not valid.";
-    res.status(401).json({ conflictError });
-  }
-};
 
 export const signout = (req, res) => {
   res.clearCookie("accessToken");

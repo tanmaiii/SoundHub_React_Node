@@ -5,6 +5,9 @@ const User = function (user) {
   this.email = user.email;
   this.password = user.password;
   this.name = user.name;
+  this.image_path = user.image_path;
+  this.verified = user.verified;
+  this.is_admin = user.is_admin;
 };
 
 User.create = (newUser, result) => {
@@ -16,6 +19,24 @@ User.create = (newUser, result) => {
     }
     console.log("CREATE USER : ", { res });
     result(null, { id: res.insertId, ...newUser });
+  });
+};
+
+User.update = (userId, newUser, result) => {
+  User.findById(userId, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    db.query(`update users set ? where id = ${userId}`, newUser, (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      console.log("UPDATE USER : ", { res });
+      result(null, { id: res.insertId, ...newUser });
+    });
   });
 };
 
@@ -34,16 +55,16 @@ User.findByEmail = (email, result) => {
 };
 
 User.findById = (id, result) => {
-  db.query(`SELECT * from users WHERE id = '${id}'`, (err, res) => {
+  db.query(`SELECT * from users WHERE id = '${id}'`, (err, user) => {
     if (err) {
       result(err, null);
       return;
     }
-    if (res.length) {
-      result(null, res[0]);
+    if (user.length) {
+      result(null, user[0]);
       return;
     }
-    result(null, null);
+    result(`Không tìm người dùng có id là ${id}`, null);
   });
 };
 
@@ -135,19 +156,23 @@ User.isEmailAlreadyExists = (email, result) => {
   });
 };
 
-User.getAll = async (req, result) => {
-  const q = req.query?.q;
-  const page = req.query?.page;
-  const limit = req.query?.limit;
-  const sortBy = req.query?.sortBy;
+User.getAll = async (query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
 
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT email, name, image_path, verified, is_admin FROM users limit ${+limit} offset ${+offset}`
+    `SELECT email, name, image_path, verified, is_admin FROM users ${
+      q ? `WHERE users.name LIKE "%${q}%"` : ""
+    } ` + ` limit ${+limit} offset ${+offset}`
   );
 
-  const [totalCount] = await promiseDb.query(`SELECT COUNT(*) AS totalCount FROM users`);
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM users ${q ? `WHERE users.name LIKE "%${q}%"` : ""}`
+  );
 
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
@@ -159,11 +184,12 @@ User.getAll = async (req, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        q,
       },
     });
     return;
   }
-  result(null, null);
+  result("Không tìm thấy !", null);
 };
 
 //followerId: người đang theo dõi,

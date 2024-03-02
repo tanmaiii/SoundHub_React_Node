@@ -4,12 +4,11 @@ const Playlist = (playlist) => {
   this.id = playlist.id;
   this.name = playlist.name;
   this.image_path = playlist.image_path;
-  this.user_id = playlist.user_id;
   this.genre_id = playlist.genre_id;
 };
 
-Playlist.create = (newPlaylist, result) => {
-  db.query("insert into playlists set ? ", newPlaylist, (err, res) => {
+Playlist.create = (userId, newPlaylist, result) => {
+  db.query(`insert into playlists set ? ,user_id = ${userId}`, newPlaylist, (err, res) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -20,23 +19,26 @@ Playlist.create = (newPlaylist, result) => {
   });
 };
 
-Playlist.update = (playlistId, newPlaylist, result) => {
-  Playlist.findById(playlistId, (err, playlist) => {
+Playlist.update = (playlistId, userId, newPlaylist, result) => {
+  Playlist.findById(playlistId, userId, (err, playlist) => {
     if (err) {
-      console.log("ERROR", err);
+      console.log("ERROR:", err);
       result(err, null);
       return;
-    } else {
-      db.query(`update playlists set ? where id = ${playlist.id}`, newPlaylist, (err, res) => {
-        if (err) {
-          console.log("ERROR", err);
-          result(err, null);
-          return;
-        }
-        console.log("CREATE : ", { res });
-        result(null, { id: res.insertId, ...newPlaylist });
-      });
     }
+    if (playlist.user_id !== userId) {
+      result("Không có quyền sửa", null);
+      return;
+    }
+    db.query(`update playlists set ? where id = ${playlist.id}`, newPlaylist, (err, res) => {
+      if (err) {
+        console.log("ERROR:", err);
+        result(err, null);
+        return;
+      }
+      console.log("UPDATE: ", { res });
+      result(null, { id: res.insertId, ...newPlaylist });
+    });
   });
 };
 
@@ -54,7 +56,9 @@ Playlist.getAll = async (query, result) => {
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} private = 0`
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${
+      q ? ` title like "%${q}%" and` : ""
+    } private = 0`
   );
 
   if (data && totalCount) {
@@ -89,7 +93,9 @@ Playlist.getMe = async (userId, query, result) => {
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} user_id = ${userId}`
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${
+      q ? ` title like "%${q}%" and` : ""
+    } user_id = ${userId}`
   );
 
   if (data && totalCount) {
@@ -110,17 +116,24 @@ Playlist.getMe = async (userId, query, result) => {
   result(null, null);
 };
 
-Playlist.findById = (playlistId, result) => {
-  db.query(`SELECT * from playlists WHERE id = '${playlistId}' and private = 0`, (err, res) => {
+Playlist.findById = (playlistId, userId, result) => {
+  db.query(`SELECT * from playlists WHERE id = '${playlistId}'`, (err, playlist) => {
+    console.log(playlistId);
     if (err) {
       result(err, null);
       return;
     }
-    if (res.length) {
-      result(null, res[0]);
-      return;
+
+    if (playlist.length) {
+      if (playlist[0].private === 1 && playlist[0].user_id !== userId) {
+        result("Playlist đang được ẩn", null);
+        return;
+      } else {
+        result(null, playlist[0]);
+        return;
+      }
     }
-    result(null, null);
+    result("Không tìm thấy playlist !", null);
   });
 };
 
@@ -133,12 +146,16 @@ Playlist.findByUserId = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and ` : ""} user_id = ${userId} and private = 0` +
+    `SELECT * FROM playlists WHERE ${
+      q ? ` title like "%${q}%" and ` : ""
+    } user_id = ${userId} and private = 0` +
       ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${q ? ` title like "%${q}%" and ` : ""} user_id = ${userId} and private = 0`
+    `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${
+      q ? ` title like "%${q}%" and ` : ""
+    } user_id = ${userId} and private = 0`
   );
 
   if (data && totalCount) {
@@ -161,7 +178,7 @@ Playlist.findByUserId = async (userId, query, result) => {
 
 Playlist.like = (playlistId, userId, result) => {
   // Tìm kiếm bài hát theo id
-  Playlist.findById(playlistId, (err, playlist) => {
+  Playlist.findById(playlistId, userId, (err, playlist) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -249,7 +266,7 @@ Playlist.unlike = (playlistId, userId, result) => {
 };
 
 Playlist.addSong = (playlistId, songId, userId, result) => {
-  db.query(`SELECT * from playlists WHERE id = '${playlistId}' `, (err, playlist) => {
+  Playlist.findById(playlistId, userId, (err, playlist) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -261,7 +278,7 @@ Playlist.addSong = (playlistId, songId, userId, result) => {
       return;
     }
 
-    if (playlist[0].user_id != userId) {
+    if (playlist.user_id != userId) {
       result(`Playlist không thuộc sở hữu của người dùng`, null);
       return;
     }
@@ -301,7 +318,7 @@ Playlist.addSong = (playlistId, songId, userId, result) => {
 };
 
 Playlist.unAddSong = (playlistId, songId, userId, result) => {
-  db.query(`SELECT * from playlists WHERE id = '${playlistId}' `, (err, playlist) => {
+  Playlist.findById(playlistId, userId, (err, playlist) => {
     if (err) {
       console.log("ERROR", err);
       result(err, null);
@@ -313,7 +330,7 @@ Playlist.unAddSong = (playlistId, songId, userId, result) => {
       return;
     }
 
-    if (playlist[0].user_id != userId) {
+    if (playlist.user_id != userId) {
       result(`Playlist không thuộc sở hữu của người dùng`, null);
       return;
     }
