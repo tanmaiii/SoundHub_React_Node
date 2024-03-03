@@ -42,6 +42,17 @@ Playlist.update = (playlistId, userId, newPlaylist, result) => {
   });
 };
 
+Playlist.delete = (playlistId, result) => {
+  db.query("DELETE FROM playlists WHERE id = ?", playlistId, (deleteErr, deleteRes) => {
+    if (deleteErr) {
+      console.log("ERROR", deleteErr);
+      result(deleteErr, null);
+      return;
+    }
+    result(null, { playlist_id: playlistId });
+  });
+}
+
 Playlist.getAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
@@ -118,7 +129,6 @@ Playlist.getMe = async (userId, query, result) => {
 
 Playlist.findById = (playlistId, userId, result) => {
   db.query(`SELECT * from playlists WHERE id = '${playlistId}'`, (err, playlist) => {
-    console.log(playlistId);
     if (err) {
       result(err, null);
       return;

@@ -31,6 +31,23 @@ export default class playlistValidator {
     }),
   };
 
+  static createPlaylist = {
+    ...bodySchema,
+    ...cookieSchema,
+  };
+
+  static updatePlaylist = {
+    ...bodySchema,
+    ...cookieSchema,
+  };
+
+  static deletePlaylist = {
+    params: Joi.object().keys({
+      playlistId: Joi.number().integer().required(),
+    }),
+    ...cookieSchema,
+  };
+
   static getAllPlaylist = {
     ...querySchema,
   };
@@ -45,16 +62,6 @@ export default class playlistValidator {
     params: Joi.object().keys({
       userId: Joi.number().integer().required(),
     }),
-  };
-
-  static createPlaylist = {
-    ...bodySchema,
-    ...cookieSchema,
-  };
-
-  static updatePlaylist = {
-    ...bodySchema,
-    ...cookieSchema,
   };
 
   static like = {

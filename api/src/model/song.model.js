@@ -42,18 +42,29 @@ Song.update = (songId, userId, newSong, result) => {
   });
 };
 
+Song.delete = (songId, result) => {
+  db.query("DELETE FROM songs WHERE id = ?", songId, (deleteErr, deleteRes) => {
+    if (deleteErr) {
+      console.log("ERROR", deleteErr);
+      result(deleteErr, null);
+      return;
+    }
+    result(null, { song_id: songId });
+  });
+};
+
 Song.findById = (songId, userId, result) => {
   db.query(`SELECT * from songs WHERE id = '${songId}'`, (err, song) => {
     if (err) {
       result(err, null);
       return;
     }
-    
+
     if (song.length) {
       if (song[0].private === 1 && song[0].user_id !== userId) {
         result("Bài hát đang ẩn", null);
         return;
-      }else{
+      } else {
         result(null, song[0]);
         return;
       }
@@ -222,9 +233,7 @@ Song.getMe = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT * FROM songs WHERE ${
-      q ? ` title LIKE "%${q}%" AND` : ""
-    } user_id = ${userId}  ` +
+    `SELECT * FROM songs WHERE ${q ? ` title LIKE "%${q}%" AND` : ""} user_id = ${userId}  ` +
       `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
@@ -318,7 +327,6 @@ Song.unlike = (songId, userId, result) => {
 
       // Nếu không tìm thấy bài hát trong danh sách yêu thích của người dùng, trả về lỗi
       if (rows.length === 0) {
-        console.log("Bài hát không được thích bởi người dùng");
         result("Bài hát không được thích bởi người dùng", null);
         return;
       }

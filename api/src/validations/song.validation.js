@@ -37,6 +37,13 @@ export default class songValidation {
     }),
   };
 
+  static deleteSong = {
+    params: Joi.object().keys({
+      songId: Joi.number().integer().required(),
+    }),
+    ...cookieSchema
+  };
+
   static getSong = {
     params: Joi.object().keys({
       songId: Joi.number().integer().required(),
@@ -58,14 +65,14 @@ export default class songValidation {
   };
 
   static getAllSongByUser = {
-    ...bodySchema,
+    ...querySchema,
     params: Joi.object().keys({
       userId: Joi.number().integer().required(),
     }),
   };
 
   static getAllSongByPlaylist = {
-    ...bodySchema,
+    ...querySchema,
     params: Joi.object().keys({
       playlistId: Joi.number().integer().required(),
     }),

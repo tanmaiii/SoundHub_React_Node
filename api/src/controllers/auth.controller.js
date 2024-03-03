@@ -18,7 +18,7 @@ export const signin = async (req, res) => {
           if (result == true) {
 
             // const token = jwt.sign({ id: user.id }, process.env.MY_SECRET, { expiresIn: "7d" });
-            const token = jwtService.generateToken({id: user.id})
+            const token = jwtService.generateToken({id: user.id, is_admin: user.is_admin})
 
             const { password, ...others } = user;
 
@@ -74,7 +74,6 @@ export const signup = async (req, res) => {
     res.status(401).json({ conflictError });
   }
 };
-
 
 export const signout = (req, res) => {
   res.clearCookie("accessToken");
