@@ -2,11 +2,12 @@ import Joi from "joi";
 
 const bodySchema = {
   body: Joi.object().keys({
-    title: Joi.string().min(0).max(255).required(),
-    genre_id: Joi.number().required(),
-    image_path: Joi.string().min(0).max(255).required(),
-    song_path: Joi.string().min(0).max(255).required(),
-    private: Joi.number().valid(0, 1),
+    title: Joi.string().min(0).max(255),
+    genre_id: Joi.number(),
+    image_path: Joi.string().min(0).max(255),
+    song_path: Joi.string().min(0).max(255),
+    public: Joi.number().valid(0, 1),
+    is_deleted: Joi.number().valid(0, 1),
   }),
 };
 
@@ -41,7 +42,21 @@ export default class songValidation {
     params: Joi.object().keys({
       songId: Joi.number().integer().required(),
     }),
-    ...cookieSchema
+    ...cookieSchema,
+  };
+
+  static destroySong = {
+    params: Joi.object().keys({
+      songId: Joi.number().integer().required(),
+    }),
+    ...cookieSchema,
+  };
+
+  static restoreSong = {
+    params: Joi.object().keys({
+      songId: Joi.number().integer().required(),
+    }),
+    ...cookieSchema,
   };
 
   static getSong = {

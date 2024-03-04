@@ -48,4 +48,8 @@ export default class genreValidation {
     }),
     ...cookieSchema,
   };
+  
+  static getAllGenres = {
+    ...querySchema
+  }
 }

@@ -14,9 +14,11 @@ export const getSong = async (req, res) => {
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
-      } else {
-        return res.json(song);
       }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+      }
+      return res.json(song);
     });
   } catch (error) {
     res.status(400).json(error);
@@ -45,14 +47,21 @@ export const updateSong = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
     const userInfo = await jwtService.verifyToken(token);
-
-    Song.update(req.params.songId, userInfo.id, req.body, (err, data) => {
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err) {
-        const conflictError = err;
-        return res.status(401).json({ conflictError });
-      } else {
-        return res.json(data);
+        return res.status(401).json({ conflictError: err });
       }
+      if (song.user_id !== userInfo.id) {
+        return res.status(401).json({ conflictError: "Không có quyền sửa" });
+      }
+      Song.update(song.songId, req.body, (err, data) => {
+        if (err) {
+          const conflictError = err;
+          return res.status(401).json({ conflictError });
+        } else {
+          return res.json(data);
+        }
+      });
     });
   } catch (error) {
     res.status(400).json(error);
@@ -90,9 +99,44 @@ export const deleteSong = async (req, res) => {
   }
 };
 
+export const destroySong = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Song.destroy(req.params.songId, userInfo.id, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const restoreSong = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Song.restore(req.params.songId, userInfo.id, (err, data) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export const getAllSong = (req, res) => {
   try {
-    Song.getAll(req.query, (err, data) => {
+    Song.findAll(req.query, (err, data) => {
       if (!data) {
         return res.status(401).json("Không tìm thấy");
       } else {
@@ -109,7 +153,7 @@ export const getAllSongByMe = async (req, res) => {
     const token = req.cookies.accessToken;
     const userInfo = await jwtService.verifyToken(token);
 
-    Song.getMe(userInfo.id, req.query, (err, data) => {
+    Song.findMe(userInfo.id, req.query, (err, data) => {
       if (!data) {
         return res.status(401).json("Không tìm thấy");
       } else {
@@ -207,6 +251,8 @@ export default {
   createSong,
   updateSong,
   deleteSong,
+  restoreSong,
+  destroySong,
   getAllSong,
   getAllSongByMe,
   getAllSongByPlaylist,

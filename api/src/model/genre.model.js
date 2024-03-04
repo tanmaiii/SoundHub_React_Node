@@ -57,7 +57,7 @@ Genre.delete = (id, result) => {
   });
 };
 
-Song.getAll = async (query, result) => {
+Genre.findAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
@@ -66,14 +66,12 @@ Song.getAll = async (query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT * FROM songs WHERE ${q ? ` title LIKE "%${q}%" AND` : ""} private = 0 ` +
+    `SELECT * FROM genre ${q ? `WHERE title LIKE "%${q}%" ` : ""} ` +
       `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM songs WHERE ${
-      q ? ` title LIKE "%${q}%" AND` : ""
-    } private = 0 `
+    `SELECT COUNT(*) AS totalCount FROM genre ${q ? `WHERE title LIKE "%${q}%"` : ""}`
   );
 
   if (data && totalCount) {
@@ -88,9 +86,10 @@ Song.getAll = async (query, result) => {
         totalPages,
       },
     });
+
     return;
   }
   result(null, null);
-};  
+};
 
 export default Genre;

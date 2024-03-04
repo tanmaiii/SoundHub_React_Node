@@ -98,9 +98,24 @@ export const deleteGenre = async (req, res) => {
   }
 };
 
+export const getAllGenres = (req, res) => {
+  try {
+    Genre.findAll(req.query, (err, data) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export default {
   getGenre,
   createGenre,
   updateGenre,
   deleteGenre,
+  getAllGenres
 };

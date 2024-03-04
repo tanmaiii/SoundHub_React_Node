@@ -2,10 +2,10 @@ import Joi from "joi";
 
 const bodySchema = {
   body: Joi.object().keys({
-    title: Joi.string().min(0).max(255).required(),
-    genre_id: Joi.number().required(),
-    image_path: Joi.string().min(0).max(255).required(),
-    private: Joi.string().min(0).max(10),
+    title: Joi.string().min(0).max(255),
+    genre_id: Joi.number(),
+    image_path: Joi.string().min(0).max(255),
+    public: Joi.number().valid(0, 1),
   }),
 };
 

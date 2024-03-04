@@ -1,10 +1,11 @@
 import { db, promiseDb } from "../config/connect.js";
+import moment from "moment";
 
 const Song = (song) => {
   this.title = song.title;
   this.image_path = song.image_path;
   this.song_path = song.song_path;
-  this.private = song.private;
+  this.public = song.public;
 };
 
 Song.create = (userId, newSong, result) => {
@@ -19,49 +20,122 @@ Song.create = (userId, newSong, result) => {
   });
 };
 
-Song.update = (songId, userId, newSong, result) => {
-  Song.findById(songId, userId, (err, song) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
-    }
-    if (song.user_id !== userId) {
-      result("Không có quyền sửa", null);
-      return;
-    }
-    db.query(`update songs set ? where id = ${song?.id}`, newSong, (err, res) => {
+Song.update = (songId, newSong, result) => {
+  db.query(
+    `update songs set ? ,update_at = '${moment(Date.now()).format(
+      "YYYY-MM-DD HH:mm:ss"
+    )}' where id = ${songId}`,
+    newSong,
+    (err, res) => {
       if (err) {
         console.log("ERROR", err);
         result(err, null);
         return;
       }
-      console.log("CREATE : ", { res });
+      console.log("UPDATE : ", { res });
       result(null, { id: songId, ...newSong });
+    }
+  );
+};
+
+Song.delete = (songId, result) => {
+  db.query(
+    `UPDATE songs SET is_deleted = 1 ,update_at = '${moment(Date.now()).format(
+      "YYYY-MM-DD HH:mm:ss"
+    )}' where id = ${songId}`,
+    (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      result(null, { id: songId });
+    }
+  );
+};
+
+Song.destroy = (songId, userId, result) => {
+  db.query("SELECT * FROM songs WHERE id = ? ", songId, (err, song) => {
+    if (err) {
+      console.log("ERROR", err);
+      result(err, null);
+      return;
+    }
+
+    if (song.length === 0) {
+      result("Không tìm thấy !", null);
+      return;
+    }
+
+    if (song[0].is_deleted === 0) {
+      result("Bài hát không có trong danh sách được xóa !", null);
+      return;
+    }
+
+    if (song[0].user_id !== userId) {
+      result("Bài hát không thuộc sở hữu của người dùng !", null);
+      return;
+    }
+
+    db.query("DELETE FROM songs WHERE id = ?", songId, (deleteErr, deleteRes) => {
+      if (deleteErr) {
+        console.log("ERROR", deleteErr);
+        result(deleteErr, null);
+        return;
+      }
+      result(null, { song_id: songId });
     });
   });
 };
 
-Song.delete = (songId, result) => {
-  db.query("DELETE FROM songs WHERE id = ?", songId, (deleteErr, deleteRes) => {
-    if (deleteErr) {
-      console.log("ERROR", deleteErr);
-      result(deleteErr, null);
+Song.restore = (songId, userId, result) => {
+  db.query("SELECT * FROM songs WHERE id = ? AND is_deleted = 1", [songId, userId], (err, song) => {
+    if (err) {
+      console.log("ERROR", err);
+      result(err, null);
       return;
     }
-    result(null, { song_id: songId });
+
+    if (song.length === 0) {
+      result("Không tìm thấy !", null);
+      return;
+    }
+
+    if (song[0].user_id !== userId) {
+      result("Bài hát không thuộc sở hữu của người dùng !", null);
+      return;
+    }
+
+    db.query(
+      `update songs set is_deleted = 0 ,update_at = '${moment(Date.now()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      )}' where id = ${songId}`,
+      (err, res) => {
+        if (err) {
+          console.log("ERROR", err);
+          result(err, null);
+          return;
+        }
+        result(null, { id: songId });
+      }
+    );
   });
 };
 
 Song.findById = (songId, userId, result) => {
-  db.query(`SELECT * from songs WHERE id = '${songId}'`, (err, song) => {
+  db.query(`SELECT * from songs WHERE id = '${songId}' AND is_deleted = 0`, (err, song) => {
     if (err) {
       result(err, null);
       return;
     }
 
+    if (!song.length) {
+      result("Không tìm thấy !", null);
+      return;
+    }
+
     if (song.length) {
-      if (song[0].private === 1 && song[0].user_id !== userId) {
+      if (song[0].public === 0 && song[0].user_id !== userId) {
         result("Bài hát đang ẩn", null);
         return;
       } else {
@@ -69,6 +143,7 @@ Song.findById = (songId, userId, result) => {
         return;
       }
     }
+
     result(null, null);
   });
 };
@@ -84,14 +159,14 @@ Song.findByPlaylistId = async (playlistId, query, result) => {
   const [data] = await promiseDb.query(
     `SELECT * FROM playlist_songs as pvs , songs as s WHERE ${
       q ? ` s.title LIKE "%${q}%" AND` : ""
-    }  pvs.playlist_id = ${playlistId} and pvs.song_id = s.id and s.private = 0 ` +
+    }  pvs.playlist_id = ${playlistId} and pvs.song_id = s.id and s.public = 1 AND is_deleted = 0 ` +
       `ORDER BY pvs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM playlist_songs as pvs , songs as s WHERE ${
       q ? ` s.title LIKE "%${q}%" AND` : ""
-    } pvs.playlist_id = ${playlistId} and pvs.song_id = s.id  and s.private = 0 `
+    } pvs.playlist_id = ${playlistId} and pvs.song_id = s.id and s.public = 1 AND is_deleted = 0`
   );
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
@@ -122,14 +197,14 @@ Song.findByFavorite = async (userId, query, result) => {
   const [data] = await promiseDb.query(
     `SELECT * FROM favourite_songs as fs , songs as s WHERE ${
       q ? ` s.title LIKE "%${q}%" AND` : ""
-    } fs.user_id = ${userId} and fs.song_id = s.id and s.private = 0 ` +
+    } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1 ` +
       `ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM favourite_songs as fs , songs as s WHERE ${
       q ? ` s.title LIKE "%${q}%" AND` : ""
-    } fs.user_id = ${userId} and fs.song_id = s.id and s.private = 0`
+    } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1`
   );
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
@@ -160,14 +235,14 @@ Song.findByUserId = async (userId, query, result) => {
   const [data] = await promiseDb.query(
     `SELECT * FROM songs WHERE ${
       q ? ` title LIKE "%${q}%" AND` : ""
-    } user_id = ${userId} AND private = 0 ` +
+    } user_id = ${userId} AND public = 1 AND is_deleted = 0 ` +
       `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM songs WHERE ${
       q ? ` title LIKE "%${q}%" AND` : ""
-    } user_id = ${userId} AND private = 0`
+    } user_id = ${userId} AND public = 1 AND is_deleted = 0 `
   );
 
   if (data && totalCount) {
@@ -188,7 +263,7 @@ Song.findByUserId = async (userId, query, result) => {
   result(null, null);
 };
 
-Song.getAll = async (query, result) => {
+Song.findAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
@@ -197,14 +272,16 @@ Song.getAll = async (query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT * FROM songs WHERE ${q ? ` title LIKE "%${q}%" AND` : ""} private = 0 ` +
+    `SELECT * FROM songs WHERE ${
+      q ? ` title LIKE "%${q}%" AND` : ""
+    } is_deleted = 0 and public = 1 ` +
       `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM songs WHERE ${
       q ? ` title LIKE "%${q}%" AND` : ""
-    } private = 0 `
+    } is_deleted = 0 and public = 1 `
   );
 
   if (data && totalCount) {
@@ -224,7 +301,7 @@ Song.getAll = async (query, result) => {
   result(null, null);
 };
 
-Song.getMe = async (userId, query, result) => {
+Song.findMe = async (userId, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;

@@ -5,6 +5,7 @@ const Playlist = (playlist) => {
   this.name = playlist.name;
   this.image_path = playlist.image_path;
   this.genre_id = playlist.genre_id;
+  this.public = playlist.public;
 };
 
 Playlist.create = (userId, newPlaylist, result) => {
@@ -37,7 +38,7 @@ Playlist.update = (playlistId, userId, newPlaylist, result) => {
         return;
       }
       console.log("UPDATE: ", { res });
-      result(null, { id: res.insertId, ...newPlaylist });
+      result(null, { id: playlistId, ...newPlaylist });
     });
   });
 };
@@ -51,7 +52,7 @@ Playlist.delete = (playlistId, result) => {
     }
     result(null, { playlist_id: playlistId });
   });
-}
+};
 
 Playlist.getAll = async (query, result) => {
   const q = query?.q;
@@ -62,14 +63,14 @@ Playlist.getAll = async (query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} private = 0 ` +
+    `SELECT * FROM playlists WHERE ${q ? ` title like "%${q}%" and` : ""} public = 1 ` +
       `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${
       q ? ` title like "%${q}%" and` : ""
-    } private = 0`
+    } public = 1`
   );
 
   if (data && totalCount) {
@@ -135,7 +136,7 @@ Playlist.findById = (playlistId, userId, result) => {
     }
 
     if (playlist.length) {
-      if (playlist[0].private === 1 && playlist[0].user_id !== userId) {
+      if (playlist[0].public === 0 && playlist[0].user_id !== userId) {
         result("Playlist đang được ẩn", null);
         return;
       } else {
@@ -158,14 +159,14 @@ Playlist.findByUserId = async (userId, query, result) => {
   const [data] = await promiseDb.query(
     `SELECT * FROM playlists WHERE ${
       q ? ` title like "%${q}%" and ` : ""
-    } user_id = ${userId} and private = 0` +
+    } user_id = ${userId} and public = 1` +
       ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM playlists WHERE ${
       q ? ` title like "%${q}%" and ` : ""
-    } user_id = ${userId} and private = 0`
+    } user_id = ${userId} and public = 1`
   );
 
   if (data && totalCount) {
