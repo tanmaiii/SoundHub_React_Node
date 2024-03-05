@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import template from "./template";
+import template from "./template.js";
 
 export const transport = nodemailer.createTransport({
   service: "gmail",
@@ -10,7 +10,7 @@ export const transport = nodemailer.createTransport({
 });
 
 export const sendEmail = async (to, subject, html) => {
-  const msg = { from: "", to, subject, html };
+  const msg = { from: process.env.MAIL_NAME, to, subject, html };
   await transport.sendMail(msg);
 };
 
@@ -20,3 +20,12 @@ export const sendResetPasswordEmail = async (to, token) => {
   const html = template.resetPassword(resetPasswordUrl, "music");
   await sendEmail(to, subject, html);
 };
+
+export const sendVerificationEmail = async (to, token) => {
+  const subject = "Email Verification";
+  const verificationEmailUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+  const html = template.verifyEmail(verificationEmailUrl, process.env.APP_NAME);
+  await sendEmail(to, subject, html);
+};
+
+export default { sendEmail, sendVerificationEmail, sendResetPasswordEmail };

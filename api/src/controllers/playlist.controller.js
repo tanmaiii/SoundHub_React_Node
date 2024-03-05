@@ -1,5 +1,5 @@
 import Playlist from "../model/playlist.model.js";
-import jwtService from "../services/jwtService/index.js";
+import jwtService from "../services/jwtService.js";
 
 export const getPlaylist = async (req, res) => {
   try {
@@ -124,6 +124,23 @@ export const getAllPlaylistByUser = (req, res) => {
   }
 };
 
+export const getAllFavoritesByUser = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    Playlist.findByFavorite(userInfo.id, req.query, (err, data) => {
+      if (!data) {
+        return res.status(401).json("Không tìm thấy");
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export const likePlaylist = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
@@ -203,6 +220,7 @@ export default {
   getAllPlaylist,
   getAllPlaylistByMe,
   getAllPlaylistByUser,
+  getAllFavoritesByUser,
   likePlaylist,
   unLikePlaylist,
   addSongPlaylist,

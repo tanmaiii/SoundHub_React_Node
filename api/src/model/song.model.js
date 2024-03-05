@@ -219,6 +219,7 @@ Song.findByFavorite = async (userId, query, result) => {
         sort,
       },
     });
+    
     return;
   }
   result(null, null);

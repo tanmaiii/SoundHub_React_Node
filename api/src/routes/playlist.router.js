@@ -22,11 +22,21 @@ router.get(
 );
 router.get("/", validate(playlistValidation.getAllPlaylist), playlistController.getAllPlaylist);
 router.post("/", validate(playlistValidation.createPlaylist), playlistController.createPlaylist);
-router.delete("/:playlistId", validate(playlistValidation.deletePlaylist), playlistController.deletePlaylist);
+router.delete(
+  "/:playlistId",
+  validate(playlistValidation.deletePlaylist),
+  playlistController.deletePlaylist
+);
 router.put(
   "/:playlistId",
   validate(playlistValidation.updatePlaylist),
   playlistController.updatePlaylist
+);
+
+router.get(
+  "/like",
+  validate(playlistValidation.getAllFavoritesByUser),
+  playlistController.getAllFavoritesByUser
 );
 
 router.post(

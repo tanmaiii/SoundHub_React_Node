@@ -64,6 +64,11 @@ export default class playlistValidator {
     }),
   };
 
+  static getAllFavoritesByUser = {
+    ...querySchema,
+    ...cookieSchema,
+  };
+
   static like = {
     ...cookieSchema,
     params: Joi.object().keys({

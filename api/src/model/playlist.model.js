@@ -187,6 +187,45 @@ Playlist.findByUserId = async (userId, query, result) => {
   result(null, null);
 };
 
+Playlist.findByFavorite = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
+
+  const offset = (page - 1) * limit;
+
+  const [data] = await promiseDb.query(
+    `SELECT * FROM favourite_playlists as fp , playlists as p WHERE ${
+      q ? ` p.title LIKE "%${q}%" AND` : ""
+    } fp.user_id = ${userId} and fp.playlist_id = p.id and p.public = 1 ` +
+      `ORDER BY fp.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) AS totalCount FROM favourite_playlists as fp , playlists as p WHERE ${
+      q ? ` p.title LIKE "%${q}%" AND` : ""
+    } fp.user_id = ${userId} and fp.playlist_id = p.id and p.public = 1`
+  );
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+        sort,
+      },
+    });
+
+    return;
+  }
+  result(null, null);
+};
+
 Playlist.like = (playlistId, userId, result) => {
   // Tìm kiếm bài hát theo id
   Playlist.findById(playlistId, userId, (err, playlist) => {

@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 
 const jwtService = {
   // Hàm tạo token
-  generateToken: (payload) => {
-    return jwt.sign(payload, process.env.MY_SECRET, { expiresIn: "7d" });
+  generateToken: (payload, options) => {
+    // options : { expiresIn: "7d" }
+    return jwt.sign(payload, process.env.MY_SECRET, options);
   },
 
   // Hàm kiểm tra token

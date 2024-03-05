@@ -4,7 +4,7 @@
 //404:  Tài nguyên được yêu cầu không tồn tại trên server.
 
 import Song from "../model/song.model.js";
-import jwtService from "../services/jwtService/index.js";
+import jwtService from "../services/jwtService.js";
 
 export const getSong = async (req, res) => {
   try {

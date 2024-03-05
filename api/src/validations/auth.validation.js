@@ -26,4 +26,27 @@ export default class authValidation {
         .required(),
     }),
   };
+  static forgotPassword = {
+    body: Joi.object().keys({
+      email: Joi.string().email().max(255).empty().required(),
+    }),
+  };
+  static resetPassword = {
+    query: Joi.object().keys({
+      token: Joi.string().required(),
+    }),
+    body: Joi.object().keys({
+      password: Joi.string().email().max(255).empty().required(),
+    }),
+  };
+  static sendVerificationEmail = {
+    body: Joi.object().keys({
+      email: Joi.string().email().max(255).empty().required(),
+    }),
+  };
+  static verifyEmail = {
+    query: Joi.object().keys({
+      token: Joi.string().required(),
+    }),
+  };
 }

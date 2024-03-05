@@ -1,43 +1,48 @@
 import { promiseDb, db } from "../config/connect.js";
 import User from "../model/user.model.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import jwtService from "../services/jwtService/index.js";
-
+import jwtService from "../services/jwtService.js";
+import emailService from "../services/emailService/index.js";
 
 export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     User.findByEmail(email, (err, user) => {
+      if (err) return res.status(401).json({ conflictError: err });
       if (!user) {
         const conflictError = "User does not exist";
-        res.status(401).json({ conflictError });
-      } else {
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (result == true) {
-
-            // const token = jwt.sign({ id: user.id }, process.env.MY_SECRET, { expiresIn: "7d" });
-            const token = jwtService.generateToken({id: user.id, is_admin: user.is_admin})
-
-            const { password, ...others } = user;
-
-            res
-              .cookie("accessToken", token, {
-                httpOnly: true,
-                sameSite: "none",
-                secure: true,
-                expires: new Date(Date.now() + 900000),
-                maxAge: 24 * 60 * 60 * 1000,
-              })
-              .status(200)
-              .json(others);
-          } else {
-            const conflictError = "Wrong password";
-            res.status(401).json({ conflictError });
-          }
-        });
+        return res.status(401).json({ conflictError });
       }
+      if (user.email_verified_at === null) {
+        return res.status(401).json({ conflictError: "Người dùng chưa được xác thực !" });
+      }
+
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (result == true) {
+          // const token = jwt.sign({ id: user.id }, process.env.MY_SECRET, { expiresIn: "7d" });
+          const token = jwtService.generateToken(
+            { id: user.id, is_admin: user.is_admin },
+            { expiresIn: "7d" }
+          );
+
+          const { password, ...others } = user;
+
+          res
+            .cookie("accessToken", token, {
+              httpOnly: true,
+              sameSite: "none",
+              secure: true,
+              expires: new Date(Date.now() + 900000),
+              maxAge: 24 * 60 * 60 * 1000,
+            })
+            .status(200)
+            .json(others);
+        } else {
+          const conflictError = "Wrong password";
+          res.status(401).json({ conflictError });
+        }
+      });
     });
   } catch (error) {
     const conflictError = "User credentials are not valid.";
@@ -80,13 +85,93 @@ export const signout = (req, res) => {
   res.end();
 };
 
-export const resetPassword = (req, res) => {};
+// Gửi xác thực tài khoản
+export const sendVerificationEmail = (req, res) => {
+  try {
+    const email = req.body.email;
+    User.findByEmail(email, async (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({ conflictError: "Không tìm thấy email" });
+      }
+      const token = jwtService.generateToken({ email }, { expiresIn: "1h" });
+      await emailService.sendVerificationEmail(email, token);
 
-export const forgotPassword = (req, res) => {};
+      return res.json({
+        success: true,
+        data: "Gửi xác thực tài khoản thành công !",
+        token: token,
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Lỗi gửi email" });
+  }
+};
+
+// Xác thực tài khoản
+export const verifyEmail = async (req, res) => {
+  try {
+    const token = req.query.token;
+    const emailInfo = await jwtService.verifyToken(token);
+    User.verify(emailInfo.email, (err, result) => {
+      if (!err) {
+        return res.json("Xác thực thành công !");
+      } else {
+        return res.status(401).json(err);
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ conflictError: "Lỗi trong quá trình xử lý yêu cầu" });
+  }
+};
+
+//Quên mật khẩu
+export const forgotPassword = (req, res) => {
+  try {
+    const email = req.body.email;
+    User.findByEmail(email, async (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({ conflictError: "Không tìm thấy email" });
+      }
+
+      const resetPasswordToken = jwtService.generateToken({ id: user.id }, { expiresIn: "1h" });
+      await emailService.sendResetPasswordEmail(email, resetPasswordToken);
+      return res.json({
+        success: true,
+        data: "Gửi email quên mật khẩu thành công !",
+        token: resetPasswordToken,
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({ conflictError: "Lỗi trong quá trình xử lý yêu cầu" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+    const token = req.query.token;
+
+    const userInfo = await jwtService.verifyToken(token);
+
+    User.update(userInfo.id, { password: hashedPassword }, (err, result) => {
+      if (err) {
+        return res.status(401).json(err);
+      }
+      return res.json("Cập nhật thành công !");
+    });
+  } catch (error) {
+    res.status(401).json({ conflictError: error });
+  }
+};
 
 export default {
   signup,
   signin,
   signout,
+  forgotPassword,
   resetPassword,
+  sendVerificationEmail,
+  verifyEmail,
 };

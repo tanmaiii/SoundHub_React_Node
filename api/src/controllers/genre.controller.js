@@ -1,5 +1,5 @@
 import Genre from "../model/genre.model.js";
-import jwtService from "../services/jwtService/index.js";
+import jwtService from "../services/jwtService.js";
 
 export const getGenre = async (req, res) => {
   try {
