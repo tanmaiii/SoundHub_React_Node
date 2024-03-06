@@ -4,13 +4,18 @@ import { PATH } from "../../constants/paths";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeOpen, changePath } from "./navbarSlide";
+import { changeOpen, changePath } from "../../slices/navbar";
 
 const navbar = [
   {
     title: "Discover",
     items: [
-      { id: 1, title: "Trang chủ", icon: <i className="fa-light fa-house-blank"></i>, path: PATH.HOME },
+      {
+        id: 1,
+        title: "Trang chủ",
+        icon: <i className="fa-light fa-house-blank"></i>,
+        path: PATH.HOME,
+      },
       {
         id: 2,
         title: "Ca sĩ",

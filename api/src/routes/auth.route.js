@@ -24,5 +24,10 @@ router.post(
   authController.sendVerificationEmail
 );
 router.post("/verify-email", validate(authController.verifyEmail), authController.verifyEmail);
+router.post(
+  "/change-password",
+  validate(authValidation.changePassword),
+  authController.changePassword
+);
 
 export default router;

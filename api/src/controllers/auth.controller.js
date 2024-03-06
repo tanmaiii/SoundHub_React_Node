@@ -146,6 +146,7 @@ export const forgotPassword = (req, res) => {
   }
 };
 
+//Tạo mới mật khẩu
 export const resetPassword = async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(10);
@@ -166,6 +167,39 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+//Thay đổi mật khẩu
+export const changePassword = async (req, res) => {
+  try {
+    const { password, passwordOld } = req.body;
+    const token = req.cookies.accessToken;
+    const userInfo = await jwtService.verifyToken(token);
+
+    User.findById(userInfo.id, (err, user) => {
+      if (err) return res.status(401).json({ conflictError: err });
+      if (!user) {
+        const conflictError = "User does not exist";
+        return res.status(401).json({ conflictError });
+      }
+
+      bcrypt.compare(passwordOld, user.password, (err, result) => {
+        if (err) return res.status(401).json({ conflictError: err });
+        if (result == false) {
+          return res.status(401).json({ conflictError: "Sai mật khẩu !" });
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        User.update(user.id, { password: hashedPassword }, (err, result) => {
+          if (err) return res.status(401).json({ conflictError: err });
+          return res.json("Thay đổi mật khẩu thành công !");
+        });
+      });
+    });
+  } catch (error) {
+    res.status(401).json({ conflictError: error });
+  }
+};
+
 export default {
   signup,
   signin,
@@ -174,4 +208,5 @@ export default {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
+  changePassword,
 };

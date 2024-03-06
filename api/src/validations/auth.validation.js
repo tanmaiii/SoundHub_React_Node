@@ -49,4 +49,25 @@ export default class authValidation {
       token: Joi.string().required(),
     }),
   };
+  static changePassword = {
+    cookies: Joi.object().keys({
+      accessToken: Joi.string().required(),
+    }),
+    body: Joi.object().keys({
+      password: Joi.string()
+        .min(6)
+        .max(50)
+        // .pattern(
+        //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
+        // )
+        .required(),
+      passwordOld: Joi.string()
+        .min(6)
+        .max(50)
+        // .pattern(
+        //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
+        // )
+        .required(),
+    }),
+  };
 }

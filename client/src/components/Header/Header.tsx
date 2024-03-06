@@ -6,7 +6,7 @@ import UserSetting from "../UserSetting/UserSetting";
 import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeOpen } from "../Navbar/navbarSlide";
+import { changeOpen } from "../../slices/navbar";
 import Modal from "../Modal/Modal";
 import Login from "../Auth/Login";
 import Signup from "../Auth/Signup";
@@ -65,21 +65,33 @@ export default function Header() {
           ) : (
             <>
               <div className="header__right__signup">
-                <button className="btn__auth" onClick={() => setOpenModalSignup(true)}>Sign up</button>
+                <button className="btn__auth" onClick={() => setOpenModalSignup(true)}>
+                  Sign up
+                </button>
               </div>
               <div className="header__right__login">
-                <button className="btn__auth" onClick={() => setOpenModalLogin(true)}>Log in</button>
+                <button className="btn__auth" onClick={() => setOpenModalLogin(true)}>
+                  Log in
+                </button>
               </div>
             </>
           )}
         </div>
       </div>
 
-      <Modal title="Log in" openModal={currentUser ? false : openModalLogin} setOpenModal={setOpenModalLogin}>
+      <Modal
+        title="Log in"
+        openModal={currentUser ? false : openModalLogin}
+        setOpenModal={setOpenModalLogin}
+      >
         <Login />
       </Modal>
 
-      <Modal title="Sign up" openModal={currentUser ? false : openModalSignup} setOpenModal={setOpenModalSignup}>
+      <Modal
+        title="Sign up"
+        openModal={currentUser ? false : openModalSignup}
+        setOpenModal={setOpenModalSignup}
+      >
         <Signup />
       </Modal>
     </>

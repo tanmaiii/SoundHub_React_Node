@@ -8,9 +8,9 @@
 //toolkit
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./pages/ExampleReduxToolkit/counterSlide";
-import navbarReducer from "../src/components/Navbar/navbarSlide";
-import darkModeReducer from "../src/components/UserSetting/UserSettingSlide";
-import authReducer from "../src/components/Auth/authSlide";
+import navbarReducer from "./slices/navbar";
+import darkModeReducer from "./slices/darkMode";
+import authReducer from "./slices/auth"
 
 const store = configureStore({
   reducer: {

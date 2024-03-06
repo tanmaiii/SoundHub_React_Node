@@ -2,7 +2,7 @@ import React, { MouseEvent, useState } from "react";
 import "./auth.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { loginSuccess, loginFailure } from "./authSlide";
+import { loginSuccess, loginFailure } from "../../slices/auth";
 
 import userApi from "../../api/userApi";
 import authApi from "../../api/authApi";

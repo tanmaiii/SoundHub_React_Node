@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import avt from "../../assets/images/avatar.jpg";
-import apiConfig from '../../api/apiConfig'
+import apiConfig from "../../api/apiConfig";
 
 import "./userSetting.scss";
-import { log } from "console";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeDarkMode } from "./UserSettingSlide";
-import { logout } from "../Auth/authSlide";
+import { changeDarkMode } from "../../slices/darkMode";
+import { logout } from "../../slices/auth";
 
 import authApi from "../../api/authApi";
 
