@@ -10,8 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
-import Loading from "./components/Loading/Loading";
-import songApi from "./api/songApi";
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
@@ -19,11 +17,7 @@ function App() {
   useEffect(() => {
     // songApi.getAll().then((res) => console.log(res.data.map(x => x.title)))
   })
-
-  useEffect(() => {
-    
-  })
-
+  
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
       <SkeletonTheme

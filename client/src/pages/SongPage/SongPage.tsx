@@ -7,8 +7,8 @@ import TrackArtist from "../../components/TrackArtist/TrackArtist";
 
 import CommentItem from "../../components/CommentItem/CommentItem";
 
-import avt from "../../assets/images/poster2.png";
-import img from "../../assets/images/poster2.png";
+import avt from "../../assets/images/poster.png";
+import img from "../../assets/images/poster.png";
 import CommentInput from "../../components/CommentInput/CommentInput";
 
 export default function SongPage() {

@@ -53,7 +53,7 @@ export default function Track({
               {loading ? (
                 <Skeleton width={100} />
               ) : (
-                artist.map((artist) => <Link to={"/"}>{artist}</Link>)
+                artist.map((artist, i) => <Link key={i} to={"/"}>{artist}</Link>)
               )}
             </div>
           </div>

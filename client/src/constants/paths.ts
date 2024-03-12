@@ -1,13 +1,16 @@
 import { lazy } from "react";
 
 const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
-const AuthPage = lazy(() => import("../pages/AuthPage/AuthPage"));
+const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
+const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));
 const DiscographyPage = lazy(() => import("../pages/DiscographyPage/DiscographyPage"));
 const PlaylistPage = lazy(() => import("../pages/PlaylistPage/PlaylistPage"));
 const SongPage = lazy(() => import("../pages/SongPage/SongPage"));
 
 const NotFoundPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
+
+const AuthLayout = lazy(() => import("../layout/AuthLayout/AuthLayout"));
 
 const PATH = {
   HOME: "/",
@@ -21,12 +24,13 @@ const PATH = {
   SONG_SHOW: "/song/:id",
   FAVOURITE: "/favourite",
   LOGIN: "/login",
-  REGISTER: "/signup",
+  SIGNUP: "/signup",
 };
 
 const publicRoutes = [
   { path: PATH.HOME, layout: null, component: HomePage },
-  { path: PATH.LOGIN, layout: null, component: AuthPage },
+  { path: PATH.LOGIN, layout: AuthLayout, component: LoginPage },
+  { path: PATH.SIGNUP, layout: AuthLayout, component: SignupPage },
   { path: PATH.ARTIST_SHOW, layout: null, component: ArtistPage },
   { path: PATH.DISCOGRAPHY_SHOW, layout: null, component: DiscographyPage },
   { path: PATH.PLAYLIST_SHOW, layout: null, component: PlaylistPage },

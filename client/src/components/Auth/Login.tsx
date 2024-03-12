@@ -6,12 +6,14 @@ import { loginSuccess, loginFailure } from "../../slices/auth";
 
 import userApi from "../../api/userApi";
 import authApi from "../../api/authApi";
+import { Link } from "react-router-dom";
+import { PATH } from "../../constants/paths";
 
 export default function Login() {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const authState = useSelector((state: RootState) => state.auth);
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -28,15 +30,21 @@ export default function Login() {
       const getList = async () => {
         const res = await authApi.signin(inputs.email, inputs.password);
         console.log(res);
-        
-        if (res) dispatch(loginSuccess(res));
+        if (res) {
+          dispatch(loginSuccess(res));
+        }else{
+          dispatch(loginFailure(res))
+        }
       };
       getList();
     } catch (err: any) {
       setErr(err.response.data);
-      // console.log(err.response.data);
+      console.log("Loi :", err.response.data);
     }
   };
+
+  console.log(authState);
+  
 
   return (
     <div className="auth">
@@ -91,7 +99,7 @@ export default function Login() {
           </button>
           <span className="auth__navigation">
             Don't have an account?
-            <a href="">Sign up for Spotify</a>
+            <Link to={PATH.SIGNUP}>Sign up for Spotify</Link>
           </span>
         </div>
       </div>

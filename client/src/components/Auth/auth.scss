@@ -2,15 +2,31 @@
 
 .auth {
   @include themify($themes) {
+    max-width: 734px;
+    width: 100%;
+    @include flex(center, center);
+    background-color: themed("bg-second");
+    padding: $space-32;
+    border-radius: $radius-12;
+
+    .error {
+      font-size: $size-16;
+      color: $color-red;
+      padding: $space-8;
+      i{
+        margin-right: $space-8;
+      }
+    }
+
     &__container {
-      width: 400px;
+      width: 380px;
       @include mobile {
         width: 100%;
       }
       &__title {
         h2 {
           @include flex(center, center);
-          font-size: $size-24;
+          font-size: $size-30;
           color: themed("txt-main");
           margin-bottom: $space-32;
           font-weight: $font-bold;
@@ -78,7 +94,7 @@
         }
 
         & > .input {
-          background-color: themed("bg-second");
+          background-color: themed("bg-main");
           padding: $space-12 $space-14;
           border-radius: $radius-8;
           position: relative;

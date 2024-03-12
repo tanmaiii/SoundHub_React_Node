@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./auth.scss";
+import { PATH } from "../../constants/paths";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
   const [show, setShow] = useState(false);
@@ -58,7 +60,7 @@ export default function Signup() {
           </button>
           <span className="auth__navigation">
             Don't have an account?
-            <a href="">Sign up for Spotify</a>
+            <Link to={PATH.LOGIN}>Login for Spotify</Link>
           </span>
         </div>
       </div>

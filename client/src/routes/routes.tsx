@@ -5,6 +5,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async"; // quản lý các 
 import Loading from "../components/Loading/Loading";
 
 import MainLayout from "../layout/MainLayout/MainLayout";
+import AuthLayout from "../layout/AuthLayout/AuthLayout";
 
 import { publicRoutes } from "../constants/paths";
 

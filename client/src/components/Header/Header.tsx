@@ -7,9 +7,11 @@ import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbar";
+import { Link } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import Login from "../Auth/Login";
 import Signup from "../Auth/Signup";
+import { PATH } from "../../constants/paths";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
@@ -64,36 +66,20 @@ export default function Header() {
             <UserSetting />
           ) : (
             <>
-              <div className="header__right__signup">
-                <button className="btn__auth" onClick={() => setOpenModalSignup(true)}>
-                  Sign up
-                </button>
-              </div>
-              <div className="header__right__login">
-                <button className="btn__auth" onClick={() => setOpenModalLogin(true)}>
-                  Log in
-                </button>
-              </div>
+              <Link to={PATH.SIGNUP}>
+                <div className="header__right__signup">
+                  <button className="btn__auth">Sign up</button>
+                </div>
+              </Link>
+              <Link to={PATH.LOGIN}>
+                <div className="header__right__login">
+                  <button className="btn__auth">Log in</button>
+                </div>
+              </Link>
             </>
           )}
         </div>
       </div>
-
-      <Modal
-        title="Log in"
-        openModal={currentUser ? false : openModalLogin}
-        setOpenModal={setOpenModalLogin}
-      >
-        <Login />
-      </Modal>
-
-      <Modal
-        title="Sign up"
-        openModal={currentUser ? false : openModalSignup}
-        setOpenModal={setOpenModalSignup}
-      >
-        <Signup />
-      </Modal>
     </>
   );
 }

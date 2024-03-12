@@ -9,7 +9,7 @@ import BarPlaying from "../../components/BarPlaying/BarPlaying";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
-interface MainLayoutProps {
+type MainLayoutProps = {
   children: React.ReactNode;
 }
 

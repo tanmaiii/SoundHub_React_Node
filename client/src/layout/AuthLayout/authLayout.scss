@@ -1,0 +1,71 @@
+@use "../../scss" as *;
+
+.AuthLayout {
+  @include themify($themes) {
+    @include flex(unset, unset);
+    flex-direction: column;
+    background-color: themed("bg-main");
+    width: 100%;
+    min-height: 100vh;
+
+    @include mobile {
+    }
+
+    &__header {
+      @include flex(center, space-between);
+      height: $height-header;
+      padding: $space-32;
+      background-color: themed("bg-second");
+      gap: $space-12;
+      width: 100%;
+      z-index: 9;
+      &__logo {
+        @include flex(center, unset);
+        flex-direction: row;
+        gap: 8px;
+        cursor: pointer;
+        img {
+          --size: 40px;
+          width: var(--size);
+          height: var(--size);
+        }
+        h2 {
+          font-size: $size-24;
+          color: themed("txt-main");
+        }
+      }
+    }
+
+    &__content {
+      position: relative;
+      width: 100%;
+      padding: $space-32;
+      margin-bottom: auto;
+      @include flex(center, center);
+
+      @include mobile {
+        height: calc(100vh - $height-header - $height-header);
+        margin-bottom: 0;
+        padding: 0;
+        background-color: themed('bg-second');
+      }
+    }
+
+    &__footer {
+      padding: $space-32;
+      @include flex(center, center);
+      background-color: themed("bg-second");
+      height: $height-header;
+      p {
+        color: themed("txt-main");
+        font-size: $size-14;
+        @include flex(center, unset);
+        gap: $space-8;
+        a {
+          color: $color-blue;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

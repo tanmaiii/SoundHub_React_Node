@@ -1,10 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import {User} from '../model/user'
+
+// const userString = localStorage.getItem("user");
+// const user: User | null = userString ? JSON.parse(userString) : null;
 
 const initialState = {
   user: undefined,
   isLoggedIn: false,
-  error: null,
 };
 
 const loadAuthState = () => {
@@ -33,13 +36,11 @@ export const authSlide = createSlice({
     loginFailure: (state, action) => {
       state.isLoggedIn = false;
       state.user = undefined;
-      state.error = action.payload;
       localStorage.removeItem("userInfo");
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.user = undefined;
-      state.error = null;
       localStorage.removeItem("userInfo");
     },
     checkLocalStorage: (state) => {

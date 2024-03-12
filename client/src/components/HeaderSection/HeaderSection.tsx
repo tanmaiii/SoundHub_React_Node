@@ -2,12 +2,12 @@ import React from "react";
 import "./headerSection.scss";
 import { Link } from "react-router-dom";
 
-interface HeaderSectionProps {
+type Props = {
   title: string;
   to?: string;
-}
+};
 
-export default function HeaderSection({ title, to }: HeaderSectionProps) {
+export default function HeaderSection({ title, to }: Props) {
   return (
     <div className="HeaderSection">
       <h4 className="HeaderSection__title">{title}</h4>

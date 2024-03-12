@@ -1,8 +1,9 @@
 import { ListResponse, ResLoginApi } from "../model";
 import axiosClient from "./axiosClient";
 
+//: Promise<ResLoginApi>
 const authApi = {
-  signin(email: string, password: string): Promise<ResLoginApi> {
+  signin(email: string, password: string) {
     const url = "auth/signin";
     return axiosClient.post(url, { email, password });
   },
@@ -17,3 +18,4 @@ const authApi = {
 };
 
 export default authApi;
+ 
