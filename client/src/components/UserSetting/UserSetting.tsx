@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import avt from "../../assets/images/avatar.jpg";
-import apiConfig from "../../api/apiConfig";
+import apiConfig from "../../apis/apiConfig";
 
 import "./userSetting.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeDarkMode } from "../../slices/darkMode";
-import { logout } from "../../slices/auth";
+// import { logout } from "../../slices/auth";
 
-import authApi from "../../api/authApi";
+import authApi from "../../apis/auth/authApi";
+import { useAuth } from "../../context/authContext";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
   const dropdownRef = useRef<HTMLInputElement>(null);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const { currentUser, logout } = useAuth();
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
   const dispatch = useDispatch();
 
@@ -33,69 +34,70 @@ export default function UserSetting() {
   });
 
   const handleClickLogout = () => {
-    dispatch(logout());
     logout();
   };
 
   return (
-    <div ref={dropdownRef} className="UserSetting">
-      <div className="UserSetting__avt" onClick={() => setActive(!active)} data-tooltip="Tấn Mãi">
-        <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
-      </div>
-
-      <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
-        <div className="UserSetting__dropdown__user">
+    currentUser && (
+      <div ref={dropdownRef} className="UserSetting">
+        <div className="UserSetting__avt" onClick={() => setActive(!active)} data-tooltip="Tấn Mãi">
           <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
-          <div className="UserSetting__dropdown__user__desc">
-            <h4>{currentUser.name}</h4>
-            <span>Basic</span>
-          </div>
         </div>
-        <hr />
 
-        <ul className="UserSetting__dropdown__list">
-          <li>
-            <i className="fa-light fa-circle-user"></i>
-            <span>Account</span>
-          </li>
-          <li>
-            <i className="fa-light fa-upload"></i>
-            <span>Upload</span>
-          </li>
-        </ul>
-        <hr />
-
-        <ul className="UserSetting__dropdown__list">
-          <li>
-            <i className="fa-light fa-gear"></i>
-            <span>Setting</span>
-          </li>
-
-          <li onClick={() => handleClickLogout()}>
-            <i className="fa-light fa-right-from-bracket"></i>
-            <span>Logout</span>
-          </li>
-        </ul>
-
-        <hr />
-
-        <div className="UserSetting__dropdown__darkMode">
-          <div className="UserSetting__dropdown__darkMode__label">
-            <i className="fa-light fa-moon"></i>
-            <span>Dark Mode</span>
+        <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
+          <div className="UserSetting__dropdown__user">
+            <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
+            <div className="UserSetting__dropdown__user__desc">
+              <h4>{currentUser.name}</h4>
+              <span>Basic</span>
+            </div>
           </div>
-          <button>
-            <input
-              defaultChecked={darkMode}
-              type="checkbox"
-              id="switch"
-              className="switch-input"
-              onClick={() => handleClick(!darkMode)}
-            />
-            <label htmlFor="switch" className="switch"></label>
-          </button>
+          <hr />
+
+          <ul className="UserSetting__dropdown__list">
+            <li>
+              <i className="fa-light fa-circle-user"></i>
+              <span>Account</span>
+            </li>
+            <li>
+              <i className="fa-light fa-upload"></i>
+              <span>Upload</span>
+            </li>
+          </ul>
+          <hr />
+
+          <ul className="UserSetting__dropdown__list">
+            <li>
+              <i className="fa-light fa-gear"></i>
+              <span>Setting</span>
+            </li>
+
+            <li onClick={() => handleClickLogout()}>
+              <i className="fa-light fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </li>
+          </ul>
+
+          <hr />
+
+          <div className="UserSetting__dropdown__darkMode">
+            <div className="UserSetting__dropdown__darkMode__label">
+              <i className="fa-light fa-moon"></i>
+              <span>Dark Mode</span>
+            </div>
+            <button>
+              <input
+                defaultChecked={darkMode}
+                type="checkbox"
+                id="switch"
+                className="switch-input"
+                onClick={() => handleClick(!darkMode)}
+              />
+              <label htmlFor="switch" className="switch"></label>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 }

@@ -2,18 +2,16 @@
 
 .auth {
   @include themify($themes) {
-    max-width: 734px;
-    width: 100%;
     @include flex(center, center);
-    background-color: themed("bg-second");
     padding: $space-32;
-    border-radius: $radius-12;
-
+    // border-radius: $radius-12;
+    background-color: themed("bg-second");
+    width: 100%;
     .error {
       font-size: $size-16;
       color: $color-red;
       padding: $space-8;
-      i{
+      i {
         margin-right: $space-8;
       }
     }
@@ -95,7 +93,7 @@
 
         & > .input {
           background-color: themed("bg-main");
-          padding: $space-12 $space-14;
+          padding: $space-18 $space-24;
           border-radius: $radius-8;
           position: relative;
           &.error {

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
+import '../src/i18n/i18n'
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);

@@ -11,8 +11,7 @@ export const signin = async (req, res) => {
     User.findByEmail(email, (err, user) => {
       if (err) return res.status(401).json({ conflictError: err });
       if (!user) {
-        const conflictError = "User does not exist";
-        return res.status(401).json({ conflictError });
+        return res.status(401).json({ conflictError: "Người dùng không tồn tại !" });
       }
       if (user.email_verified_at === null) {
         return res.status(401).json({ conflictError: "Người dùng chưa được xác thực !" });

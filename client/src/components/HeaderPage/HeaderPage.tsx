@@ -31,7 +31,6 @@ export default function HeaderPage({
     <div className="HeaderPage">
       <div className="HeaderPage__blur">
         <div className="bg-alpha"></div>
-
         <div className="blur" style={{ backgroundImage: `url(${avt})` }}></div>
       </div>
       <div className="HeaderPage__body">

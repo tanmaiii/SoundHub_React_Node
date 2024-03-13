@@ -37,33 +37,20 @@ export default class userValidation {
   };
   static updateUser = {
     ...bodySchema,
-    ...cookieSchema
+    ...cookieSchema,
   };
   static getAllUser = {
     ...querySchema,
   };
-  static getFollowed = {
-    ...querySchema,
-    params: Joi.object().keys({
-      userId: Joi.number().integer().required(),
-    }),
-  };
-  static getFollower = {
-    ...querySchema,
-    params: Joi.object().keys({
-      userId: Joi.number().integer().required(),
-    }),
-  };
-  static addFollow = {
-    ...cookieSchema,
-    params: Joi.object().keys({
-      userId: Joi.number().integer().required(),
-    }),
-  };
-  static removeFollow = {
-    ...cookieSchema,
-    params: Joi.object().keys({
-      userId: Joi.number().integer().required(),
+  static findByEmail = {
+    body: Joi.object().keys({
+      email: Joi.string().email().max(255).empty().required().messages({
+        "string.string": `Email phải là một chuổi !`,
+        "string.email": `Email không hợp lệ !`,
+        "string.max": `Email quá dài !`,
+        "string.empty": `Email đang rỗng !`,
+        "any.required": `Email là trường bắt buộc !`,
+      }),
     }),
   };
 }

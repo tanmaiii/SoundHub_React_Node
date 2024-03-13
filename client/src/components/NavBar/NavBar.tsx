@@ -1,46 +1,54 @@
 import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from "react";
 import "./navbar.scss";
 import { PATH } from "../../constants/paths";
+import Images from "../../constants/images";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen, changePath } from "../../slices/navbar";
-
-const navbar = [
-  {
-    title: "Discover",
-    items: [
-      {
-        id: 1,
-        title: "Trang chủ",
-        icon: <i className="fa-light fa-house-blank"></i>,
-        path: PATH.HOME,
-      },
-      {
-        id: 2,
-        title: "Ca sĩ",
-        icon: <i className="fa-light fa-user-music"></i>,
-        path: PATH.ARTIST,
-      },
-      {
-        id: 3,
-        title: "Yêu thích",
-        icon: <i className="fa-light fa-heart"></i>,
-        path: PATH.FAVOURITE,
-      },
-      { id: 4, title: "Gần đây", icon: <i className="fa-light fa-clock"></i>, path: PATH.ARTIST },
-    ],
-  },
-  {
-    title: "Playlist",
-    items: [],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
   const path = useSelector((state: RootState) => state.navbar.path);
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
   const navbarRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation("home");
+
+  const navbar = [
+    {
+      title: "Discover",
+      items: [
+        {
+          id: 1,
+          title: t("navbar.home"),
+          icon: <i className="fa-light fa-house-blank"></i>,
+          path: PATH.HOME,
+        },
+        {
+          id: 2,
+          title: t("navbar.artists"),
+          icon: <i className="fa-light fa-user-music"></i>,
+          path: PATH.ARTIST,
+        },
+        {
+          id: 3,
+          title: t("navbar.favourites"),
+          icon: <i className="fa-light fa-heart"></i>,
+          path: PATH.FAVOURITE,
+        },
+        {
+          id: 4,
+          title: t("navbar.recently"),
+          icon: <i className="fa-light fa-clock"></i>,
+          path: PATH.RECENTLY,
+        },
+      ],
+    },
+    {
+      title: t("navbar.playlist"),
+      items: [],
+    },
+  ];
 
   const dispatch = useDispatch();
 
@@ -69,10 +77,10 @@ export default function Navbar() {
     <div ref={navbarRef} className={`navbar ${openMenu ? "openMenu" : ""}`}>
       <div className="navbar__container">
         <div className="navbar__container__top">
-          <div className={`navbar__container__top__logo`}>
-            <i className="fa-regular fa-headphones-simple"></i>
-            <h2>Sound</h2>
-          </div>
+          <Link to={PATH.HOME} className={`navbar__container__top__logo`}>
+            <img src={Images.LOGO} alt="" />
+            <h2>{t("navbar.logo")}</h2>
+          </Link>
         </div>
 
         <div className={`navbar__container__content`}>

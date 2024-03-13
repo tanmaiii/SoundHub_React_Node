@@ -8,18 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbar";
 import { Link } from "react-router-dom";
-import Modal from "../Modal/Modal";
-import Login from "../Auth/Login";
-import Signup from "../Auth/Signup";
 import { PATH } from "../../constants/paths";
+import { useAuth } from "../../context/authContext";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
   const headerRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const currentUser = useSelector((state: RootState) => state.auth.user);
-  const [openModalLogin, setOpenModalLogin] = useState(false);
-  const [openModalSignup, setOpenModalSignup] = useState(false);
+  const { currentUser } = useAuth();
+  const { t } = useTranslation("home");
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -58,7 +56,7 @@ export default function Header() {
         <div className="header__center">
           <div className="header__center__search">
             <i className="fa-thin fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search artist, title, ablum,..." />
+            <input type="text" placeholder={t("header.Search artist, title, ablum,...")} />
           </div>
         </div>
         <div className="header__right">
@@ -68,12 +66,12 @@ export default function Header() {
             <>
               <Link to={PATH.SIGNUP}>
                 <div className="header__right__signup">
-                  <button className="btn__auth">Sign up</button>
+                  <button className="btn__auth">{t("header.signup")}</button>
                 </div>
               </Link>
               <Link to={PATH.LOGIN}>
                 <div className="header__right__login">
-                  <button className="btn__auth">Log in</button>
+                  <button className="btn__auth">{t("header.login")}</button>
                 </div>
               </Link>
             </>

@@ -2,18 +2,20 @@ import React, { MouseEvent, useState } from "react";
 import "./auth.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { loginSuccess, loginFailure } from "../../slices/auth";
 
-import userApi from "../../api/userApi";
-import authApi from "../../api/authApi";
+import userApi from "../../apis/user/userApi";
+import authApi from "../../apis/auth/authApi";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
+import { useAuth } from "../../context/authContext";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
-  const authState = useSelector((state: RootState) => state.auth);
+  const { currentUser, setCurrentUser } = useAuth();
+  const { t } = useTranslation("auth");
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -25,32 +27,20 @@ export default function Login() {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     try {
-      const getList = async () => {
-        const res = await authApi.signin(inputs.email, inputs.password);
-        console.log(res);
-        if (res) {
-          dispatch(loginSuccess(res));
-        }else{
-          dispatch(loginFailure(res))
-        }
-      };
-      getList();
+      const res = await authApi.signin(inputs.email, inputs.password);
+      setCurrentUser(res);
     } catch (err: any) {
-      setErr(err.response.data);
-      console.log("Loi :", err.response.data);
+      setErr(err.response.data.conflictError);
     }
   };
-
-  console.log(authState);
-  
 
   return (
     <div className="auth">
       <div className="auth__container">
         <div className="auth__container__title">
-          <h2>Log in on Sound</h2>
+          <h2>{t("login.Title")}</h2>
         </div>
 
         {err && (
@@ -60,20 +50,19 @@ export default function Login() {
           </div>
         )}
         <div className="auth__container__group">
-          <h4 className="title">Email</h4>
-          <div className="input">
+          <h4 className="title">{t("login.Email")}</h4>
+          <div className="input ">
             <input
               autoComplete="off"
               type="text"
               name="email"
               placeholder="Email"
               onChange={(e) => handleChange(e)}
-              defaultValue={"tanmai3@gmail.com"}
             />
           </div>
         </div>
         <div className="auth__container__group">
-          <h4 className="title">Password</h4>
+          <h4 className="title">{t("login.Password")}</h4>
           <div className="input">
             <input
               autoComplete="off"
@@ -81,7 +70,6 @@ export default function Login() {
               name="password"
               placeholder="Password"
               onChange={(e) => handleChange(e)}
-              defaultValue={"123456"}
             />
             <span className="tooglePassword" onClick={() => setShow(!show)}>
               {show ? (
@@ -93,13 +81,13 @@ export default function Login() {
           </div>
         </div>
         <div className="auth__container__group">
-          <a className="forgot">Forgot your password ?</a>
+          <a className="forgot">{t("login.Forgot your password ?")}</a>
           <button className="btn_submit" onClick={() => handleClick()}>
-            Log in
+            {t("login.Login")}
           </button>
           <span className="auth__navigation">
-            Don't have an account?
-            <Link to={PATH.SIGNUP}>Sign up for Spotify</Link>
+            {t("login.Don't have an account?")}
+            <Link to={PATH.SIGNUP}>{t("login.Sign up for Sound hub")}</Link>
           </span>
         </div>
       </div>

@@ -4,7 +4,7 @@ import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = "data/images";
+    const dir = "src/data/images";
 
     cb(null, dir);
   },
@@ -19,6 +19,7 @@ const upload = multer({
     fileSize: 6 * 1024 * 1024,
   },
   fileFilter: (req, file, cb) => {
+    console.log(file.originalname);
     var ext = path.extname(file.originalname);
     if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
       return cb("File image unsupported");
@@ -28,6 +29,8 @@ const upload = multer({
 }).single("image");
 
 const uploadImage = (req, res, next) => {
+  // if(!req.file)  return res.status(404).json({ conflictError: "emty file" });
+
   upload(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       const conflictError = "Error multer image";

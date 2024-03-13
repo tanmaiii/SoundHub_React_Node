@@ -7,17 +7,13 @@
 
 //toolkit
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./pages/ExampleReduxToolkit/counterSlide";
 import navbarReducer from "./slices/navbar";
 import darkModeReducer from "./slices/darkMode";
-import authReducer from "./slices/auth"
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
     navbar: navbarReducer,
     darkMode: darkModeReducer,
-    auth: authReducer,
   },
 });
 

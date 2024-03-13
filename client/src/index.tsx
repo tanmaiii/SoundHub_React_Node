@@ -4,10 +4,13 @@ import App from "./App";
 
 import { Provider } from "react-redux";
 import store from "./store";
+import { AuthContextProvider } from "./context/authContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <Provider store={store}>
-    <App />
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </Provider>
 );

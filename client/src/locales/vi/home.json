@@ -1,0 +1,15 @@
+{
+  "navbar": {
+    "logo": "Sound",
+    "home": "Trang chủ",
+    "artists": "Ca sĩ",
+    "favourites": "Yêu thích",
+    "recently": "Gần đây",
+    "playlist": "Playlist"
+  },
+  "header": {
+    "signup": "Đăng ký",
+    "login": "Đăng nhập",
+    "Search artist, title, ablum,...": "Tìm kiếm ca sĩ, playlist,..."
+  }
+}

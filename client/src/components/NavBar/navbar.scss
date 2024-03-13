@@ -33,27 +33,6 @@
         // height: $height-header;
         padding: $space-24 $space-24;
 
-        // &__menu {
-        //   padding: $space-12 $space-14;
-        //   border-radius: $space-8;
-        //   cursor: pointer;
-        //   color: themed("txt-second");
-        //   border: 1px solid #ccc;
-
-        //   i {
-        //     @include flex(center, center);
-        //     font-size: $size-24;
-        //     --size: 18px;
-        //     width: var(--size);
-        //     height: var(--size);
-        //   }
-
-        //   &:hover {
-        //     background-color: $color-hover;
-        //     color: themed("txt-main");
-        //   }
-        // }
-
         &__logo {
           font-weight: $font-bold;
           // @include text-gradient($color-gradient);
@@ -67,8 +46,10 @@
             display: none;
           }
 
-          i {
-            font-size: $size-30;
+          img {
+            --size: 50px;
+            width: var(--size);
+            height: var(--size);
           }
           h2 {
             font-size: $size-30;

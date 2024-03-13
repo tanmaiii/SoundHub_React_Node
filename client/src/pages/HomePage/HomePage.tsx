@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ExampleReduxToolkit } from "../ExampleReduxToolkit/ExampleReduxToolkit";
 import "./homePage.scss";
 import Header from "../../components/Header/Header";
 import Section from "../../components/Section/Section";
@@ -17,7 +16,6 @@ import CardArtist from "../../components/CardArtist/CardArtist";
 function HomePage(props: any) {
   return (
     <div className="home">
-
       <Section title={"Gợi ý"}>
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
         <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
@@ -33,7 +31,7 @@ function HomePage(props: any) {
       </Section>
 
       <SectionChartHome title={"Top nhạc trong tuần"} />
-      
+
       <Section title={"Ca sĩ phổ biến"}>
         <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
         <CardArtist name={"Mono"} image={avt} followers={"3456K"} />

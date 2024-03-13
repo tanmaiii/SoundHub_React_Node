@@ -13,7 +13,7 @@ export const uploadImage = (req, res) => {
 export const deleteImage = (req, res) => {
   const fileName = req.body.fileName;
   console.log(fileName);
-  const filePath = `data/images/${fileName}`;
+  const filePath = `src/data/images/${fileName}`;
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {

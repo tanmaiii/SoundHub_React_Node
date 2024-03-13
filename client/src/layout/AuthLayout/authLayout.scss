@@ -2,69 +2,61 @@
 
 .AuthLayout {
   @include themify($themes) {
-    @include flex(unset, unset);
-    flex-direction: column;
-    background-color: themed("bg-main");
-    width: 100%;
-    min-height: 100vh;
-
+    @include flex(center, unset);
+    flex-direction: row;
+    height: 100vh;
     @include mobile {
+      flex-direction: column-reverse;
     }
-
-    &__header {
-      @include flex(center, space-between);
+    &__left__header {
+      position: fixed;
+      top: 0;
+      left: 0;
       height: $height-header;
-      padding: $space-32;
-      background-color: themed("bg-second");
-      gap: $space-12;
-      width: 100%;
-      z-index: 9;
+      padding: 0 $space-32;
+      @include flex(center, unset);
       &__logo {
         @include flex(center, unset);
         flex-direction: row;
         gap: 8px;
         cursor: pointer;
         img {
-          --size: 40px;
+          --size: 50px;
           width: var(--size);
           height: var(--size);
         }
         h2 {
-          font-size: $size-24;
-          color: themed("txt-main");
+          font-size: $size-30;
+          color: $color-primary1;
         }
       }
     }
-
-    &__content {
-      position: relative;
+    &__left {
       width: 100%;
-      padding: $space-32;
-      margin-bottom: auto;
-      @include flex(center, center);
-
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      overflow: hidden;
       @include mobile {
-        height: calc(100vh - $height-header - $height-header);
-        margin-bottom: 0;
-        padding: 0;
-        background-color: themed('bg-second');
+        height: 0;
+      }
+      & > img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
       }
     }
-
-    &__footer {
-      padding: $space-32;
-      @include flex(center, center);
+    &__body {
+      padding: 0 90px;
       background-color: themed("bg-second");
-      height: $height-header;
-      p {
-        color: themed("txt-main");
-        font-size: $size-14;
-        @include flex(center, unset);
-        gap: $space-8;
-        a {
-          color: $color-blue;
-          text-decoration: underline;
-        }
+      height: 100%;
+      margin: auto 0;
+      @include flex(center, center);
+      @include mobile {
+        padding: 90px 0;
+        width: 100%;
       }
     }
   }

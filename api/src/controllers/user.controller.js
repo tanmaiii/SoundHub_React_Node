@@ -70,9 +70,24 @@ export const getAllUser = (req, res) => {
   }
 };
 
+export const findByEmail = (req, res) => {
+  try {
+    User.findByEmail(req.body.email, (err, user) => {
+      if (user) {
+        return res.status(401).json({ conflictError: "Email đã tồn tại" });
+      } else {
+        return res.status(200).json({ message: "Email chưa tồn tại" });
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export default {
   getUser,
   getMe,
   updateUser,
   getAllUser,
+  findByEmail,
 };
