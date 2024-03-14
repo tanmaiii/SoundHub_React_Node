@@ -7,7 +7,10 @@
       width: 100vw;
       @include flex(center, center);
       z-index: 100;
-      background-color: themed("bg-main");
+      background-color: rgba($color: themed("bg-main"), $alpha: 0.8);
+      position: fixed;
+      top: 0;
+      right: 0;
       i {
         font-size: 60px;
         color: themed("txt-main");

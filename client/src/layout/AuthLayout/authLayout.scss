@@ -32,13 +32,16 @@
       }
     }
     &__left {
-      width: 100%;
+      width: 50%;
       height: 100%;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       display: flex;
       overflow: hidden;
+      @include tablet {
+        width: 100%;
+      }
       @include mobile {
         height: 0;
       }
@@ -49,10 +52,14 @@
       }
     }
     &__body {
+      width: 50%;
       padding: 0 90px;
       background-color: themed("bg-second");
       height: 100%;
       margin: auto 0;
+      @include tablet {
+        width: auto;
+      }
       @include flex(center, center);
       @include mobile {
         padding: 90px 0;

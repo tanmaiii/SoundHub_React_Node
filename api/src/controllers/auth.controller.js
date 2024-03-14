@@ -63,6 +63,8 @@ export const signup = async (req, res) => {
           email: req.body.email,
           password: hashedPassword,
           name: req.body.name,
+          gender: req.body.gender,
+          brithday: req.body.brithday,
         });
 
         User.create(user, (err, result) => {
@@ -90,10 +92,16 @@ export const sendVerificationEmail = (req, res) => {
     const email = req.body.email;
     User.findByEmail(email, async (err, user) => {
       if (err || !user) {
-        return res.status(401).json({ conflictError: "Không tìm thấy email" });
+        return res.status(401).json({ conflictError: "Không tìm thấy email !" });
       }
+      if (user.email_verified_at !== null) {
+        return res.status(401).json({ conflictError: "Tài khoản này đã được xác thực !" });
+      }
+
       const token = jwtService.generateToken({ email }, { expiresIn: "1h" });
       await emailService.sendVerificationEmail(email, token);
+
+      console.log("✉️ Send verification email : " + email);
 
       return res.json({
         success: true,
@@ -111,11 +119,18 @@ export const verifyEmail = async (req, res) => {
   try {
     const token = req.query.token;
     const emailInfo = await jwtService.verifyToken(token);
-    User.verify(emailInfo.email, (err, result) => {
-      if (!err) {
-        return res.json("Xác thực thành công !");
+    User.findByEmail(emailInfo.email, (err, user) => {
+      if (user.email_verified_at !== null) {
+        console.log("Đã xác thực từ trước đó ");
+        return res.json("Đã được xác thực !");
       } else {
-        return res.status(401).json(err);
+        User.verify(emailInfo.email, (err, result) => {
+          if (!err) {
+            return res.json("Xác thực thành công !");
+          } else {
+            return res.status(401).json(err);
+          }
+        });
       }
     });
   } catch (error) {

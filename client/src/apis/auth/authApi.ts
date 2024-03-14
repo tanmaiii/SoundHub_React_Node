@@ -8,22 +8,23 @@ const authApi = {
     const url = "auth/signin";
     return axiosClient.post(url, { email, password });
   },
-  // async signin(email: string, password: string) {
-  //   try {
-  //     const url = "auth/signin";
-  //     let res = await axiosClient.post(url, { email, password });
-  //     return { data: res.data, status: { code: res.status, text: res.statusText } };
-  //   } catch (err) {
-  //     return {
-  //       is_err: true,
-  //       status: `failed!`,
-  //       message: err,
-  //     };
-  //   }
-  // },
-  signup(username: string, password: string, name: string) {
+  signup(
+    email: string,
+    password: string,
+    name: string,
+    brithday: string,
+    gender: string
+  ): Promise<TUser> {
     const url = "auth/signup";
-    return axiosClient.post(url, { username, password, name });
+    return axiosClient.post(url, { email, password, name, brithday, gender });
+  },
+  sendVerificationEmail(email: string) {
+    const url = "auth/send-verification-email";
+    return axiosClient.post(url, { email });
+  },
+  verifyEmail(token: string | null) {
+    const url = "auth/verify-email?token=";
+    return axiosClient.post(url + token);
   },
   signout() {
     const url = "auth/signout";

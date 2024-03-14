@@ -4,13 +4,12 @@
   @include themify($themes) {
     @include flex(center, center);
     padding: $space-32;
-    // border-radius: $radius-12;
     background-color: themed("bg-second");
     width: 100%;
     .error {
       font-size: $size-16;
       color: $color-red;
-      padding: $space-8;
+      padding: $space-4;
       i {
         margin-right: $space-8;
       }
@@ -20,6 +19,23 @@
       width: 380px;
       @include mobile {
         width: 100%;
+      }
+      &__success {
+        @include flex(center, center);
+        flex-direction: column;
+        gap: $space-8;
+        i {
+          font-size: 60px;
+          color: $color-blue;
+        }
+        h2 {
+          font-size: $size-24;
+          color: $color-blue;
+        }
+        span {
+          font-size: $size-18;
+          color: $color-blue;
+        }
       }
       &__title {
         h2 {
@@ -84,7 +100,7 @@
         margin-bottom: $space-12;
         @include flex(unset, unset);
         flex-direction: column;
-        gap: $space-12;
+        // gap: $space-12;
         & > .title {
           font-size: $size-16;
           font-weight: $font-mediun;
@@ -96,8 +112,9 @@
           padding: $space-18 $space-24;
           border-radius: $radius-8;
           position: relative;
+          margin: $space-8 0;
           &.error {
-            border: 1px solid $color-red;
+            border: 1.4px solid $color-red;
           }
           input {
             font-size: $size-16;
@@ -118,6 +135,7 @@
         & > .input__gender {
           @include flex(center, unset);
           gap: $space-12;
+          margin: $space-12 0;
           & > .input__gender__item {
             & > input {
               display: none;
@@ -191,6 +209,8 @@
                 font-weight: $font-light;
               }
               i {
+                // border: 3px solid $color-primary1;
+                color: $color-primary1;
                 font-size: $size-16;
               }
             }
@@ -235,6 +255,7 @@
           display: block;
           @include flex(center, center);
           gap: $space-8;
+          margin: $space-12 0;
           a {
             text-decoration: underline;
             cursor: pointer;

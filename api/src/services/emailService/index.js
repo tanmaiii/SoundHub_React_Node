@@ -21,11 +21,11 @@ export const sendResetPasswordEmail = async (to, token) => {
   await sendEmail(to, subject, html);
 };
 
-export const sendVerificationEmail = async (to, token) => {
+export const sendVerificationEmail = async (email, token) => {
   const subject = "Email Verification";
-  const verificationEmailUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+  const verificationEmailUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${email}`;
   const html = template.verifyEmail(verificationEmailUrl, process.env.APP_NAME);
-  await sendEmail(to, subject, html);
+  await sendEmail(email, subject, html);
 };
 
 export default { sendEmail, sendVerificationEmail, sendResetPasswordEmail };

@@ -1,0 +1,80 @@
+@use "../../../scss/" as *;
+
+.verifyPage {
+  @include themify($themes) {
+    @include flex(center, center);
+
+    &__container {
+      width: 380px;
+      @include flex(center, center);
+      flex-direction: column;
+      gap: $space-12;
+      &__title {
+        h2 {
+          font-size: $size-30;
+          color: themed("txt-main");
+        }
+      }
+      &__body {
+        & > .success {
+          @include flex(center, center);
+          flex-direction: column;
+          gap: $space-12;
+
+          i {
+            font-size: 120px;
+            color: $color-blue;
+          }
+          h2 {
+            font-size: $size-18;
+            text-align: center;
+            color: themed("txt-main");
+          }
+          a {
+            font-size: $size-18;
+            text-decoration: underline;
+            color: $color-primary1;
+          }
+        }
+        & > .error {
+          @include flex(center, center);
+          flex-direction: column;
+          gap: $space-12;
+
+          & > i {
+            font-size: 120px;
+            color: $color-red;
+          }
+          & > h2 {
+            font-size: $size-18;
+            text-align: center;
+            color: $color-red;
+          }
+          button {
+            background-color: $color-primary1;
+            width: 100%;
+            padding: $space-12 $space-14;
+            border-radius: $radius-25;
+            font-size: $size-16;
+            color: $color-white;
+            font-weight: $font-mediun;
+            cursor: pointer;
+            transition: $transition;
+            margin-top: $space-12;
+            &:hover {
+              transform: scale(1.01);
+            }
+          }
+
+          & > .sendSuccess {
+            font-size: $size-16;
+            color: $color-blue;
+            i {
+              margin-right: $space-8;
+            }
+          }
+        }
+      }
+    }
+  }
+}
