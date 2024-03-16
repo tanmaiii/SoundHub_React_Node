@@ -79,20 +79,15 @@ UserSong.find = (userId, songId, result) => {
 
 UserSong.findAllUserConfirm = (songId, result) => {
   db.query(
-    `SELECT u.id, u.name, u.image_path ,u.verified, us.config from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id and us.confirm = 1`,
+    `SELECT u.id, u.name, u.image_path ,u.verified, us.confirm from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id and us.confirm = 1`,
     (err, res) => {
       if (err) {
         result(err, null);
         return;
       }
 
-      if (!res.length) {
-        result("Không tìm thấy !", null);
-        return;
-      }
-
       if (res.length) {
-        result(null, res[0]);
+        result(null, res);
         return;
       }
 
@@ -103,7 +98,7 @@ UserSong.findAllUserConfirm = (songId, result) => {
 
 UserSong.findAllUser = (songId, result) => {
   db.query(
-    `SELECT u.id, u.name, u.image_path ,u.verified, us.config from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id`,
+    `SELECT u.id, u.name, u.image_path , u.verified, us.confirm from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id `,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -124,7 +119,6 @@ UserSong.findAllUser = (songId, result) => {
     }
   );
 };
-
 
 UserSong.findAllSong = (userId, result) => {
   db.query(
@@ -148,6 +142,6 @@ UserSong.findAllSong = (userId, result) => {
       result(null, null);
     }
   );
-}
+};
 
-export default SongPlay;
+export default UserSong;

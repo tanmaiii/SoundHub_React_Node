@@ -3,9 +3,37 @@ import Track from "../../components/Track/Track";
 import "./discographyPage.scss";
 import img from "../../assets/images/artistHoa.jpg";
 import Card from "../../components/Card/Card";
+import { TSong } from "../../model";
+import { songApi } from "../../apis";
+
+import { useQuery, useMutation } from "react-query";
+
+const song: TSong = {
+  id: 1,
+  title: "song",
+  user_id: "song",
+  genre_id: "song",
+  song_path: "song",
+  private: 1,
+  author: "song",
+  created_at: "song",
+};
 
 export default function DiscographyPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
+  const [songs, setSongs] = useState<TSong[] | null>(null);
+
+  const handleGetSong = async () => {
+    try {
+      const res = await songApi.getAllByUserId(1, 1, 100);
+      console.log(res);
+      res.data && setSongs(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isLoading, error, data } = useQuery(["songs"], () => handleGetSong());
 
   return (
     <div className="discography">
@@ -30,73 +58,35 @@ export default function DiscographyPage() {
             </div>
           </div>
         </div>
-        <div className="discography__container__list row">
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
-          <Card
-            title={"Nấu ăn cho em"}
-            artist={["Đen", "Đen"]}
-            image={img}
-            className="col pc-2 t-3 m-6"
-          />
+        <div className="discography__container__body">
+          <div className="discography__container__body__header">
+            <div className="discography__container__body__header__line1 pc-6 m-8">
+              <div className="count">#</div>
+              <div className="title">Title</div>
+            </div>
+            <div className="discography__container__body__header__line2 pc-3 m-0">
+              <div>Date Add</div>
+            </div>
+            <div className="discography__container__body__header__line3 pc-3 m-4">
+              <div>Time</div>
+            </div>
+          </div>
+          <div className="discography__container__body__list">
+            {songs &&
+              songs.map((song, index) => (
+                <Track
+                  key={index}
+                  loading={isLoading}
+                  id={song.id}
+                  number={`${index + 1}`}
+                  time="3:03"
+                  title={song.title}
+                  created_at={song.created_at}
+                  image={song.image_path}
+                  artist={["Sơn Tùng M-TP"]}
+                />
+              ))}
+          </div>
         </div>
       </div>
     </div>

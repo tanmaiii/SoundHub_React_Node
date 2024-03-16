@@ -9,7 +9,8 @@ import songRoute from "./song.router.js";
 import playlistRoute from "./playlist.router.js";
 import genreRoute from "./genre.route.js";
 import followRoute from "./follow.route.js";
-import songPlayRoute from './songPlay.route.js'
+import songPlayRoute from "./songPlay.route.js";
+import userSongRoute from "./userSong.route.js";
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
@@ -18,6 +19,7 @@ router.use("/playlist", playlistRoute);
 router.use("/genre", genreRoute);
 router.use("/follow", followRoute);
 router.use("/songPlay", songPlayRoute);
+router.use("/userSong", userSongRoute);
 
 router.use("/image", imageRoute);
 router.use("/mp3", mp3Route);

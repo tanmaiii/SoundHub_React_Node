@@ -16,19 +16,19 @@ import CardArtist from "../../components/CardArtist/CardArtist";
 function HomePage(props: any) {
   return (
     <div className="home">
-      <Section title={"Gợi ý"}>
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-      </Section>
+      {/* <Section title={"Gợi ý"}>
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+      </Section> */}
 
       <SectionChartHome title={"Top nhạc trong tuần"} />
 

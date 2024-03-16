@@ -123,28 +123,28 @@ Song.restore = (songId, userId, result) => {
 };
 
 Song.findById = (songId, userId, result) => {
-  db.query(`SELECT * from songs WHERE id = '${songId}' AND is_deleted = 0`, (err, song) => {
+  db.query(`SELECT * from songs WHERE id = ? AND is_deleted = 0`, [songId], (err, song) => {
     if (err) {
+      // Xử lý lỗi
+      console.error("Error while querying database:", err);
       result(err, null);
       return;
     }
 
-    if (!song.length) {
+
+    if (!song || !song.length) {
       result("Không tìm thấy !", null);
       return;
     }
 
-    if (song.length) {
-      if (song[0].public === 0 && song[0].user_id !== userId) {
-        result("Bài hát đang ẩn", null);
-        return;
-      } else {
-        result(null, song[0]);
-        return;
-      }
+    // Kiểm tra quyền truy cập
+    if (song[0].public === 0 && song[0].user_id !== userId) {
+      result("Bài hát đang ẩn !", null);
+      return;
     }
 
-    result(null, null);
+    // Trả về kết quả
+    result(null, song[0]);
   });
 };
 
@@ -194,18 +194,39 @@ Song.findByFavorite = async (userId, query, result) => {
 
   const offset = (page - 1) * limit;
 
+  // const [data] = await promiseDb.query(
+  //   `SELECT *, u.* FROM favourite_songs as fs , songs as s LEFT JOIN users as u WHERE ${
+  //     q ? ` s.title LIKE "%${q}%" AND` : ""
+  //   } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1 and s.userId = u.id ` +
+  //     `ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+  // );
+
   const [data] = await promiseDb.query(
-    `SELECT * FROM favourite_songs as fs , songs as s WHERE ${
-      q ? ` s.title LIKE "%${q}%" AND` : ""
-    } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1 ` +
-      `ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+    `SELECT s.*, u.name as author ` +
+      ` FROM favourite_songs AS fs` +
+      ` INNER JOIN songs AS s ON fs.song_id = s.id` +
+      ` LEFT JOIN users AS u ON s.user_id = u.id` +
+      ` WHERE ${q ? ` s.title LIKE "%${q}%" AND` : ""} fs.user_id = ${userId} AND s.public = 1` +
+      ` ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"}` +
+      ` LIMIT ${+limit} OFFSET ${+offset};`
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM favourite_songs as fs , songs as s WHERE ${
-      q ? ` s.title LIKE "%${q}%" AND` : ""
-    } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1`
+    `SELECT COUNT(*) AS totalCount ` +
+      ` FROM favourite_songs AS fs` +
+      ` INNER JOIN songs AS s ON fs.song_id = s.id` +
+      ` LEFT JOIN users AS u ON s.user_id = u.id` +
+      ` WHERE ${q ? ` s.title LIKE "%${q}%" AND` : ""} fs.user_id = ${userId} AND s.public = 1` +
+      ` ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"}` +
+      ` LIMIT ${+limit} OFFSET ${+offset};`
   );
+
+  // const [totalCount] = await promiseDb.query(
+  //   `SELECT COUNT(*) AS totalCount FROM favourite_songs as fs , songs as s LEFT JOIN users as u WHERE ${
+  //     q ? ` s.title LIKE "%${q}%" AND and s.public = 1 and s.userId = u.id ` : ""
+  //   } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1`
+  // );
+
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
 
@@ -219,7 +240,7 @@ Song.findByFavorite = async (userId, query, result) => {
         sort,
       },
     });
-    
+
     return;
   }
   result(null, null);
@@ -262,6 +283,25 @@ Song.findByUserId = async (userId, query, result) => {
     return;
   }
   result(null, null);
+};
+
+Song.findUserLike = async (songId, result) => {
+  db.query(
+    `SELECT user_id FROM music.favourite_songs as fs WHERE fs.song_id = ${songId}`,
+    (err, data) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+
+      if (data.length) {
+        result(null, data.map((user) => user.user_id));
+        return;
+      }
+
+      result(null, null);
+    }
+  );
 };
 
 Song.findAll = async (query, result) => {

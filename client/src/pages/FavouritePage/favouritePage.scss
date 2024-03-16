@@ -1,2 +1,90 @@
-@use '../../scss/' as *;
+@use "../../scss/" as *;
 
+.favourite {
+  @include themify($themes) {
+    margin-top: $height-header;
+    // padding: 0 $space-32;
+    &__container {
+      &__header {
+        @include flex(center, space-between);
+        padding: $space-16 0;
+        &__left {
+          h4 {
+            font-size: $size-24;
+            color: themed("txt-main");
+            font-weight: $font-bold;
+          }
+        }
+        &__right {
+          & > .dropdown {
+            position: relative;
+            .dropdown__header {
+              //   border: 1px solid $color-border;
+              background-color: themed("bg-second");
+              padding: $space-8 $space-14;
+              border-radius: $radius-20;
+              @include flex(center, center);
+              gap: $space-8;
+              cursor: pointer;
+              color: themed("txt-main");
+              i {
+                font-size: $size-16;
+              }
+            }
+            .dropdown__content {
+              background-color: themed("bg-second");
+              position: absolute;
+              top: calc(100% + $space-8);
+              width: 100%;
+              z-index: 2;
+              padding: $space-4;
+              border-radius: $radius-4;
+              display: none;
+              &.active {
+                display: block;
+              }
+              ul {
+                li {
+                  padding: $space-8 $space-10;
+                  color: themed("txt-main");
+                  cursor: pointer;
+                  border-radius: $radius-4;
+                  &:hover {
+                    background-color: $color-hover;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      &__body {
+        &__header {
+          @include flex(center, unset);
+          padding: $space-8 $space-14;
+          border-bottom: 1.2px solid themed("border");
+          font-size: $size-16;
+          color: themed("txt-main");
+          margin-bottom: $space-12;
+          &__line1 {
+            @include flex(center, unset);
+            gap: $space-8;
+            & > .count {
+              min-width: 20px;
+              text-align: right;
+            }
+          }
+          &__line2 {
+          }
+          &__line3 {
+            @include flex(center, unset);
+            justify-content: end;
+            & > div {
+              margin-right: 36px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

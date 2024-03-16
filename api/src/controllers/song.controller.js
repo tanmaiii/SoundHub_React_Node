@@ -2,7 +2,6 @@
 //401 : người dùng chưa được cấp quyền truy cập
 //403:  người dùng không có quyền truy cập vào tài nguyên
 //404:  Tài nguyên được yêu cầu không tồn tại trên server.
-
 import Song from "../model/song.model.js";
 import jwtService from "../services/jwtService.js";
 
@@ -54,7 +53,7 @@ export const updateSong = async (req, res) => {
       if (song.user_id !== userInfo.id) {
         return res.status(401).json({ conflictError: "Không có quyền sửa" });
       }
-      Song.update(song.songId, req.body, (err, data) => {
+      Song.update(req.params.songId, req.body, (err, data) => {
         if (err) {
           const conflictError = err;
           return res.status(401).json({ conflictError });
@@ -246,6 +245,35 @@ export const unLikeSong = async (req, res) => {
   }
 };
 
+const checkSongLiked = async (req, res) => {
+  const token = req.cookies.accessToken;
+  const userInfo = await jwtService.verifyToken(token);
+
+  try {
+    // Tìm bài hát trong database dựa trên songId
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
+      if (err || !song) {
+        return res.status(404).json({ conflictError: "Bài hát không tồn tại" });
+      } else {
+        // Kiểm tra xem userId có tồn tại trong danh sách người thích của bài hát hay không
+        Song.findUserLike(req.params.songId, (err, data) => {
+          if (data) {
+            const isLiked = data.includes(userInfo.id);
+            return res.status(200).json({ isLiked });
+          } else {
+            return res.status(200).json({ isLiked: false });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ conflictError: "Đã xảy ra lỗi khi kiểm tra bài hát đã được thích hay chưa" });
+  }
+};
+
 export default {
   getSong,
   createSong,
@@ -260,4 +288,5 @@ export default {
   getAllFavoritesByUser,
   likeSong,
   unLikeSong,
+  checkSongLiked,
 };

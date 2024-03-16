@@ -75,19 +75,19 @@ export default function SongPage() {
           </div>
         </div>
 
-        <Section title={"Recommended"}>
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        </Section>
+        {/* <Section title={"Recommended"}>
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
+        </Section> */}
       </div>
     </div>
   );

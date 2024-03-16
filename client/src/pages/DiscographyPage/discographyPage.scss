@@ -3,7 +3,6 @@
 .discography {
   @include themify($themes) {
     margin-top: $height-header;
-    padding: 0 $space-32;
     &__container {
       &__header {
         @include flex(center, space-between);
@@ -58,8 +57,32 @@
           }
         }
       }
-      &__list {
-        flex-wrap: wrap;
+      &__body {
+        &__header {
+          @include flex(center, unset);
+          padding: $space-8 $space-14;
+          border-bottom: 1.2px solid themed("border");
+          font-size: $size-16;
+          color: themed("txt-main");
+          margin-bottom: $space-12;
+          &__line1 {
+            @include flex(center, unset);
+            gap: $space-8;
+            & > .count {
+              min-width: 20px;
+              text-align: right;
+            }
+          }
+          &__line2 {
+          }
+          &__line3 {
+            @include flex(center, unset);
+            justify-content: end;
+            & > div {
+              margin-right: 36px;
+            }
+          }
+        }
       }
     }
   }

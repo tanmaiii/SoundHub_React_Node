@@ -78,7 +78,9 @@ body {
 }
 
 hr {
-  border: none;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  margin: 2px 0;
+  @include themify($themes) {
+    border: none;
+    border-top: 1px solid themed("border");
+    margin: 2px 0;
+  }
 }

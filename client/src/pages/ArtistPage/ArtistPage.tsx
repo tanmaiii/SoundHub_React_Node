@@ -73,33 +73,33 @@ export default function ArtistPage() {
               </div>
             </div>
 
-            <Section title={"Singles"} to={`${PATH.ARTIST + "/phuong-ly" + PATH.DISCOGRAPHY}`}>
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+            {/* <Section title={"Singles"} to={`${PATH.ARTIST + "/phuong-ly" + PATH.DISCOGRAPHY}`}>
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
             </Section>
 
             <Section title={`Featuring ${"Phương Ly"}`}>
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-              <Card title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
-            </Section>
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+              <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
+            </Section> */}
 
             <Section title={"Fans also like"}>
               <CardArtist name={"Mono"} image={avt} followers={"3456K"} />

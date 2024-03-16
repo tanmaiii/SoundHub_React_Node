@@ -14,10 +14,6 @@
           display: block;
         }
 
-        & .item__default {
-          // visibility: hidden;
-        }
-
         & .item__hover {
           visibility: visible;
         }
@@ -25,6 +21,7 @@
       &__left {
         @include flex(center, unset);
         gap: $space-8;
+        // width: 50%;
         &__number {
           padding: 0 $space-4;
           @include flex(center, center);
@@ -97,6 +94,12 @@
       }
 
       &__center {
+        // flex-basis: auto;
+        // flex-grow: 1;
+        // flex-shrink: 1;
+        // text-align: left;
+        // align-self: center;
+        // width: 0;
         &__date {
           font-size: $size-16;
           color: themed("txt-second");
@@ -108,6 +111,7 @@
       &__right {
         @include flex(center, center);
         gap: $space-8;
+        justify-content: end;
 
         & > .item__default {
           visibility: visible;
@@ -125,16 +129,16 @@
           .button-like {
             cursor: pointer;
             color: themed("txt-main");
-            padding: $space-8;
             border-radius: 50%;
             &.active {
               color: $color-red;
+              visibility: visible;
             }
             &:hover {
               background-color: $color-hover;
             }
             i {
-              --size: 20px;
+              --size: 36px;
               width: var(--size);
               height: var(--size);
               @include flex(center, center);
@@ -145,7 +149,6 @@
           .button-edit {
             cursor: pointer;
             color: themed("txt-main");
-            padding: $space-8;
             border-radius: 50%;
             &.active {
               color: $color-red;
@@ -154,7 +157,7 @@
               background-color: $color-hover;
             }
             i {
-              --size: 20px;
+              --size: 36px;
               width: var(--size);
               height: var(--size);
               @include flex(center, center);

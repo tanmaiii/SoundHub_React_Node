@@ -10,25 +10,33 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
-import '../src/i18n/i18n'
+import "../src/i18n/i18n";
+
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
+const queryClient = new QueryClient();
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
 
   useEffect(() => {
     // songApi.getAll().then((res) => console.log(res.data.map(x => x.title)))
-  })
-  
+  });
+
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
-      <SkeletonTheme
-        baseColor={darkMode ? "#252525" : "#ebebeb"}
-        highlightColor={darkMode ? "#121212" : "#f5f5f5"}
-        duration={2}
-      >
-        {/* <Loading /> */}
-        <Routes />
-      </SkeletonTheme>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={true} />
+        <SkeletonTheme
+          baseColor={darkMode ? "#252525" : "#ebebeb"}
+          highlightColor={darkMode ? "#121212" : "#f5f5f5"}
+          duration={2}
+        >
+          {/* <Loading /> */}
+          <Routes />
+        </SkeletonTheme>
+      </QueryClientProvider>
     </div>
   );
 }

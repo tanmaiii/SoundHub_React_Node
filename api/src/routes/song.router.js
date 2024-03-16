@@ -35,5 +35,6 @@ router.get(
 
 router.post("/like/:songId", validate(songValidation.like), songController.likeSong);
 router.delete("/like/:songId", validate(songValidation.unLike), songController.unLikeSong);
+router.get("/checkLiked/:songId", songController.checkSongLiked);
 
 export default router;

@@ -59,7 +59,7 @@ const settings = {
 interface SectionProps {
   children: React.ReactNode;
   title: string;
-  to?: string,
+  to?: string;
 }
 
 function Section({ children, title, to }: SectionProps) {
@@ -68,7 +68,7 @@ function Section({ children, title, to }: SectionProps) {
       <HeaderSection title={title} to={to} />
       <div className="section__main">
         <div className="section__main__slide">
-          <Slider {...settings}>{children}</Slider>
+          {/* <Slider {...settings}>{children}</Slider> */}
         </div>
       </div>
     </div>

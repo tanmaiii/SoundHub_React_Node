@@ -20,7 +20,7 @@ const PATH = {
   HOME: "/",
   ARTIST: "/artist",
   FAVOURITE: "/favourite",
-  ARTIST_SHOW: "/artist/:username",
+  ARTIST_SHOW: "/artist/:userId",
   RECENTLY: "/recently",
 
   SEARCH: "/search/:keyword",
