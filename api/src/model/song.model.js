@@ -123,29 +123,35 @@ Song.restore = (songId, userId, result) => {
 };
 
 Song.findById = (songId, userId, result) => {
-  db.query(`SELECT * from songs WHERE id = ? AND is_deleted = 0`, [songId], (err, song) => {
-    if (err) {
-      // Xử lý lỗi
-      console.error("Error while querying database:", err);
-      result(err, null);
-      return;
+  db.query(
+    `SELECT s.*, u.name as author ` +
+      ` FROM songs as s` +
+      ` LEFT JOIN users AS u ON s.user_id = u.id` +
+      ` WHERE s.id = ? AND s.is_deleted = 0`,
+    [songId],
+    (err, song) => {
+      if (err) {
+        // Xử lý lỗi
+        console.error("Error while querying database:", err);
+        result(err, null);
+        return;
+      }
+
+      if (!song || !song.length) {
+        result("Không tìm thấy !", null);
+        return;
+      }
+
+      // Kiểm tra quyền truy cập
+      if (song[0].public === 0 && song[0].user_id !== userId) {
+        result("Bài hát đang ẩn !", null);
+        return;
+      }
+
+      // Trả về kết quả
+      result(null, song[0]);
     }
-
-
-    if (!song || !song.length) {
-      result("Không tìm thấy !", null);
-      return;
-    }
-
-    // Kiểm tra quyền truy cập
-    if (song[0].public === 0 && song[0].user_id !== userId) {
-      result("Bài hát đang ẩn !", null);
-      return;
-    }
-
-    // Trả về kết quả
-    result(null, song[0]);
-  });
+  );
 };
 
 Song.findByPlaylistId = async (playlistId, query, result) => {
@@ -194,13 +200,6 @@ Song.findByFavorite = async (userId, query, result) => {
 
   const offset = (page - 1) * limit;
 
-  // const [data] = await promiseDb.query(
-  //   `SELECT *, u.* FROM favourite_songs as fs , songs as s LEFT JOIN users as u WHERE ${
-  //     q ? ` s.title LIKE "%${q}%" AND` : ""
-  //   } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1 and s.userId = u.id ` +
-  //     `ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
-  // );
-
   const [data] = await promiseDb.query(
     `SELECT s.*, u.name as author ` +
       ` FROM favourite_songs AS fs` +
@@ -220,12 +219,6 @@ Song.findByFavorite = async (userId, query, result) => {
       ` ORDER BY fs.created_at ${sort === "new" ? "DESC" : "ASC"}` +
       ` LIMIT ${+limit} OFFSET ${+offset};`
   );
-
-  // const [totalCount] = await promiseDb.query(
-  //   `SELECT COUNT(*) AS totalCount FROM favourite_songs as fs , songs as s LEFT JOIN users as u WHERE ${
-  //     q ? ` s.title LIKE "%${q}%" AND and s.public = 1 and s.userId = u.id ` : ""
-  //   } fs.user_id = ${userId} and fs.song_id = s.id and s.public = 1`
-  // );
 
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);
@@ -295,7 +288,10 @@ Song.findUserLike = async (songId, result) => {
       }
 
       if (data.length) {
-        result(null, data.map((user) => user.user_id));
+        result(
+          null,
+          data.map((user) => user.user_id)
+        );
         return;
       }
 

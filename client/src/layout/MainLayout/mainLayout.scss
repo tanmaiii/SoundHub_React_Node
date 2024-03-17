@@ -17,11 +17,7 @@
 
       &__content {
         min-height: 100vh;
-        margin-top: $height-header;
-        padding: 0 $space-32;
-        @include mobile {
-          padding: 0 $space-8;
-        }
+        // margin-top: $height-header;
       }
     }
   }

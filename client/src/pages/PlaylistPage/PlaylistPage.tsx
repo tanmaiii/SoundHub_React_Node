@@ -32,7 +32,7 @@ export default function PlaylistPage() {
             <i className="fa-solid fa-ellipsis"></i>
           </button>
         </div>
-        <div className="playlistPage__content__tracklist">
+        {/* <div className="playlistPage__content__tracklist">
           <Track
             number="1"
             dateAdd="2 housr ago"
@@ -89,7 +89,7 @@ export default function PlaylistPage() {
             image={avt}
             artist={["Phương Ly", "Phương Ly"]}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -6,11 +6,19 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { AuthContextProvider } from "./context/authContext";
 
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
+const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-  <Provider store={store}>
-    <AuthContextProvider>
-      <App />
-    </AuthContextProvider>
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
+
+    <Provider store={store}>
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    </Provider>
+  </QueryClientProvider>
 );

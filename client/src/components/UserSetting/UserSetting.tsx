@@ -5,11 +5,13 @@ import apiConfig from "../../apis/apiConfig";
 import "./userSetting.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeDarkMode } from "../../slices/darkMode";
+import { changeDarkMode } from "../../slices/darkModeSlice";
 // import { logout } from "../../slices/auth";
 
 import authApi from "../../apis/auth/authApi";
 import { useAuth } from "../../context/authContext";
+import { PATH } from "../../constants/paths";
+import { Link } from "react-router-dom";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
@@ -58,6 +60,12 @@ export default function UserSetting() {
             <li>
               <i className="fa-light fa-circle-user"></i>
               <span>Account</span>
+            </li>
+            <li>
+              <Link to={`${PATH.ARTIST}/${currentUser.id}`}>
+                <i className="fa-light fa-circle-user"></i>
+                <span>Profile</span>
+              </Link>
             </li>
             <li>
               <i className="fa-light fa-upload"></i>

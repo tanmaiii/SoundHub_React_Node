@@ -26,7 +26,6 @@ export default function DiscographyPage() {
   const handleGetSong = async () => {
     try {
       const res = await songApi.getAllByUserId(1, 1, 100);
-      console.log(res);
       res.data && setSongs(res.data);
     } catch (error) {
       console.log(error);
@@ -83,7 +82,7 @@ export default function DiscographyPage() {
                   title={song.title}
                   created_at={song.created_at}
                   image={song.image_path}
-                  artist={["Sơn Tùng M-TP"]}
+                  artist={"Sơn Tùng M-TP"}
                 />
               ))}
           </div>

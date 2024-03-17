@@ -15,7 +15,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-top: 1px solid themed("border");
     padding: 0 $space-12;
     @include flex(center, space-between);
 
@@ -52,13 +52,16 @@
     padding: $space-8 0;
     gap: $space-12;
     &__image {
-      height: 100%;
+      --size: 64px;
+      height: var(--size);
+      width: var(--size);
+      overflow: hidden;
+      @include flex(center, center);
       img {
         border-radius: $radius-4;
-        overflow: hidden;
-        height: 100%;
-        width: auto;
-        object-fit: contain;
+        height: auto;
+        width: 100%;
+        object-fit: cover;
       }
     }
     &__desc {
@@ -88,15 +91,18 @@
       @include mobile {
         display: none;
       }
-      button {
+      & > .button-like {
         padding: $space-8;
         color: themed("txt-second");
         cursor: pointer;
         transition: $transition;
         @include tooltip(top, center);
-        &:hover {
-          color: themed("txt-main");
+        &.active {
+          color: $color-red;
         }
+        // &:hover {
+        //   color: themed("txt-main");
+        // }
         i {
           font-size: 1.4rem;
         }
@@ -111,7 +117,7 @@
     width: 100%;
     &__actions {
       @include flex(center, center);
-      gap: $space-18;
+      gap: $space-10;
 
       button:not(.btn_play) {
         padding: $space-8;
@@ -126,10 +132,10 @@
           color: $color-primary1;
         }
         i {
-          --size: 24px;
+          --size: 18px;
           width: var(--size);
           height: var(--size);
-          font-size: $size-24;
+          font-size: $size-18;
           @include flex(center, center);
         }
       }
@@ -143,6 +149,7 @@
       }
 
       .btn_play {
+        @include tooltip(center, center);
         padding: $space-8;
         background-color: $color-primary1;
         border-radius: 50%;
@@ -154,7 +161,7 @@
         }
         i {
           @include flex(center, center);
-          --size: 30px;
+          --size: 26px;
           width: var(--size);
           height: var(--size);
           font-size: $size-24;
@@ -169,12 +176,49 @@
         font-size: $size-14;
         color: themed("txt-main");
       }
-      .progressbar {
-        flex: 1;
+      .progress {
+        // flex: 1;
+        // width: 100%;
+        // height: 5px;
+        // border-radius: $radius-4;
+        // background-color: $color-gray;
         width: 100%;
-        height: 6px;
-        border-radius: $radius-4;
-        background-color: $color-gray;
+        padding: $space-4 0;
+        &:hover {
+          & .slider-handle {
+            visibility: visible;
+          }
+        }
+
+        &_wrapper {
+          min-width: 100%;
+          background-color: $color-hover;
+          height: 5px;
+          border-radius: 30px;
+          cursor: pointer;
+          position: relative;
+
+          .seek_bar {
+            width: 0;
+            height: 100%;
+            background-color: $color-primary1;
+            border-radius: 30px;
+          }
+          .slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: -6px;
+            --size: 12px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            background-color: $color-primary1;
+            // display: none;
+            visibility: hidden;
+            transition: $transition;
+          }
+        }
       }
     }
   }

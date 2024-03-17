@@ -3,7 +3,10 @@
 .favourite {
   @include themify($themes) {
     margin-top: $height-header;
-    // padding: 0 $space-32;
+    padding: 0 $space-32;
+    @include mobile {
+      padding: 0 $space-12;
+    }
     &__container {
       &__header {
         @include flex(center, space-between);

@@ -6,7 +6,7 @@ import UserSetting from "../UserSetting/UserSetting";
 import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeOpen } from "../../slices/navbar";
+import { changeOpen } from "../../slices/navbarSlice";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";

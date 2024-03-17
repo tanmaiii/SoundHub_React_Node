@@ -7,13 +7,15 @@
 
 //toolkit
 import { configureStore } from "@reduxjs/toolkit";
-import navbarReducer from "./slices/navbar";
-import darkModeReducer from "./slices/darkMode";
+import navbarReducer from "./slices/navbarSlice";
+import darkModeReducer from "./slices/darkModeSlice";
+import nowPlayingReducer from "./slices/nowPlayingSlice";
 
 const store = configureStore({
   reducer: {
     navbar: navbarReducer,
     darkMode: darkModeReducer,
+    nowPlaying: nowPlayingReducer,
   },
 });
 

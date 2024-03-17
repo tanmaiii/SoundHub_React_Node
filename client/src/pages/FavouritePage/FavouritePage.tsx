@@ -7,16 +7,6 @@ import { ListResponse, TSong } from "../../model";
 import Track from "../../components/Track/Track";
 import { useQuery, useMutation } from "react-query";
 
-const song: TSong = {
-  id: 1,
-  title: "song",
-  user_id: "song",
-  genre_id: "song",
-  song_path: "song",
-  private: 1,
-  author: "song",
-  created_at: "12-01-2003",
-};
 
 export default function FavouritePage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
@@ -24,9 +14,8 @@ export default function FavouritePage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sort, setSort] = useState(10);
-  const [loading, setLoading] = useState(false);
 
-  const handleGetSong = async () => {
+  const getSongs = async () => {
     try {
       const res = await songApi.getAllFavoritesByUser(limit, page);
       res.data && setSongs(res.data);
@@ -35,7 +24,9 @@ export default function FavouritePage() {
     }
   };
 
-  const { isLoading, error, data } = useQuery("song-favourite", handleGetSong);
+  const { isLoading, error, data } = useQuery(["songs-like"], () => {
+    return getSongs();
+  });
 
   return (
     <div className="favourite">
@@ -85,7 +76,7 @@ export default function FavouritePage() {
                   title={song.title}
                   created_at={song.created_at}
                   image={song.image_path}
-                  artist={["Phương Ly"]}
+                  artist={song.author}
                 />
                 // <Card key={index} song={song} className="col pc-2 t-3 m-6" loading={loading} />
               ))}

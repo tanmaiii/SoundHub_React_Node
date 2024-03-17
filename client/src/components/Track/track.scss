@@ -8,6 +8,9 @@
       border-radius: $radius-8;
       cursor: pointer;
       margin-bottom: $space-8;
+      &.active {
+        background-color: $color-hover;
+      }
       &:hover {
         background-color: $color-hover;
         & .button-play {
@@ -62,6 +65,9 @@
               color: themed("txt-main");
               font-size: $size-24;
             }
+            &.active {
+              display: block;
+            }
           }
         }
         &__desc {
@@ -89,6 +95,10 @@
                 color: $color-primary1;
               }
             }
+          }
+          &__quantity {
+            color: themed("txt-second");
+            font-size: $size-14;
           }
         }
       }

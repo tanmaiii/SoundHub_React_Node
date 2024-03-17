@@ -5,7 +5,7 @@ import Images from "../../constants/images";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { changeOpen, changePath } from "../../slices/navbar";
+import { changeOpen, changePath } from "../../slices/navbarSlice";
 import { useTranslation } from "react-i18next";
 
 export default function Navbar() {

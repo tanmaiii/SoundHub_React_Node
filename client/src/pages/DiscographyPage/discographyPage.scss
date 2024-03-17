@@ -3,6 +3,10 @@
 .discography {
   @include themify($themes) {
     margin-top: $height-header;
+    padding: 0 $space-32;
+    @include mobile {
+      padding: 0 $space-8;
+    }
     &__container {
       &__header {
         @include flex(center, space-between);

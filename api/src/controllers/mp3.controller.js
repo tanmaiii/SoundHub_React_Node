@@ -12,7 +12,7 @@ export const uploadMp3 = (req, res) => {
 
 export const deleteMp3 = (req, res) => {
   const fileName = req.body.fileName;
-  const filePath = `data/mp3/${fileName}`;
+  const filePath = `src/data/mp3/${fileName}`;
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {

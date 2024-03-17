@@ -16,6 +16,10 @@ const songApi = {
       },
     });
   },
+  getDetail(songId: number): Promise<TSong> {
+    const url = "song/detail/";
+    return axiosClient.get(url + songId);
+  },
   getAllByUserId(userId: number, page: number, limit: number): Promise<ListResponse<TSong>> {
     const url = "song/user/";
     return axiosClient.get(url + userId, {

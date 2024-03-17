@@ -6,5 +6,11 @@
     overflow: hidden;
     position: relative;
     margin-bottom: $space-12;
+
+    margin-top: $height-header;
+    padding: 0 $space-32;
+    @include mobile {
+      padding: 0 $space-12;
+    }
   }
 }
