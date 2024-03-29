@@ -11,6 +11,7 @@ const bodySchema = {
   }),
 };
 
+
 const querySchema = {
   query: Joi.object().keys({
     q: Joi.string(),

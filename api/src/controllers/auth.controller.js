@@ -27,6 +27,13 @@ export const signin = async (req, res) => {
 
           const { password, ...others } = user;
 
+          const data = {
+            data: others,
+            token: token,
+          };
+
+          console.log("LOGIN", user);
+
           res
             .cookie("accessToken", token, {
               httpOnly: true,
@@ -36,7 +43,7 @@ export const signin = async (req, res) => {
               maxAge: 24 * 60 * 60 * 1000,
             })
             .status(200)
-            .json(others);
+            .json(data);
         } else {
           const conflictError = "Wrong password";
           res.status(401).json({ conflictError });

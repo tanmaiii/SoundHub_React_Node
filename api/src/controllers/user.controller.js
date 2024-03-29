@@ -37,7 +37,8 @@ export const getUser = (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const token = req.cookies?.accessToken;
+    // const token = req.cookies?.accessToken;
+    const { token } = req.body;
 
     const userInfo = await jwtService.verifyToken(token);
 
@@ -47,6 +48,7 @@ export const getMe = async (req, res) => {
         return res.status(401).json({ conflictError });
       } else {
         const { password, ...others } = user;
+        console.log("GET ME: ", user);
         return res.json(others);
       }
     });
@@ -73,6 +75,8 @@ export const getAllUser = (req, res) => {
 export const findByEmail = (req, res) => {
   try {
     User.findByEmail(req.body.email, (err, user) => {
+      console.log("FIND BY EMAIL: ", user);
+
       if (user) {
         return res.status(401).json({ conflictError: "Email đã tồn tại" });
       } else {

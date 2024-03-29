@@ -7,7 +7,9 @@ import jwtService from "../services/jwtService.js";
 
 export const getSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
+    console.log("token",token);
     const userInfo = await jwtService.verifyToken(token);
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
@@ -17,6 +19,7 @@ export const getSong = async (req, res) => {
       if (!song) {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
+      console.log('Get song', song);
       return res.json(song);
     });
   } catch (error) {
@@ -26,7 +29,8 @@ export const getSong = async (req, res) => {
 
 export const createSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.create(userInfo.id, req.body, (err, data) => {
@@ -44,7 +48,8 @@ export const createSong = async (req, res) => {
 
 export const updateSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err) {
@@ -69,7 +74,8 @@ export const updateSong = async (req, res) => {
 
 export const deleteSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
@@ -100,7 +106,8 @@ export const deleteSong = async (req, res) => {
 
 export const destroySong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.destroy(req.params.songId, userInfo.id, (err, data) => {
@@ -118,7 +125,8 @@ export const destroySong = async (req, res) => {
 
 export const restoreSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.restore(req.params.songId, userInfo.id, (err, data) => {
@@ -149,7 +157,8 @@ export const getAllSong = (req, res) => {
 
 export const getAllSongByMe = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.findMe(userInfo.id, req.query, (err, data) => {
@@ -194,7 +203,8 @@ export const getAllSongByUser = (req, res) => {
 
 export const getAllFavoritesByUser = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.findByFavorite(userInfo.id, req.query, (err, data) => {
@@ -211,7 +221,8 @@ export const getAllFavoritesByUser = async (req, res) => {
 
 export const likeSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.like(req.params.songId, userInfo.id, (err, data) => {
@@ -229,7 +240,8 @@ export const likeSong = async (req, res) => {
 
 export const unLikeSong = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    // const token = req.cookies.accessToken;
+    const { token } = req.body;
     const userInfo = await jwtService.verifyToken(token);
 
     Song.unlike(req.params.songId, userInfo.id, (err, data) => {
@@ -246,7 +258,8 @@ export const unLikeSong = async (req, res) => {
 };
 
 const checkSongLiked = async (req, res) => {
-  const token = req.cookies.accessToken;
+  // const token = req.cookies.accessToken;
+  const { token } = req.body;
   const userInfo = await jwtService.verifyToken(token);
 
   try {
