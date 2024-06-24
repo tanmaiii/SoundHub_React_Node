@@ -2,23 +2,22 @@ import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import "./songPage.scss";
 import Section from "../../components/Section/Section";
-import Card from "../../components/Card/Card";
+import Card from "../../components/CardSong";
 import TrackArtist from "../../components/TrackArtist/TrackArtist";
 
 import CommentItem from "../../components/CommentItem/CommentItem";
 
-import avt from "../../assets/images/poster.png";
-import img from "../../assets/images/poster.png";
 import CommentInput from "../../components/CommentInput/CommentInput";
+import Images from "../../constants/images";
 
 export default function SongPage() {
   return (
     <div className="songPage">
       <HeaderPage
-        avt={avt}
+        avt={Images.AVATAR}
         title="Thằng điên"
         author="JustaTee"
-        avtAuthor={avt}
+        avtAuthor={Images.AVATAR}
         time="2022"
         listen="18,714,210"
         category="Song"
@@ -38,7 +37,7 @@ export default function SongPage() {
 
         <div className="songPage__content__body row">
           <div className="songPage__content__body__comment col pc-7 t-12">
-            <CommentInput avatarUrl={avt} />
+            <CommentInput avatarUrl={Images.AVATAR} />
 
             <div className="songPage__content__body__comment__header">
               <div className="quantity">
@@ -61,17 +60,17 @@ export default function SongPage() {
             </div>
 
             <div className="songPage__content__body__comment__list">
-              <CommentItem avatarUrl={avt} name="Tấn Mãi" time="2 hours ago" />
-              <CommentItem avatarUrl={avt} name="Tấn Mãi" level={1} time="2 hours ago" />
-              <CommentItem avatarUrl={avt} name="Tấn Mãi" level={2} time="2 hours ago" />
-              <CommentItem avatarUrl={avt} name="Tấn Mãi" level={3} time="2 hours ago" />
-              <CommentItem avatarUrl={avt} name="Tấn Mãi" time="2 hours ago" />
+              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" time="2 hours ago" />
+              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={1} time="2 hours ago" />
+              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={2} time="2 hours ago" />
+              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={3} time="2 hours ago" />
+              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" time="2 hours ago" />
             </div>
           </div>
           <div className="songPage__content__body__artist col pc-5 t-12">
-            <TrackArtist name="Phương Ly" avatarUrl={avt} className="col pc-12" />
-            <TrackArtist name="Phương Ly" avatarUrl={avt} className="col pc-12" />
-            <TrackArtist name="Phương Ly" avatarUrl={avt} className="col pc-12" />
+            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
+            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
+            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
           </div>
         </div>
 

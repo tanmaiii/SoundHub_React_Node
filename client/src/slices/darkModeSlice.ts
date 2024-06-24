@@ -6,7 +6,7 @@ export interface navbarState {
 }
 
 const initialState: navbarState = {
-  state: false,
+  state: true,
 };
 
 const loadDarkModeState = (): boolean => {

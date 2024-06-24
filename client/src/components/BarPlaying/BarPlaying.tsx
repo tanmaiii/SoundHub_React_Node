@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./barPlaying.scss";
 import { Link } from "react-router-dom";
-import img from "../../assets/images/poster.png";
 import {
   selectIsPlaying,
   selectSongPlayId,
@@ -11,22 +10,24 @@ import {
 } from "../../slices/nowPlayingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { TSong } from "../../model";
+import { TSong } from "../../types";
 import { songApi } from "../../apis";
-import apiConfig from "../../apis/apiConfig";
 import Images from "../../constants/images";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useAuth } from "../../context/authContext";
+import { apiConfig } from "../../configs";
 
 export default function BarPlaying() {
   // const songPlayId = useSelector(selectSongPlayId);
   const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
+  const { token } = useAuth()
 
   const songPlayId = useSelector(selectSongPlayId);
   const [song, setSong] = useState<TSong | null>(null);
 
   const getSong = async () => {
     try {
-      const res = songPlayId && (await songApi.getDetail(songPlayId));
+      const res = songPlayId && (await songApi.getDetail(songPlayId ?? "", token ?? ""));
       setSong(res);
     } catch (error) {
       console.log(error);
@@ -58,10 +59,11 @@ const CardSong = ({ song }: CardSongProps) => {
   // const {songPlayId } = useSelector((state: RootState) => state.nowPlaying);
   const [like, setLike] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { token } = useAuth()
 
   const checkLiked = async () => {
     try {
-      const res: any = await songApi.checkLikedSong(song.id);
+      const res: any = await songApi.checkLikedSong(song.id, token ?? "");
       setLike(res.isLiked);
     } catch (error) {
       console.log(error);
@@ -74,8 +76,8 @@ const CardSong = ({ song }: CardSongProps) => {
 
   const likeMutation = useMutation(
     async (like: boolean) => {
-      if (!like) return songApi.likeSong(song.id);
-      return songApi.unLikeSong(song.id);
+      if (!like) return songApi.likeSong(song.id, token ?? "");
+      return songApi.unLikeSong(song.id, token ?? "");
     },
     {
       onSuccess: () => {
@@ -196,7 +198,7 @@ const ControlsBar = ({ song }: CardSongProps) => {
 
     const time = divprogress && duration && (divprogress / 100) * duration;
 
-    time && audioRef &&  audioRef.current?.currentTime = time;
+    // time && audioRef &&  audioRef.current?.currentTime == time;
   };
 
   return (

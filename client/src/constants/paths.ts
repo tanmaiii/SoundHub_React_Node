@@ -1,6 +1,7 @@
-import { lazy } from "react";
+import { lazy, FunctionComponent } from "react";
+import { ComponentType } from "react";
 
-const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
+const HomePage: FunctionComponent<any> = lazy(() => import("../pages/HomePage/HomePage") as Promise<{ default: ComponentType<any> }>);
 const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));

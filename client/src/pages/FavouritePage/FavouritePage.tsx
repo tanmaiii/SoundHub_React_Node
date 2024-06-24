@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./favouritePage.scss";
-import Card from "../../components/Card/Card";
+import Card from "../../components/CardSong";
 import Images from "../../constants/images";
 import { songApi } from "../../apis";
-import { ListResponse, TSong } from "../../model";
+import { ListResponse, TSong } from "../../types";
 import Track from "../../components/Track/Track";
 import { useQuery, useMutation } from "react-query";
 
@@ -17,8 +17,8 @@ export default function FavouritePage() {
 
   const getSongs = async () => {
     try {
-      const res = await songApi.getAllFavoritesByUser(limit, page);
-      res.data && setSongs(res.data);
+      // const res = await songApi.getAllFavoritesByUser(limit, page);
+      // res.data && setSongs(res.data);
     } catch (error) {
       console.log(error);
     }

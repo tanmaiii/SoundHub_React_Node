@@ -23,7 +23,7 @@ export default function VerifyPage() {
   useEffect(() => {
     const VerifyEmail = async () => {
       try {
-        await authApi.verifyEmail(token);
+        // await authApi.verifyEmail(token);
         setSuccess("Successfully authenticated account");
       } catch (err: any) {
         console.log(err);
@@ -38,7 +38,7 @@ export default function VerifyPage() {
     setLoading(true);
     setSendSuccess("");
     try {
-      await authApi.sendVerificationEmail(email);
+      // await authApi.sendVerificationEmail(email);
       setLoading(false);
       setSendSuccess("Send verification email success !");
     } catch (err: any) {

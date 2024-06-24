@@ -2,14 +2,13 @@ import React from "react";
 import "./artistPage.scss";
 import Slider from "react-slick";
 
-import avt from "../../assets/images/artistHoa.jpg";
-import img from "../../assets/images/poster.png";
 
 import Track from "../../components/Track/Track";
 import Section from "../../components/Section/Section";
-import Card from "../../components/Card/Card";
+import Card from "../../components/CardSong";
 import CardArtist from "../../components/CardArtist/CardArtist";
 import { PATH } from "../../constants/paths";
+import Images from "../../constants/images";
 
 export default function ArtistPage() {
   return (
@@ -18,11 +17,11 @@ export default function ArtistPage() {
         <div className="artist__container__hero">
           <div className="artist__container__hero__blur">
             <div className="bg-alpha"></div>
-            <div className="blur" style={{ backgroundImage: `url(${avt})` }}></div>
+            <div className="blur" style={{ backgroundImage: `url(${Images.AVATAR})` }}></div>
           </div>
           <div className="artist__container__hero__body">
             <div className="avatar">
-              <img src={avt} alt="" />
+              <img src={Images.AVATAR} alt="" />
             </div>
             <div className="info">
               <div className="info__check">
@@ -97,22 +96,22 @@ export default function ArtistPage() {
             </Section> */}
 
             <Section title={"Fans also like"}>
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
-              <CardArtist name={"Mono"} image={avt} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
+              <CardArtist name={"Mono"} followers={"3456K"} />
             </Section>
           </div>
         </div>

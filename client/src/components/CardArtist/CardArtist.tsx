@@ -5,9 +5,10 @@ import "./cardArtist.scss";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
+import Images from "../../constants/images";
 
 interface CardProps {
-  image: string;
+  image?: string;
   name: string;
   followers: string;
   loading?: boolean;
@@ -19,7 +20,7 @@ export default function CardArtist({ name, image, followers, loading = false }: 
       <div className="CardArtist__container">
         <Link target="_blank" to={`/artist/${"12312"}`}>
           <div className="CardArtist__container__image">
-            {loading ? <Skeleton circle height={200} /> : <img src={image} alt="" />}
+            {loading ? <Skeleton circle height={200} /> : <img src={Images.AVATAR} alt="" />}
           </div>
         </Link>
         <div className="CardArtist__container__desc">

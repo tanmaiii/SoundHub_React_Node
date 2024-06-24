@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import img from "../../assets/images/poster2.png";
 import "./commentItem.scss";
 
 import CommentInput from "../CommentInput/CommentInput";
+import Images from "../../constants/images";
 
 interface CommentItemProps {
   name: string;
@@ -59,7 +59,7 @@ export default function CommentItem({
         </div>
       </div>
 
-      {openInput && <CommentInput avatarUrl={img} level={level + 1} />}
+      {openInput && <CommentInput avatarUrl={Images.AVATAR} level={level + 1} />}
     </>
   );
 }

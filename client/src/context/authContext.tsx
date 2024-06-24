@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { authApi, useApi } from "../apis";
-import { TUser } from "../model/user";
+import { authApi, userApi } from "../apis";
+import { TUser } from "../types";
 
 // Khai báo kiểu dữ liệu cho AuthContext
 interface IAuthContext {
   currentUser: TUser | null;
   setCurrentUser: (user: TUser) => void;
+  token: string | null;
   logout: () => void;
+  login: (email: string, password: string) => void;
 }
 
 // Tạo AuthContext với giá trị mặc định là null
@@ -26,6 +28,16 @@ export const AuthContextProvider = ({ children }: Props) => {
     return userString ? JSON.parse(userString) : null;
   });
 
+  const [token, setToken] = useState<string | null>(() => {
+    const tokenString = localStorage.getItem("token");
+    return tokenString ? JSON.parse(tokenString) : null;
+  });
+
+  const login = async (email: string, password: string) => {
+    const res = await authApi.signin(email, password);
+    if (res) setCurrentUser(res.data); setToken(res.token); return res;
+  }
+
   const logout = async () => {
     setCurrentUser(null);
     await authApi.signout();
@@ -34,24 +46,27 @@ export const AuthContextProvider = ({ children }: Props) => {
   useEffect(() => {
     const getInfo = async () => {
       try {
-        const res = await useApi.getMe();
-        setCurrentUser(res);
+        const res = token && await userApi.getMe(token);
+        res && setCurrentUser(res);
       } catch (error) {
         setCurrentUser(null);
       }
     };
     currentUser && getInfo();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));
-  }, [currentUser]);
+    localStorage.setItem("token", JSON.stringify(token));
+  }, [currentUser, token]);
 
   // Cập nhật giá trị của AuthContextProvider
   const contextValue: IAuthContext = {
     currentUser,
     setCurrentUser,
+    token,
     logout,
+    login
   };
 
   // Sử dụng AuthContext.Provider để cung cấp giá trị cho các component con

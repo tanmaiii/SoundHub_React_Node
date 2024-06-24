@@ -1,5 +1,4 @@
 import React from "react";
-import img from "../../assets/images/poster.png";
 import "./sectionChartItem.scss";
 import Skeleton from "react-loading-skeleton";
 
@@ -9,28 +8,28 @@ const listMusic = [
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: img,
+    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
   },
   {
     Title: "OMG",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: img,
+    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
   },
   {
     Title: "Ditto",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: img,
+    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
   },
   {
     Title: "GODS",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: img,
+    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
   },
 ];
 

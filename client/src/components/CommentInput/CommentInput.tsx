@@ -1,5 +1,4 @@
 import React from "react";
-import avt from "../../assets/images/artistHoa.jpg";
 import "./commentInput.scss";
 
 interface CommentInputProps {

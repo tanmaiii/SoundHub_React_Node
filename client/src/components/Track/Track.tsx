@@ -4,7 +4,6 @@ import Skeleton from "react-loading-skeleton";
 import moment from "moment";
 import "./track.scss";
 import Images from "../../constants/images";
-import apiConfig from "../../apis/apiConfig";
 import { songApi } from "../../apis";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "react-query";
 import IconPlay from "../IconPlay/IconPlay";
@@ -12,9 +11,10 @@ import IconPlay from "../IconPlay/IconPlay";
 import { selectIsPlaying, setNowPlaying, playSong, stopSong } from "../../slices/nowPlayingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { apiConfig } from "../../configs";
 
 interface TrackProps {
-  id?: number;
+  id?: string;
   title: string;
   image?: string;
   artist?: string;
@@ -27,7 +27,7 @@ interface TrackProps {
 }
 
 export default function Track({
-  id = 1,
+  id = "1",
   title,
   image,
   artist,
@@ -45,8 +45,8 @@ export default function Track({
 
   const checkLiked = async () => {
     try {
-      const res = await songApi.checkLikedSong(id);
-      setLike(res.isLiked);
+     // const res = await songApi.checkLikedSong(id);
+     // setLike(res.isLiked);
     } catch (error) {
       console.log(error);
     }
@@ -58,8 +58,8 @@ export default function Track({
 
   const likeMutation = useMutation(
     async (like: boolean) => {
-      if (!like) return songApi.likeSong(id);
-      return songApi.unLikeSong(id);
+      //if (!like) return songApi.likeSong(id);
+      //return songApi.unLikeSong(id);
     },
     {
       onSuccess: () => {
@@ -77,8 +77,8 @@ export default function Track({
     return likeMutation.mutate(like);
   };
 
-  const handleClickPlay = (id: number) => {
-    if (songPlayId === id && isPlaying) {
+  const handleClickPlay = (id: string) => {
+    if (songPlayId == id && isPlaying) {
       dispatch(stopSong());
       console.log("dừng", id, isPlaying);
     } else {

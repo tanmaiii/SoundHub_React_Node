@@ -1,6 +1,6 @@
-import poster from "../assets/images/poster2.png";
-import avatar from "../assets/images/avatar.jpg";
-import background from "../assets/images/bg1.jpg";
+import poster from "../assets/images/song2.png";
+import avatar from "../assets/images/avatar.png";
+import background from "../assets/images/gradient-black.png";
 import logo from "../assets/images/logo.png";
 
 const Images = {

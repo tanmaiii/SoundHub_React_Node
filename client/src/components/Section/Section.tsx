@@ -1,6 +1,5 @@
 import React, { Children } from "react";
-import Card from "../Card/Card";
-import img from "../../assets/images/poster2.png";
+import Card from "../CardSong";
 import "./section.scss";
 import HeaderSection from "../HeaderSection/HeaderSection";
 
@@ -68,7 +67,7 @@ function Section({ children, title, to }: SectionProps) {
       <HeaderSection title={title} to={to} />
       <div className="section__main">
         <div className="section__main__slide">
-          {/* <Slider {...settings}>{children}</Slider> */}
+          <Slider {...settings}>{children}</Slider>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import "./mainLayout.scss";
 
-import NavBar from "../../components/Navbar/Navbar";
+import NavBar from "../../components/NavBar/NavBar";
 import Header from "../../components/Header/Header";
 import BarPlaying from "../../components/BarPlaying/BarPlaying";
 

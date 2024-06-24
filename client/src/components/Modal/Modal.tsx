@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./modal.scss";
-import bgWallet from "../../assets/images/background-wallet.png";
+import Images from "../../constants/images";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -41,7 +41,7 @@ export default function Modal(props: ModalProps) {
         <div className="Modal__wrapper__body">{props.children}</div>
         
         <div className="Modal__wrapper__bg">
-          <img src={bgWallet} alt="" />
+          <img src={Images.BG} alt="" />
         </div>
 
         <button className="btn_close" onClick={() => setOpenModal(false)}>

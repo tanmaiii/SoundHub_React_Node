@@ -1,9 +1,9 @@
 // nowPlayingSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { TSong } from "../model";
+import { TSong } from "../types";
 
 type TNowPlaying = {
-  songPlayId: number | null;
+  songPlayId: string | null;
   isPlaying: boolean;
 };
 

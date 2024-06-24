@@ -1,6 +1,5 @@
 import React, { MouseEvent, useState } from "react";
 import "./auth.scss";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 
 import userApi from "../../apis/user/userApi";
@@ -11,10 +10,9 @@ import { useAuth } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 
 export default function Login() {
-  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
-  const { currentUser, setCurrentUser } = useAuth();
+  const { login } = useAuth();
   const { t } = useTranslation("auth");
 
   const [inputs, setInputs] = useState({
@@ -29,8 +27,7 @@ export default function Login() {
 
   const handleClick = async () => {
     try {
-      const res = await authApi.signin(inputs.email, inputs.password);
-      setCurrentUser(res);
+      return login(inputs.email, inputs.password);
     } catch (err: any) {
       setErr(err.response.data.conflictError);
     }
@@ -53,6 +50,7 @@ export default function Login() {
           <h4 className="title">{t("login.Email")}</h4>
           <div className="input ">
             <input
+              value={inputs.email}
               autoComplete="off"
               type="text"
               name="email"
@@ -65,6 +63,7 @@ export default function Login() {
           <h4 className="title">{t("login.Password")}</h4>
           <div className="input">
             <input
+              value={inputs.password}
               autoComplete="off"
               type={`${show ? "text" : "password"}`}
               name="password"

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import Track from "../../components/Track/Track";
 import "./discographyPage.scss";
-import img from "../../assets/images/artistHoa.jpg";
-import Card from "../../components/Card/Card";
-import { TSong } from "../../model";
+import Card from "../../components/CardSong";
+import { TSong } from "../../types";
 import { songApi } from "../../apis";
 
 import { useQuery, useMutation } from "react-query";
+import { useAuth } from "../../context/authContext";
 
 const song: TSong = {
-  id: 1,
+  id: "1",
   title: "song",
   user_id: "song",
   genre_id: "song",
   song_path: "song",
-  private: 1,
+  image_path: "song",
+  public: 1,
   author: "song",
   created_at: "song",
 };
@@ -22,11 +23,12 @@ const song: TSong = {
 export default function DiscographyPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [songs, setSongs] = useState<TSong[] | null>(null);
+  const {token} = useAuth();
 
   const handleGetSong = async () => {
     try {
-      const res = await songApi.getAllByUserId(1, 1, 100);
-      res.data && setSongs(res.data);
+      // const res = await songApi.getAllByUserId(token,1, 10, 10);
+      // res.data && setSongs(res.data);
     } catch (error) {
       console.log(error);
     }

@@ -1,15 +1,13 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
 import { Route, Routes as Router, BrowserRouter } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async"; // quản lý các thẻ trong <head>
 
 import Loading from "../components/Loading/Loading";
 
 import MainLayout from "../layout/MainLayout/MainLayout";
-import AuthLayout from "../layout/AuthLayout/AuthLayout";
 
 import { publicRoutes } from "../constants/paths";
 
-import HomePage from "../pages/HomePage/HomePage";
 
 const helmetContext = {};
 
@@ -20,10 +18,7 @@ export const Routes = () => {
         <Helmet>
           <meta charSet="utf-8" />
           <title>Sound Hub</title>
-          <link
-            rel="stylesheet"
-            href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"
-          ></link>
+          <link rel="canonical" href="https://www.tacobell.com/" />
         </Helmet>
         <Suspense fallback={<Loading />}>
           <Router>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import avt from "../../assets/images/avatar.jpg";
 
 import UserSetting from "../UserSetting/UserSetting";
 

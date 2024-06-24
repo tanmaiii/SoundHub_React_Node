@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import avt from "../../assets/images/avatar.jpg";
-import apiConfig from "../../apis/apiConfig";
 
 import "./userSetting.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +10,8 @@ import authApi from "../../apis/auth/authApi";
 import { useAuth } from "../../context/authContext";
 import { PATH } from "../../constants/paths";
 import { Link } from "react-router-dom";
+import Images from "../../constants/images";
+import { apiConfig } from "../../configs";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
@@ -43,12 +43,12 @@ export default function UserSetting() {
     currentUser && (
       <div ref={dropdownRef} className="UserSetting">
         <div className="UserSetting__avt" onClick={() => setActive(!active)} data-tooltip="Tấn Mãi">
-          <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
+          <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : Images.AVATAR} alt="" />
         </div>
 
         <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
           <div className="UserSetting__dropdown__user">
-            <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : avt} alt="" />
+            <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : Images.AVATAR} alt="" />
             <div className="UserSetting__dropdown__user__desc">
               <h4>{currentUser.name}</h4>
               <span>Basic</span>

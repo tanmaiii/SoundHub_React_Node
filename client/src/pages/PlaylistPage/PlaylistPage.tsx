@@ -1,19 +1,17 @@
 import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import "./playlistPage.scss";
+import Images from "../../constants/images";
 
-import avt from "../../assets/images/artistHoa.jpg";
-import img from "../../assets/images/poster2.png";
-import Track from "../../components/Track/Track";
 
 export default function PlaylistPage() {
   return (
     <div className="playlistPage">
       <HeaderPage
-        avt={avt}
+        avt={Images.AVATAR}
         title="Thằng điên"
         author="JustaTee"
-        avtAuthor={avt}
+        avtAuthor={Images.AVATAR}
         time="2022"
         // listen="18,714,210"
         category="Playlist"

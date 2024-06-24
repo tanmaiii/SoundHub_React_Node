@@ -3,7 +3,7 @@ import "./auth.scss";
 import { PATH } from "../../constants/paths";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useApi, authApi } from "../../apis";
+import { userApi, authApi } from "../../apis";
 import Loading from "../Loading/Loading";
 
 type PropsSignupPassword = {
@@ -57,8 +57,8 @@ export default function Signup() {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      await authApi.signup(email, password, name, birthDay, genre);
-      await authApi.sendVerificationEmail(email);
+      // await authApi.signup(email, password, name, birthDay, genre);
+      // await authApi.sendVerificationEmail(email);
       setSuccess(true);
       setLoading(false);
     } catch (error: any) {
@@ -163,7 +163,7 @@ export function SignupEmail({ handleClickNext, email, setEmail }: PropsSignupEma
     setErr("");
     if (email.trim() !== "") {
       try {
-        await useApi.findByEmail(email);
+        await userApi.findByEmail(email);
         handleClickNext();
       } catch (err: any) {
         setErr(err.response.data.conflictError);
