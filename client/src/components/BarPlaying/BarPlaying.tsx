@@ -98,7 +98,7 @@ const CardSong = ({ song }: CardSongProps) => {
   return (
     <div className="CardSong">
       <div className="CardSong__image">
-        <img src={song?.image_path ? apiConfig.imageURL(song?.image_path) : Images.POSTER} alt="" />
+        <img src={song?.image_path ? apiConfig.imageURL(song?.image_path) : Images.SONG} alt="" />
       </div>
       <div className="CardSong__desc">
         <span className="CardSong__desc__title">{song?.title}</span>

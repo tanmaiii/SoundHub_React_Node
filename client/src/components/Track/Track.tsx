@@ -108,7 +108,7 @@ export default function Track({
               <Skeleton height="100%" />
             ) : (
               <>
-                <img src={image ? apiConfig.imageURL(image) : Images.POSTER} alt="" />
+                <img src={image ? apiConfig.imageURL(image) : Images.SONG} alt="" />
                 <button
                   className={`button-play ${songPlayId === id ? "active" : ""}`}
                   onClick={() => handleClickPlay(id)}

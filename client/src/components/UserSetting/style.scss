@@ -33,18 +33,19 @@
       box-shadow: themed("box-shadow");
       width: 230px;
       display: none;
-
+      
       &.active {
         display: block;
       }
-
+      
       &__user {
         @include flex(center, unset);
         gap: $space-8;
         padding: $space-14;
-
+        
         img {
           --size: 60px;
+          border: 2px solid $color-primary1;
           width: var(--size);
           height: var(--size);
           border-radius: 50%;

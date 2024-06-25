@@ -8,28 +8,28 @@ const listMusic = [
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
+    Poster: "https://picsum.photos/200/300",
   },
   {
     Title: "OMG",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
+    Poster: "https://picsum.photos/200/300",
   },
   {
     Title: "Ditto",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
+    Poster: "https://picsum.photos/200/300",
   },
   {
     Title: "GODS",
     Artist: "NewJeans",
     Quantity: "432,329,228",
     Time: "3:21",
-    Poster: "https://i.scdn.co/image/ab67616d0000b273f4b4b3b3b4b3b4b3b4b3b4b3",
+    Poster: "https://picsum.photos/200/300",
   },
 ];
 

@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React, { Children, useEffect, useState } from "react";
 import Card from "../CardSong";
 import "./section.scss";
 import HeaderSection from "../HeaderSection/HeaderSection";
@@ -9,6 +9,7 @@ import "swiper/css";
 // import "./slick.scss";
 
 import Slider from "react-slick";
+import { log } from "console";
 
 const settings = {
   dots: true,
@@ -67,7 +68,9 @@ function Section({ children, title, to }: SectionProps) {
       <HeaderSection title={title} to={to} />
       <div className="section__main">
         <div className="section__main__slide">
-          <Slider {...settings}>{children}</Slider>
+          <div>
+            <Slider {...settings}>{children}</Slider>
+          </div>
         </div>
       </div>
     </div>

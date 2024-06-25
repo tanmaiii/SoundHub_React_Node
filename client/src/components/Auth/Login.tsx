@@ -1,13 +1,10 @@
-import React, { MouseEvent, useState } from "react";
+import React, { useState } from "react";
 import "./auth.scss";
-import { RootState } from "../../store";
 
-import userApi from "../../apis/user/userApi";
-import authApi from "../../apis/auth/authApi";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
-import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const [show, setShow] = useState(false);
@@ -80,7 +77,7 @@ export default function Login() {
           </div>
         </div>
         <div className="auth__container__group">
-          <a className="forgot">{t("login.Forgot your password ?")}</a>
+          <p className="forgot">{t("login.Forgot your password ?")}</p>
           <button className="btn_submit" onClick={() => handleClick()}>
             {t("login.Login")}
           </button>

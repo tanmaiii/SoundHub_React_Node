@@ -1,13 +1,7 @@
-import React from "react";
 import "./artistPage.scss";
-import Slider from "react-slick";
 
 
 import Track from "../../components/Track/Track";
-import Section from "../../components/Section/Section";
-import Card from "../../components/CardSong";
-import CardArtist from "../../components/CardArtist/CardArtist";
-import { PATH } from "../../constants/paths";
 import Images from "../../constants/images";
 
 export default function ArtistPage() {
@@ -95,7 +89,7 @@ export default function ArtistPage() {
               <Card id={1} title={"Nấu ăn cho em"} artist={["Đen", "Đen"]} image={img} />
             </Section> */}
 
-            <Section title={"Fans also like"}>
+            {/* <Section title={"Fans also like"}>
               <CardArtist name={"Mono"} followers={"3456K"} />
               <CardArtist name={"Mono"} followers={"3456K"} />
               <CardArtist name={"Mono"} followers={"3456K"} />
@@ -112,7 +106,7 @@ export default function ArtistPage() {
               <CardArtist name={"Mono"} followers={"3456K"} />
               <CardArtist name={"Mono"} followers={"3456K"} />
               <CardArtist name={"Mono"} followers={"3456K"} />
-            </Section>
+            </Section> */}
           </div>
         </div>
       </div>

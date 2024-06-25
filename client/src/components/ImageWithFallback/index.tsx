@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
 type props = {
-    src: string;
+    src?: string;
     fallbackSrc?: string;
     alt: string;
     stype?: any;
 }
 
 function ImageWithFallback({ src, fallbackSrc, alt, stype}: props) {
-    const [imgSrc, setImgSrc] = useState<string>(src);
+    const [imgSrc, setImgSrc] = useState<string | undefined>(src);
 
     const handleError = () => {
         fallbackSrc && setImgSrc(fallbackSrc);

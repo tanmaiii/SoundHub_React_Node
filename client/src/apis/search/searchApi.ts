@@ -92,7 +92,7 @@ const searchApi = {
     limit: number,
     q?: string,
     sort?: string
-  ): Promise<ListResponse<TSong>> {
+  ): Promise<ListResponse<ResSoPaAr>> {
     const url = "search/popular";
     return axiosClient.get(url, {
       headers: {

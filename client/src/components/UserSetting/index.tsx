@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import "./userSetting.scss";
+import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeDarkMode } from "../../slices/darkModeSlice";
-// import { logout } from "../../slices/auth";
 
-import authApi from "../../apis/auth/authApi";
 import { useAuth } from "../../context/authContext";
 import { PATH } from "../../constants/paths";
 import { Link } from "react-router-dom";
 import Images from "../../constants/images";
 import { apiConfig } from "../../configs";
+import ImageWithFallback from "../ImageWithFallback";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
@@ -32,7 +31,10 @@ export default function UserSetting() {
       }
     }
     document.addEventListener("mousedown", (event) => handleMousedown(event));
-    return () => document.removeEventListener("mousedown", (event) => handleMousedown(event));
+    return () =>
+      document.removeEventListener("mousedown", (event) =>
+        handleMousedown(event)
+      );
   });
 
   const handleClickLogout = () => {
@@ -42,13 +44,25 @@ export default function UserSetting() {
   return (
     currentUser && (
       <div ref={dropdownRef} className="UserSetting">
-        <div className="UserSetting__avt" onClick={() => setActive(!active)} data-tooltip="Tấn Mãi">
-          <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : Images.AVATAR} alt="" />
+        <div
+          className="UserSetting__avt"
+          onClick={() => setActive(!active)}
+          data-tooltip="Tấn Mãi"
+        >
+          <ImageWithFallback
+            alt=""
+            src={currentUser && apiConfig.imageURL(currentUser.image_path)}
+            fallbackSrc={Images.AVATAR}
+          />
         </div>
 
         <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
           <div className="UserSetting__dropdown__user">
-            <img src={currentUser ? apiConfig.imageURL(currentUser.image_path) : Images.AVATAR} alt="" />
+            <ImageWithFallback
+              alt=""
+              src={currentUser && apiConfig.imageURL(currentUser.image_path)}
+              fallbackSrc={Images.AVATAR}
+            />
             <div className="UserSetting__dropdown__user__desc">
               <h4>{currentUser.name}</h4>
               <span>Basic</span>

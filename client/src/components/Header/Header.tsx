@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import UserSetting from "../UserSetting/UserSetting";
+import UserSetting from "../UserSetting";
 
 import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,8 @@ export default function Header() {
 
   useEffect(() => {
     const handleScrollHeader = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
 
       if (scrollTop == 0) {
         headerRef.current?.classList.remove("shrink");
@@ -38,24 +39,54 @@ export default function Header() {
     dispatch(changeOpen(!openMenu));
   };
 
+  const handleClickGoBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    }
+  };
+
+  const handleClickGoNext = () => {
+    if (window.history.length - 1 > 1) {
+      window.history.forward();
+    }
+  };
+
+  useEffect(() => {
+    console.log(window.history);
+  });
+
   return (
     <>
       <div className="header" ref={headerRef}>
         <div className="header__left">
-          <button className="header__left__menu" onClick={() => handleClickMenu()}>
+          <button
+            className="header__left__menu"
+            onClick={() => handleClickMenu()}
+          >
             <i className="fa-regular fa-bars"></i>
           </button>
-          <button disabled data-tooltip={"Go back"}>
+          <button
+            disabled={window.history.length === 0}
+            data-tooltip={"Go back"}
+            onClick={() => handleClickGoBack()}
+          >
             <i className="fa-solid fa-angle-left"></i>
           </button>
-          <button data-tooltip={"Go next"}>
+          <button
+            disabled={window.history.length - 1 <= 1}
+            data-tooltip={"Go next"}
+            onClick={() => handleClickGoNext()}
+          >
             <i className="fa-solid fa-angle-right"></i>
           </button>
         </div>
         <div className="header__center">
           <div className="header__center__search">
             <i className="fa-thin fa-magnifying-glass"></i>
-            <input type="text" placeholder={t("header.Search artist, title, ablum,...")} />
+            <input
+              type="text"
+              placeholder={t("header.Search artist, title, ablum,...")}
+            />
           </div>
         </div>
         <div className="header__right">
