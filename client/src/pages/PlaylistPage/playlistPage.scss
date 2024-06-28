@@ -13,7 +13,7 @@
         @include flex(center, start);
         button {
           cursor: pointer;
-          background-color: themed("bg-second");
+          background-color: themed("bg-2");
           border-radius: 50%;
           padding: $space-4;
           &:hover {

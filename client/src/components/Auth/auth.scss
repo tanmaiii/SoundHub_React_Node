@@ -4,7 +4,7 @@
   @include themify($themes) {
     @include flex(center, center);
     padding: $space-32;
-    background-color: themed("bg-second");
+    background-color: themed("bg-2");
     width: 100%;
     .error {
       font-size: $size-16;
@@ -108,7 +108,7 @@
         }
 
         & > .input {
-          background-color: themed("bg-main");
+          background-color: themed("bg-1");
           padding: $space-18 $space-24;
           border-radius: $radius-8;
           position: relative;

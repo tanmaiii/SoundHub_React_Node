@@ -39,8 +39,8 @@ export default function ArtistPage() {
                 <h4>New release</h4>
                 <div className="top__section__new__list row">
                   <div className="col pc-12 t-12 m-12">
-                    <Track time="3:03" title="Thằng điên 1" />
-                    <Track time="3:03" title="Thằng điên 2" quantity={"12,330,000"} />
+                    {/* <Track time="3:03" title="Thằng điên 1" /> */}
+                    {/* <Track time="3:03" title="Thằng điên 2" quantity={"12,330,000"} /> */}
                   </div>
                 </div>
               </div>
@@ -48,14 +48,14 @@ export default function ArtistPage() {
                 <h4>Popular</h4>
                 <div className="top__section__popular__list row">
                   <div className="col pc-6 t-6 m-12">
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
                   </div>
                   <div className="col pc-6 t-6 m-12">
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
-                    <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} />
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
+                    {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
                   </div>
                 </div>
               </div>

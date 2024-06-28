@@ -51,6 +51,7 @@
             object-fit: cover;
             overflow: hidden;
             border-radius: $radius-8;
+            background-color: themed("bg-2");
           }
           .button-play {
             position: absolute;

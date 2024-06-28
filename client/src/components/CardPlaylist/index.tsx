@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.scss";
 
 import { apiConfig } from "../../configs";
@@ -7,6 +7,7 @@ import Images from "../../constants/images";
 import { PATH } from "../../constants/paths";
 import { ResSoPaAr } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
+import { useEffect, useState } from "react";
 
 export interface CardPlaylistProps {
   className?: string;
@@ -14,15 +15,47 @@ export interface CardPlaylistProps {
   playlist: ResSoPaAr;
 }
 
-function CardPlaylist({ className, playlist, loading = false }: CardPlaylistProps) {
+function CardPlaylist({
+  className,
+  playlist,
+  loading = false,
+}: CardPlaylistProps) {
+  const navigate = useNavigate();
+  const [isMouseMoving, setIsMouseMoving] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const handleMouseMove = () => {
+      setIsMouseMoving(true);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setIsMouseMoving(false);
+      }, 100);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  const handleClick = () => {
+    if (!isMouseMoving) {
+      navigate(`${PATH.SONG}/${playlist?.id}`);
+    }
+  };
+
   return (
-    <div className={`CardPlaylist ${className}`}>
+    <div onClick={handleClick} className={`CardPlaylist ${className}`}>
       <div className="CardPlaylist__container">
         <div className="CardPlaylist__container__image">
           {loading ? (
             <Skeleton height={200} />
           ) : (
-            <Link target="_blank" to={`${PATH.PLAYLIST}/${playlist.id}`}>
+            <div>
               <ImageWithFallback
                 src={
                   playlist.image_path
@@ -32,16 +65,16 @@ function CardPlaylist({ className, playlist, loading = false }: CardPlaylistProp
                 fallbackSrc={Images.PLAYLIST}
                 alt=""
               />
-            </Link>
+            </div>
           )}
         </div>
 
         <div className="CardPlaylist__container__desc">
-          <Link target="_blank" to={`${PATH.SONG}/${"123123"}`}>
+          <p>
             <span className="CardPlaylist__container__desc__title">
               {loading ? <Skeleton /> : playlist.title}
             </span>
-          </Link>
+          </p>
           <div className="CardPlaylist__container__desc__info">
             {loading ? (
               <Skeleton />

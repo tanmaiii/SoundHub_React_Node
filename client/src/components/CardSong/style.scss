@@ -8,7 +8,7 @@
       padding: $space-14;
       border-radius: $radius-8;
       cursor: pointer;
-      // background-color: themed("bg-second");
+      // background-color: themed("bg-2");
       transition: $transition;
 
       @include mobile {
@@ -22,7 +22,7 @@
         height: 100%;
         position: relative;
         img {
-          background-color: themed("bg-second");
+          background-color: themed("bg-2");
           border-radius: $radius-8;
           overflow: hidden;
           width: 100%;

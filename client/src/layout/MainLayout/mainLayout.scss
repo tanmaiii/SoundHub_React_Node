@@ -4,7 +4,7 @@
   @include themify($themes) {
     @include flex(unset, unset);
     flex-direction: row;
-    background-color: themed("bg-main");
+    background-color: themed("bg-1");
 
     &__main {
       position: relative;

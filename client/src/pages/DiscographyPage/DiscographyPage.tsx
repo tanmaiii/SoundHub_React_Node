@@ -72,7 +72,7 @@ export default function DiscographyPage() {
               <div>Time</div>
             </div>
           </div>
-          <div className="discography__container__body__list">
+          {/* <div className="discography__container__body__list">
             {songs &&
               songs.map((song, index) => (
                 <Track
@@ -87,7 +87,7 @@ export default function DiscographyPage() {
                   artist={"Sơn Tùng M-TP"}
                 />
               ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

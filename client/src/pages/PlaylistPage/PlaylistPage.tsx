@@ -2,6 +2,18 @@ import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import "./playlistPage.scss";
 import Images from "../../constants/images";
+import Track from "../../components/Track/Track";
+import { TSong } from "../../types";
+
+const data: TSong = {
+    title: "asdasdasd",
+    id: "1231312-1231312",
+    author: "tAN mAI",
+    song_path: "https:",
+    image_path: "https:",
+    count: 123,
+    user_id: "1231232",
+}
 
 
 export default function PlaylistPage() {
@@ -30,64 +42,11 @@ export default function PlaylistPage() {
             <i className="fa-solid fa-ellipsis"></i>
           </button>
         </div>
-        {/* <div className="playlistPage__content__tracklist">
+        <div className="playlistPage__content__tracklist">
           <Track
-            number="1"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
+           song={data}
           />
-          <Track
-            number="2"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-          <Track
-            number="12"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-          <Track
-            number="434"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-          <Track
-            number="5"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-          <Track
-            number="6"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-          <Track
-            number="7"
-            dateAdd="2 housr ago"
-            time="3:03"
-            title="Thằng điên 1"
-            image={avt}
-            artist={["Phương Ly", "Phương Ly"]}
-          />
-        </div> */}
+        </div>
       </div>
     </div>
   );

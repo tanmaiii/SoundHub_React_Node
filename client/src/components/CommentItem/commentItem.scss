@@ -25,7 +25,7 @@
         @include flex(center, space-between);
         gap: $space-12;
         &__info {
-          background-color: themed("bg-second");
+          background-color: themed("bg-2");
           padding: $space-8 $space-12;
           border-radius: $space-14;
           a {

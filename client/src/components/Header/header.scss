@@ -20,7 +20,7 @@
     }
 
     &.shrink {
-      background-color: rgba($color: themed("bg-main"), $alpha: 0.8);
+      background-color: rgba($color: themed("bg-1"), $alpha: 0.8);
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
@@ -45,14 +45,14 @@
         color: themed("txt-main");
         transition: $transition;
         color: themed("txt-main");
-        background-color: themed("bg-second");
+        background-color: themed("bg-2");
         opacity: 0.8;
 
         @include tooltip(bottom, center);
 
         &:hover {
           opacity: 1;
-          background-color: themed("bg-second");
+          background-color: themed("bg-2");
         }
 
         &:disabled {
@@ -80,7 +80,7 @@
         @include flex(center, unset);
         gap: $space-8;
         color: themed("txt-main");
-        background-color: themed("bg-second");
+        background-color: themed("bg-2");
         flex: 1;
         // background-color: themed("bg-rgba");
         @include mobile {
@@ -130,7 +130,7 @@
       &__login {
         & > button {
           background-color: $color-primary1;
-          color: $color-bg-main;
+          color: $color-bg-1;
         }
       }
     }

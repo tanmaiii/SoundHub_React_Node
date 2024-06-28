@@ -23,7 +23,7 @@
             position: relative;
             .dropdown__header {
               //   border: 1px solid $color-border;
-              background-color: themed("bg-second");
+              background-color: themed("bg-2");
               padding: $space-8 $space-14;
               border-radius: $radius-20;
               @include flex(center, center);
@@ -35,7 +35,7 @@
               }
             }
             .dropdown__content {
-              background-color: themed("bg-second");
+              background-color: themed("bg-2");
               position: absolute;
               top: calc(100% + $space-8);
               width: 100%;

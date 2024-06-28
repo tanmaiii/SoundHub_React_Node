@@ -25,7 +25,7 @@
       margin-right: $space-12;
       input {
         height: var(--size);
-        background-color: themed("bg-second");
+        background-color: themed("bg-2");
         font-size: $space-16;
         padding: $space-12 $space-16;
         border-radius: $radius-25;
@@ -52,10 +52,10 @@
       padding: $space-4;
       cursor: pointer;
       transition: $transition;
-      background-color: themed("bg-second");
+      background-color: themed("bg-2");
       &:hover {
         opacity: 1;
-        background-color: themed("bg-second");
+        background-color: themed("bg-2");
         i {
           color: themed("txt-main");
         }

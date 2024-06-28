@@ -2,8 +2,9 @@
 
 $themes: (
   light: (
-    bg-main: $color-bg-main,
-    bg-second: $color-bg-second,
+    bg-1: $color-bg-1,
+    bg-2: $color-bg-2,
+    bg-3: $color-bg-3,
     txt-main: $color-txt-main,
     txt-second: $color-txt-second,
     box-shadow: $box-shadow-light,
@@ -11,8 +12,9 @@ $themes: (
     border: rgba(0, 0, 0, 0.05),
   ),
   dark: (
-    bg-main: $color-bg-main-dark,
-    bg-second: $color-bg-second-dark,
+    bg-1: $color-bg-1-dark,
+    bg-2: $color-bg-2-dark,
+    bg-3: $color-bg-3-dark,
     txt-main: $color-txt-main-dark,
     txt-second: $color-txt-second-dark,
     box-shadow: $box-shadow-dark,

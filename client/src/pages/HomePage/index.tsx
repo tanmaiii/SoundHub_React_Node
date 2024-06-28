@@ -3,15 +3,14 @@ import "./style.scss";
 
 import SectionChartHome from "../../components/SectionChartHome/SectionChartHome";
 
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { searchApi } from "../../apis";
-import CardArtist from "../../components/CardArtist/CardArtist";
-import CardPlaylist from "../../components/CardPlaylist/index";
+import CardArtist from "../../components/CardArtist";
+import CardPlaylist from "../../components/CardPlaylist";
 import CardSong from "../../components/CardSong";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
-import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { SwiperSlide } from "swiper/react";
 
 function HomePage(props: any) {
   const { token } = useAuth();

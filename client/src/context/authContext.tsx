@@ -6,7 +6,7 @@ import { TUser } from "../types";
 interface IAuthContext {
   currentUser: TUser | null;
   setCurrentUser: (user: TUser) => void;
-  token: string | null;
+  token: string;
   logout: () => void;
   login: (email: string, password: string) => void;
 }
@@ -28,15 +28,17 @@ export const AuthContextProvider = ({ children }: Props) => {
     return userString ? JSON.parse(userString) : null;
   });
 
-  const [token, setToken] = useState<string | null>(() => {
+  const [token, setToken] = useState<string>(() => {
     const tokenString = localStorage.getItem("token");
     return tokenString ? JSON.parse(tokenString) : null;
   });
 
   const login = async (email: string, password: string) => {
     const res = await authApi.signin(email, password);
-    if (res) setCurrentUser(res.data); setToken(res.token); return res;
-  }
+    if (res) setCurrentUser(res.data);
+    setToken(res.token);
+    return res;
+  };
 
   const logout = async () => {
     setCurrentUser(null);
@@ -46,7 +48,7 @@ export const AuthContextProvider = ({ children }: Props) => {
   useEffect(() => {
     const getInfo = async () => {
       try {
-        const res = token && await userApi.getMe(token);
+        const res = token && (await userApi.getMe(token));
         res && setCurrentUser(res);
       } catch (error) {
         setCurrentUser(null);
@@ -66,9 +68,11 @@ export const AuthContextProvider = ({ children }: Props) => {
     setCurrentUser,
     token,
     logout,
-    login
+    login,
   };
 
   // Sử dụng AuthContext.Provider để cung cấp giá trị cho các component con
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };

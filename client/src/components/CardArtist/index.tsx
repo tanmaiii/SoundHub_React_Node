@@ -1,13 +1,10 @@
-import React from "react";
-import { Interface } from "readline";
-import "./cardArtist.scss";
+import "./style.scss";
 
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
-import { PATH } from "../../constants/paths";
+import { apiConfig } from "../../configs";
 import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
-import { apiConfig } from "../../configs";
 
 interface CardProps {
   id: string;

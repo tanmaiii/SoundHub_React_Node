@@ -2,7 +2,7 @@
 
 .navbar {
   @include themify($themes) {
-    background-color: themed("bg-second");
+    background-color: themed("bg-2");
     height: 100vh;
     max-width: $width-navbar;
     width: $width-navbar;
@@ -89,7 +89,7 @@
               }
               &.active {
                 background-color: $color-primary1;
-                color: $color-bg-main;
+                color: $color-bg-1;
               }
               &__icon {
                 --size: 20px;
