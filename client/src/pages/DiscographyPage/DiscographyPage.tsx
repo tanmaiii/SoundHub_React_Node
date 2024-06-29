@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Track from "../../components/Track/Track";
+import Track from "../../components/Track";
 import "./discographyPage.scss";
 import Card from "../../components/CardSong";
 import { TSong } from "../../types";

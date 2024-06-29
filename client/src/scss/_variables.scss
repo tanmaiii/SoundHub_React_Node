@@ -23,11 +23,11 @@ $space-28: 28px;
 $space-32: 32px;
 $space-36: 36px;
 
-$color-primary1: #D23259;
-$color-primary2: #D23259;
-$color-hover: rgba(210, 50, 89, 0.1);
+$color-primary1: #fb5732;
+$color-primary2: #d23259;
+$color-hover: rgba(#fb5732, 0.1);
 
-$color-overlay : rgba(0, 0, 0, 0.6);
+$color-overlay: rgba(0, 0, 0, 0.6);
 
 $color-white: #fff;
 $color-black: #000000;
@@ -57,7 +57,11 @@ $color-border: #878787;
 $box-shadow-light: 0 -4px 32px rgba(0, 0, 0, 0.2);
 $box-shadow-dark: 0 9px 32px rgba(0, 0, 0, 0.8);
 
-$color-gradient: linear-gradient(90deg, $color-primary2 -15.19%, $color-primary1 111.92%);
+$color-gradient: linear-gradient(
+  90deg,
+  $color-primary2 -15.19%,
+  $color-primary1 111.92%
+);
 
 $font-bold: 900;
 $font-mediun: 500;

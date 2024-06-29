@@ -2,7 +2,7 @@ import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import "./playlistPage.scss";
 import Images from "../../constants/images";
-import Track from "../../components/Track/Track";
+import Track from "../../components/Track";
 import { TSong } from "../../types";
 
 const data: TSong = {

@@ -88,8 +88,8 @@
                 color: themed("txt-main");
               }
               &.active {
-                background-color: $color-primary1;
-                color: $color-bg-1;
+                background-color: $color-hover;
+                color: $color-primary1;
               }
               &__icon {
                 --size: 20px;
@@ -100,11 +100,7 @@
               }
               &__title {
                 font-size: $size-16;
-                font-weight: $font-light;
-
-                // @include tablet {
-                //   display: none;
-                // }
+                font-weight: $font-mediun;
               }
             }
           }

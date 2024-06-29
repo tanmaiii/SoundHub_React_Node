@@ -44,7 +44,7 @@ function CardPlaylist({
 
   const handleClick = () => {
     if (!isMouseMoving) {
-      navigate(`${PATH.SONG}/${playlist?.id}`);
+      navigate(`${PATH.PLAYLIST}/${playlist?.id}`);
     }
   };
 

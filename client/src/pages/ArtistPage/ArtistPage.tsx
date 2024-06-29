@@ -1,7 +1,7 @@
 import "./artistPage.scss";
 
 
-import Track from "../../components/Track/Track";
+import Track from "../../components/Track";
 import Images from "../../constants/images";
 
 export default function ArtistPage() {

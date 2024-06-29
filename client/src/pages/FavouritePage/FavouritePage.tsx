@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { favouriteApi } from "../../apis";
-import Track from "../../components/Track/Track";
+import Track from "../../components/Track";
 import { useAuth } from "../../context/authContext";
 import { TSong, TStateParams } from "../../types";
 import "./favouritePage.scss";
@@ -96,14 +96,17 @@ export default function FavouritePage() {
         <div className="favourite__container__body ">
           <div className="favourite__container__body__header">
             <div className="favourite__container__body__header__line1 pc-6 m-8">
-              <div className="count">#</div>
-              <div className="title">Title</div>
+              <span className="count">#</span>
+              <span className="title">Title</span>
             </div>
-            <div className="favourite__container__body__header__line2 pc-3 m-0">
-              <div>Date Add</div>
+            <div className="favourite__container__body__header__line2 pc-2 m-0">
+              <span>Date Add</span>
             </div>
-            <div className="favourite__container__body__header__line3 pc-3 m-4">
-              <div>Time</div>
+            <div className="favourite__container__body__header__line3 pc-2 t-2 m-0">
+              <span>Listen</span>
+            </div>
+            <div className="favourite__container__body__header__line4 pc-2 t-2 m-4">
+              <span>Time</span>
             </div>
           </div>
           <div className="favourite__container__body__list">

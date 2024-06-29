@@ -78,12 +78,15 @@
             }
           }
           &__line2 {
+            // @include flex(center, start);
           }
           &__line3 {
-            @include flex(center, unset);
-            justify-content: end;
-            & > div {
-              margin-right: 36px;
+            // @include flex(center, start);
+          }
+          &__line4 {
+            @include flex(center, end);
+            & > span {
+              margin-right: 48px;
             }
           }
         }
