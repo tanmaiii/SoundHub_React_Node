@@ -3,6 +3,7 @@
     "logo": "Sound",
     "home": "Home",
     "artists": "Artists",
+    "search": "Search",
     "favourites": "Favourites",
     "recently": "Recently",
     "playlist": "Playlist"
@@ -11,5 +12,12 @@
     "signup": "Sign Up",
     "login": "Log In",
     "Search artist, title, ablum,...": "Search artist, title, ablum,..."
+  },
+  "section" : {
+    "all": "All",
+    "Songs new" : "Songs new",
+    "Songs popular" : "Songs popular",
+    "Artists relased" : "Artists relased",
+    "Playlists popular" : "Playlists popular"
   }
 }

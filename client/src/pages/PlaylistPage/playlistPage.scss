@@ -2,6 +2,7 @@
 
 .playlistPage {
   @include themify($themes) {
+    margin-top: $height-header;
     &__content {
       padding: 0 $space-32;
       @include mobile {

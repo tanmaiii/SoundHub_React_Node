@@ -6,6 +6,8 @@ import "./mainLayout.scss";
 import NavBar from "../../components/NavBar/NavBar";
 import Header from "../../components/Header/Header";
 import BarPlaying from "../../components/BarPlaying/BarPlaying";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -13,13 +15,31 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   document.title = "Sound Hub";
+  const openWatting = useSelector((state: RootState) => state.waiting.state);
 
   return (
     <div className="MainLayout">
-      <NavBar />
-      <div className={`MainLayout__main`}>
-        <Header />
-        <div className={`MainLayout__main__content`}>{children}</div>
+      <div className="MainLayout__top">
+        <NavBar />
+        <div className={`MainLayout__top__main`}>
+          <div className="MainLayout__top__main__content">
+            <Header />
+            <div className={`MainLayout__top__main__content__body`}>
+              {children}
+            </div>
+            {/* <BarPlaying /> */}
+          </div>
+          <div
+            className={`MainLayout__top__main__waiting ${
+              openWatting ? "open" : ""
+            }`}
+          >
+            <span>Waiting list</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="MainLayout__bottom">
         <BarPlaying />
       </div>
     </div>

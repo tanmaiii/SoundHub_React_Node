@@ -8,10 +8,11 @@
     background-color: transparent;
     gap: $space-12;
 
-    position: fixed;
+    position: sticky;
     top: 0;
     right: 0;
-    width: calc(100% - $width-navbar);
+    width: 100%;
+    // width: calc(100% - $width-navbar);
     z-index: 9;
 
     @include tablet {

@@ -1,22 +1,10 @@
-import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
-import "./playlistPage.scss";
+import TableTrack from "../../components/TableTrack";
 import Images from "../../constants/images";
-import Track from "../../components/Track";
-import { TSong } from "../../types";
-
-const data: TSong = {
-    title: "asdasdasd",
-    id: "1231312-1231312",
-    author: "tAN mAI",
-    song_path: "https:",
-    image_path: "https:",
-    count: 123,
-    user_id: "1231232",
-}
-
+import "./playlistPage.scss";
 
 export default function PlaylistPage() {
+
   return (
     <div className="playlistPage">
       <HeaderPage
@@ -31,22 +19,7 @@ export default function PlaylistPage() {
         song="20 songs"
       />
       <div className="playlistPage__content">
-        <div className="playlistPage__content__header">
-          <button className="btn__play">
-            <i className="fa-solid fa-play"></i>
-          </button>
-          <button>
-            <i className="fa-light fa-heart"></i>
-          </button>
-          <button>
-            <i className="fa-solid fa-ellipsis"></i>
-          </button>
-        </div>
-        <div className="playlistPage__content__tracklist">
-          <Track
-           song={data}
-          />
-        </div>
+        <TableTrack songs={[]} isLoading={true} />
       </div>
     </div>
   );

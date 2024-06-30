@@ -2,7 +2,6 @@
 
 .CardPlaylist {
   @include themify($themes) {
-    padding: 0 $space-4;
     &__container {
       padding: $space-14;
       border-radius: $radius-8;
@@ -11,7 +10,7 @@
       transition: $transition;
 
       @include mobile {
-        padding: $space-4;
+        padding: $space-8;
       }
       &:hover {
         background-color: $color-hover;

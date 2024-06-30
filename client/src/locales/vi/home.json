@@ -3,13 +3,16 @@
     "logo": "Sound",
     "home": "Trang chủ",
     "artists": "Ca sĩ",
+    "search": "Tìm kiếm",
     "favourites": "Yêu thích",
     "recently": "Gần đây",
     "playlist": "Playlist"
   },
-  "header": {
-    "signup": "Đăng ký",
-    "login": "Đăng nhập",
-    "Search artist, title, ablum,...": "Tìm kiếm ca sĩ, playlist,..."
+  "section" : {
+    "all": "Tất cả",
+    "Songs new" : "Nhạc vừa ra mắt",
+    "Songs popular" : "Nhạc phổ biến",
+    "Artists relased" : "Nghệ sĩ có thể bạn quan tâm",
+    "Playlists popular" : "Dánh sách phổ biến"
   }
 }

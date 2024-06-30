@@ -24,7 +24,8 @@ const PATH = {
   ARTIST_SHOW: "/artist/:userId",
   RECENTLY: "/recently",
 
-  SEARCH: "/search/:keyword",
+  SEARCH: "/search",
+  SEARCH_SHOW: "/search/:keyword",
 
   DISCOGRAPHY: "/discography",
   DISCOGRAPHY_SHOW: "/artist/:username/discography",

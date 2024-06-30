@@ -2,35 +2,40 @@
 
 .HeaderPage {
   @include themify($themes) {
-    padding-top: 145px;
+    padding-bottom: 50px;
     position: relative;
     overflow: hidden;
-
+    border-radius: $radius-8;
+    // margin-bottom: -20px;
+    z-index: 1;
     &__blur {
+      z-index: -1;
       .blur {
         height: 100%;
         background-repeat: no-repeat;
         background-position: 50% center;
         background-size: cover;
-        filter: blur(50px);
+        filter: blur(200px);
         position: absolute;
         inset: 0px;
         display: block;
       }
       .bg-alpha {
-        background-color: themed("bg-rgba");
+        background: linear-gradient(transparent, themed("bg-1"));
+        // background-color: red;
         height: 100%;
+        width: 100%;
         z-index: 1;
         position: absolute;
-        inset: 0px;
-        display: block;
+        // inset: 0px;
+        // display: block;
       }
     }
 
     &__body {
       z-index: 2;
       position: relative;
-      padding: $space-32;
+      padding: 145px $space-32 $space-32 $space-32;
       @include flex(end, unset);
       gap: $space-20;
       @include mobile {
@@ -83,10 +88,12 @@
               }
             }
             img {
+              background-color: themed("bg-2");
+              box-shadow: themed("box-shadow");
               --size: 24px;
               width: var(--size);
               height: var(--size);
-              overflow: hidden;
+              // overflow: hidden;
               border-radius: 50%;
             }
             a {

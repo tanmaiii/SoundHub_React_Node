@@ -21,31 +21,9 @@ function CardPlaylist({
   loading = false,
 }: CardPlaylistProps) {
   const navigate = useNavigate();
-  const [isMouseMoving, setIsMouseMoving] = useState(false);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    const handleMouseMove = () => {
-      setIsMouseMoving(true);
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setIsMouseMoving(false);
-      }, 100);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
 
   const handleClick = () => {
-    if (!isMouseMoving) {
-      navigate(`${PATH.PLAYLIST}/${playlist?.id}`);
-    }
+    navigate(`${PATH.PLAYLIST}/${playlist?.id}`);
   };
 
   return (

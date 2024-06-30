@@ -5,6 +5,10 @@ import Track from "../../components/Track";
 import { useAuth } from "../../context/authContext";
 import { TSong, TStateParams } from "../../types";
 import "./favouritePage.scss";
+import TableTrack from "../../components/TableTrack";
+import HeaderPage from "../../components/HeaderPage/HeaderPage";
+import Images from "../../constants/images";
+import { apiConfig } from "../../configs";
 
 export default function FavouritePage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
@@ -65,58 +69,19 @@ export default function FavouritePage() {
 
   return (
     <div className="favourite">
-      <div className="favourite__container">
-        <div className="favourite__container__header">
-          <div className="favourite__container__header__left">
-            <h4>Favourite</h4>
-          </div>
-          <div className="favourite__container__header__right">
-            <div className="dropdown">
-              <div
-                className="dropdown__header"
-                onClick={() => setActiveDropdown(!activeDropdown)}
-              >
-                <i className="fa-light fa-bars-sort"></i>
-                <span>Mới nhất</span>
-                <i className="fa-light fa-chevron-down"></i>
-              </div>
-              <div
-                className={`dropdown__content ${
-                  activeDropdown ? "active" : ""
-                }`}
-              >
-                <ul>
-                  <li>Mới nhất</li>
-                  <li>Phổ biến</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="favourite__container__body ">
-          <div className="favourite__container__body__header">
-            <div className="favourite__container__body__header__line1 pc-6 m-8">
-              <span className="count">#</span>
-              <span className="title">Title</span>
-            </div>
-            <div className="favourite__container__body__header__line2 pc-2 m-0">
-              <span>Date Add</span>
-            </div>
-            <div className="favourite__container__body__header__line3 pc-2 t-2 m-0">
-              <span>Listen</span>
-            </div>
-            <div className="favourite__container__body__header__line4 pc-2 t-2 m-4">
-              <span>Time</span>
-            </div>
-          </div>
-          <div className="favourite__container__body__list">
-            {songs &&
-              songs.map((song, index) => (
-                <Track song={song} loading={isLoading} />
-                // <Card key={index} song={song} className="col pc-2 t-3 m-6" loading={loading} />
-              ))}
-          </div>
-        </div>
+      <div style={{ zIndex: 1 }}>
+        <HeaderPage
+          avt={Images.LIKED_SONGS}
+          title="Liked songs"
+          // /https://picsum.photos/200/300
+          avtAuthor={apiConfig.imageURL(currentUser?.image_path || "")}
+          author={currentUser?.name || ""}
+          category="Playlist"
+          song={songs?.length.toString() ?? ""}
+        />
+      </div>
+      <div style={{ zIndex: 2 }}>
+        <TableTrack songs={songs} isLoading={isLoading} />
       </div>
     </div>
   );

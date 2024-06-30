@@ -2,7 +2,6 @@
 
 .CardSong {
   @include themify($themes) {
-    padding: 0 $space-4;
     &__container {
       width: 100%;
       padding: $space-14;
@@ -12,20 +11,20 @@
       transition: $transition;
 
       @include mobile {
-        padding: $space-4;
+        padding: $space-8;
       }
       &:hover {
         background-color: $color-hover;
       }
       &__image {
-        width: 100%;
+        max-width: 100%;
         height: 100%;
         position: relative;
         img {
           background-color: themed("bg-2");
           border-radius: $radius-8;
           overflow: hidden;
-          width: 100%;
+          max-width: 100%;
           height: 100%;
           object-fit: cover;
           aspect-ratio: 1/1; // Ensure the image is always square
@@ -51,12 +50,14 @@
           }
         }
       }
+
       &__desc {
         padding: $space-8 0;
         &__title {
           font-size: $size-16;
           font-weight: $font-light;
           color: themed("txt-main");
+          @include text(1)
         }
         &__info {
           &__artist {

@@ -18,78 +18,47 @@ export interface CardSongProps {
 function CardSong({ className, song, loading = false }: CardSongProps) {
   const navigate = useNavigate();
 
-  const [isMouseMoving, setIsMouseMoving] = useState(false);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-  
-    const handleMouseMove = () => {
-      setIsMouseMoving(true);
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setIsMouseMoving(false);
-      }, 100);
-    };
-  
-    window.addEventListener("mousemove", handleMouseMove);
-  
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
   const handleClick = () => {
-    if (!isMouseMoving) {
-      navigate(`${PATH.SONG}/${song.id}`);
-    }
+    navigate(`${PATH.SONG}/${song.id}`);
   };
 
   return (
     <div className={`CardSong ${className}`} onClick={handleClick}>
       <div className="CardSong__container">
         <div className="CardSong__container__image">
-          {loading ? (
-            <Skeleton height={160} width={"100%"} />
-          ) : (
-            <div>
-              <ImageWithFallback
-                src={
-                  song.image_path
-                    ? apiConfig.imageURL(song.image_path)
-                    : Images.SONG
-                }
-                fallbackSrc={Images.SONG}
-                alt=""
-              />
-              <div className="CardSong__container__image__button">
-                <i className="fa-solid fa-play"></i>
-              </div>
-            </div>
-          )}
+          {/* <div> */}
+          <ImageWithFallback
+            src={
+              song.image_path
+                ? apiConfig.imageURL(song.image_path)
+                : Images.SONG
+            }
+            fallbackSrc={Images.SONG}
+            alt=""
+          />
+          <div className="CardSong__container__image__button">
+            <i className="fa-solid fa-play"></i>
+          </div>
+          {/* </div> */}
         </div>
 
         <div className="CardSong__container__desc">
           <div>
             <span className="CardSong__container__desc__title">
-              {loading ? <Skeleton /> : song.title}
+              {song?.title}
             </span>
           </div>
           <div className="CardSong__container__desc__info">
-            {loading ? (
-              <Skeleton />
-            ) : (
-              <div className="CardSong__container__desc__info__artist">
-                <Link to={"/"}>{song.author}</Link>
-                {/* {artists &&
+            <div className="CardSong__container__desc__info__artist">
+              <Link to={"/"}>{song.author}</Link>
+              {/* {artists &&
                   Array.isArray(artists) &&
                   artists.map((artist, index) => (
                     <Link key={index} to={`${PATH.ARTIST}/${artist.id}`}>
                       {artist.name}
                     </Link>
                   ))} */}
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
   @include themify($themes) {
     background-color: themed("bg-2");
     height: 100vh;
-    max-width: $width-navbar;
+    min-width: $width-navbar;
     width: $width-navbar;
     position: sticky;
     top: 0;

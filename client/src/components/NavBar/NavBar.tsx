@@ -26,18 +26,24 @@ export default function Navbar() {
         },
         {
           id: 2,
+          title: t("navbar.search"),
+          icon: <i className="fa-light fa-magnifying-glass"></i>,
+          path: PATH.SEARCH,
+        },
+        {
+          id: 3,
           title: t("navbar.artists"),
           icon: <i className="fa-light fa-user-music"></i>,
           path: PATH.ARTIST,
         },
         {
-          id: 3,
+          id: 4,
           title: t("navbar.favourites"),
           icon: <i className="fa-light fa-heart"></i>,
           path: PATH.FAVOURITE,
         },
         {
-          id: 4,
+          id: 5,
           title: t("navbar.recently"),
           icon: <i className="fa-light fa-clock"></i>,
           path: PATH.RECENTLY,
@@ -70,7 +76,10 @@ export default function Navbar() {
       }
     }
     document.addEventListener("mousedown", (event) => handleMousedown(event));
-    return () => document.removeEventListener("mousedown", (event) => handleMousedown(event));
+    return () =>
+      document.removeEventListener("mousedown", (event) =>
+        handleMousedown(event)
+      );
   });
 
   return (
@@ -86,7 +95,9 @@ export default function Navbar() {
         <div className={`navbar__container__content`}>
           {navbar.map((navbar, index) => (
             <div key={index} className="navbar__container__content__group">
-              <h4 className="navbar__container__content__group__title">{navbar.title}</h4>
+              <h4 className="navbar__container__content__group__title">
+                {navbar.title}
+              </h4>
               <div className="navbar__container__content__group__list">
                 {navbar.items.map((item, index) => (
                   <Link
@@ -100,7 +111,9 @@ export default function Navbar() {
                     <div className="navbar__container__content__group__list__item__icon">
                       {item.icon}
                     </div>
-                    <h4 className={`navbar__container__content__group__list__item__title`}>
+                    <h4
+                      className={`navbar__container__content__group__list__item__title`}
+                    >
                       {item.title}
                     </h4>
                   </Link>

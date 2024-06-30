@@ -16,18 +16,21 @@ import Images from "../../constants/images";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useAuth } from "../../context/authContext";
 import { apiConfig } from "../../configs";
+import { changeOpenWaiting } from "../../slices/waitingSlice";
+import ImageWithFallback from "../ImageWithFallback";
 
 export default function BarPlaying() {
   // const songPlayId = useSelector(selectSongPlayId);
   const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
-  const { token } = useAuth()
+  const { token } = useAuth();
 
   const songPlayId = useSelector(selectSongPlayId);
   const [song, setSong] = useState<TSong | null>(null);
 
   const getSong = async () => {
     try {
-      const res = songPlayId && (await songApi.getDetail(songPlayId ?? "", token ?? ""));
+      const res =
+        songPlayId && (await songApi.getDetail(songPlayId ?? "", token ?? ""));
       setSong(res);
     } catch (error) {
       console.log(error);
@@ -42,8 +45,12 @@ export default function BarPlaying() {
 
   return (
     <div className="barPlaying">
-      <div className="barPlaying__left ">{song && <CardSong song={song} />}</div>
-      <div className="barPlaying__center ">{song && <ControlsBar song={song} />}</div>
+      <div className="barPlaying__left ">
+        {song && <CardSong song={song} />}
+      </div>
+      <div className="barPlaying__center ">
+        {song && <ControlsBar song={song} />}
+      </div>
       <div className="barPlaying__right ">
         <ControlsRight />
       </div>
@@ -59,7 +66,7 @@ const CardSong = ({ song }: CardSongProps) => {
   // const {songPlayId } = useSelector((state: RootState) => state.nowPlaying);
   const [like, setLike] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const { token } = useAuth()
+  const { token } = useAuth();
 
   const checkLiked = async () => {
     try {
@@ -98,7 +105,15 @@ const CardSong = ({ song }: CardSongProps) => {
   return (
     <div className="CardSong">
       <div className="CardSong__image">
-        <img src={song?.image_path ? apiConfig.imageURL(song?.image_path) : Images.SONG} alt="" />
+        <ImageWithFallback
+          src={
+            song?.image_path
+              ? apiConfig.imageURL(song?.image_path)
+              : Images.SONG
+          }
+          fallbackSrc={Images.SONG}
+          alt=""
+        />
       </div>
       <div className="CardSong__desc">
         <span className="CardSong__desc__title">{song?.title}</span>
@@ -114,7 +129,11 @@ const CardSong = ({ song }: CardSongProps) => {
           onClick={handleClickLike}
           data-tooltip={"Save to your library"}
         >
-          {like ? <i className="fa-solid fa-heart"></i> : <i className="fa-light fa-heart"></i>}
+          {like ? (
+            <i className="fa-solid fa-heart"></i>
+          ) : (
+            <i className="fa-light fa-heart"></i>
+          )}
         </button>
       </div>
     </div>
@@ -206,7 +225,7 @@ const ControlsBar = ({ song }: CardSongProps) => {
       <audio
         ref={audioRef}
         id="audio"
-        src={apiConfig.mp3Url(song.song_path)}
+        src={song && apiConfig.mp3Url(song?.song_path)}
         autoPlay
         onTimeUpdate={onPlaying}
       ></audio>
@@ -219,7 +238,11 @@ const ControlsBar = ({ song }: CardSongProps) => {
           <i className="fa-solid fa-backward-step"></i>
         </button>
         <button className="btn_play" onClick={handleClickPlay}>
-          {isPlaying ? <i className="fa-solid fa-pause"></i> : <i className="fa-solid fa-play"></i>}
+          {isPlaying ? (
+            <i className="fa-solid fa-pause"></i>
+          ) : (
+            <i className="fa-solid fa-play"></i>
+          )}
         </button>
         <button>
           <i className="fa-solid fa-forward-step"></i>
@@ -231,9 +254,19 @@ const ControlsBar = ({ song }: CardSongProps) => {
       <div className="ControlsBar__bar">
         <span>{`${minutesPlay}:${secondsPlay}`}</span>
         <div className="progress">
-          <div className="progress_wrapper" onClick={(e) => checkWidth(e)} ref={clickRef}>
-            <div className="seek_bar" style={{ width: `${progress + "%"}` }}></div>
-            <div className="slider-handle" style={{ left: `${progress + "%"}` }}></div>
+          <div
+            className="progress_wrapper"
+            onClick={(e) => checkWidth(e)}
+            ref={clickRef}
+          >
+            <div
+              className="seek_bar"
+              style={{ width: `${progress + "%"}` }}
+            ></div>
+            <div
+              className="slider-handle"
+              style={{ left: `${progress + "%"}` }}
+            ></div>
           </div>
         </div>
         <span>{`${minutes}:${seconds}`}</span>
@@ -243,6 +276,12 @@ const ControlsBar = ({ song }: CardSongProps) => {
 };
 
 const ControlsRight = (props: any) => {
+  const dispatch = useDispatch();
+  const openWatting = useSelector((state: RootState) => state.waiting.state);
+  const handleOpenWaiting = () => {
+    dispatch(changeOpenWaiting(!openWatting));
+  };
+
   return (
     <div className="ControlsRight">
       <div className="ControlsRight__volume">
@@ -252,7 +291,11 @@ const ControlsRight = (props: any) => {
         </button>
         <div className="ControlsRight__volume__progressbar"></div>
       </div>
-      <button className={"ControlsRight__list"} data-tooltip={"Playlist"}>
+      <button
+        onClick={handleOpenWaiting}
+        className={`ControlsRight__list ${openWatting ? "active" : ""}`}
+        data-tooltip={"Playlist"}
+      >
         <i className="fa-duotone fa-list"></i>
       </button>
     </div>

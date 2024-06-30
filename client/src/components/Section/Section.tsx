@@ -1,76 +1,42 @@
-import React, { Children, useEffect, useState } from "react";
-import Card from "../CardSong";
-import "./section.scss";
+import React, { useEffect } from "react";
 import HeaderSection from "../HeaderSection/HeaderSection";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-// import "./slick-theme.scss";
-// import "./slick.scss";
-
-import Slider from "react-slick";
-import { log } from "console";
-
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 6, // Số lượng hiển thị item mỗi lần
-  slidesToScroll: 6,
-  nextArrow: <></>,
-  prevArrow: <></>,
-  responsive: [
-    {
-      breakpoint: 1300,
-      settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5,
-        infinite: true,
-        dots: true,
-      },
-    },
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        infinite: true,
-        dots: true,
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        initialSlide: 2,
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-      },
-    },
-  ],
-};
+import "./section.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface SectionProps {
   children: React.ReactNode;
   title: string;
   to?: string;
+  colunm?: number;
 }
 
-function Section({ children, title, to }: SectionProps) {
+function Section({ children, title, to, colunm = 6 }: SectionProps) {
+  const openWatting = useSelector((state: RootState) => state.waiting.state);
+
   return (
     <div className="section">
       <HeaderSection title={title} to={to} />
       <div className="section__main">
         <div className="section__main__slide">
-          <div>
-            <Slider {...settings}>{children}</Slider>
-          </div>
+          {React.Children.map(children, (child, index) => {
+            if (index < colunm) {
+              return (
+                <div
+                  className={
+                    colunm === 6
+                      ? "pc-2 t-3 m-4"
+                      : colunm === 4
+                      ? "pc-3 t-4 m-4"
+                      : "pc-2 t-3 m-4"
+                  }
+                >
+                  {child}
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       </div>
     </div>

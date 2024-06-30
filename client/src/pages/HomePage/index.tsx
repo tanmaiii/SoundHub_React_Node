@@ -11,10 +11,12 @@ import CardPlaylist from "../../components/CardPlaylist";
 import CardSong from "../../components/CardSong";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
+import { useTranslation } from "react-i18next";
 
 function HomePage(props: any) {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation("home");
 
   const { data: songPopular } = useQuery({
     queryKey: ["songs-popular"],
@@ -78,28 +80,28 @@ function HomePage(props: any) {
 
   return (
     <div className="home">
-      <Section title={"Nhạc phổ biến"} to={PATH.SONG}>
+      <Section title={t("section.Songs popular")} to={PATH.SONG}>
         {songPopular &&
           songPopular?.map((song, index) => (
             <CardSong key={index} song={song} />
           ))}
       </Section>
 
-      <Section title={"Vừa ra mắt"}>
+      <Section title={t("section.Songs new")} to={PATH.SONG}>
         {songNew &&
           songNew?.map((song, index) => <CardSong key={index} song={song} />)}
       </Section>
 
       <SectionChartHome title={"Top nhạc trong tuần"} />
 
-      <Section title={"Danh sách phát"}>
+      <Section title={t("section.Playlists popular")}>
         {playlists &&
           playlists?.map((playlist, index) => (
             <CardPlaylist key={index} playlist={playlist} />
           ))}
       </Section>
 
-      <Section title={"Vừa ra mắt"}>
+      <Section title={t("section.Artists relased")}>
         {artists &&
           artists?.map((artist) => (
             <CardArtist

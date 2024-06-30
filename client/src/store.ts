@@ -10,12 +10,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import navbarReducer from "./slices/navbarSlice";
 import darkModeReducer from "./slices/darkModeSlice";
 import nowPlayingReducer from "./slices/nowPlayingSlice";
+import waitingReducer from "./slices/waitingSlice";
 
 const store = configureStore({
   reducer: {
     navbar: navbarReducer,
     darkMode: darkModeReducer,
     nowPlaying: nowPlayingReducer,
+    waiting: waitingReducer,
   },
 });
 

@@ -3,6 +3,7 @@ import avatar from "../assets/images/avatar2.png";
 import playlist from "../assets/images/playlist2.png";
 import background from "../assets/images/gradient-black.png";
 import logo from "../assets/images/logo.png";
+import likedSongs from "../assets/images/liked-songs.png";
 
 const Images = {
   SONG: song,
@@ -10,6 +11,7 @@ const Images = {
   AVATAR: avatar,
   LOGO: logo,
   BG: background,
+  LIKED_SONGS: likedSongs,
 };
 
 export default Images;

@@ -1,6 +1,5 @@
 // nowPlayingSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { TSong } from "../types";
 
 type TNowPlaying = {
   songPlayId: string | null;
