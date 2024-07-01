@@ -17,6 +17,7 @@
       width: var(--size);
       height: var(--size);
       border-radius: 50%;
+      background-color: themed("bg-2");
       overflow: hidden;
       img {
         width: 100%;

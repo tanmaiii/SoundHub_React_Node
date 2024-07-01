@@ -72,6 +72,7 @@ export default function FavouritePage() {
       <div style={{ zIndex: 1 }}>
         <HeaderPage
           avt={Images.LIKED_SONGS}
+          fbAvt={Images.LIKED_SONGS}
           title="Liked songs"
           // /https://picsum.photos/200/300
           avtAuthor={apiConfig.imageURL(currentUser?.image_path || "")}

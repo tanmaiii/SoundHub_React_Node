@@ -16,6 +16,8 @@
       img {
         width: 100%;
         height: 100%;
+        background-color: themed("bg-2");
+        object-fit: cover;
       }
     }
     &__input {
@@ -52,17 +54,14 @@
       padding: $space-4;
       cursor: pointer;
       transition: $transition;
-      background-color: themed("bg-2");
+      background-color: $color-primary1;
+      transition: $transition;
       &:hover {
-        opacity: 1;
-        background-color: themed("bg-2");
-        i {
-          color: themed("txt-main");
-        }
+        scale: 0.98;
       }
 
       i {
-        color: themed("txt-second");
+        color: $color-white;
         @include flex(center, center);
         font-size: $size-24;
       }

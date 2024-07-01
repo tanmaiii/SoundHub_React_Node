@@ -14,7 +14,8 @@ export default function SongPage() {
   return (
     <div className="songPage">
       <HeaderPage
-        avt={Images.AVATAR}
+        fbAvt={Images.SONG}
+        avt={Images.SONG}
         title="Thằng điên"
         author="JustaTee"
         avtAuthor={Images.AVATAR}
@@ -60,17 +61,59 @@ export default function SongPage() {
             </div>
 
             <div className="songPage__content__body__comment__list">
-              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" time="2 hours ago" />
-              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={1} time="2 hours ago" />
-              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={2} time="2 hours ago" />
-              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" level={3} time="2 hours ago" />
-              <CommentItem avatarUrl={Images.AVATAR} name="Tấn Mãi" time="2 hours ago" />
+              <CommentItem
+                avatarUrl={Images.AVATAR}
+                name="Tấn Mãi"
+                time="2 hours ago"
+                content="Hay quá anh ơi"
+                level={0}
+              />
+              <CommentItem
+                avatarUrl={Images.AVATAR}
+                name="Tấn Mãi"
+                content="Hay quá anh ơi"
+                level={1}
+                time="2 hours ago"
+              />
+              <CommentItem
+                avatarUrl={Images.AVATAR}
+                name="Tấn Mãi"
+                level={2}
+                content="Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh
+                Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh "
+                time="2 hours ago"
+              />
+              <CommentItem
+                avatarUrl={Images.AVATAR}
+                name="Tấn Mãi"
+                level={3}
+                content="Hay quá anh ơi"
+                time="2 hours ago"
+              />
+              <CommentItem
+                avatarUrl={Images.AVATAR}
+                name="Tấn Mãi"
+                content="Hay quá anh ơi"
+                time="2 hours ago"
+              />
             </div>
           </div>
           <div className="songPage__content__body__artist col pc-5 t-12">
-            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
-            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
-            <TrackArtist name="Phương Ly" avatarUrl={Images.AVATAR} className="col pc-12" />
+            <TrackArtist
+              name="Phương Ly"
+              avatarUrl={Images.AVATAR}
+              className="col pc-12"
+            />
+            <TrackArtist
+              name="Phương Ly"
+              avatarUrl={Images.AVATAR}
+              className="col pc-12"
+            />
+            <TrackArtist
+              name="Phương Ly"
+              avatarUrl={Images.AVATAR}
+              className="col pc-12"
+            />
           </div>
         </div>
 

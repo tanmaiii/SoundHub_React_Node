@@ -51,9 +51,9 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    console.log(window.history);
-  });
+  // useEffect(() => {
+  //   console.log(window.history);
+  // });
 
   return (
     <>

@@ -2,36 +2,26 @@
 
 .playlistPage {
   @include themify($themes) {
-    margin-top: $height-header;
+    // margin-top: $height-header;
+    padding: 0 $space-24;
     &__content {
-      padding: 0 $space-32;
-      @include mobile {
-        padding: 0 $space-12;
-      }
-      &__header {
-        padding: $space-32 0;
-        gap: $space-8;
-        @include flex(center, start);
-        button {
-          cursor: pointer;
-          background-color: themed("bg-2");
-          border-radius: 50%;
-          padding: $space-4;
-          &:hover {
-            background-color: $color-hover;
-          }
-          i {
-            --size: 40px;
-            width: var(--size);
-            height: var(--size);
-            @include flex(center, center);
-            font-size: $size-24;
-            color: themed("txt-main");
-          }
+      width: 100%;
+      &__empty {
+        @include flex(center, center);
+        flex-direction: column;
+        & img {
+          width: 200px;
+          height: 200px;
+          object-fit: cover;
+          border-radius: $radius-8;
         }
-      }
-      &__tracklist {
-        padding: $space-32 0;
+        & span {
+          font-size: $size-18;
+          font-weight: $font-light;
+          color: themed("txt-main");
+          margin-top: $space-16;
+          text-align: center;
+        }
       }
     }
   }

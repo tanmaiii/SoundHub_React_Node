@@ -2,9 +2,9 @@
 
 .songPage {
   @include themify($themes) {
+    padding: 0 $space-32;
     &__content {
-      padding: 0 $space-32;
-      margin-bottom: $space-32;
+      // margin-bottom: $space-32;
       &__header {
         padding: $space-16 0;
         gap: $space-8;

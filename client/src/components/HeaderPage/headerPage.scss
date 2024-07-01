@@ -19,6 +19,7 @@
         position: absolute;
         inset: 0px;
         display: block;
+        background-color: $color-primary1;
       }
       .bg-alpha {
         background: linear-gradient(transparent, themed("bg-1"));
@@ -35,7 +36,7 @@
     &__body {
       z-index: 2;
       position: relative;
-      padding: 145px $space-32 $space-32 $space-32;
+      padding: 145px $space-24 $space-24 $space-24;
       @include flex(end, unset);
       gap: $space-20;
       @include mobile {
@@ -50,6 +51,7 @@
         border-radius: $radius-8;
         overflow: hidden;
         box-shadow: themed("box-shadow");
+        background-color: themed('bg-2');
         @include mobile {
           --size: 120px;
         }

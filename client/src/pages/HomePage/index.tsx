@@ -56,8 +56,6 @@ function HomePage(props: any) {
         undefined,
         "new"
       );
-      console.log(res.data);
-
       return res.data;
     },
   });

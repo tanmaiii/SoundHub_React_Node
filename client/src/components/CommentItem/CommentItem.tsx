@@ -3,6 +3,7 @@ import "./commentItem.scss";
 
 import CommentInput from "../CommentInput/CommentInput";
 import Images from "../../constants/images";
+import ImageWithFallback from "../ImageWithFallback";
 
 interface CommentItemProps {
   name: string;
@@ -27,28 +28,32 @@ export default function CommentItem({
     <>
       <div className="comment__item" style={{ marginLeft: marginLeft }}>
         <div className="comment__item__avatar">
-          <img src={avatarUrl} alt="" />
+          <ImageWithFallback
+            src={avatarUrl}
+            fallbackSrc={Images.AVATAR}
+            alt=""
+          />
         </div>
 
         <div className="comment__item__content">
           <div className="comment__item__content__top">
             <div className="comment__item__content__top__info">
-              <a>{name}</a>
-              <span>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam ipsam ipsa neque
-                voluptates accusamus facilis, doloribus temporibus minus, inventore, veniam natus
-                explicabo architecto eaque tenetur tempora adipisci quos dolorum soluta!
-              </span>
+              <div className="comment__item__content__top__info__top">
+                <a>{name}</a>
+                <span>{time}</span>
+              </div>
+              <span>{content}</span>
             </div>
             <div className="comment__item__content__top__like">
               <button>
-                <i className="fa-light fa-heart"></i>
+                <i className="fa-regular fa-heart"></i>
               </button>
-              <span>3</span>
             </div>
           </div>
           <div className="comment__item__content__bottom">
-            <span className="comment__item__content__bottom__time">{time}</span>
+            <span className="comment__item__content__bottom__likes">
+              12 likes
+            </span>
             <button
               className="comment__item__content__bottom__reply"
               onClick={() => setOpenInput(!openInput)}
@@ -59,7 +64,9 @@ export default function CommentItem({
         </div>
       </div>
 
-      {openInput && <CommentInput avatarUrl={Images.AVATAR} level={level + 1} />}
+      {openInput && (
+        <CommentInput avatarUrl={Images.AVATAR} level={level + 1} />
+      )}
     </>
   );
 }

@@ -2,9 +2,11 @@ import Skeleton from "react-loading-skeleton";
 import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
 import "./headerPage.scss";
+import moment from "moment";
 
 interface HeaderPageProps {
   avt: string;
+  fbAvt: string;
   title: string;
   category: string;
   author?: string;
@@ -18,6 +20,7 @@ interface HeaderPageProps {
 
 export default function HeaderPage({
   avt,
+  fbAvt,
   title,
   category,
   avtAuthor,
@@ -36,7 +39,8 @@ export default function HeaderPage({
       </div>
       <div className="HeaderPage__body">
         <div className="avatar">
-          {loading ? <Skeleton height="100%" /> : <img src={avt} alt="" />}
+          {/* {loading ? <Skeleton height="100%" /> : <img src={avt} alt="" />} */}
+          <ImageWithFallback src={avt} alt="" fallbackSrc={fbAvt} />
         </div>
         <div className="info">
           <span className="info__category">
@@ -58,7 +62,7 @@ export default function HeaderPage({
               {time && (
                 <div className="info__desc__item">
                   <i className="fa-light fa-clock"></i>
-                  <span>{time}</span>
+                  <span>{moment(time).format("YYYY")}</span>
                 </div>
               )}
               {listen && (

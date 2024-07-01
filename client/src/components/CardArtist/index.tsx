@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { apiConfig } from "../../configs";
 import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
+import { useEffect } from "react";
 
 interface CardProps {
   id: string;
@@ -21,10 +22,13 @@ export default function CardArtist({
   followers,
   loading = false,
 }: CardProps) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   return (
     <div className="CardArtist">
       <div className="CardArtist__container">
-        <Link target="_blank" to={`/artist/${"12312"}`}>
+        <Link to={`/artist/${id}`}>
           <div className="CardArtist__container__image">
             {loading ? (
               <Skeleton circle height={200} />
@@ -38,7 +42,7 @@ export default function CardArtist({
           </div>
         </Link>
         <div className="CardArtist__container__desc">
-          <Link target="_blank" to={`/artist/${"12312"}`}>
+          <Link to={`/artist/${id}`}>
             <span className="CardArtist__container__desc__name">
               {loading ? <Skeleton /> : name}
             </span>

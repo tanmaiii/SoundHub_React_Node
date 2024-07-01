@@ -1,5 +1,7 @@
 import React from "react";
 import "./commentInput.scss";
+import ImageWithFallback from '../ImageWithFallback/index';
+import Images from "../../constants/images";
 
 interface CommentInputProps {
   avatarUrl: string;
@@ -11,7 +13,7 @@ export default function CommentInput({ avatarUrl, level = 0 }: CommentInputProps
   return (
     <div className="comment__form" style={{ marginLeft: `${marginLeft}px` }}>
       <div className="comment__form__avatar">
-        <img src={avatarUrl} alt="" />
+        <ImageWithFallback src={avatarUrl} fallbackSrc={Images.AVATAR} alt=""/>
       </div>
       <div className="comment__form__input">
         <input type="text" placeholder="Write a comment..." />

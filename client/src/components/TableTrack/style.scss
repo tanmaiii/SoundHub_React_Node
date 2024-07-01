@@ -5,7 +5,8 @@
     z-index: 10;
     &__header {
       @include flex(center, space-between);
-      padding: $space-8 0;
+      padding: $space-8 $space-24;
+
       &__left {
         padding: $space-32 0;
         gap: $space-8;
@@ -15,7 +16,22 @@
           background-color: themed("bg-2");
           border-radius: 50%;
           padding: $space-4;
-          &:hover {
+          &.btn__play {
+            background-color: $color-primary1;
+            transition: all 0.3s;
+            &:hover {
+              scale: 1.04;
+            }
+            i {
+              --size: 40px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-24;
+              color: $color-white;
+            }
+          }
+          &:not(.btn__play):hover {
             background-color: $color-hover;
           }
           i {
@@ -49,7 +65,7 @@
             position: absolute;
             top: calc(100% + $space-8);
             width: 100%;
-            z-index: 2;
+            z-index: 99;
             padding: $space-4;
             border-radius: $radius-4;
             display: none;
@@ -79,6 +95,12 @@
         font-size: $size-16;
         color: themed("txt-main");
         margin-bottom: $space-12;
+
+        position: sticky;
+        top: $height-header;
+        background-color: themed("bg-1");
+        z-index: 80;
+
         &__line1 {
           @include flex(center, unset);
           gap: $space-8;
@@ -98,6 +120,23 @@
           & > span {
             margin-right: 48px;
           }
+        }
+      }
+      &__empty {
+        @include flex(center, center);
+        flex-direction: column;
+        & img {
+          width: 200px;
+          height: 200px;
+          object-fit: cover;
+          border-radius: $radius-8;
+        }
+        & span {
+          font-size: $size-18;
+          font-weight: $font-light;
+          color: themed("txt-main");
+          margin-top: $space-16;
+          text-align: center;
         }
       }
     }
