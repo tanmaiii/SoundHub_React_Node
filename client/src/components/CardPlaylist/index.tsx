@@ -35,11 +35,7 @@ function CardPlaylist({
           ) : (
             <div>
               <ImageWithFallback
-                src={
-                  playlist.image_path
-                    ? apiConfig.imageURL(playlist.image_path)
-                    : Images.PLAYLIST
-                }
+                src={playlist?.image_path ?? ""}
                 fallbackSrc={Images.PLAYLIST}
                 alt=""
               />

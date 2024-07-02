@@ -18,7 +18,7 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
   return (
     <div className="table__track">
       <div className="table__track__header">
-        <div className="table__track__header__left">
+        {/* <div className="table__track__header__left">
           {songs && songs?.length > 0 && (
             <button className="btn__play">
               <i className="fa-solid fa-play"></i>
@@ -56,7 +56,7 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
       {songs && songs?.length > 0 ? (
         <div className="table__track__body">
@@ -78,13 +78,13 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
           <div className="table__track__body__list">
             {songs &&
               songs.map((song, index) => (
-                <Track song={song} loading={isLoading} />
+                <Track number={`${index + 1}`} song={song} loading={isLoading} />
               ))}
           </div>
         </div>
       ) : (
         <div className="table__track__body__empty">
-          <img src={Images.SONG} alt="" />
+          <img src={Images.EMPTY} alt="" />
           <span>Playlist is empty</span>
         </div>
       )}

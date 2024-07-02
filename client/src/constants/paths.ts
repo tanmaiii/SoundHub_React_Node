@@ -21,7 +21,7 @@ const PATH = {
   HOME: "/",
   ARTIST: "/artist",
   FAVOURITE: "/favourite",
-  ARTIST_SHOW: "/artist/:userId",
+  ARTIST_SHOW: "/artist/:id",
   RECENTLY: "/recently",
 
   SEARCH: "/search",

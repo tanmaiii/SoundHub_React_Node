@@ -16,6 +16,8 @@ import {
 import { RootState } from "../../store";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
+import { songApi } from "../../apis";
+import { useAuth } from "../../context/authContext";
 
 interface TrackProps {
   song: TSong;
@@ -24,64 +26,47 @@ interface TrackProps {
 }
 
 export default function Track({ song, number, loading = false }: TrackProps) {
-  const [like, setLike] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const [songPlay, setSongPlay] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const { token, currentUser } = useAuth();
+
   const { isPlaying, songPlayId } = useSelector(
     (state: RootState) => state.nowPlaying
   );
 
-  const checkLiked = async () => {
-    try {
-      // const res = await songApi.checkLikedSong(id);
-      // setLike(res.isLiked);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const { isLoading, isError } = useQuery(["like", song?.id], () => {
-    return checkLiked();
-  });
-
-  const likeMutation = useMutation(
-    async (like: boolean) => {
-      //if (!like) return songApi.likeSong(id);
-      //return songApi.unLikeSong(id);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["likePlaying", song?.id]);
-        queryClient.invalidateQueries(["like", song?.id]);
-        queryClient.invalidateQueries(["songs-like"]);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    }
-  );
-
-  const handleClickLike = () => {
-    return likeMutation.mutate(like);
-  };
-
   const handleClickPlay = (id: string) => {
-    if (songPlayId == id && isPlaying) {
+    if (songPlayId === id && isPlaying) {
       dispatch(stopSong());
-      console.log("dừng", song?.id, isPlaying);
     } else {
       dispatch(setNowPlaying({ id }));
       dispatch(playSong());
-      console.log("chơi", id, isPlaying);
     }
   };
 
-  useEffect(() => {
-    setSongPlay(songPlayId === song?.id && isPlaying);
-  }, [isPlaying, songPlayId]);
+  const { data: isLike, refetch: refetchLike } = useQuery({
+    queryKey: ["like-song", song?.id],
+    queryFn: async () => {
+      const res = await songApi.checkLikedSong(song?.id ?? "", token);
+      console.log(res.isLiked);
+      
+      return res.isLiked;
+    },
+  });
 
-  loading = isLoading;
+  const mutationLike = useMutation({
+    mutationFn: (like: boolean) => {
+      if (like) return songApi.unLikeSong(song?.id ?? "", token);
+      return songApi.likeSong(song?.id ?? "", token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["like-song", song?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["songs-favorites", currentUser?.id],
+      });
+    },
+  });
 
   return (
     <div className="track">
@@ -98,11 +83,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
           )}
           <div className="track__wrapper__left__image">
             <ImageWithFallback
-              src={
-                song?.image_path
-                  ? apiConfig.imageURL(song?.image_path)
-                  : Images.SONG
-              }
+              src={song?.image_path ?? ""}
               fallbackSrc={Images.SONG}
               alt=""
             />
@@ -112,7 +93,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
               }`}
               onClick={() => handleClickPlay(song?.id)}
             >
-              {songPlay ? <IconPlay /> : <i className="fa-solid fa-play"></i>}
+              {false ? <IconPlay /> : <i className="fa-solid fa-play"></i>}
             </button>
           </div>
           <div className="track__wrapper__left__desc">
@@ -135,10 +116,10 @@ export default function Track({ song, number, loading = false }: TrackProps) {
         <div className="track__wrapper__right pc-2 t-2 m-4">
           <div className="item__hover">
             <button
-              className={`button-like ${like ? "active" : ""}`}
-              onClick={handleClickLike}
+              className={`button-like ${isLike ? "active" : ""}`}
+              onClick={() => mutationLike.mutate(isLike ?? false)}
             >
-              {like ? (
+              {isLike ? (
                 <i className="fa-solid fa-heart"></i>
               ) : (
                 <i className="fa-light fa-heart"></i>

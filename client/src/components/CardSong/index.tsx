@@ -28,11 +28,7 @@ function CardSong({ className, song, loading = false }: CardSongProps) {
         <div className="CardSong__container__image">
           {/* <div> */}
           <ImageWithFallback
-            src={
-              song.image_path
-                ? apiConfig.imageURL(song.image_path)
-                : Images.SONG
-            }
+            src={song?.image_path ?? ""}
             fallbackSrc={Images.SONG}
             alt=""
           />

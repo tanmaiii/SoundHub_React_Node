@@ -5,17 +5,18 @@
     padding-bottom: 50px;
     position: relative;
     overflow: hidden;
-    border-radius: $radius-8;
-    // margin-bottom: -20px;
-    z-index: 1;
+    border-top-left-radius: $radius-8;
+    border-top-right-radius: $radius-8;
+    padding-bottom: 200px;
+
     &__blur {
       z-index: -1;
       .blur {
         height: 100%;
         background-repeat: no-repeat;
-        background-position: 50% center;
+        background-position: 50% top;
         background-size: cover;
-        filter: blur(200px);
+        filter: blur(100px);
         position: absolute;
         inset: 0px;
         display: block;
@@ -23,13 +24,12 @@
       }
       .bg-alpha {
         background: linear-gradient(transparent, themed("bg-1"));
-        // background-color: red;
         height: 100%;
         width: 100%;
         z-index: 1;
+        top: 0;
+        left: 0;
         position: absolute;
-        // inset: 0px;
-        // display: block;
       }
     }
 
@@ -41,7 +41,11 @@
       gap: $space-20;
       @include mobile {
         padding: $space-12;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 100px;
       }
+
       .avatar {
         --size: 180px;
         min-width: var(--size);
@@ -51,22 +55,55 @@
         border-radius: $radius-8;
         overflow: hidden;
         box-shadow: themed("box-shadow");
-        background-color: themed('bg-2');
+        background-color: themed("bg-2");
+        position: relative;
+
         @include mobile {
-          --size: 120px;
+          --size: 180px;
         }
-        img {
+        & > img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        &:hover {
+          .avatar__overlay {
+            display: flex;
+          }
+        }
+        &__overlay {
+          background-color: $color-rgba-black;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          @include flex(center, center);
+          flex-direction: column;
+          cursor: pointer;
+          gap: $space-8;
+          display: none;
+          & > i {
+            font-size: $size-24;
+            color: $color-white;
+          }
+          & > span {
+            font-size: $size-16;
+            color: $color-white;
+          }
         }
       }
 
       .info {
         @include flex(unset, unset);
         flex-direction: column;
+        flex-wrap: wrap;
         // gap: $space-8;
         min-width: 200px;
+        @include mobile {
+          text-align: center;
+          justify-content: center;
+        }
         &__category {
           font-size: $size-16;
           color: themed("txt-main");
@@ -77,10 +114,18 @@
           font-weight: $font-bold;
           color: themed("txt-main");
           @include text(1);
+          @include mobile {
+            font-size: $size-40;
+          }
         }
         &__desc {
           @include flex(center, unset);
           gap: $space-12;
+          flex-wrap: wrap;
+          @include mobile {
+            text-align: center;
+            justify-content: center;
+          }
           &__author {
             @include flex(center, unset);
             gap: $space-8;
@@ -105,6 +150,8 @@
             }
           }
           &__item {
+            @include flex(center, center);
+
             i {
               font-size: $size-18;
               color: themed("txt-main");

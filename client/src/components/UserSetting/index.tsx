@@ -58,13 +58,18 @@ export default function UserSetting() {
 
         <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
           <div className="UserSetting__dropdown__user">
-            <ImageWithFallback
-              alt=""
-              src={currentUser && apiConfig.imageURL(currentUser.image_path)}
-              fallbackSrc={Images.AVATAR}
-            />
+            <Link to={`${PATH.ARTIST + "/" + currentUser?.id}`}>
+              <ImageWithFallback
+                alt=""
+                src={currentUser && apiConfig.imageURL(currentUser.image_path)}
+                fallbackSrc={Images.AVATAR}
+              />
+            </Link>
+
             <div className="UserSetting__dropdown__user__desc">
-              <h4>{currentUser.name}</h4>
+              <Link to={`${PATH.ARTIST + "/" + currentUser?.id}`}>
+                <h4>{currentUser?.name}</h4>
+              </Link>
               <span>Basic</span>
             </div>
           </div>

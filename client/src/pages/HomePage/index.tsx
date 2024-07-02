@@ -28,6 +28,8 @@ function HomePage(props: any) {
         undefined,
         "new"
       );
+      console.log("songPopular", res.data);
+
       return res.data;
     },
   });
@@ -78,12 +80,13 @@ function HomePage(props: any) {
 
   return (
     <div className="home">
-      <Section title={t("section.Songs popular")} to={PATH.SONG}>
-        {songPopular &&
-          songPopular?.map((song, index) => (
+      {songPopular && songPopular?.length > 0 && (
+        <Section title={t("section.Songs popular")} to={PATH.SONG}>
+          {songPopular?.map((song, index) => (
             <CardSong key={index} song={song} />
           ))}
-      </Section>
+        </Section>
+      )}
 
       <Section title={t("section.Songs new")} to={PATH.SONG}>
         {songNew &&
@@ -103,10 +106,10 @@ function HomePage(props: any) {
         {artists &&
           artists?.map((artist) => (
             <CardArtist
-              key={artist.id}
-              id={artist.id}
-              name={artist.name}
-              image={artist.image_path}
+              key={artist?.id}
+              id={artist?.id}
+              name={artist?.name}
+              image={artist?.image_path}
               followers={"1"}
             />
           ))}

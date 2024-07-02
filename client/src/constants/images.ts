@@ -12,6 +12,7 @@ const Images = {
   LOGO: logo,
   BG: background,
   LIKED_SONGS: likedSongs,
+  EMPTY: song,
 };
 
 export default Images;

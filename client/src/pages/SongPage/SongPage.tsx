@@ -1,43 +1,125 @@
 import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import "./songPage.scss";
-import Section from "../../components/Section/Section";
-import Card from "../../components/CardSong";
 import TrackArtist from "../../components/TrackArtist/TrackArtist";
 
 import CommentItem from "../../components/CommentItem/CommentItem";
 
 import CommentInput from "../../components/CommentInput/CommentInput";
 import Images from "../../constants/images";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
+import { songApi, userApi } from "../../apis";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { apiConfig } from "../../configs";
+import playApi from "../../apis/play/playApi";
 
 export default function SongPage() {
+  const navigation = useNavigate();
+  const { id } = useParams();
+  const { token, currentUser } = useAuth();
+  const queryClient = useQueryClient();
+
+  const {
+    data: song,
+    isLoading: loading,
+    refetch,
+  } = useQuery({
+    queryKey: ["song", id],
+    queryFn: async () => {
+      try {
+        if (id) {
+          const res = await songApi.getDetail(id ?? "", token);
+          return res;
+        }
+      } catch (error) {
+        // navigation.goBack();
+        return null;
+      }
+    },
+  });
+  const { data: author } = useQuery({
+    queryKey: ["author", song?.user_id],
+    queryFn: async () => {
+      try {
+        const res = await userApi.getDetail(song?.user_id ?? "");
+        return res;
+      } catch (error) {
+        return null;
+      }
+    },
+  });
+
+  const { data: playCount, refetch: refetchCount } = useQuery({
+    queryKey: ["play-count", id],
+    queryFn: async () => {
+      const res = await playApi.getCountPlay(id ?? "");
+      return res;
+    },
+  });
+
+  const { data: isLike, refetch: refetchLike } = useQuery({
+    queryKey: ["like-song", id],
+    queryFn: async () => {
+      const res = await songApi.checkLikedSong(id ?? "", token);
+      return res.isLiked;
+    },
+  });
+
+  const mutationLike = useMutation({
+    mutationFn: (like: boolean) => {
+      if (like) return songApi.unLikeSong(id ?? "", token);
+      return songApi.likeSong(id ?? "", token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["like-song", id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["songs-favorites", currentUser?.id],
+      });
+    },
+  });
+
   return (
     <div className="songPage">
-      <HeaderPage
-        fbAvt={Images.SONG}
-        avt={Images.SONG}
-        title="Thằng điên"
-        author="JustaTee"
-        avtAuthor={Images.AVATAR}
-        time="2022"
-        listen="18,714,210"
-        category="Song"
-      />
+      <div className="songPage__header">
+        <HeaderPage
+          fbAvt={Images.SONG}
+          avt={song?.image_path ?? ""}
+          title={song?.title ?? ""}
+          author={author?.name ?? ""}
+          avtAuthor={Images.AVATAR}
+          time={song?.created_at ?? ""}
+          listen={playCount ?? 0}
+          category="Song"
+          userId={song?.user_id}
+        />
+      </div>
       <div className="songPage__content">
         <div className="songPage__content__header">
           <button className="btn__play">
             <i className="fa-solid fa-play"></i>
           </button>
-          <button>
-            <i className="fa-light fa-heart"></i>
+          {/* {currentUser?.id !== song?.user_id && ( */}
+          <button
+            className={isLike ? "active" : ""}
+            onClick={() => mutationLike.mutate(isLike ?? false)}
+          >
+            {isLike ? (
+              <i className="fa-solid fa-heart"></i>
+            ) : (
+              <i className="fa-light fa-heart"></i>
+            )}
           </button>
+          {/* )} */}
           <button>
             <i className="fa-solid fa-ellipsis"></i>
           </button>
         </div>
 
         <div className="songPage__content__body row">
-          <div className="songPage__content__body__comment col pc-7 t-12">
+          <div className="songPage__content__body__comment col pc-8 t-12">
             <CommentInput avatarUrl={Images.AVATAR} />
 
             <div className="songPage__content__body__comment__header">
@@ -98,8 +180,9 @@ export default function SongPage() {
               />
             </div>
           </div>
-          <div className="songPage__content__body__artist col pc-5 t-12">
-            <TrackArtist
+          <div className="songPage__content__body__artist col pc-4 t-12">
+            <TrackArtist id={author?.id ?? ""} className="col pc-12" />
+            {/* <TrackArtist
               name="Phương Ly"
               avatarUrl={Images.AVATAR}
               className="col pc-12"
@@ -108,12 +191,7 @@ export default function SongPage() {
               name="Phương Ly"
               avatarUrl={Images.AVATAR}
               className="col pc-12"
-            />
-            <TrackArtist
-              name="Phương Ly"
-              avatarUrl={Images.AVATAR}
-              className="col pc-12"
-            />
+            /> */}
           </div>
         </div>
 

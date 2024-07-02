@@ -57,6 +57,8 @@ export default function FavouritePage() {
     } else {
       setSongs((prevSongs) => prevSongs && [...prevSongs, ...res.data]);
     }
+    console.log(res);
+
     return res;
   };
 
@@ -69,7 +71,7 @@ export default function FavouritePage() {
 
   return (
     <div className="favourite">
-      <div style={{ zIndex: 1 }}>
+      <div className="favourite__header">
         <HeaderPage
           avt={Images.LIKED_SONGS}
           fbAvt={Images.LIKED_SONGS}
@@ -81,7 +83,43 @@ export default function FavouritePage() {
           song={songs?.length.toString() ?? ""}
         />
       </div>
-      <div style={{ zIndex: 2 }}>
+      <div className="favourite__content">
+        <div className="favourite__content__header">
+          <div className="favourite__content__header__left">
+            {songs && songs?.length > 0 && (
+              <button className="btn__play">
+                <i className="fa-solid fa-play"></i>
+              </button>
+            )}
+            <button>
+              <i className="fa-solid fa-ellipsis"></i>
+            </button>
+          </div>
+          <div className="favourite__content__header__right">
+            {songs && songs?.length > 0 && (
+              <div className="dropdown">
+                <div
+                  className="dropdown__header"
+                  onClick={() => setActiveDropdown(!activeDropdown)}
+                >
+                  <i className="fa-light fa-bars-sort"></i>
+                  <span>Mới nhất</span>
+                  <i className="fa-light fa-chevron-down"></i>
+                </div>
+                <div
+                  className={`dropdown__content ${
+                    activeDropdown ? "active" : ""
+                  }`}
+                >
+                  <ul>
+                    <li>Mới nhất</li>
+                    <li>Phổ biến</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
         <TableTrack songs={songs} isLoading={isLoading} />
       </div>
     </div>

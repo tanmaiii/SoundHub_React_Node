@@ -2,11 +2,17 @@
 
 .songPage {
   @include themify($themes) {
+    isolation: isolate;
     padding: 0 $space-32;
+    &__header {
+      isolation: isolate;
+    }
     &__content {
-      // margin-bottom: $space-32;
+      background-color: themed('bg-rgba');
+      isolation: isolate;
+      margin-top: -200px;
       &__header {
-        padding: $space-16 0;
+        padding: $space-24 $space-24;
         gap: $space-8;
         @include flex(center, start);
         button {
@@ -14,8 +20,26 @@
           background-color: themed("bg-2");
           border-radius: 50%;
           padding: $space-4;
-          &:hover {
+          &.btn__play {
+            background-color: $color-primary1;
+            transition: all 0.3s;
+            &:hover {
+              scale: 1.04;
+            }
+            i {
+              --size: 40px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-24;
+              color: $color-white;
+            }
+          }
+          &:not(.btn__play):hover {
             background-color: $color-hover;
+          }
+          &.active{
+            i {color: $color-primary1;}
           }
           i {
             --size: 40px;

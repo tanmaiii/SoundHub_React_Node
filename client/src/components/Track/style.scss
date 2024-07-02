@@ -8,6 +8,9 @@
       border-radius: $radius-8;
       cursor: pointer;
       margin-bottom: $space-8;
+      @include mobile{
+        padding: $space-8;
+      }
       &.active {
         background-color: $color-hover;
       }
@@ -29,11 +32,12 @@
         &__number {
           padding: 0 $space-4;
           @include flex(center, center);
-          width: 20px;
+          width: 30px;
           position: relative;
           h4 {
             position: absolute;
             right: 0;
+            margin-right: $space-8;
             font-size: $size-18;
             color: themed("txt-main");
             font-weight: $font-light;

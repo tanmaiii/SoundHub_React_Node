@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authApi, userApi } from "../apis";
 import { TUser } from "../types";
+import { set } from "react-hook-form";
 
 // Khai báo kiểu dữ liệu cho AuthContext
 interface IAuthContext {
@@ -42,6 +43,7 @@ export const AuthContextProvider = ({ children }: Props) => {
 
   const logout = async () => {
     setCurrentUser(null);
+    setToken("");
     await authApi.signout();
   };
 

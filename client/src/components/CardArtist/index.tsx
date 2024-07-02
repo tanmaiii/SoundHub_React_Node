@@ -34,7 +34,7 @@ export default function CardArtist({
               <Skeleton circle height={200} />
             ) : (
               <ImageWithFallback
-                src={apiConfig.imageURL(image || "")}
+                src={image ?? ""}
                 alt="image.png"
                 fallbackSrc={Images.AVATAR}
               />

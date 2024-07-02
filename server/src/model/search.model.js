@@ -249,12 +249,25 @@ Search.findSongPopular = async (userId, query, result) => {
       ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
       ` LEFT JOIN users as u on u.id = s.user_id  ` +
       ` WHERE  sp.created_at >= NOW() - INTERVAL 30 DAY ` +
-      ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
+      ` AND s.public = 1 AND is_deleted = 0 `+
+      // ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} ` +
       ` GROUP BY  sp.song_id ` +
       `  ${sort === "new" ? " ORDER BY count DESC " : "ORDER BY count ASC"}` +
       ` LIMIT ${+limit} OFFSET ${+offset} `
   );
+
+  console.log(  ` SELECT s.*, u.name as author, count(sp.song_id) as count ` +
+    ` FROM song_plays sp ` +
+    ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
+    ` LEFT JOIN users as u on u.id = s.user_id  ` +
+    ` WHERE  sp.created_at >= NOW() - INTERVAL 30 DAY ` +
+    ` AND s.public = 1 AND is_deleted = 0 ` +
+    // ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
+    ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} ` +
+    ` GROUP BY  sp.song_id ` +
+    `  ${sort === "new" ? " ORDER BY count DESC " : "ORDER BY count ASC"}` +
+    ` LIMIT ${+limit} OFFSET ${+offset} `);
 
   const [totalCount] = await promiseDb.query(
     ` SELECT count(DISTINCT sp.song_id) as totalCount ` +
@@ -262,7 +275,8 @@ Search.findSongPopular = async (userId, query, result) => {
       ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
       ` LEFT JOIN users as u on u.id = s.user_id  ` +
       ` WHERE  sp.created_at >= NOW() - INTERVAL 30 DAY ` +
-      ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
+      ` AND s.public = 1 AND is_deleted = 0 ` +
+      // ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} `
   );
 

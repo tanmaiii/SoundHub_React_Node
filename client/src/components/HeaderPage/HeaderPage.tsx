@@ -3,6 +3,12 @@ import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
 import "./headerPage.scss";
 import moment from "moment";
+import { useAuth } from "../../context/authContext";
+// import numeral from "numeral";
+import numeral from "numeral";
+import { apiConfig } from "../../configs";
+import { Link } from "react-router-dom";
+import { PATH } from "../../constants/paths";
 
 interface HeaderPageProps {
   avt: string;
@@ -12,10 +18,11 @@ interface HeaderPageProps {
   author?: string;
   avtAuthor?: string;
   time?: string;
-  listen?: string;
+  listen?: number;
   loading?: boolean;
   like?: string;
   song?: string;
+  userId?: string;
 }
 
 export default function HeaderPage({
@@ -30,17 +37,34 @@ export default function HeaderPage({
   loading = false,
   like,
   song,
+  userId,
 }: HeaderPageProps) {
+  const { currentUser } = useAuth();
+
   return (
     <div className="HeaderPage">
       <div className="HeaderPage__blur">
         <div className="bg-alpha"></div>
-        <div className="blur" style={{ backgroundImage: `url(${avt})` }}></div>
+        <div
+          className="blur"
+          style={{ backgroundImage: `url(${apiConfig.imageURL(avt)})` }}
+        ></div>
       </div>
       <div className="HeaderPage__body">
         <div className="avatar">
-          {/* {loading ? <Skeleton height="100%" /> : <img src={avt} alt="" />} */}
-          <ImageWithFallback src={avt} alt="" fallbackSrc={fbAvt} />
+          {loading ? (
+            <Skeleton width={"100%"} height={"100%"} />
+          ) : (
+            <>
+              <ImageWithFallback src={avt} alt="" fallbackSrc={fbAvt} />
+              {userId && currentUser?.id === userId && (
+                <div className="avatar__overlay">
+                  <i className="fa-regular fa-pen-to-square"></i>
+                  <span>Edit playlist</span>
+                </div>
+              )}
+            </>
+          )}
         </div>
         <div className="info">
           <span className="info__category">
@@ -52,12 +76,14 @@ export default function HeaderPage({
           ) : (
             <div className="info__desc">
               <div className="info__desc__author">
-                <ImageWithFallback
-                  src={avtAuthor}
-                  alt="image.png"
-                  fallbackSrc={Images.AVATAR}
-                />
-                <a href="">{author}</a>
+                {avtAuthor && (
+                  <ImageWithFallback
+                    src={avtAuthor}
+                    alt="image.png"
+                    fallbackSrc={Images.AVATAR}
+                  />
+                )}
+                <Link to={`${PATH.ARTIST + "/" + userId}`}>{author}</Link>
               </div>
               {time && (
                 <div className="info__desc__item">
@@ -68,7 +94,7 @@ export default function HeaderPage({
               {listen && (
                 <div className="info__desc__item">
                   <i className="fa-light fa-headphones"></i>
-                  <span>{listen}</span>
+                  <span>{numeral(listen).format("0a").toUpperCase()}</span>
                 </div>
               )}
               {like && (

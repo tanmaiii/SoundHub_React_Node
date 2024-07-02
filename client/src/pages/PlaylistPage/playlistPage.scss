@@ -4,23 +4,95 @@
   @include themify($themes) {
     // margin-top: $height-header;
     padding: 0 $space-24;
+    &__header {
+      isolation: isolate;
+    }
     &__content {
       width: 100%;
-      &__empty {
-        @include flex(center, center);
-        flex-direction: column;
-        & img {
-          width: 200px;
-          height: 200px;
-          object-fit: cover;
-          border-radius: $radius-8;
+      margin-top: -200px;
+      background-color: themed("bg-rgba");
+      isolation: isolate;
+      &__header {
+        @include flex(center, space-between);
+        padding: $space-24;
+
+        &__left {
+          gap: $space-8;
+          @include flex(center, start);
+          button {
+            cursor: pointer;
+            background-color: themed("bg-2");
+            border-radius: 50%;
+            padding: $space-4;
+            &.btn__play {
+              background-color: $color-primary1;
+              transition: all 0.3s;
+              &:hover {
+                scale: 1.04;
+              }
+              i {
+                --size: 40px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                font-size: $size-24;
+                color: $color-white;
+              }
+            }
+            &:not(.btn__play):hover {
+              background-color: $color-hover;
+            }
+            i {
+              --size: 40px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-24;
+              color: themed("txt-main");
+            }
+          }
         }
-        & span {
-          font-size: $size-18;
-          font-weight: $font-light;
-          color: themed("txt-main");
-          margin-top: $space-16;
-          text-align: center;
+        &__right {
+          & > .dropdown {
+            position: relative;
+            .dropdown__header {
+              //   border: 1px solid $color-border;
+              background-color: themed("bg-2");
+              padding: $space-8 $space-14;
+              border-radius: $radius-20;
+              @include flex(center, center);
+              gap: $space-8;
+              cursor: pointer;
+              color: themed("txt-main");
+              i {
+                font-size: $size-16;
+              }
+            }
+            .dropdown__content {
+              background-color: themed("bg-2");
+              position: absolute;
+              top: calc(100% + $space-8);
+              width: 100%;
+              z-index: 99;
+              padding: $space-4;
+              border-radius: $radius-4;
+              display: none;
+              &.active {
+                display: block;
+              }
+              ul {
+                li {
+                  padding: $space-8 $space-10;
+                  color: themed("txt-main");
+                  cursor: pointer;
+                  border-radius: $radius-4;
+                  &:hover {
+                    background-color: $color-hover;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
