@@ -6,6 +6,9 @@ import { apiConfig } from "../../configs";
 import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
 import { useEffect } from "react";
+import { useQuery } from "react-query";
+import { userApi } from "../../apis";
+import numeral from "numeral";
 
 interface CardProps {
   id: string;
@@ -19,12 +22,17 @@ export default function CardArtist({
   id,
   name,
   image,
-  followers,
+  // followers,
   loading = false,
 }: CardProps) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const { data: followers, isLoading: loadingFollower } = useQuery({
+    queryKey: ["followers", id],
+    queryFn: async () => {
+      const res = await userApi.getCountFollowers(id ?? "");
+      return res;
+    },
   });
+
   return (
     <div className="CardArtist">
       <div className="CardArtist__container">
@@ -48,7 +56,11 @@ export default function CardArtist({
             </span>
           </Link>
           <span className="CardArtist__container__desc__followers">
-            {loading ? <Skeleton /> : `${followers} Follower`}
+            {loading ? (
+              <Skeleton />
+            ) : (
+              `${numeral(followers).format("0a").toUpperCase()} followers `
+            )}
           </span>
           {/* {loading ? (
             <Skeleton />

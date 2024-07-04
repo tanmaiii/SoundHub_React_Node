@@ -27,6 +27,7 @@ export type ResSoPaAr = {
   title?: string;
   author?: string;
   name?: string;
+  user_id?: string;
   image_path?: string;
   public?: number;
   created_at: string;

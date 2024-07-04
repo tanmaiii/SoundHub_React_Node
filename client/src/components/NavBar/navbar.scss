@@ -9,14 +9,14 @@
     position: sticky;
     top: 0;
     left: 0;
-    // box-shadow: themed("box-shadow");
     z-index: 99;
     @include flex(unset, space-between);
     flex-direction: column;
-
+    
     @include tablet {
       position: fixed;
       transform: translateY(-100%);
+      box-shadow: themed("box-shadow");
       &.openMenu {
         transform: translateY(0);
       }

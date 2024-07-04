@@ -1,6 +1,6 @@
 import React from "react";
 import SectionChartItem from "../SectionChartItem/SectionChartItem";
-import HeaderSection from "../HeaderSection/HeaderSection";
+import HeaderSection from "../HeaderSection";
 import "./sectionChartHome.scss";
 
 export default function SectionChartHome(props: any) {

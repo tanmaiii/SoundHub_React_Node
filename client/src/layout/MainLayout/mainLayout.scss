@@ -18,7 +18,7 @@
           flex: 1;
           position: relative;
           max-width: 100%;
-          padding-bottom: $height-barPlaying;
+          // padding-bottom: $height-barPlaying;
           @include tablet {
             max-width: calc(100%);
           }

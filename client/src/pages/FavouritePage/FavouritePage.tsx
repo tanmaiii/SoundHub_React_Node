@@ -80,6 +80,7 @@ export default function FavouritePage() {
           avtAuthor={apiConfig.imageURL(currentUser?.image_path || "")}
           author={currentUser?.name || ""}
           category="Playlist"
+          userId={currentUser?.id || ""}
           song={songs?.length.toString() ?? ""}
         />
       </div>

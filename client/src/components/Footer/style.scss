@@ -1,0 +1,51 @@
+@use "../../scss/" as *;
+
+.footer {
+  @include themify($themes) {
+    &__swapper {
+      padding: $space-32;
+      min-height: 200px;
+      //   background-color: themed("bg-2");
+      padding-bottom: $height-barPlaying;
+      flex-wrap: wrap;
+
+      @include mobile {
+        padding: $space-8 $space-12;
+        @include flex(center, center);
+        text-align: center;
+      }
+      &__col {
+        margin-bottom: $space-24;
+        &__button {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: themed("bg-2");
+        }
+        &__header {
+          font-size: $size-18;
+          font-weight: 600;
+          color: themed("txt-main");
+          margin-bottom: $space-8;
+        }
+        &__list {
+          @include flex(unset, unset);
+          flex-direction: column;
+          gap: $space-8;
+          li {
+            a {
+              color: themed("txt-second");
+              font-size: $size-16;
+              display: block;
+              margin-bottom: $space-4;
+              transition: $transition;
+              &:hover {
+                color: themed("txt-main");
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

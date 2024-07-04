@@ -3,11 +3,14 @@
 .HeaderSection {
   @include themify($themes) {
     @include flex(center, space-between);
-    padding: $space-18 0;
+    padding: $space-14 $space-12;
+    @include mobile {
+      padding: $space-8 $space-8;
+    }
     &__title {
       font-size: $size-24;
       font-weight: $font-mediun;
-      color: themed('txt-main')
+      color: themed("txt-main");
     }
     &__button {
       @include flex(center, space-between);

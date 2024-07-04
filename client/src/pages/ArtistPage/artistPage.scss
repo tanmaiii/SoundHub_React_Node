@@ -3,6 +3,9 @@
 .artist {
   @include themify($themes) {
     padding: 0 $space-24;
+    @include mobile {
+      padding: 0 $space-8;
+    }
     &__container {
       &__hero {
         padding-top: 145px;
@@ -152,6 +155,8 @@
         margin-top: -200px;
         background-color: themed("bg-rgba");
         isolation: isolate;
+        min-height: 200px;
+
         @include mobile {
           padding: $space-12;
         }
@@ -195,32 +200,15 @@
         &__top__section {
           @include flex(start, unset);
           flex-wrap: wrap;
-          padding: 0 $space-24;
-
-          & > .top__section__new {
-            & > h4 {
-              font-size: $size-18;
-              color: themed("txt-main");
-              font-weight: $font-mediun;
-              margin-bottom: $space-18;
-            }
-            & > .top__section__new__list {
-              width: 100%;
-              flex-wrap: wrap;
-            }
+          flex-direction: column;
+          & > h4 {
+            font-size: $size-24;
+            color: themed("txt-main");
+            font-weight: $font-mediun;
+            margin-bottom: $space-18;
           }
-          & > .top__section__popular {
-            & > h4 {
-              font-size: $size-18;
-              color: themed("txt-main");
-              font-weight: $font-mediun;
-              margin-bottom: $space-18;
-            }
-
-            & > .top__section__popular__list {
-              width: 100%;
-              flex-wrap: wrap;
-            }
+          & > div {
+            width: 100%;
           }
         }
       }

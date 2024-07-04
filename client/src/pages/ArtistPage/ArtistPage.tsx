@@ -4,18 +4,25 @@ import Track from "../../components/Track";
 import Images from "../../constants/images";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { userApi } from "../../apis";
+import { playlistApi, searchApi, songApi, userApi } from "../../apis";
 import { log } from "console";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { apiConfig } from "../../configs";
 import { useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import numeral from "numeral";
+import Section from "../../components/Section";
+import { useTranslation } from "react-i18next";
+import CardPlaylist from "../../components/CardPlaylist";
+import { TSong } from "../../types";
+import HeaderSection from "../../components/HeaderSection";
+import CardArtist from "../../components/CardArtist";
 
 export default function ArtistPage() {
   const { id } = useParams();
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
+  const { t } = useTranslation("home");
 
   const { data: user, isLoading } = useQuery({
     queryKey: ["artist", id],
@@ -73,6 +80,36 @@ export default function ArtistPage() {
       queryClient.invalidateQueries({
         queryKey: ["artists-follow"],
       });
+    },
+  });
+
+  const { data: playlists, isLoading: loadingPlaylists } = useQuery({
+    queryKey: ["playlists-artist", id],
+    queryFn: async () => {
+      const res = await playlistApi.getAllByUserId(id ?? "", 1, 10);
+      return res.data;
+    },
+  });
+
+  const {
+    data: songs,
+    isLoading: loadingSongs,
+    refetch: refechSongs,
+  } = useQuery({
+    queryKey: ["songs-artist", id],
+    queryFn: async () => {
+      const res = await songApi.getAllByUserId(token, id ?? "", 1, 6);
+      console.log(res);
+
+      return res.data;
+    },
+  });
+
+  const { data: artists, isLoading: loadingArtists } = useQuery({
+    queryKey: ["artists"],
+    queryFn: async () => {
+      const res = await userApi.getAll(1, 10);
+      return res.data;
     },
   });
 
@@ -142,30 +179,53 @@ export default function ArtistPage() {
             </button>
           </div>
           <div className="artist__container__content__top__section row">
-            <div className="top__section__new col pc-4 t-12 m-12">
-              <h4>New release</h4>
-              <div className="top__section__new__list row">
-                <div className="col pc-12 t-12 m-12">
-                  {/* <Track time="3:03" title="Thằng điên 1" /> */}
-                  {/* <Track time="3:03" title="Thằng điên 2" quantity={"12,330,000"} /> */}
+            {songs && songs?.length > 0 && (
+              <>
+                <HeaderSection title="Popular" />
+                <div>
+                  {songs?.map((song: TSong, index: number) => (
+                    <Track song={song} key={index} />
+                  ))}
                 </div>
-              </div>
-            </div>
-            <div className="top__section__popular col pc-8 t-12 m-12">
-              <h4>Popular</h4>
-              <div className="top__section__popular__list row">
-                <div className="col pc-6 t-6 m-12">
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                </div>
-                <div className="col pc-6 t-6 m-12">
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                  {/* <Track time="3:03" title="Thằng điên" quantity={"12,330,000"} /> */}
-                </div>
-              </div>
-            </div>
+              </>
+            )}
+          </div>
+          <div>
+            {playlists && playlists.length > 0 && (
+              <Section title={"Playlist"}>
+                {playlists?.map((playlist, index) => (
+                  <CardPlaylist
+                    key={index}
+                    title={playlist.title}
+                    image={playlist.image_path}
+                    author={playlist.author}
+                    id={playlist.id}
+                    userId={playlist.user_id ?? ""}
+                  />
+                ))}
+              </Section>
+            )}
+          </div>
+
+          <div>
+            {playlists && playlists.length > 0 && (
+              <Section title={"Artists"}>
+                {artists?.map((artist, index) => {
+                  if (artist.id === id) return;
+                  if (artist.id === currentUser?.id) return;
+
+                  return (
+                    <CardArtist
+                      key={index}
+                      image={artist.image_path}
+                      name={artist.name}
+                      id={artist.id}
+                      followers="1"
+                    />
+                  );
+                })}
+              </Section>
+            )}
           </div>
         </div>
       </div>

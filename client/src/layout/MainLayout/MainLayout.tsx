@@ -8,6 +8,7 @@ import Header from "../../components/Header/Header";
 import BarPlaying from "../../components/BarPlaying/BarPlaying";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import Footer from "../../components/Footer";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <div className={`MainLayout__top__main__content__body`}>
               {children}
             </div>
-            {/* <BarPlaying /> */}
+            <Footer />
           </div>
           <div
             className={`MainLayout__top__main__waiting ${

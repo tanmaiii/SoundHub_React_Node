@@ -198,15 +198,17 @@ export const getAllSongByPlaylist = async (req, res) => {
 
 export const getAllSongByUser = async (req, res) => {
   try {
-    const userReqInfo = await jwtService.verifyToken(token);
     const token = req.headers["authorization"];
+    const userReqInfo = await jwtService.verifyToken(token);
+
+    console.log("USER REQ INFO: ", userReqInfo);
 
     Song.findByUserId(
       req.params.userId,
       userReqInfo,
       req.query,
       (err, data) => {
-        if (!data) {
+        if (!data || err) {
           return res.status(401).json("Không tìm thấy");
         } else {
           return res.json(data);

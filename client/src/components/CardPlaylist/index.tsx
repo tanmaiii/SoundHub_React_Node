@@ -12,49 +12,60 @@ import { useEffect, useState } from "react";
 export interface CardPlaylistProps {
   className?: string;
   loading?: boolean;
-  playlist: ResSoPaAr;
+  // playlist: ResSoPaAr;
+  id?: string;
+  image?: string;
+  title: string | undefined;
+  author: string | undefined;
+  userId: string;
 }
 
 function CardPlaylist({
   className,
-  playlist,
+  id,
+  image,
+  title,
+  author,
+  userId,
   loading = false,
 }: CardPlaylistProps) {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`${PATH.PLAYLIST}/${playlist?.id}`);
-  };
-
   return (
-    <div onClick={handleClick} className={`CardPlaylist ${className}`}>
+    <div className={`CardPlaylist ${className}`}>
       <div className="CardPlaylist__container">
-        <div className="CardPlaylist__container__image">
+        <Link
+          to={`${PATH.PLAYLIST}/${id}`}
+          className="CardPlaylist__container__image"
+        >
           {loading ? (
             <Skeleton height={200} />
           ) : (
             <div>
               <ImageWithFallback
-                src={playlist?.image_path ?? ""}
+                src={image ?? ""}
                 fallbackSrc={Images.PLAYLIST}
                 alt=""
               />
             </div>
           )}
-        </div>
+        </Link>
 
         <div className="CardPlaylist__container__desc">
           <p>
-            <span className="CardPlaylist__container__desc__title">
-              {loading ? <Skeleton /> : playlist.title}
-            </span>
+            <Link
+              to={`${PATH.PLAYLIST}/${id}`}
+              className="CardPlaylist__container__desc__title"
+            >
+              {loading ? <Skeleton /> : title}
+            </Link>
           </p>
           <div className="CardPlaylist__container__desc__info">
             {loading ? (
               <Skeleton />
             ) : (
               <div className="CardPlaylist__container__desc__info__artist">
-                <Link to={"/"}>{playlist.author}</Link>
+                <Link to={`${PATH.PLAYLIST}/${userId}`}>{author}</Link>
                 {/* {artists &&
                   Array.isArray(artists) &&
                   artists.map((artist, index) => (

@@ -12,48 +12,65 @@ import ImageWithFallback from "../ImageWithFallback";
 export interface CardSongProps {
   className?: string;
   loading?: boolean;
-  song: ResSoPaAr;
+  // song: ResSoPaAr;
+  id?: string;
+  image?: string;
+  title: string | undefined;
+  author: string | undefined;
+  userId: string;
 }
 
-function CardSong({ className, song, loading = false }: CardSongProps) {
+function CardSong({
+  className,
+  loading = false,
+  id,
+  image,
+  title,
+  author,
+  userId,
+}: CardSongProps) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`${PATH.SONG}/${song.id}`);
+    navigate(`${PATH.SONG}/${id}`);
   };
 
   return (
-    <div className={`CardSong ${className}`} onClick={handleClick}>
+    <div className={`CardSong ${className}`}>
       <div className="CardSong__container">
-        <div className="CardSong__container__image">
-          {/* <div> */}
-          <ImageWithFallback
-            src={song?.image_path ?? ""}
-            fallbackSrc={Images.SONG}
-            alt=""
-          />
-          <div className="CardSong__container__image__button">
-            <i className="fa-solid fa-play"></i>
-          </div>
-          {/* </div> */}
-        </div>
+        <Link to={`${PATH.SONG}/${id}`} className="CardSong__container__image">
+          {loading ? (
+            <Skeleton height={180} width={"100%"} />
+          ) : (
+            <>
+              <ImageWithFallback
+                src={image ?? ""}
+                fallbackSrc={Images.SONG}
+                alt=""
+              />
+              <div className="CardSong__container__image__button">
+                <i className="fa-solid fa-play"></i>
+              </div>
+            </>
+          )}
+        </Link>
 
         <div className="CardSong__container__desc">
           <div>
-            <span className="CardSong__container__desc__title">
-              {song?.title}
-            </span>
+            <Link
+              to={`${PATH.SONG}/${id}`}
+              className="CardSong__container__desc__title"
+            >
+              {loading ? <Skeleton height={24} /> : title}
+            </Link>
           </div>
           <div className="CardSong__container__desc__info">
             <div className="CardSong__container__desc__info__artist">
-              <Link to={"/"}>{song.author}</Link>
-              {/* {artists &&
-                  Array.isArray(artists) &&
-                  artists.map((artist, index) => (
-                    <Link key={index} to={`${PATH.ARTIST}/${artist.id}`}>
-                      {artist.name}
-                    </Link>
-                  ))} */}
+              {loading ? (
+                <Skeleton height={18} />
+              ) : (
+                <Link to={`${PATH.ARTIST}/${userId}`}>{author}</Link>
+              )}
             </div>
           </div>
         </div>
