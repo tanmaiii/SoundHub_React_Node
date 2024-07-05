@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authApi, userApi } from "../apis";
 import { TUser } from "../types";
-import { set } from "react-hook-form";
 
 // Khai báo kiểu dữ liệu cho AuthContext
 interface IAuthContext {
@@ -9,7 +8,7 @@ interface IAuthContext {
   setCurrentUser: (user: TUser) => void;
   token: string;
   logout: () => void;
-  login: (email: string, password: string) => void;
+  login: (user: TUser, token: string) => void;
 }
 
 // Tạo AuthContext với giá trị mặc định là null
@@ -34,11 +33,9 @@ export const AuthContextProvider = ({ children }: Props) => {
     return tokenString ? JSON.parse(tokenString) : null;
   });
 
-  const login = async (email: string, password: string) => {
-    const res = await authApi.signin(email, password);
-    if (res) setCurrentUser(res.data);
-    setToken(res.token);
-    return res;
+  const login = async (user: TUser, token: string) => {
+    setCurrentUser(user);
+    setToken(token);
   };
 
   const logout = async () => {

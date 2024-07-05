@@ -18,6 +18,7 @@ import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import { songApi } from "../../apis";
 import { useAuth } from "../../context/authContext";
+import { PATH } from "../../constants/paths";
 
 interface TrackProps {
   song: TSong;
@@ -48,7 +49,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
     queryFn: async () => {
       const res = await songApi.checkLikedSong(song?.id ?? "", token);
       console.log(res.isLiked);
-      
+
       return res.isLiked;
     },
   });
@@ -97,10 +98,19 @@ export default function Track({ song, number, loading = false }: TrackProps) {
             </button>
           </div>
           <div className="track__wrapper__left__desc">
-            <h4>{song?.title}</h4>
+            <Link to={`${PATH.SONG}/${song.id}`}>
+              <h4 className="track__wrapper__left__desc__title">
+                {song?.title}
+              </h4>
+            </Link>
             {song?.author && (
-              <div className="track__wrapper__left__desc__artist">
-                <Link to={"/"}>{song?.author}</Link>
+              <div className="track__wrapper__left__desc__artists">
+                <Link to={`${PATH.ARTIST}/${song?.user_id}`}>
+                  {song?.author}
+                </Link>
+                <Link to={`${PATH.ARTIST}/${song?.user_id}`}>
+                  {song?.author}
+                </Link>
               </div>
             )}
           </div>

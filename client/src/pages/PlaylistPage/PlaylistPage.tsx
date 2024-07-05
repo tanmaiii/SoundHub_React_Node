@@ -91,10 +91,10 @@ export default function PlaylistPage() {
       <div className="playlistPage__header">
         <HeaderPage
           fbAvt={Images.PLAYLIST}
-          avt={apiConfig.imageURL(playlist?.image_path ?? "")}
+          avt={playlist?.image_path ?? ""}
           title={playlist?.title ?? ""}
           author={author?.name ?? ""}
-          avtAuthor={apiConfig.imageURL(author?.image_path || "") ?? ""}
+          avtAuthor={author?.image_path ?? ""}
           time={playlist?.created_at ?? ""}
           // listen="18,714,210"
           category="Playlist"

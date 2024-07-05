@@ -6,14 +6,15 @@ const Footer = () => {
     <div className="footer">
       <div className="footer__swapper row">
         <div className="footer__swapper__col pc-4 t-12 m-12">
-          <div>
+          <div className="footer__swapper__col__social">
             <button className="footer__swapper__col__button">
-              <i className="fab fa-facebook-f"></i>
+              <i className="fa-brands fa-facebook-f"></i>
             </button>
             <button className="footer__swapper__col__button">
+              <i className="fa-brands fa-youtube"></i>{" "}
             </button>
             <button className="footer__swapper__col__button">
-              <i className="fab fa-facebook-f"></i>
+              <i className="fa-brands fa-steam-symbol"></i>
             </button>
           </div>
         </div>

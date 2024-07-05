@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
+import authApi from "../../apis/auth/authApi";
 
 export default function Login() {
   const [show, setShow] = useState(false);
@@ -24,9 +25,11 @@ export default function Login() {
 
   const handleClick = async () => {
     try {
-      return login(inputs.email, inputs.password);
+      // return login(inputs.email, inputs.password);
+      const res = await authApi.signin(inputs.email, inputs.password);
+      res && login(res.data, res.token);
     } catch (err: any) {
-      setErr(err.response.data.conflictError);
+      setErr(err?.response.data.conflictError);
     }
   };
 
@@ -43,6 +46,7 @@ export default function Login() {
             <span>{err}</span>
           </div>
         )}
+
         <div className="auth__container__group">
           <h4 className="title">{t("login.Email")}</h4>
           <div className="input ">

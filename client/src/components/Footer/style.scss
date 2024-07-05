@@ -2,25 +2,44 @@
 
 .footer {
   @include themify($themes) {
+    padding: $space-32;
+    @include mobile {
+      padding: $space-8 $space-12;
+    }
     &__swapper {
-      padding: $space-32;
+      padding: $space-12;
       min-height: 200px;
       //   background-color: themed("bg-2");
       padding-bottom: $height-barPlaying;
       flex-wrap: wrap;
 
       @include mobile {
-        padding: $space-8 $space-12;
         @include flex(center, center);
         text-align: center;
       }
       &__col {
         margin-bottom: $space-24;
+        &__social {
+          @include flex(center, start);
+          gap: $space-16;
+          @include mobile {
+            @include flex(center, center);
+            text-align: center;
+          }
+        }
         &__button {
-          width: 40px;
-          height: 40px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           background-color: themed("bg-2");
+          i {
+            color: themed("txt-main");
+            font-size: $size-18;
+          }
+          &:hover {
+            cursor: pointer;
+            background-color: themed("bg-3");
+          }
         }
         &__header {
           font-size: $size-18;
