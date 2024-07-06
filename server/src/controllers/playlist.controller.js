@@ -44,13 +44,18 @@ export const updatePlaylist = async (req, res) => {
 
     const { ...newPlaylist } = req.body;
 
-    Playlist.update(req.params.playlistId, userInfo.id, newPlaylist, (err, data) => {
-      if (err) {
-        return res.status(401).json({ conflictError: err });
-      } else {
-        return res.json(data);
+    Playlist.update(
+      req.params.playlistId,
+      userInfo.id,
+      newPlaylist,
+      (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        } else {
+          return res.json(data);
+        }
       }
-    });
+    );
   } catch (error) {
     res.status(400).json(error);
   }
@@ -67,11 +72,15 @@ export const deletePlaylist = async (req, res) => {
       }
 
       if (!playlist) {
-        return res.status(404).json({ conflictError: "Không tìm thấy playlist !" });
+        return res
+          .status(404)
+          .json({ conflictError: "Không tìm thấy playlist !" });
       }
 
       if (playlist.user_id !== userInfo.id) {
-        return res.status(401).json({ conflictError: "Không có quyền xóa playlist !" });
+        return res
+          .status(401)
+          .json({ conflictError: "Không có quyền xóa playlist !" });
       }
 
       Playlist.delete(playlist.id, (err, data) => {
@@ -166,22 +175,6 @@ export const getAllPlaylistByUser = (req, res) => {
   }
 };
 
-export const getAllFavoritesByUser = async (req, res) => {
-  try {
-    const token = req.headers["authorization"];
-    const userInfo = await jwtService.verifyToken(token);
-
-    Playlist.findByFavorite(userInfo.id, req.query, (err, data) => {
-      if (!data) {
-        return res.status(401).json({ conflictError: "Not found" });
-      } else {
-        return res.json(data);
-      }
-    });
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
 
 export const checkPlaylistLike = async (req, res) => {
   try {
@@ -247,6 +240,33 @@ export const unLikePlaylist = async (req, res) => {
   }
 };
 
+export const countPlaylistLikes = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    // Tìm bài hát trong database dựa trên songId
+    Playlist.findById(req.params.playlistId, userInfo.id, (err, song) => {
+      if (err || !song) {
+        return res
+          .status(404)
+          .json({ conflictError: "Playlist không tồn tại !" });
+      } else {
+        Playlist.countLikes(req.params.playlistId, (err, data) => {
+          if (data) {
+            return res.status(200).json(data);
+          } else {
+            return res.status(200).json(0);
+          }
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+// Xử lí bài hát vào danh sách phát
 export const checkSongInPlaylist = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -285,15 +305,20 @@ export const addSongPlaylist = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Playlist.addSong(req.body.playlist_id, req.body.song_id, userInfo.id, (err, data) => {
-      if (err) {
-        const conflictError = err;
-        return res.status(401).json({ conflictError });
-      } else {
-        console.log("ADD SONG", data);
-        return res.json(data);
+    Playlist.addSong(
+      req.body.playlist_id,
+      req.body.song_id,
+      userInfo.id,
+      (err, data) => {
+        if (err) {
+          const conflictError = err;
+          return res.status(401).json({ conflictError });
+        } else {
+          console.log("ADD SONG", data);
+          return res.json(data);
+        }
       }
-    });
+    );
   } catch (error) {
     res.status(400).json(error);
   }
@@ -304,15 +329,20 @@ export const unAddSongPlaylist = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Playlist.unAddSong(req.body.playlist_id, req.body.song_id, userInfo.id, (err, data) => {
-      if (err) {
-        const conflictError = err;
-        return res.status(401).json({ conflictError });
-      } else {
-        console.log("UN ADD SONG", data);
-        return res.json(data);
+    Playlist.unAddSong(
+      req.body.playlist_id,
+      req.body.song_id,
+      userInfo.id,
+      (err, data) => {
+        if (err) {
+          const conflictError = err;
+          return res.status(401).json({ conflictError });
+        } else {
+          console.log("UN ADD SONG", data);
+          return res.json(data);
+        }
       }
-    });
+    );
   } catch (error) {
     res.status(400).json(error);
   }
@@ -323,15 +353,20 @@ export const updateSongPlaylist = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Playlist.updateSong(req.params.playlistId, userInfo.id, req.body.songs, (err, data) => {
-      if (err || !data) {
-        const conflictError = err;
-        console.log(err);
-        return res.status(401).json({ conflictError });
+    Playlist.updateSong(
+      req.params.playlistId,
+      userInfo.id,
+      req.body.songs,
+      (err, data) => {
+        if (err || !data) {
+          const conflictError = err;
+          console.log(err);
+          return res.status(401).json({ conflictError });
+        }
+        console.log(req.body.songs);
+        return res.json("Update successful !");
       }
-      console.log(req.body.songs);
-      return res.json("Update successful !");
-    });
+    );
   } catch (error) {
     res.status(400).json(error);
   }
@@ -348,11 +383,11 @@ export default {
   getAllPlaylist,
   getAllPlaylistByMe,
   getAllPlaylistByUser,
-  getAllFavoritesByUser,
 
   checkPlaylistLike,
   likePlaylist,
   unLikePlaylist,
+  countPlaylistLikes,
 
   checkSongInPlaylist,
   addSongPlaylist,

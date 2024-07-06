@@ -4,12 +4,36 @@ import songController from "../controllers/song.controller.js";
 import songValidation from "../validations/song.validation.js";
 import validate from "../middlewares/validate.js";
 
-router.get("/detail/:songId", validate(songValidation.getSong), songController.getSong);
-router.put("/:songId", validate(songValidation.updateSong), songController.updateSong);
-router.post("/", validate(songValidation.createSong), songController.createSong);
-router.patch("/delete/:songId", validate(songValidation.deleteSong), songController.deleteSong);
-router.patch("/restore/:songId", validate(songValidation.restoreSong), songController.restoreSong);
-router.delete("/destroy/:songId", validate(songValidation.destroySong), songController.destroySong);
+router.get(
+  "/detail/:songId",
+  validate(songValidation.getSong),
+  songController.getSong
+);
+router.put(
+  "/:songId",
+  validate(songValidation.updateSong),
+  songController.updateSong
+);
+router.post(
+  "/",
+  validate(songValidation.createSong),
+  songController.createSong
+);
+router.patch(
+  "/delete/:songId",
+  validate(songValidation.deleteSong),
+  songController.deleteSong
+);
+router.patch(
+  "/restore/:songId",
+  validate(songValidation.restoreSong),
+  songController.restoreSong
+);
+router.delete(
+  "/destroy/:songId",
+  validate(songValidation.destroySong),
+  songController.destroySong
+);
 
 router.get("/", validate(songValidation.getAllSong), songController.getAllSong);
 
@@ -19,7 +43,11 @@ router.get(
   songController.getAllSongByPlaylist
 );
 
-router.get("/me", validate(songValidation.getAllSongByMe), songController.getAllSongByMe);
+router.get(
+  "/me",
+  validate(songValidation.getAllSongByMe),
+  songController.getAllSongByMe
+);
 
 router.get(
   "/user/:userId",
@@ -27,9 +55,24 @@ router.get(
   songController.getAllSongByUser
 );
 
+router.post(
+  "/like/:songId",
+  validate(songValidation.like),
+  songController.likeSong
+);
 
-router.post("/like/:songId", validate(songValidation.like), songController.likeSong);
-router.delete("/like/:songId", validate(songValidation.unLike), songController.unLikeSong);
+router.delete(
+  "/like/:songId",
+  validate(songValidation.unLike),
+  songController.unLikeSong
+);
+
+router.get(
+  "/like/:songId",
+  validate(songValidation.countLikes),
+  songController.countSongLikes
+);
+
 router.get(
   "/checkLiked/:songId",
   validate(songValidation.checkSongLiked),

@@ -282,6 +282,30 @@ export const checkSongLiked = async (req, res) => {
   }
 };
 
+export const countSongLikes = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    // Tìm bài hát trong database dựa trên songId
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
+      if (err || !song) {
+        return res.status(404).json({ conflictError: "Bài hát không tồn tại" });
+      } else {
+        Song.countLikes(req.params.songId, (err, data) => {
+          if (data) {
+            return res.status(200).json(data);
+          } else {
+            return res.status(200).json(0);
+          }
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
 export default {
   getSong,
   createSong,
@@ -296,4 +320,5 @@ export default {
   likeSong,
   unLikeSong,
   checkSongLiked,
+  countSongLikes
 };

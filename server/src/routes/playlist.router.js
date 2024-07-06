@@ -5,13 +5,28 @@ import playlistValidation from "../validations/playlist.validation.js";
 
 import validate from "../middlewares/validate.js";
 
-router.put("/song/:playlistId", validate(playlistValidation.updateSong), playlistController.updateSongPlaylist);
-router.post("/song", validate(playlistValidation.addSong), playlistController.addSongPlaylist);
+//
+router.post(
+  "/checkSong",
+  validate(playlistValidation.addSong),
+  playlistController.checkSongInPlaylist
+);
+router.put(
+  "/song/:playlistId",
+  validate(playlistValidation.updateSong),
+  playlistController.updateSongPlaylist
+);
+router.post(
+  "/song",
+  validate(playlistValidation.addSong),
+  playlistController.addSongPlaylist
+);
 router.delete(
   "/song",
   validate(playlistValidation.unAddSong),
   playlistController.unAddSongPlaylist
 );
+//
 
 router.get(
   "/detail/:playlistId",
@@ -28,8 +43,16 @@ router.get(
   validate(playlistValidation.getAllPlaylistByMe),
   playlistController.getAllPlaylistByMe
 );
-router.get("/", validate(playlistValidation.getAllPlaylist), playlistController.getAllPlaylist);
-router.post("/", validate(playlistValidation.createPlaylist), playlistController.createPlaylist);
+router.get(
+  "/",
+  validate(playlistValidation.getAllPlaylist),
+  playlistController.getAllPlaylist
+);
+router.post(
+  "/",
+  validate(playlistValidation.createPlaylist),
+  playlistController.createPlaylist
+);
 router.put(
   "/:playlistId",
   validate(playlistValidation.updatePlaylist),
@@ -52,16 +75,11 @@ router.delete(
   playlistController.destroyPlaylist
 );
 
+//
 router.get(
   "/checkLiked/:playlistId",
   validate(playlistValidation.checkLike),
   playlistController.checkPlaylistLike
-);
-
-router.get(
-  "/like",
-  validate(playlistValidation.getAllFavoritesByUser),
-  playlistController.getAllFavoritesByUser
 );
 
 router.post(
@@ -76,10 +94,12 @@ router.delete(
   playlistController.unLikePlaylist
 );
 
-router.post(
-  "/checkSong",
-  validate(playlistValidation.addSong),
-  playlistController.checkSongInPlaylist
+router.get(
+  "/like/:playlistId",
+  validate(playlistValidation.countLikes),
+  playlistController.countPlaylistLikes
 );
+
+
 
 export default router;

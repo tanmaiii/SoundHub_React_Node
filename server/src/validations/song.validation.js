@@ -93,6 +93,13 @@ export default class songValidation {
       songId: Joi.string().min(0).max(36).required(),
     }),
   };
+
+  static countLikes = {
+    params: Joi.object().keys({
+      songId: Joi.string().min(0).max(36).required(),
+    }),
+  };
+
   static checkSongLiked = {
     params: Joi.object().keys({
       songId: Joi.string().min(0).max(36).required(),

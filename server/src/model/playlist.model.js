@@ -46,61 +46,76 @@ Playlist.update = (playlistId, userId, newPlaylist, result) => {
       result("Không có quyền sửa", null);
       return;
     }
-    db.query(`update playlists set ? where id = '${playlist.id}'`, newPlaylist, (err, res) => {
-      if (err) {
-        console.log("ERROR:", err);
-        result(err, null);
-        return;
+    db.query(
+      `update playlists set ? where id = '${playlist.id}'`,
+      newPlaylist,
+      (err, res) => {
+        if (err) {
+          console.log("ERROR:", err);
+          result(err, null);
+          return;
+        }
+        console.log("UPDATE: ", { res });
+        result(null, { id: playlistId, ...newPlaylist });
       }
-      console.log("UPDATE: ", { res });
-      result(null, { id: playlistId, ...newPlaylist });
-    });
+    );
   });
 };
 
 Playlist.delete = (playlistId, result) => {
-  db.query(`UPDATE playlists SET is_deleted = 1 where id = '${playlistId}'`, (err, res) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
+  db.query(
+    `UPDATE playlists SET is_deleted = 1 where id = '${playlistId}'`,
+    (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      result(null, { id: playlistId });
     }
-    result(null, { id: playlistId });
-  });
+  );
 };
 
 Playlist.destroy = (playlistId, userId, result) => {
-  db.query("SELECT * FROM playlists WHERE id = ? ", playlistId, (err, playlist) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
-    }
-
-    if (playlist.length === 0) {
-      result("Not found !", null);
-      return;
-    }
-
-    if (playlist[0].user_id !== userId) {
-      result("The song is not owned by the user!", null);
-      return;
-    }
-
-    if (playlist[0].is_deleted === 0) {
-      result("The song is not in the list to be deleted!", null);
-      return;
-    }
-
-    db.query("DELETE FROM playlists WHERE id = ?", playlistId, (deleteErr, deleteRes) => {
-      if (deleteErr) {
-        console.log("ERROR", deleteErr);
-        result(deleteErr, null);
+  db.query(
+    "SELECT * FROM playlists WHERE id = ? ",
+    playlistId,
+    (err, playlist) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
         return;
       }
-      result(null, { song_id: playlistId });
-    });
-  });
+
+      if (playlist.length === 0) {
+        result("Not found !", null);
+        return;
+      }
+
+      if (playlist[0].user_id !== userId) {
+        result("The song is not owned by the user!", null);
+        return;
+      }
+
+      if (playlist[0].is_deleted === 0) {
+        result("The song is not in the list to be deleted!", null);
+        return;
+      }
+
+      db.query(
+        "DELETE FROM playlists WHERE id = ?",
+        playlistId,
+        (deleteErr, deleteRes) => {
+          if (deleteErr) {
+            console.log("ERROR", deleteErr);
+            result(deleteErr, null);
+            return;
+          }
+          result(null, { song_id: playlistId });
+        }
+      );
+    }
+  );
 };
 
 Playlist.restore = (playlistId, userId, result) => {
@@ -124,14 +139,17 @@ Playlist.restore = (playlistId, userId, result) => {
         return;
       }
 
-      db.query(`update playlists set is_deleted = 0 where id = ${playlistId}`, (err, res) => {
-        if (err) {
-          console.log("ERROR", err);
-          result(err, null);
-          return;
+      db.query(
+        `update playlists set is_deleted = 0 where id = ${playlistId}`,
+        (err, res) => {
+          if (err) {
+            console.log("ERROR", err);
+            result(err, null);
+            return;
+          }
+          result(null, { id: playlistId });
         }
-        result(null, { id: playlistId });
-      });
+      );
     }
   );
 };
@@ -150,7 +168,9 @@ Playlist.getAll = async (query, result) => {
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
       ` WHERE ${q ? ` title like "%${q}%" and` : ""} ` +
       ` public = 1 AND is_deleted = 0 ` +
-      ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+      ` ORDER BY created_at ${
+        sort === "new" ? "DESC" : "ASC"
+      } limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
@@ -192,7 +212,9 @@ Playlist.getMe = async (userId, query, result) => {
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
       ` WHERE ${q ? ` title like "%${q}%" and` : ""}` +
       ` user_id = '${userId}' AND is_deleted = 0 ` +
-      `ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+      `ORDER BY created_at ${
+        sort === "new" ? "DESC" : "ASC"
+      } limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
@@ -260,7 +282,9 @@ Playlist.findByUserId = async (userId, query, result) => {
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
       ` WHERE ${q ? ` title like "%${q}%" and ` : ""} ` +
       ` user_id = '${userId}' and public = 1 AND is_deleted = 0` +
-      ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} limit ${+limit} offset ${+offset}`
+      ` ORDER BY created_at ${
+        sort === "new" ? "DESC" : "ASC"
+      } limit ${+limit} offset ${+offset}`
   );
 
   const [totalCount] = await promiseDb.query(
@@ -271,53 +295,6 @@ Playlist.findByUserId = async (userId, query, result) => {
   );
 
   if (data && totalCount) {
-    const totalPages = Math.ceil(totalCount[0]?.totalCount / limit);
-
-    result(null, {
-      data,
-      pagination: {
-        page: +page,
-        limit: +limit,
-        totalCount: totalCount[0].totalCount,
-        totalPages,
-        sort,
-      },
-    });
-
-    return;
-  }
-  result(null, null);
-};
-
-Playlist.findByFavorite = async (userId, query, result) => {
-  const q = query?.q;
-  const page = query?.page;
-  const limit = query?.limit;
-  const sort = query?.sortBy || "new";
-
-  const offset = (page - 1) * limit;
-
-  const [data] = await promiseDb.query(
-    `SELECT fp.*, p.*, u.name as author ` +
-      ` FROM favourite_playlists AS fp` +
-      ` INNER JOIN playlists AS p ON fp.playlist_id = p.id` +
-      ` LEFT JOIN users AS u ON p.user_id = u.id` +
-      ` WHERE ${q ? ` p.title LIKE "%${q}%" AND ` : ""} ` +
-      ` (p.public = 1 AND fp.user_id = '${userId}' ) OR (fp.user_id = '${userId}' AND p.user_id = fp.user_id) AND p.is_deleted = 0` +
-      ` ORDER BY fp.created_at ${sort === "new" ? "DESC" : "ASC"}` +
-      ` LIMIT ${+limit} OFFSET ${+offset};`
-  );
-
-  const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount ` +
-      ` FROM favourite_playlists AS fp ` +
-      ` INNER JOIN playlists AS p ON fp.playlist_id = p.id` +
-      ` LEFT JOIN users AS u ON p.user_id = u.id` +
-      ` WHERE ${q ? ` p.title LIKE "%${q}%" AND ` : ""} ` +
-      ` (p.public = 1 AND fp.user_id = '${userId}' ) OR (fp.user_id = '${userId}' AND p.user_id = fp.user_id) AND p.is_deleted = 0`
-  );
-
-  if (data && totalCount && totalCount) {
     const totalPages = Math.ceil(totalCount[0]?.totalCount / limit);
 
     result(null, {
@@ -409,6 +386,25 @@ Playlist.like = (playlistId, userId, result) => {
       }
     );
   });
+};
+
+Playlist.countLikes = (playlistId, result) => {
+  db.query(
+    `SELECT count as totalCount FROM favourite_playlists_count where playlist_id = ?`,
+    [playlistId],
+    (err, playlist) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+
+      if (playlist.length) {
+        result(null, playlist[0].totalCount);
+        return;
+      }
+      result("Không tìm thấy playlist !", null);
+    }
+  );
 };
 
 Playlist.unlike = (playlistId, userId, result) => {

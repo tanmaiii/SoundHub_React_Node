@@ -1,18 +1,16 @@
-import React from "react";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
-import "./songPage.scss";
 import TrackArtist from "../../components/TrackArtist/TrackArtist";
+import "./songPage.scss";
 
-import CommentItem from "../../components/CommentItem/CommentItem";
+import CommentItem from "../../components/CommentItem";
 
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { songApi, userApi } from "../../apis";
+import playApi from "../../apis/play/playApi";
 import CommentInput from "../../components/CommentInput/CommentInput";
 import Images from "../../constants/images";
-import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { songApi, userApi } from "../../apis";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { apiConfig } from "../../configs";
-import playApi from "../../apis/play/playApi";
 
 export default function SongPage() {
   const navigation = useNavigate();

@@ -19,12 +19,10 @@
         width: 100%;
         height: 100%;
         position: relative;
-        background-color: themed("bg-2");
-        aspect-ratio: 1/1; // Ensure the image is always square
-        border-radius: $radius-8;
-        overflow: hidden;
         img {
+          overflow: hidden;
           background-color: themed("bg-2");
+          border-radius: $radius-8;
           max-width: 100%;
           height: 100%;
           object-fit: cover;

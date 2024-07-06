@@ -17,7 +17,7 @@ export default function FavouritePage() {
 
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
-    limit: 10,
+    limit: 0,
     loading: false,
     totalPages: 1,
     totalCount: 0,
@@ -76,12 +76,11 @@ export default function FavouritePage() {
           avt={Images.LIKED_SONGS}
           fbAvt={Images.LIKED_SONGS}
           title="Liked songs"
-          // /https://picsum.photos/200/300
           avtAuthor={apiConfig.imageURL(currentUser?.image_path || "")}
           author={currentUser?.name || ""}
           category="Playlist"
           userId={currentUser?.id || ""}
-          song={songs?.length.toString() ?? ""}
+          song={songs?.length ?? 0}
         />
       </div>
       <div className="favourite__content">

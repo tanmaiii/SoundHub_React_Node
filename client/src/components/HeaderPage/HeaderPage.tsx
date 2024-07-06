@@ -19,10 +19,10 @@ interface HeaderPageProps {
   avtAuthor?: string;
   time?: string;
   listen?: number;
-  loading?: boolean;
-  like?: string;
-  song?: string;
+  like?: number;
+  song?: number;
   userId?: string;
+  loading?: boolean;
 }
 
 export default function HeaderPage({
@@ -85,28 +85,28 @@ export default function HeaderPage({
                 )}
                 <Link to={`${PATH.ARTIST + "/" + userId}`}>{author}</Link>
               </div>
-              {time && (
+              {time !== undefined && (
                 <div className="info__desc__item">
                   <i className="fa-light fa-clock"></i>
                   <span>{moment(time).format("YYYY")}</span>
                 </div>
               )}
-              {listen && (
+              {listen !== undefined && (
                 <div className="info__desc__item">
                   <i className="fa-light fa-headphones"></i>
                   <span>{numeral(listen).format("0a").toUpperCase()}</span>
                 </div>
               )}
-              {like && (
+              {like !== undefined && (
                 <div className="info__desc__item">
                   <i className="fa-light fa-heart"></i>
-                  <span>{like}</span>
+                  <span>{numeral(like).format("0a").toUpperCase()}</span>
                 </div>
               )}
-              {song && (
+              {song !== undefined && (
                 <div className="info__desc__item">
                   <i className="fa-thin fa-album"></i>
-                  <span>{song}</span>
+                  <span>{numeral(song).format("0a").toUpperCase()} songs</span>
                 </div>
               )}
             </div>

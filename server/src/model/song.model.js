@@ -139,6 +139,7 @@ Song.restore = (songId, userId, result) => {
   );
 };
 
+//Tìm bằng ID
 Song.findById = (songId, userId, result) => {
   db.query(
     `SELECT s.*, u.name as author, slc.count as count  ` +
@@ -172,6 +173,7 @@ Song.findById = (songId, userId, result) => {
   );
 };
 
+//Tìm bằng Playlist ID
 Song.findByPlaylistId = async (userId, playlistId, query, result) => {
   const q = query?.q;
   const page = query?.page;
@@ -218,6 +220,7 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
   result(null, null);
 };
 
+//Tìm bằng User Id
 Song.findByUserId = async (userId, userReqInfo, query, result) => {
   const q = query?.q;
   const page = query?.page;
@@ -458,6 +461,25 @@ Song.unlike = (songId, userId, result) => {
           result(null, { song_id: songId, user_id: userId });
         }
       );
+    }
+  );
+};
+
+Song.countLikes = (songId, result) => {
+  db.query(
+    `SELECT count as totalCount FROM favourite_songs_count where song_id = ?`,
+    [songId],
+    (err, song) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+
+      if (song.length) {
+        result(null, song[0].totalCount);
+        return;
+      }
+      result("Không tìm thấy bài hát !", null);
     }
   );
 };

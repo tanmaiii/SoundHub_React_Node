@@ -92,6 +92,12 @@ export default class playlistValidator {
     }),
   };
 
+  static countLikes = {
+    params: Joi.object().keys({
+      playlistId: Joi.string().min(0).max(36).required(),
+    }),
+  };
+
   static checkSong = {
     body: Joi.object().keys({
       playlist_id: Joi.string().min(0).max(36).required(),

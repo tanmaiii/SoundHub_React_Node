@@ -36,7 +36,7 @@ SongPlay.countSongPlays = (songId, result) => {
         result(null, song[0].totalCount);
         return;
       }
-      result("Không tìm thấy playlist !", null);
+      result("Không tìm thấy bài hát !", null);
     }
   );
 };
@@ -89,29 +89,6 @@ SongPlay.findAllByUserId = async (userId, query, result) => {
       ` WHERE ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} `
   );
-
-  const offset = (page - 1) * limit;
-
-  // const [data] = await promiseDb.query(
-  //   ` SELECT s.*, u.name as author, count(sp.song_id) as count, sp.created_at as created_at_play ` +
-  //     ` FROM song_plays sp ` +
-  //     ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
-  //     ` LEFT JOIN users as u on u.id = s.user_id  ` +
-  //     ` WHERE ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
-  //     ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} ` +
-  //     ` ORDER BY sp.created_at ${sort === "new" ? "DESC" : "ASC"} ` +
-  //     ` LIMIT ${+limit} OFFSET ${+offset} `
-  // );
-
-
-  // const [totalCount] = await promiseDb.query(
-  //   ` SELECT count(DISTINCT sp.song_id) as totalCount ` +
-  //     ` FROM song_plays sp ` +
-  //     ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
-  //     ` LEFT JOIN users as u on u.id = s.user_id  ` +
-  //     ` WHERE ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
-  //     ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} `
-  // );
 
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].totalCount / limit);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./commentItem.scss";
+import "./style.scss";
 
 import CommentInput from "../CommentInput/CommentInput";
 import Images from "../../constants/images";

@@ -70,12 +70,21 @@ export default function PlaylistPage() {
     },
   });
 
+  const { data: countLikes } = useQuery({
+    queryKey: ["playlist-count", id],
+    queryFn: async () => {
+      const res = await playlistApi.countLikes(id ?? "", token);
+      return res;
+    },
+  });
+
   const mutationLike = useMutation({
     mutationFn: (like: boolean) => {
       if (like) return playlistApi.unLikePlaylist(id ?? "", token);
       return playlistApi.likePlaylist(id ?? "", token);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["playlist-count", id] });
       queryClient.invalidateQueries({ queryKey: ["like-playlist", id] });
       queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
       queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
@@ -96,12 +105,10 @@ export default function PlaylistPage() {
           author={author?.name ?? ""}
           avtAuthor={author?.image_path ?? ""}
           time={playlist?.created_at ?? ""}
-          // listen="18,714,210"
           category="Playlist"
-          like="23,123"
-          song={`${totalCount.toString()} songs`}
+          like={countLikes ?? 0}
+          song={totalCount ?? 0}
           userId={playlist?.user_id}
-          // loading={true}
         />
       </div>
       <div className="playlistPage__content">

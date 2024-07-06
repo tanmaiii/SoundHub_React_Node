@@ -29,7 +29,9 @@ Favourite.findAll = async (userId, query, result) => {
           ? " ORDER BY SUBSTRING(LOWER(title), 1, 1), SUBSTRING(LOWER(name), 1, 1) "
           : ""
       }` +
-      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } ` +
       `) AS combined_result `
   );
 
@@ -86,8 +88,12 @@ Favourite.findSongs = async (userId, query, result) => {
       ` AND s.is_deleted = 0 ${q ? `AND s.title LIKE "%${q}%"` : ""} ` +
       `  ${sort === "new" ? " ORDER BY fs.created_at DESC " : ""}` +
       `  ${sort === "old" ? " ORDER BY fs.created_at ASC " : ""}` +
-      `  ${sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(s.title), 1, 1) " : ""}` +
-      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} `
+      `  ${
+        sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(s.title), 1, 1) " : ""
+      }` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(
@@ -108,7 +114,7 @@ Favourite.findSongs = async (userId, query, result) => {
         page: +page,
         limit: +limit,
         totalCount: totalCount[0].totalCount,
-        totalPages,
+        totalPages: totalPages,
         sort,
         q,
       },
@@ -134,8 +140,12 @@ Favourite.findPlaylists = async (userId, query, result) => {
       ` ((p.public = 1 AND fp.user_id = '${userId}' ) OR (fp.user_id = '${userId}' AND p.user_id = fp.user_id)) AND p.is_deleted = 0` +
       `  ${sort === "new" ? " ORDER BY fp.created_at DESC " : ""}` +
       `  ${sort === "old" ? " ORDER BY fp.created_at ASC " : ""}` +
-      `  ${sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(p.title), 1, 1) " : ""}` +
-      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} `
+      `  ${
+        sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(p.title), 1, 1) " : ""
+      }` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(
@@ -179,8 +189,12 @@ Favourite.findArtists = async (userId, query, result) => {
       ` ${q ? `AND u.name LIKE "%${q}%"` : ""}` +
       `  ${sort === "new" ? " ORDER BY fl.created_at DESC " : ""}` +
       `  ${sort === "old" ? " ORDER BY fl.created_at ASC " : ""}` +
-      `  ${sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(u.name), 1, 1) " : ""}` +
-      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} `
+      `  ${
+        sort === "alpha" ? " ORDER BY SUBSTRING(LOWER(u.name), 1, 1) " : ""
+      }` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(

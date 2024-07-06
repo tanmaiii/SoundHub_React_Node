@@ -101,26 +101,6 @@ const playlistApi = {
       },
     });
   },
-  getAllFavoritesByUser(
-    token: string,
-    page: number,
-    limit: number,
-    q?: string,
-    sort?: string
-  ): Promise<ListResponse<TPlaylist>> {
-    const url = `playlist/like`;
-    return axiosClient.get(url, {
-      headers: {
-        authorization: token,
-      },
-      params: {
-        page: page,
-        limit: limit,
-        sortBy: sort,
-        q: q,
-      },
-    });
-  },
   checkLikedPlaylist(playlistId: string, token: string): Promise<CheckLikedResponse> {
     const url = "playlist/checkLiked/";
     return axiosClient.get(url + playlistId, {
@@ -140,6 +120,14 @@ const playlistApi = {
   unLikePlaylist(playlistId: string, token: string) {
     const url = "playlist/like/";
     return axiosClient.delete(url + playlistId, {
+      headers: {
+        authorization: token,
+      },
+    });
+  },
+  countLikes(playlistId: string, token: string): Promise<number> {
+    const url = "playlist/like/";
+    return axiosClient.get(url + playlistId, {
       headers: {
         authorization: token,
       },
