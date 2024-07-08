@@ -10,6 +10,8 @@ import { useAuth } from "../../context/authContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { apiConfig } from "../../configs";
 import { use } from "i18next";
+import { Helmet } from "react-helmet-async";
+import SongMenu from "../../components/Menu/SongMenu";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -18,6 +20,7 @@ export default function PlaylistPage() {
   const [totalCount, setTotalCount] = useState(0);
   const queryClient = useQueryClient();
   const [activeDropdown, setActiveDropdown] = useState<boolean>(false);
+  const [activeMenu, setActiveMenu] = useState<boolean>(false);
 
   const {
     data: playlist,
@@ -56,7 +59,7 @@ export default function PlaylistPage() {
   } = useQuery({
     queryKey: ["playlist-songs", id],
     queryFn: async () => {
-      const res = await songApi.getAllByPlaylistId(token, id || "", 1, 50);
+      const res = await songApi.getAllByPlaylistId(token, id || "", 1, 0);
       setTotalCount(res.pagination.totalCount);
       return res.data;
     },
@@ -97,6 +100,10 @@ export default function PlaylistPage() {
 
   return (
     <div className="playlistPage">
+      <Helmet>
+        <title>{`${playlist?.title} | Sound hub`}</title>
+      </Helmet>
+
       <div className="playlistPage__header">
         <HeaderPage
           fbAvt={Images.PLAYLIST}
@@ -119,9 +126,9 @@ export default function PlaylistPage() {
                 <i className="fa-solid fa-play"></i>
               </button>
             )}
-            {playlist?.id && currentUser?.id !== playlist?.id && (
+            {playlist?.user_id && currentUser?.id !== playlist?.user_id && (
               <button
-                className={isLike ? "active" : ""}
+                className={`btn__like ${isLike ? "active" : ""}`}
                 onClick={() => mutationLike.mutate(isLike ?? false)}
               >
                 {isLike ? (
@@ -131,11 +138,17 @@ export default function PlaylistPage() {
                 )}
               </button>
             )}
-            <button>
-              <i className="fa-solid fa-ellipsis"></i>
+            <button className="btn__menu">
+              {/* <i className="fa-solid fa-ellipsis"></i> */}
+              <SongMenu
+                id={id || ""}
+                active={activeMenu}
+                onOpen={() => setActiveMenu(true)}
+                onClose={() => setActiveMenu(false)}
+              />
             </button>
           </div>
-          <div className="playlistPage__content__header__right">
+          {/* <div className="playlistPage__content__header__right">
             {songs && songs?.length > 0 && (
               <div className="dropdown">
                 <div
@@ -158,7 +171,7 @@ export default function PlaylistPage() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
 
         <TableTrack

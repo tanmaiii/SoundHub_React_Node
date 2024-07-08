@@ -10,14 +10,14 @@ Favourite.findAll = async (userId, query, result) => {
 
   const [data] = await promiseDb.query(
     `SELECT * FROM (` +
-      ` SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name , p.image_path, NULL as song_path , p.public, fp.created_at as created_at ` +
+      ` SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name,u.id as user_id , p.image_path, NULL as song_path , p.public, fp.created_at as created_at ` +
       ` FROM favourite_playlists AS fp` +
       ` LEFT JOIN playlists AS p ON fp.playlist_id = p.id` +
       ` LEFT JOIN users as u on u.id = p.user_id` +
       ` WHERE ((p.public = 1 AND fp.user_id = '${userId}' ) OR (fp.user_id = '${userId}' AND p.user_id = fp.user_id)) AND p.is_deleted = 0 ` +
       ` ${q ? `AND p.title LIKE "%${q}%" ` : ""} ` +
       ` UNION ` +
-      ` SELECT 'artist' AS type, u.id, NUll as title,NUll as author, u.name, u.image_path, NULL as song_path, NULL as public, fl.created_at as created_at ` +
+      ` SELECT 'artist' AS type, u.id, NUll as title,NUll as author, u.name, u.id as user_id, u.image_path, NULL as song_path, NULL as public, fl.created_at as created_at ` +
       ` FROM follows AS fl` +
       ` LEFT JOIN users AS u ON u.id = fl.followed_user_id` +
       ` WHERE fl.follower_user_id = '${userId}'` +
@@ -37,14 +37,14 @@ Favourite.findAll = async (userId, query, result) => {
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) AS totalCount FROM (` +
-      ` SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name ,p.image_path ,NULL as song_path , p.public, fp.created_at as created_at ` +
+      ` SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name, u.id as user_id, p.image_path ,NULL as song_path , p.public, fp.created_at as created_at ` +
       ` FROM favourite_playlists AS fp` +
       ` LEFT JOIN playlists AS p ON fp.playlist_id = p.id` +
       ` LEFT JOIN users as u on u.id = p.user_id` +
       ` WHERE ((p.public = 1 AND fp.user_id = '${userId}' ) OR (fp.user_id = '${userId}' AND p.user_id = fp.user_id)) AND p.is_deleted = 0 ` +
       ` ${q ? `AND p.title LIKE "%${q}%" ` : ""} ` +
       ` UNION ` +
-      ` SELECT 'artist' AS type, u.id, NUll as title,NUll as author, u.name, u.image_path ,NULL as song_path, NULL as public, fl.created_at as created_at ` +
+      ` SELECT 'artist' AS type, u.id, NUll as title,NUll as author, u.name, u.id as user_id, u.image_path ,NULL as song_path, NULL as public, fl.created_at as created_at ` +
       ` FROM follows AS fl` +
       ` LEFT JOIN users AS u ON u.id = fl.followed_user_id` +
       ` WHERE fl.follower_user_id = '${userId}'` +
@@ -132,7 +132,7 @@ Favourite.findPlaylists = async (userId, query, result) => {
   const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
-    `SELECT p.id, p.title, p.image_path, NULL as song_path, u.name as author, p.public, fp.created_at ` +
+    `SELECT p.id, p.title, p.image_path, NULL as song_path, u.name as author, u.id as user_id, p.public, fp.created_at ` +
       ` FROM favourite_playlists AS fp` +
       ` INNER JOIN playlists AS p ON fp.playlist_id = p.id` +
       ` LEFT JOIN users AS u ON p.user_id = u.id` +

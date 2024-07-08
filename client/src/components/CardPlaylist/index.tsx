@@ -8,6 +8,9 @@ import { PATH } from "../../constants/paths";
 import { ResSoPaAr } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { playlistApi } from "../../apis";
+import { useAuth } from "../../context/authContext";
 
 export interface CardPlaylistProps {
   className?: string;
@@ -18,6 +21,7 @@ export interface CardPlaylistProps {
   title: string | undefined;
   author: string | undefined;
   userId: string;
+  isPublic: number;
 }
 
 function CardPlaylist({
@@ -27,32 +31,82 @@ function CardPlaylist({
   title,
   author,
   userId,
+  isPublic,
   loading = false,
 }: CardPlaylistProps) {
   const navigate = useNavigate();
+  const { token, currentUser } = useAuth();
+  const queryClient = useQueryClient();
+
+  const handleClick = () => {
+    id && navigate(`${PATH.PLAYLIST}/${id}`);
+  };
+
+  const { data: isLike } = useQuery({
+    queryKey: ["like-playlist", id],
+    queryFn: async () => {
+      const res = await playlistApi.checkLikedPlaylist(id ?? "", token);
+      return res.isLiked;
+    },
+  });
+
+  const mutationLike = useMutation({
+    mutationFn: (like: boolean) => {
+      if (like) return playlistApi.unLikePlaylist(id ?? "", token);
+      return playlistApi.likePlaylist(id ?? "", token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["playlist-count", id] });
+      queryClient.invalidateQueries({ queryKey: ["like-playlist", id] });
+      queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
+      queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
+    },
+  });
+
+  const handleRemove = () => {};
 
   return (
     <div className={`CardPlaylist ${className}`}>
       <div className="CardPlaylist__container">
-        <Link
-          to={`${PATH.PLAYLIST}/${id}`}
-          className="CardPlaylist__container__image"
-        >
+        <div className="CardPlaylist__container__image">
           {loading ? (
             <Skeleton height={200} />
           ) : (
-            <div>
-              <ImageWithFallback
-                src={image ?? ""}
-                fallbackSrc={Images.PLAYLIST}
-                alt=""
-              />
-            </div>
+            <>
+                <ImageWithFallback
+                  src={image ?? ""}
+                  fallbackSrc={Images.PLAYLIST}
+                  alt=""
+                />
+              <div
+                className="CardPlaylist__container__image__swapper"
+                onClick={handleClick}
+              ></div>
+              {currentUser?.id === userId ? (
+                <button className="btn__remove" onClick={handleRemove}>
+                  <i className="fa-light fa-trash-can"></i>
+                </button>
+              ) : (
+                <button
+                  className={`btn__like ${isLike ? "active" : ""}`}
+                  onClick={() => mutationLike.mutate(isLike ?? false)}
+                >
+                  {isLike ? (
+                    <i className="fa-solid fa-heart"></i>
+                  ) : (
+                    <i className="fa-light fa-heart"></i>
+                  )}
+                </button>
+              )}
+            </>
           )}
-        </Link>
+        </div>
 
         <div className="CardPlaylist__container__desc">
           <p>
+            {isPublic === 0 && (
+              <i className="icon__private fa-light fa-lock"></i>
+            )}
             <Link
               to={`${PATH.PLAYLIST}/${id}`}
               className="CardPlaylist__container__desc__title"
@@ -65,7 +119,7 @@ function CardPlaylist({
               <Skeleton />
             ) : (
               <div className="CardPlaylist__container__desc__info__artist">
-                <Link to={`${PATH.PLAYLIST}/${userId}`}>{author}</Link>
+                <Link to={`${PATH.ARTIST}/${userId}`}>{author}</Link>
                 {/* {artists &&
                   Array.isArray(artists) &&
                   artists.map((artist, index) => (

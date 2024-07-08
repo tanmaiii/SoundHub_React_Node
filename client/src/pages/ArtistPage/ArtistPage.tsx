@@ -201,6 +201,7 @@ export default function ArtistPage() {
                     author={playlist.author}
                     id={playlist.id}
                     userId={playlist.user_id ?? ""}
+                    isPublic={playlist.public ?? 1}
                   />
                 ))}
               </Section>

@@ -12,7 +12,7 @@
     z-index: 99;
     @include flex(unset, space-between);
     flex-direction: column;
-    
+
     @include tablet {
       position: fixed;
       transform: translateY(-100%);
@@ -61,7 +61,19 @@
         padding: 0 $space-24;
 
         &__group {
-          padding: $space-4 0;
+          // padding: $space-4 0;
+
+          &:first-child {
+            hr {
+              display: none;
+            }
+          }
+
+          &:not(:first-child) {
+            hr {
+              margin: $space-10 0;
+            }
+          }
 
           &__title {
             font-size: $size-18;
@@ -80,8 +92,11 @@
               color: themed("txt-second");
               border-radius: $radius-12;
               transition: $transition;
-              margin-bottom: $space-8;
+              // margin-bottom: $space-8;
               cursor: pointer;
+              &:not(:last-child) {
+                margin-bottom: $space-8;
+              }
 
               &:hover {
                 background-color: $color-hover;

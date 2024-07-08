@@ -11,12 +11,16 @@ import playApi from "../../apis/play/playApi";
 import CommentInput from "../../components/CommentInput/CommentInput";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
+import { Helmet } from "react-helmet-async";
+import SongMenu from "../../components/Menu/SongMenu";
+import { useState } from "react";
 
 export default function SongPage() {
   const navigation = useNavigate();
   const { id } = useParams();
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
+  const [activeMenu, setActiveMenu] = useState<boolean>(false);
 
   const {
     data: song,
@@ -81,6 +85,10 @@ export default function SongPage() {
 
   return (
     <div className="songPage">
+      <Helmet>
+        <title>{`${song?.title} | Sound hub`}</title>
+      </Helmet>
+
       <div className="songPage__header">
         <HeaderPage
           fbAvt={Images.SONG}
@@ -99,20 +107,27 @@ export default function SongPage() {
           <button className="btn__play">
             <i className="fa-solid fa-play"></i>
           </button>
-          {/* {currentUser?.id !== song?.user_id && ( */}
-          <button
-            className={isLike ? "active" : ""}
-            onClick={() => mutationLike.mutate(isLike ?? false)}
-          >
-            {isLike ? (
-              <i className="fa-solid fa-heart"></i>
-            ) : (
-              <i className="fa-light fa-heart"></i>
-            )}
-          </button>
-          {/* )} */}
-          <button>
-            <i className="fa-solid fa-ellipsis"></i>
+          {currentUser?.id !== song?.user_id && (
+            <button
+              className={`btn__like ${isLike ? "active" : ""}`}
+              onClick={() => mutationLike.mutate(isLike ?? false)}
+            >
+              {isLike ? (
+                <i className="fa-solid fa-heart"></i>
+              ) : (
+                <i className="fa-light fa-heart"></i>
+              )}
+            </button>
+          )}
+          <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
+            {/* <i className="fa-solid fa-ellipsis"></i> */}
+            <SongMenu
+              id={id || ""}
+              active={activeMenu}
+              onOpen={() => setActiveMenu(true)}
+              onClose={() => setActiveMenu(false)}
+              placement="bottom-start"
+            />
           </button>
         </div>
 

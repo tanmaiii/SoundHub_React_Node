@@ -1,0 +1,13 @@
+{
+    "song" : "Bài hát",
+    "playlist" : "Danh sách phát",
+    "comments" : "Bình luận",
+    "Menu" : {
+        "Add to playlist" : "Thêm vào danh sách phát",
+        "Add to favorites list" : "Thêm vào danh sách yêu thích",
+        "Add to waiting list" : "Thêm vào danh sách chờ",
+        "See details" : "Xem chi tiết",
+        "Artist Access" : "Truy cập nghệ sĩ",
+        "Share" : "Chia sẻ"
+    }
+}

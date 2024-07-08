@@ -1,0 +1,51 @@
+@use "../../scss/" as *;
+
+.MyPlaylistPage {
+  &__container {
+    @include themify($themes) {
+      // margin-top: $height-header;
+      padding: 0 $space-24;
+      &__header {
+        &__nav {
+          padding: 0 $space-12;
+          ul {
+            @include flex(center, unset);
+            gap: $space-8;
+            button {
+              font-size: $radius-16;
+              color: themed("txt-main");
+              padding: $space-6 $space-16;
+              border-radius: $radius-16;
+              background-color: themed("bg-2");
+            }
+          }
+        }
+      }
+      &__body {
+        &__list {
+          @include flex(center, unset);
+          // gap: $space-16;
+          flex-wrap: wrap;
+          padding: $space-12 0;
+        }
+        &__loadMore {
+          width: 100%;
+          @include flex(center, center);
+          button {
+            font-size: $radius-16;
+            color: themed("txt-main");
+            padding: $space-8 $space-16;
+            border-radius: $radius-10;
+            background-color: themed("bg-2");
+            cursor: pointer;
+            border: 1px solid themed("bg-3");
+            transition: $transition;
+            &:hover {
+              background-color: themed("bg-3");
+            }
+          }
+        }
+      }
+    }
+  }
+}

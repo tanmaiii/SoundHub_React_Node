@@ -39,6 +39,11 @@
                 color: $color-white;
               }
             }
+            &.active {
+              i {
+                color: $color-primary1;
+              }
+            }
             &:not(.btn__play):hover {
               background-color: $color-hover;
             }

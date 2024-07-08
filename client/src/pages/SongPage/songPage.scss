@@ -8,18 +8,27 @@
       isolation: isolate;
     }
     &__content {
-      background-color: themed('bg-rgba');
+      background-color: themed("bg-rgba");
       isolation: isolate;
       margin-top: -200px;
       &__header {
         padding: $space-24 $space-24;
         gap: $space-8;
         @include flex(center, start);
-        button {
+        & > button {
           cursor: pointer;
           background-color: themed("bg-2");
           border-radius: 50%;
           padding: $space-4;
+          & > i {
+            --size: 40px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-24;
+            color: themed("txt-main");
+          }
+
           &.btn__play {
             background-color: $color-primary1;
             transition: all 0.3s;
@@ -35,19 +44,30 @@
               color: $color-white;
             }
           }
+          &.btn__menu {
+            position: relative;
+            .SongMenu__button {
+              cursor: pointer;
+              color: themed("txt-main");
+              border-radius: 50%;
+              & > i {
+                --size: 36px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                font-size: $size-18;
+              }
+            }
+          }
           &:not(.btn__play):hover {
             background-color: $color-hover;
           }
-          &.active{
-            i {color: $color-primary1;}
-          }
-          i {
-            --size: 40px;
-            width: var(--size);
-            height: var(--size);
-            @include flex(center, center);
-            font-size: $size-24;
-            color: themed("txt-main");
+          & > .btn__like {
+            &.active {
+              & > i {
+                color: $color-primary1;
+              }
+            }
           }
         }
       }

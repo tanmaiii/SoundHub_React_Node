@@ -51,7 +51,7 @@ export default function UserSetting() {
         >
           <ImageWithFallback
             alt=""
-            src={currentUser && apiConfig.imageURL(currentUser.image_path)}
+            src={currentUser.image_path ?? ""}
             fallbackSrc={Images.AVATAR}
           />
         </div>
@@ -61,7 +61,7 @@ export default function UserSetting() {
             <Link to={`${PATH.ARTIST + "/" + currentUser?.id}`}>
               <ImageWithFallback
                 alt=""
-                src={currentUser && apiConfig.imageURL(currentUser.image_path)}
+                src={currentUser.image_path ?? ""}
                 fallbackSrc={Images.AVATAR}
               />
             </Link>

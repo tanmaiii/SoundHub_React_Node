@@ -180,7 +180,7 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
   const limit = query?.limit;
   const sort = query?.sort || "new";
 
-  const offset = (page - 1) * limit;
+  // const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
     `SELECT s.*, u.name as author, pvs.num_song, slc.count as count` +
@@ -191,7 +191,7 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
       ` WHERE ${q ? ` s.title LIKE "%${q}%" AND` : ""}` +
       ` ((s.public = 1 AND pvs.playlist_id = '${playlistId}' ) OR (pvs.playlist_id = '${playlistId}' AND s.user_id = '${userId}')) AND is_deleted = 0 ` +
       ` ORDER BY pvs.num_song ${sort === "new" ? "ASC" : "DESC"} ` +
-      ` limit ${+limit} offset ${+offset}`
+      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} `
   );
 
   const [totalCount] = await promiseDb.query(

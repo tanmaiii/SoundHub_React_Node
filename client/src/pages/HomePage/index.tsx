@@ -30,7 +30,6 @@ function HomePage(props: any) {
         undefined,
         "new"
       );
-      console.log("songPopular", res.data);
 
       return res.data;
     },
@@ -157,6 +156,7 @@ function HomePage(props: any) {
               author={playlist.author}
               id={playlist.id}
               userId={playlist.user_id ?? ""}
+              isPublic={playlist.public ?? 1}
             />
           ))}
         </Section>

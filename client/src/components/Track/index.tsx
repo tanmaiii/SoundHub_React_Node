@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import Images from "../../constants/images";
@@ -7,7 +7,9 @@ import IconPlay from "../IconPlay/IconPlay";
 import "./style.scss";
 
 import { useDispatch, useSelector } from "react-redux";
-import { apiConfig } from "../../configs";
+import { songApi } from "../../apis";
+import { PATH } from "../../constants/paths";
+import { useAuth } from "../../context/authContext";
 import {
   playSong,
   setNowPlaying,
@@ -16,9 +18,7 @@ import {
 import { RootState } from "../../store";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
-import { songApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
-import { PATH } from "../../constants/paths";
+import SongMenu from "../Menu/SongMenu";
 
 interface TrackProps {
   song: TSong;
@@ -30,6 +30,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { token, currentUser } = useAuth();
+  const [activeMenu, setActiveMenu] = useState(false);
 
   const { isPlaying, songPlayId } = useSelector(
     (state: RootState) => state.nowPlaying
@@ -48,8 +49,6 @@ export default function Track({ song, number, loading = false }: TrackProps) {
     queryKey: ["like-song", song?.id],
     queryFn: async () => {
       const res = await songApi.checkLikedSong(song?.id ?? "", token);
-      console.log(res.isLiked);
-
       return res.isLiked;
     },
   });
@@ -68,6 +67,11 @@ export default function Track({ song, number, loading = false }: TrackProps) {
       });
     },
   });
+
+  const handleOnClickEdit = () => {
+    setActiveMenu(!activeMenu);
+    console.log("Click Button : ", !activeMenu);
+  };
 
   return (
     <div className="track">
@@ -108,9 +112,6 @@ export default function Track({ song, number, loading = false }: TrackProps) {
                 <Link to={`${PATH.ARTIST}/${song?.user_id}`}>
                   {song?.author}
                 </Link>
-                <Link to={`${PATH.ARTIST}/${song?.user_id}`}>
-                  {song?.author}
-                </Link>
               </div>
             )}
           </div>
@@ -142,9 +143,14 @@ export default function Track({ song, number, loading = false }: TrackProps) {
           </div>
 
           <div className="item__hover">
-            <button className="button-edit">
-              <i className="fa-solid fa-ellipsis"></i>
-            </button>
+            <div className={`button-edit ${activeMenu ? " active" : ""}`}>
+              <SongMenu
+                id={song?.id}
+                active={activeMenu}
+                onOpen={() => setActiveMenu(true)}
+                onClose={() => setActiveMenu(false)}
+              />
+            </div>
           </div>
         </div>
       </div>

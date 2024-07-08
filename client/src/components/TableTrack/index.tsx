@@ -78,7 +78,12 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
           <div className="table__track__body__list">
             {songs &&
               songs.map((song, index) => (
-                <Track number={`${index + 1}`} song={song} loading={isLoading} />
+                <Track
+                  key={index}
+                  number={`${index + 1}`}
+                  song={song}
+                  loading={isLoading}
+                />
               ))}
           </div>
         </div>

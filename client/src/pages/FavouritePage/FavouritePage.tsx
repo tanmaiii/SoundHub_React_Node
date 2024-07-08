@@ -9,6 +9,7 @@ import TableTrack from "../../components/TableTrack";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import Images from "../../constants/images";
 import { apiConfig } from "../../configs";
+import { Helmet } from "react-helmet-async";
 
 export default function FavouritePage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
@@ -57,8 +58,6 @@ export default function FavouritePage() {
     } else {
       setSongs((prevSongs) => prevSongs && [...prevSongs, ...res.data]);
     }
-    console.log(res);
-
     return res;
   };
 
@@ -71,6 +70,10 @@ export default function FavouritePage() {
 
   return (
     <div className="favourite">
+      <Helmet>
+        <title>{`Favourite | Sound hub`}</title>
+      </Helmet>
+
       <div className="favourite__header">
         <HeaderPage
           avt={Images.LIKED_SONGS}
@@ -95,7 +98,7 @@ export default function FavouritePage() {
               <i className="fa-solid fa-ellipsis"></i>
             </button>
           </div>
-          <div className="favourite__content__header__right">
+          {/* <div className="favourite__content__header__right">
             {songs && songs?.length > 0 && (
               <div className="dropdown">
                 <div
@@ -118,7 +121,7 @@ export default function FavouritePage() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
         <TableTrack songs={songs} isLoading={isLoading} />
       </div>

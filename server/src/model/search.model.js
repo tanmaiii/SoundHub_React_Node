@@ -93,7 +93,7 @@ Search.findPlaylists = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `  SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name ,p.image_path , p.public, fpc.count ,p.created_at as created_at  ` +
+    `  SELECT 'playlist' AS type, p.id , p.title, u.name as author, NULL AS name, u.id as user_id ,p.image_path , p.public, fpc.count ,p.created_at as created_at  ` +
       ` FROM playlists AS p` +
       ` LEFT JOIN users as u on u.id = p.user_id ` +
       ` LEFT JOIN favourite_playlists_count as fpc on fpc.playlist_id = p.id ` +
@@ -103,14 +103,6 @@ Search.findPlaylists = async (userId, query, result) => {
       `  ${sort === "old" ? " ORDER BY created_at ASC " : ""}` +
       `  ${sort === "count" ? " ORDER BY count DESC " : ""}` +
       ` LIMIT ${+limit} OFFSET ${+offset}`
-  );
-
-  console.log(
-    `  SELECT  COUNT(*) AS totalCount ` +
-      ` FROM playlists AS p` +
-      ` LEFT JOIN users as u on u.id = p.user_id ` +
-      ` WHERE ((p.public = 1 ) OR (p.user_id = '${userId}' AND p.user_id = p.user_id)) AND p.is_deleted = 0 ` +
-      ` ${q ? ` AND p.title LIKE "%${q}%" ` : ""} `
   );
 
   const [totalCount] = await promiseDb.query(
@@ -199,7 +191,7 @@ Search.findArtists = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    ` SELECT 'artist' AS type, u.id , null as title, null as author, u.name AS name , u.image_path ,null as public, fl.count, null as created_at ` +
+    ` SELECT 'artist' AS type, u.id , null as title, null as author, u.name AS name, u.id as user_id, u.image_path ,null as public, fl.count, null as created_at ` +
       ` FROM users as u ` +
       ` LEFT JOIN followers_count as fl on fl.user_id = u.id ` +
       ` ${q ? ` WHERE u.name LIKE "%${q}%" ` : ""} ` +

@@ -7,8 +7,9 @@ import { useAuth } from "../../context/authContext";
 // import numeral from "numeral";
 import numeral from "numeral";
 import { apiConfig } from "../../configs";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { PATH } from "../../constants/paths";
+import { useEffect } from "react";
 
 interface HeaderPageProps {
   avt: string;
@@ -40,6 +41,7 @@ export default function HeaderPage({
   userId,
 }: HeaderPageProps) {
   const { currentUser } = useAuth();
+  const { id } = useParams();
 
   return (
     <div className="HeaderPage">
@@ -57,7 +59,7 @@ export default function HeaderPage({
           ) : (
             <>
               <ImageWithFallback src={avt} alt="" fallbackSrc={fbAvt} />
-              {userId && currentUser?.id === userId && (
+              {userId && currentUser?.id === userId && id && (
                 <div className="avatar__overlay">
                   <i className="fa-regular fa-pen-to-square"></i>
                   <span>Edit playlist</span>

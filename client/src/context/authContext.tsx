@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authApi, userApi } from "../apis";
 import { TUser } from "../types";
+import Cookies from "js-cookie";
 
 // Khai báo kiểu dữ liệu cho AuthContext
 interface IAuthContext {
@@ -28,14 +29,16 @@ export const AuthContextProvider = ({ children }: Props) => {
     return userString ? JSON.parse(userString) : null;
   });
 
-  const [token, setToken] = useState<string>(() => {
-    const tokenString = localStorage.getItem("token");
-    return tokenString ? JSON.parse(tokenString) : null;
-  });
+  const [token, setToken] = useState<string>(() => Cookies.get("token") || "");
 
   const login = async (user: TUser, token: string) => {
     setCurrentUser(user);
     setToken(token);
+    Cookies.set("token", token, {
+      expires: 7,
+      secure: true,
+      sameSite: "Strict",
+    });
   };
 
   const logout = async () => {
@@ -58,7 +61,12 @@ export const AuthContextProvider = ({ children }: Props) => {
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));
-    localStorage.setItem("token", JSON.stringify(token));
+    // localStorage.setItem("token", JSON.stringify(token));
+    Cookies.set("token", token, {
+      expires: 7,
+      secure: true,
+      sameSite: "Strict",
+    });
   }, [currentUser, token]);
 
   // Cập nhật giá trị của AuthContextProvider

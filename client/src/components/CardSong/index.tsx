@@ -32,13 +32,13 @@ function CardSong({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`${PATH.SONG}/${id}`);
+    id && navigate(`${PATH.SONG}/${id}`);
   };
 
   return (
     <div className={`CardSong ${className}`}>
       <div className="CardSong__container">
-        <Link to={`${PATH.SONG}/${id}`} className="CardSong__container__image">
+        <div className="CardSong__container__image" onClick={handleClick}>
           {loading ? (
             <Skeleton height={180} width={"100%"} />
           ) : (
@@ -53,16 +53,16 @@ function CardSong({
               </div>
             </>
           )}
-        </Link>
+        </div>
 
         <div className="CardSong__container__desc">
           <div>
-            <Link
-              to={`${PATH.SONG}/${id}`}
+            <h4
+              onClick={handleClick}
               className="CardSong__container__desc__title"
             >
               {loading ? <Skeleton height={24} /> : title}
-            </Link>
+            </h4>
           </div>
           <div className="CardSong__container__desc__info">
             <div className="CardSong__container__desc__info__artist">

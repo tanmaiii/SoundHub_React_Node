@@ -16,7 +16,7 @@ export default function Navbar() {
 
   const navbar = [
     {
-      title: "Discover",
+      title: "",
       items: [
         {
           id: 1,
@@ -30,29 +30,36 @@ export default function Navbar() {
           icon: <i className="fa-light fa-magnifying-glass"></i>,
           path: PATH.SEARCH,
         },
+      ],
+    },
+    {
+      title: "",
+      items: [
         {
           id: 3,
           title: t("navbar.artists"),
           icon: <i className="fa-light fa-user-music"></i>,
-          path: PATH.ARTIST,
+          path: PATH.MY_ARTIST,
         },
         {
           id: 4,
+          title: t("navbar.playlist"),
+          icon: <i className="fa-light fa-album"></i>,
+          path: PATH.MY_PLAYLIST,
+        },
+        {
+          id: 5,
           title: t("navbar.favourites"),
           icon: <i className="fa-light fa-heart"></i>,
           path: PATH.FAVOURITE,
         },
         {
-          id: 5,
+          id: 6,
           title: t("navbar.recently"),
           icon: <i className="fa-light fa-clock"></i>,
           path: PATH.RECENTLY,
         },
       ],
-    },
-    {
-      title: t("navbar.playlist"),
-      items: [],
     },
   ];
 
@@ -95,9 +102,10 @@ export default function Navbar() {
         <div className={`navbar__container__content`}>
           {navbar.map((navbar, index) => (
             <div key={index} className="navbar__container__content__group">
-              <h4 className="navbar__container__content__group__title">
+              {/* <h4 className="navbar__container__content__group__title">
                 {navbar.title}
-              </h4>
+              </h4> */}
+              <hr />
               <div className="navbar__container__content__group__list">
                 {navbar.items.map((item, index) => (
                   <Link

@@ -24,7 +24,7 @@ function ImageWithFallback({ src, fallbackSrc, alt, stype }: props) {
     setImgSrc(fallbackSrc);
   };
 
-  return <img style={stype} src={imgSrc} alt={alt} onError={handleError} />;
-}
+  return <img style={{verticalAlign: "middle", ...stype}} src={imgSrc} alt={alt} onError={handleError} />;
+  }
 
 export default ImageWithFallback;
