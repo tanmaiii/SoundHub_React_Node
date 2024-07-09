@@ -221,7 +221,6 @@ export default function ArtistPage() {
                       image={artist.image_path}
                       name={artist.name}
                       id={artist.id}
-                      followers="1"
                     />
                   );
                 })}

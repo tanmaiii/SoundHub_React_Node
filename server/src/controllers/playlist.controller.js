@@ -148,17 +148,21 @@ export const getAllPlaylist = (req, res) => {
 };
 
 export const getAllPlaylistByMe = async (req, res) => {
-  const token = req.headers["authorization"];
-  const userInfo = await jwtService.verifyToken(token);
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
 
-  Playlist.getMe(userInfo.id, req.query, (err, data) => {
-    if (err) {
-      const conflictError = err;
-      return res.status(401).json({ conflictError });
-    } else {
-      return res.json(data);
-    }
-  });
+    Playlist.getMe(userInfo.id, req.query, (err, data) => {
+      if (err) {
+        const conflictError = err;
+        return res.status(401).json({ conflictError });
+      } else {
+        return res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
 };
 
 export const getAllPlaylistByUser = (req, res) => {
@@ -174,7 +178,6 @@ export const getAllPlaylistByUser = (req, res) => {
     res.status(400).json(error);
   }
 };
-
 
 export const checkPlaylistLike = async (req, res) => {
   try {

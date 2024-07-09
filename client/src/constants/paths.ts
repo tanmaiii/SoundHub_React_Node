@@ -1,6 +1,7 @@
 import { lazy, FunctionComponent } from "react";
 import { ComponentType } from "react";
 import MyPlaylistPage from "../pages/MyPlaylistPage";
+import MyArtistPage from "../pages/MyArtistPage";
 
 const HomePage: FunctionComponent<any> = lazy(() => import("../pages/HomePage") as Promise<{ default: ComponentType<any> }>);
 const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
@@ -61,7 +62,7 @@ const publicRoutes = [
   { path: PATH.SONG_SHOW, layout: null, component: SongPage },
 
   { path: PATH.MY_PLAYLIST, layout: null, component: MyPlaylistPage },
-  { path: PATH.MY_ARTIST, layout: null, component: MyPlaylistPage },
+  { path: PATH.MY_ARTIST, layout: null, component: MyArtistPage },
   
 
   { path: "*", layout: null, component: NotFoundPage },

@@ -14,7 +14,6 @@ interface CardProps {
   id: string;
   image?: string;
   name: string | undefined;
-  followers: string;
   loading?: boolean;
 }
 

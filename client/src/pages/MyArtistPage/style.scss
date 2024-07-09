@@ -1,6 +1,6 @@
 @use "../../scss/" as *;
 
-.MyPlaylistPage {
+.MyArtistPage {
   &__container {
     @include themify($themes) {
       // margin-top: $height-header;

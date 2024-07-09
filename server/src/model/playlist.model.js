@@ -207,7 +207,7 @@ Playlist.getMe = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT p.id, p.title, p.image_path, u.name as author, p.public, p.created_at ` +
+    `SELECT p.id, p.title, p.image_path, u.name as author, u.id as user_id, p.public, p.created_at ` +
       ` FROM playlists as p ` +
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
       ` WHERE ${q ? ` title like "%${q}%" and` : ""}` +

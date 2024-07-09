@@ -131,8 +131,10 @@ $themes: (
     height: max-content;
     padding: $space-8 $space-12;
     border-radius: 12px;
-    color: $color-black;
-    background-color: $color-gray;
+    color: $color-white;
+    // background-color: rgba($color-gray, 0.8);
+    background-color: $color-bg-3-dark;
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.2);
     font-size: $size-14;
     font-weight: $font-light;
     transition: all 0.2;

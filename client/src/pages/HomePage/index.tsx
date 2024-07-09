@@ -170,7 +170,6 @@ function HomePage(props: any) {
               id={artist?.id}
               name={artist?.name}
               image={artist?.image_path}
-              followers={"1"}
             />
           ))}
         </Section>

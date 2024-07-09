@@ -85,8 +85,8 @@ const playlistApi = {
     token: string,
     page: number,
     limit: number,
+    sort?: string,
     q?: string,
-    sort?: string
   ): Promise<ListResponse<TPlaylist>> {
     const url = "playlist/me";
     return axiosClient.get(url, {

@@ -73,30 +73,39 @@ function CardPlaylist({
             <Skeleton height={200} />
           ) : (
             <>
-                <ImageWithFallback
-                  src={image ?? ""}
-                  fallbackSrc={Images.PLAYLIST}
-                  alt=""
-                />
+              <ImageWithFallback
+                src={image ?? ""}
+                fallbackSrc={Images.PLAYLIST}
+                alt=""
+              />
               <div
                 className="CardPlaylist__container__image__swapper"
                 onClick={handleClick}
               ></div>
               {currentUser?.id === userId ? (
-                <button className="btn__remove" onClick={handleRemove}>
-                  <i className="fa-light fa-trash-can"></i>
-                </button>
+                <div className="CardPlaylist__container__image__button">
+                  <button
+                    data-tooltip="Remove playlist"
+                    className="btn__remove"
+                    onClick={handleRemove}
+                  >
+                    <i className="fa-light fa-trash-can"></i>
+                  </button>
+                </div>
               ) : (
-                <button
-                  className={`btn__like ${isLike ? "active" : ""}`}
-                  onClick={() => mutationLike.mutate(isLike ?? false)}
-                >
-                  {isLike ? (
-                    <i className="fa-solid fa-heart"></i>
-                  ) : (
-                    <i className="fa-light fa-heart"></i>
-                  )}
-                </button>
+                <div className="CardPlaylist__container__image__button">
+                  <button
+                    data-tooltip="Add to favorite"
+                    className={`btn__like ${isLike ? "active" : ""}`}
+                    onClick={() => mutationLike.mutate(isLike ?? false)}
+                  >
+                    {isLike ? (
+                      <i className="fa-solid fa-heart"></i>
+                    ) : (
+                      <i className="fa-light fa-heart"></i>
+                    )}
+                  </button>
+                </div>
               )}
             </>
           )}

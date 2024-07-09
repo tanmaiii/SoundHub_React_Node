@@ -29,9 +29,10 @@
         width: 100%;
         height: 100%;
         position: relative;
-        overflow: hidden;
         border-radius: $radius-8;
+        // overflow: hidden;
         img {
+          border-radius: $radius-8;
           vertical-align: middle;
           overflow: hidden;
           background-color: themed("bg-2");
@@ -42,6 +43,7 @@
         }
         &__swapper {
           position: absolute;
+          border-radius: $radius-8;
           width: 100%;
           height: 100%;
           top: 0;
@@ -51,38 +53,39 @@
           background-color: $color-rgba-black;
           display: none;
         }
-        button {
+        &__button {
           position: absolute;
           top: 10px;
           right: 10px;
-          padding: $space-8;
-          border-radius: 50%;
-          @include flex(center, center);
-          cursor: pointer;
-          transition: $transition;
-          display: none;
-          // background-color: $color-rgba-black;
-          &:hover {
-            background-color: $color-rgba-white;
-          }
-          i {
+          button {
+            padding: $space-8;
+            border-radius: 50%;
             @include flex(center, center);
-            --size: 20px;
-            width: var(--size);
-            height: var(--size);
-            font-size: $size-20;
-            color: themed("txt-main");
+            cursor: pointer;
             transition: $transition;
-          }
-        }
-        & > .btn__like {
-          &.active {
+            display: none;
+            @include tooltip(top, center);
+            // background-color: $color-rgba-black;
+            &:hover {
+              background-color: $color-rgba-white;
+            }
             i {
-              color: $color-red;
+              @include flex(center, center);
+              --size: 20px;
+              width: var(--size);
+              height: var(--size);
+              font-size: $size-20;
+              color: $color-bg-2;
+              transition: $transition;
             }
           }
-        }
-        & .btn__remove {
+          & > .btn__like {
+            &.active {
+              i {
+                color: $color-red;
+              }
+            }
+          }
         }
       }
       &__desc {
