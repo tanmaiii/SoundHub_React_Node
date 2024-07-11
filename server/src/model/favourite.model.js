@@ -79,7 +79,7 @@ Favourite.findSongs = async (userId, query, result) => {
   const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
-    `SELECT s.*, u.name as author, slc.count as count ` +
+    `SELECT s.*, u.name as author, slc.count as count_listen ` +
       ` FROM favourite_songs AS fs ` +
       ` INNER JOIN songs AS s ON fs.song_id = s.id ` +
       ` LEFT JOIN song_listens_count AS slc ON s.id = slc.song_id ` +

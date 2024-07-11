@@ -28,21 +28,22 @@
       top: calc(100% + 10px);
       right: 0;
       background-color: themed("bg-1");
-      padding: $space-4;
+      // padding: $space-4;
       border-radius: $space-12;
       box-shadow: themed("box-shadow");
-      width: 230px;
+      width: 260px;
+      overflow: hidden;
       display: none;
-      
+
       &.active {
         display: block;
       }
-      
+
       &__user {
         @include flex(center, unset);
         gap: $space-8;
         padding: $space-14;
-        
+
         img {
           --size: 60px;
           border: 2px solid $color-primary1;
@@ -63,29 +64,6 @@
             color: $color-white;
             border-radius: $radius-8;
             padding: 0 $space-8;
-          }
-        }
-      }
-
-      &__list {
-        li {
-          padding: $space-14;
-          @include flex(center, unset);
-          cursor: pointer;
-          margin-bottom: $space-8;
-          &:hover {
-            background-color: $color-hover;
-            border-radius: $space-8;
-          }
-          i {
-            margin-right: $space-12;
-            font-size: $size-18;
-            color: themed("txt-main");
-          }
-          span {
-            margin-right: $space-12;
-            font-size: $size-16;
-            color: themed("txt-main");
           }
         }
       }
@@ -146,6 +124,105 @@
             transform: translateX(24px);
             background-color: white;
           }
+        }
+      }
+    }
+  }
+}
+
+.Dropdown {
+  @include flex(start, start, row);
+  // overflow: hidden;
+  // transform: translateX(0);
+  // transform: translateX(-100%);
+  min-width: 260px;
+  height: 400px;
+  position: relative;
+  .DropdownGroup {
+    @include themify($themes) {
+      padding: $space-4;
+      min-width: 260px;
+      // transform: translateX(0);
+      transition: $transition;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &.level-1 {
+        transform: translateX(-100%);
+      }
+
+      &.level-2 {
+        transform: translateX(100%);
+      }
+
+      &.active {
+        transform: translateX(0);
+      }
+      &__header {
+        padding: 0 $space-4;
+        height: 52px;
+        @include flex(center, start);
+        h4 {
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-mediun;
+        }
+        & > .button__back {
+          border-radius: 50%;
+          cursor: pointer;
+          color: themed("txt-main");
+          margin-right: $space-12;
+          &:hover {
+            background-color: $color-hover;
+          }
+          i {
+            --size: 36px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-18;
+          }
+        }
+      }
+    }
+  }
+
+  .DropdownItem {
+    @include themify($themes) {
+      // padding: $space-14;
+      padding: 0 $space-12;
+      @include flex(center, unset);
+      cursor: pointer;
+      margin-bottom: $space-8;
+      height: 52px;
+      &:hover {
+        background-color: $color-hover;
+        border-radius: $space-8;
+      }
+      i:first-of-type {
+        margin-right: $space-12;
+        font-size: $size-18;
+        color: themed("txt-main");
+      }
+
+      i:last-of-type {
+        font-size: $size-18;
+        color: themed("txt-main");
+      }
+      &__body {
+        flex: 1;
+        h4 {
+          margin-right: $space-12;
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-mediun;
+        }
+        span {
+          margin-right: $space-12;
+          font-size: $size-12;
+          color: themed("txt-second");
         }
       }
     }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Section from "../../components/Section";
 import "./style.scss";
 
-import SectionChartHome from "../../components/SectionChartHome/SectionChartHome";
+import SectionTopSong from "../../components/SectionSong";
 
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -26,11 +26,23 @@ function HomePage(props: any) {
       const res = await searchApi.getPopular(
         token ?? "",
         1,
-        10,
+        20,
         undefined,
         "new"
       );
 
+      return res.data;
+    },
+  });
+
+  const {
+    data: songsFavorite,
+    isLoading: loadingSongs,
+    refetch: refetchSongs,
+  } = useQuery({
+    queryKey: ["favorite-songs"],
+    queryFn: async () => {
+      const res = await searchApi.getSongs(token, 1, 10, undefined, "count");
       return res.data;
     },
   });
@@ -114,15 +126,15 @@ function HomePage(props: any) {
 
   return (
     <div className="home">
-      {songPopular && songPopular?.length > 0 && (
-        <Section title={t("section.Songs popular")} to={PATH.SONG}>
-          {songPopular?.map((song, index) => (
+      {songsFavorite && songsFavorite?.length > 0 && (
+        <Section title={t("section.favoriteSongs")} to={PATH.SONG}>
+          {songsFavorite?.map((song, index) => (
             <CardSong
               key={index}
               title={song.title}
               image={song.image_path}
               author={song.author}
-              userId={song.user_id}
+              userId={song.user_id ?? ""}
               id={song.id}
             />
           ))}
@@ -130,7 +142,7 @@ function HomePage(props: any) {
       )}
 
       {songNew && songNew.length > 0 && (
-        <Section title={t("section.Songs new")} to={PATH.SONG}>
+        <Section title={t("section.newSongs")} to={PATH.SONG}>
           {songNew?.map((song, index) => (
             <CardSong
               key={index}
@@ -144,10 +156,13 @@ function HomePage(props: any) {
         </Section>
       )}
 
-      <SectionChartHome title={"Top nhạc trong tuần"} />
+      <SectionTopSong
+        title={t("section.bestMusicOfTheMonth")}
+        data={songPopular ?? []}
+      />
 
       {playlists && playlists.length > 0 && (
-        <Section title={t("section.Playlists popular")}>
+        <Section title={t("section.popularPlaylists")}>
           {playlists?.map((playlist, index) => (
             <CardPlaylist
               key={index}
@@ -163,7 +178,7 @@ function HomePage(props: any) {
       )}
 
       {artists && artists.length > 0 && (
-        <Section title={t("section.Artists relased")}>
+        <Section title={t("section.relatedArtists")}>
           {artists?.map((artist) => (
             <CardArtist
               key={artist?.id}

@@ -15,9 +15,11 @@
   },
   "section" : {
     "all": "All",
-    "Songs new" : "Songs new",
-    "Songs popular" : "Songs popular",
-    "Artists relased" : "Artists relased",
-    "Playlists popular" : "Playlists popular"
+    "newSongs": "New Songs",
+    "favoriteSongs": "Favorite Songs",
+    "popularSongs": "Popular Songs",
+    "relatedArtists": "Related Artists",
+    "popularPlaylists": "Popular Playlists",
+    "bestMusicOfTheMonth": "Best Music Of The Month"
   }
 }

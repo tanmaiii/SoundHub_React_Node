@@ -68,11 +68,6 @@ export default function Track({ song, number, loading = false }: TrackProps) {
     },
   });
 
-  const handleOnClickEdit = () => {
-    setActiveMenu(!activeMenu);
-    console.log("Click Button : ", !activeMenu);
-  };
-
   return (
     <div className="track">
       <div
@@ -122,7 +117,9 @@ export default function Track({ song, number, loading = false }: TrackProps) {
           </span>
         </div>
         <div className="pc-2 t-2 m-0">
-          <span className="track__wrapper__count">{song?.count ?? 0}</span>
+          <span className="track__wrapper__count">
+            {song?.count_listen ?? 0}
+          </span>
         </div>
         <div className="track__wrapper__right pc-2 t-2 m-4">
           <div className="item__hover">

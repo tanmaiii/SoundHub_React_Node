@@ -236,7 +236,7 @@ Search.findSongPopular = async (userId, query, result) => {
   const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    ` SELECT s.*, u.name as author, count(sp.song_id) as count ` +
+    ` SELECT s.*, u.name as author, count(sp.song_id) as count_listen` +
       ` FROM song_plays sp ` +
       ` LEFT JOIN  songs s ON sp.song_id = s.id ` +
       ` LEFT JOIN users as u on u.id = s.user_id  ` +
@@ -245,7 +245,7 @@ Search.findSongPopular = async (userId, query, result) => {
       // ` AND ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} ` +
       ` GROUP BY  sp.song_id ` +
-      `  ${sort === "new" ? " ORDER BY count DESC " : "ORDER BY count ASC"}` +
+      `  ${sort === "new" ? " ORDER BY count_listen DESC " : "ORDER BY count_listen ASC"}` +
       ` LIMIT ${+limit} OFFSET ${+offset} `
   );
 

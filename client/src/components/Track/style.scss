@@ -169,13 +169,10 @@
 
           .button-edit {
             position: relative;
-            
             &.active {
               visibility: visible;
               color: $color-red;
             }
-            
-
             .SongMenu__button {
               cursor: pointer;
               color: themed("txt-main");

@@ -62,11 +62,11 @@
           &:not(.btn__play):hover {
             background-color: $color-hover;
           }
-          & > .btn__like {
-            &.active {
-              & > i {
-                color: $color-primary1;
-              }
+        }
+        & > .btn__like {
+          &.active {
+            & > i {
+              color: $color-primary1;
             }
           }
         }

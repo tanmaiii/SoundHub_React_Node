@@ -1,0 +1,17 @@
+@use "../../scss/" as *;
+
+.SectionSong {
+  @include themify($themes) {
+    &__main {
+      &__slide {
+        @include flex(start, start, row);
+        flex-wrap: wrap;
+        &__col {
+          // @include flex(start, start, column);
+          // gap: $space-4;
+          padding: 0 $space-4;
+        }
+      }
+    }
+  }
+}

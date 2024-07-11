@@ -60,7 +60,6 @@ const SongMenu = ({
         SongMenuRef.current &&
         !SongMenuRef.current.contains(e.target as Node)
       ) {
-        // console.log("Click outside : ", active);
         onClose();
       }
     };

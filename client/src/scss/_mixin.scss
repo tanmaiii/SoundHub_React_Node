@@ -48,10 +48,11 @@ $themes: (
   @return map-get($theme-map, $key);
 }
 
-@mixin flex($align-item, $justify-content) {
+@mixin flex($align-item, $justify-content, $direction: row) {
   display: flex;
   align-items: $align-item;
   justify-content: $justify-content;
+  flex-direction: $direction;
 }
 
 @mixin text($line) {

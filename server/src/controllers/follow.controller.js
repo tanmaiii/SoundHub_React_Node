@@ -111,7 +111,7 @@ export const getCountFollowers = (req, res) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       } else if (!data) {
-        return res.status(401).json(0);
+        return res.json(0);
       } else {
         return res.json(data);
       }
@@ -127,7 +127,7 @@ export const getCountFollowing = (req, res) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       } else if (!data) {
-        return res.status(401).json(0);
+        return res.json(0);
       } else {
         return res.json(data);
       }
@@ -153,7 +153,6 @@ export const checkFollowing = async (req, res) => {
     res.status(400).json(error);
   }
 };
-
 
 export default {
   addFollow,
