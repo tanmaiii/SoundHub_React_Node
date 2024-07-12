@@ -9,4 +9,5 @@ export type TPlaylist = {
   public?: number;
   is_deleted?: number;
   created_at?: string;
+  count_like?: number;
 };

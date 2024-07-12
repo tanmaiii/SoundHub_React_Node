@@ -33,16 +33,27 @@
       box-shadow: themed("box-shadow");
       width: 260px;
       overflow: hidden;
-      display: none;
+      // display: none;
+      transition: $transition;
+      visibility: hidden;
+
+      hr {
+        margin: 0;
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+        width: 100%;
+      }
 
       &.active {
-        display: block;
+        // display: block;
+        visibility: visible;
       }
 
       &__user {
         @include flex(center, unset);
         gap: $space-8;
         padding: $space-14;
+        width: 100%;
 
         img {
           --size: 60px;
@@ -70,7 +81,16 @@
 
       &__darkMode {
         @include flex(center, space-between);
-        padding: $space-14;
+        height: 52px;
+        padding: 0 $space-12;
+        width: 100%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $color-hover;
+          border-radius: $space-8;
+        }
+
         &__label {
           i {
             margin-right: $space-12;
@@ -132,22 +152,18 @@
 
 .Dropdown {
   @include flex(start, start, row);
-  // overflow: hidden;
-  // transform: translateX(0);
-  // transform: translateX(-100%);
   min-width: 260px;
-  height: 400px;
   position: relative;
   .DropdownGroup {
     @include themify($themes) {
       padding: $space-4;
       min-width: 260px;
-      // transform: translateX(0);
-      transition: $transition;
-
+      transition: transform 0.25s ease-in-out;
       position: absolute;
       top: 0;
       left: 0;
+      @include flex(start, start, column);
+      gap: $space-4;
 
       &.level-1 {
         transform: translateX(-100%);
@@ -191,12 +207,12 @@
 
   .DropdownItem {
     @include themify($themes) {
-      // padding: $space-14;
       padding: 0 $space-12;
       @include flex(center, unset);
       cursor: pointer;
-      margin-bottom: $space-8;
+      // margin-bottom: $space-8;
       height: 52px;
+      width: 100%;
       &:hover {
         background-color: $color-hover;
         border-radius: $space-8;

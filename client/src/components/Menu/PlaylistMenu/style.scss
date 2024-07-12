@@ -1,0 +1,70 @@
+@use "../../../scss/" as *;
+
+.PlaylistMenu {
+  @include themify($themes) {
+    &__button {
+    }
+
+    &__context {
+      position: absolute;
+      background-color: themed("bg-2");
+      width: max-content;
+      padding: $space-4;
+      border-radius: $radius-8;
+      z-index: 10;
+      display: none;
+      &[data-placement="top-start"] {
+        bottom: 100%;
+        left: 0;
+      }
+      &[data-placement="bottom-start"] {
+        top: 100%;
+        left: 0;
+      }
+      &[data-placement="top-end"] {
+        bottom: 100%;
+        right: 0;
+      }
+      &[data-placement="bottom-end"] {
+        top: 100%;
+        right: 0;
+      }
+
+      &.active {
+        display: block;
+      }
+      &__list {
+        @include flex(start, unset);
+        flex-direction: column;
+
+        &__item {
+          width: 100%;
+
+          button {
+            cursor: pointer;
+            padding: $space-12 $space-12;
+            border-radius: $radius-4;
+            @include flex(center, start);
+            gap: $space-8;
+            width: 100%;
+            transition: $transition;
+
+            &:hover {
+              background-color: themed("bg-3");
+            }
+            i {
+              font-size: $size-16;
+              color: themed("txt-second");
+            }
+
+            span {
+              font-size: $size-16;
+              transition: all 0.3s;
+              color: themed("txt-main");
+            }
+          }
+        }
+      }
+    }
+  }
+}

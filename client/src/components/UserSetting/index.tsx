@@ -48,8 +48,8 @@ export default function UserSetting() {
   });
 
   useEffect(() => {
-    console.log(active, activeMenu, height);
-  }, [active, activeMenu, height]);
+    active && setActiveMenu("main");
+  }, [active]);
 
   const handleClickLogout = () => {
     logout();
@@ -116,13 +116,6 @@ export default function UserSetting() {
                 desc="English"
                 iconRight={<i className="fa-regular fa-chevron-right"></i>}
               />
-              <DropdownItem
-                iconLeft={<i className="fa-light fa-right-from-bracket"></i>}
-                title="Logout"
-                func={() => handleClickLogout()}
-              />
-              <hr />
-
               <div className="UserSetting__dropdown__darkMode">
                 <div className="UserSetting__dropdown__darkMode__label">
                   <i className="fa-light fa-moon"></i>
@@ -139,6 +132,13 @@ export default function UserSetting() {
                   <label htmlFor="switch" className="switch"></label>
                 </button>
               </div>
+
+              <hr />
+              <DropdownItem
+                iconLeft={<i className="fa-light fa-right-from-bracket"></i>}
+                title="Logout"
+                func={() => handleClickLogout()}
+              />
             </DropdownGroup>
             <DropdownGroup
               name="language"
@@ -214,8 +214,8 @@ const DropdownGroup = ({
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setHeight(divRef.current?.clientHeight ?? 200);
-  }, []);
+    active && setHeight(divRef.current?.clientHeight ?? 200);
+  }, [active]);
 
   return (
     <div

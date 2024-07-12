@@ -35,11 +35,11 @@ export default function SongPage() {
           return res;
         }
       } catch (error) {
-        // navigation.goBack();
         return null;
       }
     },
   });
+
   const { data: author } = useQuery({
     queryKey: ["author", song?.user_id],
     queryFn: async () => {
@@ -49,14 +49,6 @@ export default function SongPage() {
       } catch (error) {
         return null;
       }
-    },
-  });
-
-  const { data: playCount, refetch: refetchCount } = useQuery({
-    queryKey: ["play-count", id],
-    queryFn: async () => {
-      const res = await playApi.getCountPlay(id ?? "");
-      return res;
     },
   });
 
@@ -78,6 +70,9 @@ export default function SongPage() {
         queryKey: ["like-song", id],
       });
       queryClient.invalidateQueries({
+        queryKey: ["song", id],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["songs-favorites", currentUser?.id],
       });
     },
@@ -97,7 +92,8 @@ export default function SongPage() {
           author={author?.name ?? ""}
           avtAuthor={Images.AVATAR}
           time={song?.created_at ?? ""}
-          listen={playCount ?? 0}
+          like={song?.count_like ?? 0}
+          listen={song?.count_listen ?? 0}
           category="Song"
           userId={song?.user_id}
         />
@@ -120,7 +116,6 @@ export default function SongPage() {
             </button>
           )}
           <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
-            {/* <i className="fa-solid fa-ellipsis"></i> */}
             <SongMenu
               id={id || ""}
               active={activeMenu}

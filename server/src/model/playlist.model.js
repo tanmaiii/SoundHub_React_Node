@@ -244,9 +244,10 @@ Playlist.getMe = async (userId, query, result) => {
 
 Playlist.findById = (playlistId, userId, result) => {
   db.query(
-    `SELECT p.*, u.name as author ` +
+    `SELECT p.*, u.name as author, fpc.count as count_like ` +
       ` FROM playlists as p` +
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
+      ` LEFT JOIN favourite_playlists_count AS fpc ON p.id = fpc.playlist_id ` +
       ` WHERE p.id = ? AND p.is_deleted = 0 `,
     [playlistId],
     (err, playlist) => {

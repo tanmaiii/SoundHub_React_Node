@@ -19,11 +19,20 @@
         &__left {
           gap: $space-8;
           @include flex(center, start);
-          button {
+          & > button {
             cursor: pointer;
             background-color: themed("bg-2");
             border-radius: 50%;
             padding: $space-4;
+            & > i {
+              --size: 40px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-24;
+              color: themed("txt-main");
+            }
+
             &.btn__play {
               background-color: $color-primary1;
               transition: all 0.3s;
@@ -39,21 +48,30 @@
                 color: $color-white;
               }
             }
-            &.active {
-              i {
-                color: $color-primary1;
+            &.btn__menu {
+              position: relative;
+              .PlaylistMenu__button {
+                cursor: pointer;
+                color: themed("txt-main");
+                border-radius: 50%;
+                & > i {
+                  --size: 36px;
+                  width: var(--size);
+                  height: var(--size);
+                  @include flex(center, center);
+                  font-size: $size-18;
+                }
               }
             }
             &:not(.btn__play):hover {
               background-color: $color-hover;
             }
-            i {
-              --size: 40px;
-              width: var(--size);
-              height: var(--size);
-              @include flex(center, center);
-              font-size: $size-24;
-              color: themed("txt-main");
+            &.btn__like {
+              &.active {
+                & > i {
+                  color: $color-primary1;
+                }
+              }
             }
           }
         }

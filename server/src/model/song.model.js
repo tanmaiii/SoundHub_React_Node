@@ -142,9 +142,10 @@ Song.restore = (songId, userId, result) => {
 //Tìm bằng ID
 Song.findById = (songId, userId, result) => {
   db.query(
-    `SELECT s.*, u.name as author, slc.count as count  ` +
+    `SELECT s.*, u.name as author, slc.count as count_listen, fsc.count as count_like  ` +
       ` FROM songs as s` +
       ` LEFT JOIN users AS u ON s.user_id = u.id` +
+      ` LEFT JOIN favourite_songs_count AS fsc ON s.id = fsc.song_id ` +
       ` LEFT JOIN song_listens_count AS slc ON s.id = slc.song_id ` +
       ` WHERE s.id = ? AND s.is_deleted = 0`,
     [songId],
@@ -183,10 +184,11 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
   // const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
-    `SELECT s.*, u.name as author, pvs.num_song, slc.count as count` +
+    `SELECT s.*, u.name as author, pvs.num_song, slc.count as count_listen, fsc.count as count_like` +
       ` FROM playlist_songs as pvs ` +
       ` INNER JOIN songs AS s ON pvs.song_id = s.id` +
       ` LEFT JOIN users AS u ON s.user_id = u.id` +
+      ` LEFT JOIN favourite_songs_count AS fsc ON s.id = fsc.song_id ` +
       ` LEFT JOIN song_listens_count AS slc ON s.id = slc.song_id ` +
       ` WHERE ${q ? ` s.title LIKE "%${q}%" AND` : ""}` +
       ` ((s.public = 1 AND pvs.playlist_id = '${playlistId}' ) OR (pvs.playlist_id = '${playlistId}' AND s.user_id = '${userId}')) AND is_deleted = 0 ` +

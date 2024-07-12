@@ -12,6 +12,7 @@ import { apiConfig } from "../../configs";
 import { use } from "i18next";
 import { Helmet } from "react-helmet-async";
 import SongMenu from "../../components/Menu/SongMenu";
+import PlaylistMenu from "../../components/Menu/PlaylistMenu";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -73,13 +74,13 @@ export default function PlaylistPage() {
     },
   });
 
-  const { data: countLikes } = useQuery({
-    queryKey: ["playlist-count", id],
-    queryFn: async () => {
-      const res = await playlistApi.countLikes(id ?? "", token);
-      return res;
-    },
-  });
+  // const { data: countLikes } = useQuery({
+  //   queryKey: ["playlist-count", id],
+  //   queryFn: async () => {
+  //     const res = await playlistApi.countLikes(id ?? "", token);
+  //     return res;
+  //   },
+  // });
 
   const mutationLike = useMutation({
     mutationFn: (like: boolean) => {
@@ -87,7 +88,7 @@ export default function PlaylistPage() {
       return playlistApi.likePlaylist(id ?? "", token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["playlist-count", id] });
+      queryClient.invalidateQueries({ queryKey: ["playlist", id] });
       queryClient.invalidateQueries({ queryKey: ["like-playlist", id] });
       queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
       queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
@@ -113,7 +114,7 @@ export default function PlaylistPage() {
           avtAuthor={author?.image_path ?? ""}
           time={playlist?.created_at ?? ""}
           category="Playlist"
-          like={countLikes ?? 0}
+          like={playlist?.count_like ?? 0}
           song={totalCount ?? 0}
           userId={playlist?.user_id}
         />
@@ -138,11 +139,11 @@ export default function PlaylistPage() {
                 )}
               </button>
             )}
-            <button className="btn__menu">
-              {/* <i className="fa-solid fa-ellipsis"></i> */}
-              <SongMenu
+            <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
+              <PlaylistMenu
                 id={id || ""}
                 active={activeMenu}
+                placement="bottom-start"
                 onOpen={() => setActiveMenu(true)}
                 onClose={() => setActiveMenu(false)}
               />
