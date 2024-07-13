@@ -13,6 +13,7 @@ import { apiConfig } from "../../configs";
 import ImageWithFallback from "../ImageWithFallback";
 import { CSSTransition } from "react-transition-group";
 import { useTranslation } from "react-i18next";
+import { locales } from "../../i18n/i18n";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
@@ -22,7 +23,7 @@ export default function UserSetting() {
   const { currentUser, logout } = useAuth();
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
   const dispatch = useDispatch();
-
+  const { t } = useTranslation("header");
   const { i18n } = useTranslation();
 
   const changeLanguage = (lng: string) => {
@@ -96,30 +97,30 @@ export default function UserSetting() {
               <hr />
               <DropdownItem
                 iconLeft={<i className="fa-light fa-circle-user"></i>}
-                title="Profile"
+                title={t("Dropdown.main.Profile")}
               />
               <DropdownItem
                 iconLeft={<i className="fa-light fa-upload"></i>}
-                title="Upload"
+                title={t("Dropdown.main.Upload")}
               />
               <hr />
               <DropdownItem
                 iconLeft={<i className="fa-light fa-gear"></i>}
-                title="Settings"
+                title={t("Dropdown.main.Setting")}
                 iconRight={<i className="fa-regular fa-chevron-right"></i>}
                 func={() => setActiveMenu("settings")}
               />
               <DropdownItem
                 func={() => setActiveMenu("language")}
                 iconLeft={<i className="fa-sharp fa-light fa-globe"></i>}
-                title="Language"
-                desc="English"
+                title={t("Dropdown.main.Language")}
+                desc={locales[i18n.language]}
                 iconRight={<i className="fa-regular fa-chevron-right"></i>}
               />
               <div className="UserSetting__dropdown__darkMode">
                 <div className="UserSetting__dropdown__darkMode__label">
                   <i className="fa-light fa-moon"></i>
-                  <span>Dark Mode</span>
+                  <span>{t("Dropdown.main.DarkMode")}</span>
                 </div>
                 <button>
                   <input
@@ -136,14 +137,14 @@ export default function UserSetting() {
               <hr />
               <DropdownItem
                 iconLeft={<i className="fa-light fa-right-from-bracket"></i>}
-                title="Logout"
+                title={t("Dropdown.main.Logout")}
                 func={() => handleClickLogout()}
               />
             </DropdownGroup>
             <DropdownGroup
               name="language"
               active={activeMenu === "language"}
-              title="Language"
+              title={t("Dropdown.main.Language")}
               level={2}
               setHeight={(num) => setHeight(num)}
               func={() => setActiveMenu("main")}
@@ -158,7 +159,7 @@ export default function UserSetting() {
                       <i className="fa-sharp fa-regular fa-circle"></i>
                     )
                   }
-                  title="English"
+                  title={locales["en"]}
                 />
                 <DropdownItem
                   func={() => changeLanguage("vi")}
@@ -169,20 +170,20 @@ export default function UserSetting() {
                       <i className="fa-sharp fa-regular fa-circle"></i>
                     )
                   }
-                  title="Vietnamese"
+                  title={locales["vi"]}
                 />
               </div>
             </DropdownGroup>
             <DropdownGroup
               name="settings"
               active={activeMenu === "settings"}
-              title="Settings"
+              title={t("Dropdown.main.Setting")}
               level={2}
               setHeight={(num) => setHeight(num)}
               func={() => setActiveMenu("main")}
             >
               <div>
-                <span>Settings</span>
+                <span>{t("Dropdown.main.Setting")}</span>
               </div>
             </DropdownGroup>
           </div>

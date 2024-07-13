@@ -1,0 +1,24 @@
+{
+  "signup": "Đăng ký",
+  "login": "Đăng nhập",
+  "Search artist, title, ablum,...": "Tìm kiếm ...",
+  "Dropdown": {
+    "main": {
+      "Profile": "Hồ sơ",
+      "Logout": "Đăng xuất",
+      "Setting": "Cài đặt",
+      "Language": "Ngôn ngữ",
+      "DarkMode": "Chế độ tối",
+      "Upload": "Tải lên"
+    },
+    "Language": {
+      "Vietnamese": "Tiếng Việt",
+      "English": "Tiếng Anh"
+    },
+    "Setting": {
+      "Change password": "Đổi mật khẩu",
+      "Change email": "Đổi email",
+      "Change username": "Đổi tên người dùng"
+    }
+  }
+}

@@ -9,6 +9,7 @@ import BarPlaying from "../../components/BarPlaying/BarPlaying";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Footer from "../../components/Footer";
+import WattingList from "../../components/WattingList";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -30,12 +31,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
             </div>
             <Footer />
           </div>
-          <div
-            className={`MainLayout__top__main__waiting ${
-              openWatting ? "open" : ""
-            }`}
-          >
-            <span>Waiting list</span>
+          <div className={`MainLayout__top__main__waiting`}>
+            <WattingList/>
           </div>
         </div>
       </div>

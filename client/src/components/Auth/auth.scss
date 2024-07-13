@@ -103,7 +103,7 @@
         // gap: $space-12;
         & > .title {
           font-size: $size-16;
-          font-weight: $font-mediun;
+          font-weight: $font-medium;
           color: themed("txt-main");
         }
 
@@ -187,7 +187,7 @@
         & > .desc {
           h4 {
             font-size: $size-14;
-            font-weight: $font-mediun;
+            font-weight: $font-medium;
             color: themed("txt-main");
             margin-bottom: $space-4;
           }
@@ -224,7 +224,7 @@
           border-radius: $radius-25;
           font-size: $size-16;
           color: $color-white;
-          font-weight: $font-mediun;
+          font-weight: $font-medium;
           cursor: pointer;
           transition: $transition;
           margin-top: $space-32;

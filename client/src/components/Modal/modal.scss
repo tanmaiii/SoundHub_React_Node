@@ -11,20 +11,17 @@
     @include flex(center, center);
     z-index: 99;
     transform: translateY(-100%);
-    display: none;
-    transition: all 0.1s;
     &.active {
       transform: translateY(0);
-      display: flex;
     }
 
     &__wrapper {
       background-color: themed("bg-1");
-      border-radius: $radius-12;
+      border-radius: $radius-8;
       width: max-content;
       min-height: 400px;
       min-width: 400px;
-      overflow: hidden;
+      // overflow: hidden;
       animation: fadeIn linear 0.1s;
       position: relative;
 
@@ -36,50 +33,33 @@
         min-width: 100%;
       }
 
-      &__bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 10rem;
-        width: 100%;
-        z-index: 100;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+      &__header {
+        @include flex(center, space-between, row);
+        padding: $space-12 $space-8 $space-12 $space-24;
+        h3 {
+          font-size: $size-20;
+          font-weight: $font-bold;
+          color: themed("txt-main");
+        }
+        .btn_close {
+          border-radius: 50%;
+          overflow: hidden;
+          color: themed("txt-main");
+          cursor: pointer;
+          &:hover {
+            background-color: $color-hover;
+          }
+          i {
+            --size: 36px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-20;
+          }
         }
       }
 
       &__body {
-        position: relative;
-        padding: 10rem 24px 24px;
-        z-index: 101;
-      }
-
-      .btn_close {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        cursor: pointer;
-        background-color: rgba($color: $color-black, $alpha: 0.4);
-        backdrop-filter: blur(10px);
-        border-radius: 50%;
-        padding: $space-8;
-        color: $color-white;
-        transition: $transition;
-        z-index: 101;
-
-        &:hover {
-          background-color: rgba($color: $color-black, $alpha: 0.6);
-        }
-
-        i {
-          @include flex(center, center);
-          --size: 20px;
-          width: var(--size);
-          height: var(--size);
-          font-size: $size-24;
-        }
       }
     }
   }

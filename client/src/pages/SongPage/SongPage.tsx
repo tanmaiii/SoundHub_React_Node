@@ -13,7 +13,7 @@ import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
 import { Helmet } from "react-helmet-async";
 import SongMenu from "../../components/Menu/SongMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -21,6 +21,10 @@ export default function SongPage() {
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  })
 
   const {
     data: song,

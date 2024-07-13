@@ -6,7 +6,7 @@ interface ModalProps {
   children: React.ReactNode;
   title: string;
   openModal: boolean;
-  setOpenModal: Function;
+  setOpenModal: (value: boolean) => void;
 }
 
 export default function Modal(props: ModalProps) {
@@ -32,21 +32,22 @@ export default function Modal(props: ModalProps) {
       }
     }
     document.addEventListener("mousedown", (event) => handleMousedown(event));
-    return () => document.removeEventListener("mousedown", (event) => handleMousedown(event));
+    return () =>
+      document.removeEventListener("mousedown", (event) =>
+        handleMousedown(event)
+      );
   });
 
   return (
     <div className={`Modal ${openModal ? "active" : ""}`}>
       <div ref={modalBodyRef} className="Modal__wrapper">
-        <div className="Modal__wrapper__body">{props.children}</div>
-        
-        <div className="Modal__wrapper__bg">
-          <img src={Images.BG} alt="" />
+        <div className="Modal__wrapper__header">
+          <h3>{props.title}</h3>
+          <button className="btn_close" onClick={() => setOpenModal(false)}>
+            <i className="fa-solid fa-times"></i>
+          </button>
         </div>
-
-        <button className="btn_close" onClick={() => setOpenModal(false)}>
-          <i className="fa-light fa-xmark"></i>
-        </button>
+        <div className="Modal__wrapper__body">{props.children}</div>
       </div>
     </div>
   );

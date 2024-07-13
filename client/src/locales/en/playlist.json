@@ -1,0 +1,12 @@
+{
+  "Playlist": "Playlist",
+  "EditPlaylist": {
+    "EditPlaylist": "Edit Playlist",
+    "Title": "Title",
+    "Description": "Description",
+    "Image": "Image",
+    "Genre": "Genre",
+    "Save": "Save",
+    "Cancel": "Cancel"
+  }
+}

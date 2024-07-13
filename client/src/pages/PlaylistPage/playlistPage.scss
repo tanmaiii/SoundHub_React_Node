@@ -119,5 +119,287 @@
         }
       }
     }
+
+    .ModalEdit {
+      padding: $space-14 $space-24;
+      &__top {
+        @include flex(start, center, row);
+        --size: 240px;
+        gap: $space-14;
+        @include mobile {
+          flex-direction: column;
+          align-items: center;
+        }
+        &__image {
+          background-color: red;
+          overflow: hidden;
+          width: var(--size);
+          height: var(--size);
+          border-radius: $radius-4;
+          position: relative;
+          @include mobile {
+            width: 200px;
+            height: 200px;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          &:hover {
+            .ModalEdit__top__image__edit {
+              display: flex;
+            }
+          }
+          &__edit {
+            background-color: $color-rgba-black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            @include flex(center, center);
+            flex-direction: column;
+            cursor: pointer;
+            gap: $space-8;
+            display: none;
+            & > i {
+              font-size: $size-24;
+              color: $color-white;
+            }
+            & > span {
+              font-size: $size-16;
+              color: $color-white;
+            }
+          }
+        }
+        &__body {
+          @include flex(start, start, column);
+          width: 400px;
+          gap: $space-14;
+          height: var(--size);
+          @include mobile {
+            width: 100%;
+          }
+          &__title {
+            position: relative;
+            width: 100%;
+            label {
+              font-size: $size-14;
+              font-weight: $font-medium;
+              color: themed("txt-second");
+              position: absolute;
+              top: 0;
+              left: 10px;
+              transform: translateY(-50%);
+              padding: 0 $space-4;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+              &::before {
+                background: themed("bg-2");
+                content: "";
+                height: 2px;
+                position: absolute;
+                right: 50%;
+                top: 50%;
+                -webkit-transform: translate(50%, -50%);
+                transform: translate(50%, -50%);
+                width: 110%;
+                z-index: -1;
+              }
+            }
+            input {
+              padding: $space-12 $space-14;
+              width: 100%;
+              border-radius: $radius-4;
+              background-color: themed("bg-2");
+              font-size: $size-16;
+              font-weight: $font-light;
+              color: themed("txt-main");
+              border: 1px solid transparent;
+              &:focus {
+                border: 1px solid themed("border");
+              }
+
+              &:focus + label {
+                opacity: 1;
+              }
+            }
+          }
+          &__desc {
+            position: relative;
+            width: 100%;
+            flex: 1;
+            label {
+              font-size: $size-14;
+              font-weight: $font-medium;
+              color: themed("txt-second");
+              position: absolute;
+              top: 0;
+              left: 10px;
+              transform: translateY(-50%);
+              padding: 0 $space-4;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+              &::before {
+                background: themed("bg-2");
+                content: "";
+                height: 2px;
+                position: absolute;
+                right: 50%;
+                top: 50%;
+                -webkit-transform: translate(50%, -50%);
+                transform: translate(50%, -50%);
+                width: 110%;
+                z-index: -1;
+              }
+            }
+            textarea {
+              background-color: themed("bg-2");
+              padding: $space-12 $space-14;
+              border-radius: $radius-4;
+              width: 100%;
+              font-size: $size-16;
+              font-weight: $font-light;
+              color: themed("txt-main");
+              height: 100%;
+              outline: none;
+              border: 1px solid transparent;
+              resize: none;
+              &:focus {
+                border: 1px solid themed("border");
+              }
+
+              &:focus + label {
+                opacity: 1;
+              }
+            }
+          }
+
+          .select {
+            width: 100%;
+            position: relative;
+            &__header {
+              @include flex(center, space-between, row);
+              cursor: pointer;
+              position: relative;
+              input {
+                width: 100%;
+                padding: $space-12 40px $space-12 $space-14;
+                font-size: $size-16;
+                border-radius: $radius-4;
+                background-color: themed("bg-2");
+                color: themed("txt-main");
+                border: 1px solid transparent;
+
+                &:focus {
+                  border: 1px solid themed("border");
+                }
+                &:not(:placeholder-shown) + label,
+                &:focus + label {
+                  top: 0;
+                  font-size: $size-14;
+                  font-weight: $font-medium;
+                  color: themed("txt-second");
+                }
+              }
+              label {
+                position: absolute;
+                left: $space-12;
+                font-size: $size-16;
+                color: themed("txt-main");
+                font-weight: $font-light;
+                transition: $transition;
+                top: 50%;
+                transform: translateY(-50%);
+                &::before {
+                  background: themed("bg-2");
+                  content: "";
+                  height: 2px;
+                  position: absolute;
+                  right: 50%;
+                  top: 50%;
+                  -webkit-transform: translate(50%, -50%);
+                  transform: translate(50%, -50%);
+                  width: 110%;
+                  z-index: -1;
+                }
+              }
+              button {
+                position: absolute;
+                right: $space-4;
+                border-radius: 50%;
+                overflow: hidden;
+                color: themed("txt-main");
+                cursor: pointer;
+                &.active{
+                  transform: rotate(180deg);
+                }
+                &:hover {
+                  // background-color: $color-hover;
+                }
+                i {
+                  --size: 36px;
+                  width: var(--size);
+                  height: var(--size);
+                  @include flex(center, center);
+                  font-size: $size-18;
+                }
+              }
+            }
+            &__body {
+              position: absolute;
+              top: calc(100% + $space-8);
+              left: 0;
+              width: 100%;
+              height: 200px;
+              border-radius: $radius-4;
+              background-color: themed("bg-2");
+              overflow: hidden;
+              visibility: hidden;
+              &.active {
+                visibility: visible;
+              }
+              &__item {
+                padding: $space-12 $space-14;
+                @include flex(center, start, row);
+                gap: $space-4;
+                cursor: pointer;
+                span {
+                  font-size: $size-16;
+                  color: themed("txt-main");
+                }
+                &:hover {
+                  background-color: $color-hover;
+                }
+              }
+            }
+          }
+        }
+      }
+      &__bottom {
+        @include flex(center, end, row);
+        margin-top: $space-24;
+        gap: $space-14;
+
+        button {
+          padding: $space-12 $space-24;
+          border-radius: $radius-4;
+          font-size: $size-16;
+          font-weight: $font-medium;
+          color: $color-white;
+          background-color: $color-primary1;
+          cursor: pointer;
+          transition: all 0.3s;
+
+          &:hover {
+            scale: 0.98;
+          }
+        }
+        & > button:first-child {
+          background-color: themed("bg-3");
+        }
+      }
+    }
   }
 }

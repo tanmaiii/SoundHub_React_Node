@@ -8,11 +8,6 @@
     "recently": "Recently",
     "playlist": "Playlist"
   },
-  "header": {
-    "signup": "Sign Up",
-    "login": "Log In",
-    "Search artist, title, ablum,...": "Search artist, title, ablum,..."
-  },
   "section" : {
     "all": "All",
     "newSongs": "New Songs",

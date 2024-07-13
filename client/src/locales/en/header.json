@@ -1,0 +1,24 @@
+{
+  "signup": "Sign up",
+  "login": "Log in",
+  "Search artist, title, ablum,...": "Search ...",
+  "Dropdown": {
+    "main": {
+      "Profile": "Profile",
+      "Logout": "Logout",
+      "Setting": "Settings",
+      "Language": "Language",
+      "DarkMode": "Dark mode",
+      "Upload": "Upload"
+    },
+    "Language": {
+      "Vietnamese": "Vietnamese",
+      "English": "English"
+    },
+    "Setting": {
+      "Change password": "Change password",
+      "Change email": "Change email",
+      "Change username": "Change username"
+    }
+  }
+}

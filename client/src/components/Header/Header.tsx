@@ -16,7 +16,7 @@ export default function Header() {
   const headerRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
   const { currentUser } = useAuth();
-  const { t } = useTranslation("home");
+  const { t } = useTranslation("header");
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -85,7 +85,7 @@ export default function Header() {
             <i className="fa-thin fa-magnifying-glass"></i>
             <input
               type="text"
-              placeholder={t("header.Search artist, title, ablum,...")}
+              placeholder={t("Search artist, title, ablum,...")}
             />
           </div>
         </div>
@@ -96,12 +96,12 @@ export default function Header() {
             <>
               <Link to={PATH.SIGNUP}>
                 <div className="header__right__signup">
-                  <button className="btn__auth">{t("header.signup")}</button>
+                  <button className="btn__auth">{t("signup")}</button>
                 </div>
               </Link>
               <Link to={PATH.LOGIN}>
                 <div className="header__right__login">
-                  <button className="btn__auth">{t("header.login")}</button>
+                  <button className="btn__auth">{t("login")}</button>
                 </div>
               </Link>
             </>

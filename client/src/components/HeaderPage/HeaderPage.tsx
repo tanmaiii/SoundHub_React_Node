@@ -24,6 +24,7 @@ interface HeaderPageProps {
   song?: number;
   userId?: string;
   loading?: boolean;
+  fnOpenEdit?: () => void;
 }
 
 export default function HeaderPage({
@@ -39,6 +40,7 @@ export default function HeaderPage({
   like,
   song,
   userId,
+  fnOpenEdit,
 }: HeaderPageProps) {
   const { currentUser } = useAuth();
   const { id } = useParams();
@@ -60,7 +62,12 @@ export default function HeaderPage({
             <>
               <ImageWithFallback src={avt} alt="" fallbackSrc={fbAvt} />
               {userId && currentUser?.id === userId && id && (
-                <div className="avatar__overlay">
+                <div
+                  onClick={() => {
+                    fnOpenEdit && fnOpenEdit();
+                  }}
+                  className="avatar__overlay"
+                >
                   <i className="fa-regular fa-pen-to-square"></i>
                   <span>Edit playlist</span>
                 </div>

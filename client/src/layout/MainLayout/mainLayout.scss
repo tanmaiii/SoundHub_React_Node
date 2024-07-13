@@ -29,22 +29,21 @@
         }
 
         &__waiting {
-          background-color: $color-primary1;
-          width: 360px;
-          // display: none;
-          height: 100vh;
-          position: fixed;
-          z-index: 99;
-          top: 0;
-          right: 0;
-          transform: translateX(400px);
-          transition: $transition;
-          &.open {
-            // display: block;
-            transform: translateX(0);
-          }
-          @include tablet {
-          }
+          // background-color: $color-primary1;
+          // width: 360px;
+          // // display: none;
+          // height: 100vh;
+          // position: fixed;
+          // z-index: 99;
+          // top: 0;
+          // right: 0;
+          // transform: translateX(400px);
+          // transition: $transition;
+          // &.open {
+          //   transform: translateX(0);
+          // }
+          // @include tablet {
+          // }
         }
       }
     }

@@ -1,0 +1,12 @@
+{
+  "Playlist": "Playlist",
+  "EditPlaylist": {
+    "EditPlaylist": "Chỉnh sửa playlist",
+    "Title": "Tiêu đề",
+    "Description": "Mô tả",
+    "Image": "Hình ảnh",
+    "Genre": "Thể loại",
+    "Save": "Lưu",
+    "Cancel": "Hủy"
+  }
+}

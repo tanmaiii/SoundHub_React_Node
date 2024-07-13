@@ -13,6 +13,9 @@ import { use } from "i18next";
 import { Helmet } from "react-helmet-async";
 import SongMenu from "../../components/Menu/SongMenu";
 import PlaylistMenu from "../../components/Menu/PlaylistMenu";
+import Modal from "../../components/Modal/Modal";
+import { useTranslation } from "react-i18next";
+import { log } from "console";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -22,6 +25,8 @@ export default function PlaylistPage() {
   const queryClient = useQueryClient();
   const [activeDropdown, setActiveDropdown] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { t } = useTranslation("playlist");
 
   const {
     data: playlist,
@@ -117,6 +122,7 @@ export default function PlaylistPage() {
           like={playlist?.count_like ?? 0}
           song={totalCount ?? 0}
           userId={playlist?.user_id}
+          fnOpenEdit={() => setOpenModal(true)}
         />
       </div>
       <div className="playlistPage__content">
@@ -181,6 +187,87 @@ export default function PlaylistPage() {
           userId={playlist?.user_id}
         />
       </div>
+
+      <Modal
+        title={t("EditPlaylist.EditPlaylist")}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      >
+        <div className="ModalEdit">
+          <div className="ModalEdit__top">
+            <div className="ModalEdit__top__image">
+              <img
+                src={apiConfig.imageURL(playlist?.image_path ?? "")}
+                alt=""
+              />
+              <div className="ModalEdit__top__image__edit">
+                <i className="fa-regular fa-pen-to-square"></i>
+                <span>Edit playlist</span>
+              </div>
+            </div>
+            <div className="ModalEdit__top__body">
+              <div className="ModalEdit__top__body__title">
+                <input
+                  type="text"
+                  id="title"
+                  value={playlist?.title}
+                  placeholder="Add title"
+                />
+                <label htmlFor="title">{t("EditPlaylist.Title")}</label>
+              </div>
+              <div className="ModalEdit__top__body__desc">
+                <textarea
+                  id="title"
+                  value={playlist?.desc}
+                  placeholder="Add description"
+                />
+                <label htmlFor="title">{t("EditPlaylist.Description")}</label>
+              </div>
+              {/* dropdown genre */}
+              <div className="select">
+                <div className="select__header">
+                  <input
+                    type="text"
+                    placeholder="  "
+                    onFocus={() => setActiveDropdown(!activeDropdown)}
+                  />
+                  <label>{t("EditPlaylist.Genre")}</label>
+                  <button
+                    className={`${activeDropdown ? "active" : ""}`}
+                    onClick={() => {
+                      console.log(!activeDropdown);
+
+                      setActiveDropdown(!activeDropdown);
+                    }}
+                  >
+                    <i className="fa-regular fa-chevron-down"></i>
+                  </button>
+                </div>
+                <div
+                  className={`select__body ${activeDropdown ? "active" : ""}`}
+                >
+                  <div className="select__body__item">
+                    <input type="radio" />
+                    <span>akdjhaskdhkas</span>
+                  </div>
+                  <div className="select__body__item">
+                    <input type="radio" />
+                    <span>akdjhaskdhkas</span>
+                  </div>
+                  <div className="select__body__item">
+                    <input type="radio" />
+                    <span>akdjhaskdhkas</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="ModalEdit__bottom">
+            <button>{t("EditPlaylist.Cancel")}</button>
+            <button>{t("EditPlaylist.Save")}</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
