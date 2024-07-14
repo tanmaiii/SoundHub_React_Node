@@ -149,30 +149,28 @@ export default function UserSetting() {
               setHeight={(num) => setHeight(num)}
               func={() => setActiveMenu("main")}
             >
-              <div>
-                <DropdownItem
-                  func={() => changeLanguage("en")}
-                  iconLeft={
-                    i18n.language === "en" ? (
-                      <i className="fa-solid fa-circle-o"></i>
-                    ) : (
-                      <i className="fa-sharp fa-regular fa-circle"></i>
-                    )
-                  }
-                  title={locales["en"]}
-                />
-                <DropdownItem
-                  func={() => changeLanguage("vi")}
-                  iconLeft={
-                    i18n.language === "vi" ? (
-                      <i className="fa-solid fa-circle-o"></i>
-                    ) : (
-                      <i className="fa-sharp fa-regular fa-circle"></i>
-                    )
-                  }
-                  title={locales["vi"]}
-                />
-              </div>
+              <DropdownItem
+                func={() => changeLanguage("en")}
+                iconLeft={
+                  i18n.language === "en" ? (
+                    <i className="fa-solid fa-circle-o"></i>
+                  ) : (
+                    <i className="fa-sharp fa-regular fa-circle"></i>
+                  )
+                }
+                title={locales["en"]}
+              />
+              <DropdownItem
+                func={() => changeLanguage("vi")}
+                iconLeft={
+                  i18n.language === "vi" ? (
+                    <i className="fa-solid fa-circle-o"></i>
+                  ) : (
+                    <i className="fa-sharp fa-regular fa-circle"></i>
+                  )
+                }
+                title={locales["vi"]}
+              />
             </DropdownGroup>
             <DropdownGroup
               name="settings"

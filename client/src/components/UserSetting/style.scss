@@ -180,6 +180,7 @@
         padding: 0 $space-4;
         height: 52px;
         @include flex(center, start);
+        width: 100%;
         h4 {
           font-size: $size-16;
           color: themed("txt-main");

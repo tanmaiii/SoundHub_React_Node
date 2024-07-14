@@ -9,7 +9,9 @@ import numeral from "numeral";
 import { apiConfig } from "../../configs";
 import { Link, useParams } from "react-router-dom";
 import { PATH } from "../../constants/paths";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { genreApi } from "../../apis";
+import { TGenre } from "../../types/genre.type";
 
 interface HeaderPageProps {
   avt: string;
@@ -23,7 +25,9 @@ interface HeaderPageProps {
   like?: number;
   song?: number;
   userId?: string;
+  genreId?: string;
   loading?: boolean;
+  desc?: string;
   fnOpenEdit?: () => void;
 }
 
@@ -40,10 +44,34 @@ export default function HeaderPage({
   like,
   song,
   userId,
+  genreId,
+  desc,
   fnOpenEdit,
 }: HeaderPageProps) {
   const { currentUser } = useAuth();
   const { id } = useParams();
+  const [genre, setGenre] = useState<TGenre | null>(null);
+  const [sizeTitle, setSizeTitle] = useState<number>(60);
+
+  useEffect(() => {
+    const getGenre = async () => {
+      try {
+        const res = await genreApi.getDetail(genreId || "");
+        res && setGenre(res ?? null);
+      } catch (error) {
+        setGenre(null);
+      }
+    };
+    genreId && getGenre();
+  }, [genreId]);
+
+  useEffect(() => {
+    console.log(title.length);
+
+    if (title.length > 24) {
+      setSizeTitle(30);
+    }
+  }, [title]);
 
   return (
     <div className="HeaderPage">
@@ -77,9 +105,26 @@ export default function HeaderPage({
         </div>
         <div className="info">
           <span className="info__category">
-            {loading ? <Skeleton count={1} /> : category}
+            {loading ? (
+              <Skeleton count={1} />
+            ) : (
+              <>
+                <p>{category}</p>
+                {genre && (
+                  <>
+                    <i className="fa-sharp fa-solid fa-circle"></i>
+                    <p>{`${genre?.title}`}</p>
+                  </>
+                )}
+              </>
+            )}
           </span>
-          <h2 className="info__title">{loading ? <Skeleton /> : title}</h2>
+          <span className="info__title" style={{ fontSize: sizeTitle }}>
+            {loading ? <Skeleton /> : title}
+          </span>
+          <span className="info__description">
+            {loading ? <Skeleton /> : desc}
+          </span>
           {loading ? (
             <Skeleton />
           ) : (

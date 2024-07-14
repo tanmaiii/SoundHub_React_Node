@@ -39,6 +39,7 @@
       padding: 145px $space-24 $space-24 $space-24;
       @include flex(end, unset);
       gap: $space-20;
+      overflow: hidden;
       @include mobile {
         padding: $space-12;
         flex-direction: column;
@@ -96,32 +97,57 @@
 
       .info {
         @include flex(unset, unset);
+        flex: 1;
         flex-direction: column;
         flex-wrap: wrap;
-        // gap: $space-8;
         min-width: 200px;
+        width: 100%;
         @include mobile {
           text-align: center;
           justify-content: center;
         }
+
         &__category {
-          font-size: $size-16;
+          font-size: $size-14;
           color: themed("txt-main");
+          @include flex(center, unset);
+          gap: $space-4;
+          @include mobile {
+            justify-content: center;
+          }
+          i {
+            font-size: 6px;
+            color: themed("txt-main");
+          }
         }
 
         &__title {
-          font-size: 60px;
+          // font-size: 60px;
           font-weight: $font-bold;
           color: themed("txt-main");
-          @include text(1);
+          overflow: hidden;
+          @include text(2);
           @include mobile {
-            font-size: $size-40;
+            // font-size: $size-40;
           }
+        }
+
+        &__description {
+          font-size: $size-14;
+          color: themed("txt-second");
+          @include text(2);
+          // display: -webkit-box;
+          // -webkit-line-clamp: 1;
+          // -webkit-box-orient: vertical;
+          // max-height: 74px;
+          // overflow: hidden;
+          // word-break: break-word;
         }
         &__desc {
           @include flex(center, unset);
           gap: $space-12;
           flex-wrap: wrap;
+          margin-top: $space-8;
           @include mobile {
             text-align: center;
             justify-content: center;

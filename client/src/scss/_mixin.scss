@@ -61,6 +61,7 @@ $themes: (
   display: -webkit-box;
   -webkit-line-clamp: $line;
   -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 @mixin hideText($width) {

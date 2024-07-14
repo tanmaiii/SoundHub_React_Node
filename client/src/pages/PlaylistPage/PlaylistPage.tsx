@@ -1,21 +1,20 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import HeaderPage from "../../components/HeaderPage/HeaderPage";
-import TableTrack from "../../components/TableTrack";
-import Images from "../../constants/images";
-import "./playlistPage.scss";
 import { useEffect, useState } from "react";
-import { TPlaylist } from "../../types";
-import { playlistApi, songApi, userApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { apiConfig } from "../../configs";
-import { use } from "i18next";
 import { Helmet } from "react-helmet-async";
-import SongMenu from "../../components/Menu/SongMenu";
+import { useTranslation } from "react-i18next";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { genreApi, imageApi, playlistApi, songApi, userApi } from "../../apis";
+import Dropdown from "../../components/Dropdown";
+import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import PlaylistMenu from "../../components/Menu/PlaylistMenu";
 import Modal from "../../components/Modal/Modal";
-import { useTranslation } from "react-i18next";
-import { log } from "console";
+import TableTrack from "../../components/TableTrack";
+import { apiConfig } from "../../configs";
+import Images from "../../constants/images";
+import { useAuth } from "../../context/authContext";
+import "./playlistPage.scss";
+import { TPlaylist } from "../../types";
+import ImageWithFallback from "../../components/ImageWithFallback";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -23,7 +22,6 @@ export default function PlaylistPage() {
   const { token, currentUser } = useAuth();
   const [totalCount, setTotalCount] = useState(0);
   const queryClient = useQueryClient();
-  const [activeDropdown, setActiveDropdown] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { t } = useTranslation("playlist");
@@ -79,14 +77,6 @@ export default function PlaylistPage() {
     },
   });
 
-  // const { data: countLikes } = useQuery({
-  //   queryKey: ["playlist-count", id],
-  //   queryFn: async () => {
-  //     const res = await playlistApi.countLikes(id ?? "", token);
-  //     return res;
-  //   },
-  // });
-
   const mutationLike = useMutation({
     mutationFn: (like: boolean) => {
       if (like) return playlistApi.unLikePlaylist(id ?? "", token);
@@ -122,7 +112,9 @@ export default function PlaylistPage() {
           like={playlist?.count_like ?? 0}
           song={totalCount ?? 0}
           userId={playlist?.user_id}
+          desc={playlist?.desc ?? ""}
           fnOpenEdit={() => setOpenModal(true)}
+          genreId={playlist?.genre_id ?? ""}
         />
       </div>
       <div className="playlistPage__content">
@@ -187,87 +179,204 @@ export default function PlaylistPage() {
           userId={playlist?.user_id}
         />
       </div>
-
       <Modal
         title={t("EditPlaylist.EditPlaylist")}
         openModal={openModal}
         setOpenModal={setOpenModal}
       >
-        <div className="ModalEdit">
-          <div className="ModalEdit__top">
-            <div className="ModalEdit__top__image">
-              <img
-                src={apiConfig.imageURL(playlist?.image_path ?? "")}
-                alt=""
-              />
-              <div className="ModalEdit__top__image__edit">
-                <i className="fa-regular fa-pen-to-square"></i>
-                <span>Edit playlist</span>
-              </div>
-            </div>
-            <div className="ModalEdit__top__body">
-              <div className="ModalEdit__top__body__title">
-                <input
-                  type="text"
-                  id="title"
-                  value={playlist?.title}
-                  placeholder="Add title"
-                />
-                <label htmlFor="title">{t("EditPlaylist.Title")}</label>
-              </div>
-              <div className="ModalEdit__top__body__desc">
-                <textarea
-                  id="title"
-                  value={playlist?.desc}
-                  placeholder="Add description"
-                />
-                <label htmlFor="title">{t("EditPlaylist.Description")}</label>
-              </div>
-              {/* dropdown genre */}
-              <div className="select">
-                <div className="select__header">
-                  <input
-                    type="text"
-                    placeholder="  "
-                    onFocus={() => setActiveDropdown(!activeDropdown)}
-                  />
-                  <label>{t("EditPlaylist.Genre")}</label>
-                  <button
-                    className={`${activeDropdown ? "active" : ""}`}
-                    onClick={() => {
-                      console.log(!activeDropdown);
-
-                      setActiveDropdown(!activeDropdown);
-                    }}
-                  >
-                    <i className="fa-regular fa-chevron-down"></i>
-                  </button>
-                </div>
-                <div
-                  className={`select__body ${activeDropdown ? "active" : ""}`}
-                >
-                  <div className="select__body__item">
-                    <input type="radio" />
-                    <span>akdjhaskdhkas</span>
-                  </div>
-                  <div className="select__body__item">
-                    <input type="radio" />
-                    <span>akdjhaskdhkas</span>
-                  </div>
-                  <div className="select__body__item">
-                    <input type="radio" />
-                    <span>akdjhaskdhkas</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="ModalEdit__bottom">
-            <button>{t("EditPlaylist.Cancel")}</button>
-            <button>{t("EditPlaylist.Save")}</button>
-          </div>
-        </div>
+        <EditPlaylist
+          playlist={playlist ?? {}}
+          closeModal={() => setOpenModal(false)}
+        />
       </Modal>
     </div>
   );
 }
+
+type props = {
+  playlist: TPlaylist;
+  closeModal: () => void;
+};
+
+const EditPlaylist = ({ playlist, closeModal }: props) => {
+  const { t } = useTranslation("playlist");
+  const [urlImage, setUrlImage] = useState<string>(playlist?.image_path ?? "");
+  const [imageFile, setImageFile] = useState<any>(null);
+  const queryClient = useQueryClient();
+  const { token } = useAuth();
+
+  interface Inputs {
+    title: string;
+    desc: string;
+    genre_id: string;
+  }
+
+  const [inputs, setInputs] = useState<Inputs>({
+    title: playlist?.title ?? "",
+    desc: playlist?.desc ?? "",
+    genre_id: playlist?.genre_id ?? "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    e.preventDefault();
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const { data: genres, refetch: refetchGenres } = useQuery({
+    queryKey: ["genres"],
+    queryFn: async () => {
+      try {
+        const res = await genreApi.getAll(1, 100);
+        return res.data;
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    },
+  });
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  useEffect(() => {
+    setInputs({
+      title: playlist?.title ?? "",
+      desc: playlist?.desc ?? "",
+      genre_id: playlist?.genre_id ?? "",
+    });
+  }, [playlist]);
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    try {
+      const uploadImage = async () => {
+        formData.append("image", imageFile);
+
+        const res = await imageApi.upload(formData, token);
+        if (res.image) {
+          console.log(res.image);
+          setInputs((prev) => ({ ...prev, image_path: res.image }));
+          await playlistApi.updatePlaylist(token, playlist?.id ?? "", { image_path: res.image });
+        } else {
+          console.log("Update image unsuccessful");
+        }
+      };
+
+      imageFile && (await uploadImage());
+
+      await playlistApi.updatePlaylist(token, playlist?.id ?? "", inputs);
+      console.log(inputs);
+      console.log(imageFile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(inputs);
+    
+  },[inputs])
+
+  const mutionSave = useMutation(
+    () => {
+      return handleSave();
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["playlist", playlist?.id] });
+        queryClient.invalidateQueries({
+          queryKey: ["playlist-songs", playlist.id],
+        });
+        closeModal();
+      },
+    }
+  );
+  return (
+    <div className="ModalEdit">
+      <div className="ModalEdit__top">
+        <div className="ModalEdit__top__image">
+          <img
+            src={
+              imageFile
+                ? URL.createObjectURL(imageFile)
+                : playlist?.image_path
+                ? apiConfig.imageURL(playlist?.image_path ?? "")
+                : Images.PLAYLIST
+            }
+            alt=""
+          />
+          {/* <ImageWithFallback
+            src={
+              imageFile
+                ? imageFile
+                : playlist?.image_path
+                ? playlist?.image_path
+                : ""
+            }
+            fallbackSrc={Images.PLAYLIST}
+            alt=""
+          /> */}
+          <label htmlFor="input-image" className="ModalEdit__top__image__edit">
+            <i className="fa-regular fa-pen-to-square"></i>
+            <span>Edit playlist</span>
+            <input
+              type="file"
+              id="input-image"
+              onChange={onChangeImage}
+              accept="image/png, image/jpeg"
+            />
+          </label>
+        </div>
+        <div className="ModalEdit__top__body">
+          <div className="ModalEdit__top__body__title">
+            <input
+              type="text"
+              id="title"
+              value={inputs?.title}
+              placeholder="Add title"
+              name="title"
+              onChange={(e) => handleChange(e)}
+            />
+            <label htmlFor="title">{t("EditPlaylist.Title")}</label>
+          </div>
+          <div className="ModalEdit__top__body__desc">
+            <textarea
+              id="desc"
+              value={inputs?.desc}
+              placeholder="Add description"
+              name="desc"
+              onChange={(e) => handleChange(e)}
+            />
+            <label htmlFor="title">{t("EditPlaylist.Description")}</label>
+          </div>
+          {/* dropdown genre */}
+          <div className="ModalEdit__top__body__select">
+            <Dropdown
+              title={t("EditPlaylist.Genre")}
+              defaultSelected={inputs?.genre_id ?? ""}
+              changeSelected={(selected: { id: string; title: string }) =>
+                setInputs((prev) => ({ ...prev, genre_id: selected.id }))
+              }
+              options={
+                genres?.map((genre) => ({
+                  id: genre.id ?? "",
+                  title: genre.title ?? "",
+                })) || []
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div className="ModalEdit__bottom">
+        <button onClick={closeModal}>{t("EditPlaylist.Cancel")}</button>
+        <button onClick={() => mutionSave.mutate()}>
+          {t("EditPlaylist.Save")}
+        </button>
+      </div>
+    </div>
+  );
+};
