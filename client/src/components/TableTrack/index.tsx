@@ -1,19 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { TSong } from "../../types";
 import Track from "../Track";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { playlistApi } from "../../apis";
+import { useMutation, useQueryClient } from "react-query";
 
 type props = {
+  playlistId?: string;
   songs: TSong[] | null;
   isLoading?: boolean;
   userId?: string;
 };
 
-const TableTrack = ({ songs, isLoading = false, userId }: props) => {
+const TableTrack = ({
+  songs,
+  isLoading = false,
+  userId,
+  playlistId,
+}: props) => {
   const [activeDropdown, setActiveDropdown] = useState<boolean>(false);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
+  const [songsNew, setSongsNew] = useState<{ id: string; num_song: number }[]>(
+    []
+  );
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setSongsNew([]);
+    songs &&
+      songs.map((item) =>
+        setSongsNew((prev) => [
+          ...prev,
+          { id: item?.id, num_song: item?.num_song ?? 0 },
+        ])
+      );
+  }, [songs]);
+
+  useEffect(() => {
+    // console.log(songsNew);
+  }, [songsNew]);
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
+    console.log(result);
+
+    const newItems = Array.from(songsNew);
+    const [movedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, movedItem);
+
+    newItems.map((item, index) => (item.num_song = index + 1));
+
+    setSongsNew(newItems);
+    mutation.mutate();
+  };
+
+  const handleUpdateSongs = async () => {
+    try {
+      playlistId &&
+        (await playlistApi.updateSong(token, playlistId ?? "", songsNew));
+      console.log("UPDATE SONGS:", songsNew);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const mutation = useMutation({
+    mutationFn: handleUpdateSongs,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["playlist", playlistId] });
+      queryClient.invalidateQueries({
+        queryKey: ["playlist-songs", playlistId],
+      });
+    },
+  });
 
   return (
     <div className="table__track">
@@ -76,15 +138,38 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
             </div>
           </div>
           <div className="table__track__body__list">
-            {songs &&
-              songs.map((song, index) => (
-                <Track
-                  key={index}
-                  number={`${index + 1}`}
-                  song={song}
-                  loading={isLoading}
-                />
-              ))}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable direction="vertical" droppableId="droppable">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {songs &&
+                      songs.map((item, index) => (
+                        <Draggable
+                          key={item.id}
+                          draggableId={item.id}
+                          index={index}
+                          isDragDisabled={userId !== currentUser?.id}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Track
+                                key={index}
+                                number={`${index + 1}`}
+                                song={item}
+                                loading={isLoading}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           </div>
         </div>
       ) : (
@@ -98,3 +183,22 @@ const TableTrack = ({ songs, isLoading = false, userId }: props) => {
 };
 
 export default TableTrack;
+
+type propsSortableItem = {
+  index: number;
+  song: TSong;
+  isLoading: boolean;
+};
+
+const SortableItem = ({ index, song, isLoading }: propsSortableItem) => {
+  return (
+    <div>
+      <Track
+        key={index}
+        number={`${index + 1}`}
+        song={song}
+        loading={isLoading}
+      />
+    </div>
+  );
+};

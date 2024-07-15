@@ -15,6 +15,7 @@ import { useAuth } from "../../context/authContext";
 import "./playlistPage.scss";
 import { TPlaylist } from "../../types";
 import ImageWithFallback from "../../components/ImageWithFallback";
+import path from "path";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -92,7 +93,7 @@ export default function PlaylistPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, [id]);
 
   return (
     <div className="playlistPage">
@@ -177,6 +178,7 @@ export default function PlaylistPage() {
           songs={songs || []}
           isLoading={true}
           userId={playlist?.user_id}
+          playlistId={playlist?.id}
         />
       </div>
       <Modal
@@ -200,8 +202,8 @@ type props = {
 
 const EditPlaylist = ({ playlist, closeModal }: props) => {
   const { t } = useTranslation("playlist");
-  const [urlImage, setUrlImage] = useState<string>(playlist?.image_path ?? "");
   const [imageFile, setImageFile] = useState<any>(null);
+  const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
   const { token } = useAuth();
 
@@ -252,34 +254,44 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
 
   const handleSave = async () => {
     const formData = new FormData();
+    setError("");
+    if (inputs.title === "") return setError("Title is required");
+    if (inputs.genre_id === "") return setError("Genre is required");
+
     try {
       const uploadImage = async () => {
         formData.append("image", imageFile);
 
         const res = await imageApi.upload(formData, token);
         if (res.image) {
-          console.log(res.image);
           setInputs((prev) => ({ ...prev, image_path: res.image }));
-          await playlistApi.updatePlaylist(token, playlist?.id ?? "", { image_path: res.image });
+          await playlistApi.updatePlaylist(token, playlist?.id ?? "", {
+            image_path: res.image,
+          });
         } else {
           console.log("Update image unsuccessful");
         }
       };
 
-      imageFile && (await uploadImage());
+      if (imageFile) {
+        await uploadImage();
+      }
 
       await playlistApi.updatePlaylist(token, playlist?.id ?? "", inputs);
-      console.log(inputs);
-      console.log(imageFile);
-    } catch (error) {
-      console.log(error);
+      closeModal();
+    } catch (error: any) {
+      setError(error.response.data.conflictError);
     }
   };
 
   useEffect(() => {
-    console.log(inputs);
-    
-  },[inputs])
+    setError("");
+    setInputs({
+      title: playlist?.title ?? "",
+      desc: playlist?.desc ?? "",
+      genre_id: playlist?.genre_id ?? "",
+    });
+  }, []);
 
   const mutionSave = useMutation(
     () => {
@@ -291,12 +303,17 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
         queryClient.invalidateQueries({
           queryKey: ["playlist-songs", playlist.id],
         });
-        closeModal();
       },
     }
   );
   return (
     <div className="ModalEdit">
+      {error && (
+        <div className="ModalEdit__error">
+          <i className="fa-regular fa-circle-exclamation"></i>
+          <span>{error}</span>
+        </div>
+      )}
       <div className="ModalEdit__top">
         <div className="ModalEdit__top__image">
           <img

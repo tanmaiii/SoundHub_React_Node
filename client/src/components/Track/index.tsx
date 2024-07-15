@@ -69,7 +69,9 @@ export default function Track({ song, number, loading = false }: TrackProps) {
   });
 
   return (
-    <div className="track">
+    <div
+      className="track"
+    >
       <div
         className={`track__wrapper row ${
           songPlayId === song?.id ? "active" : ""

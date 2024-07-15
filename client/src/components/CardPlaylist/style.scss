@@ -99,6 +99,7 @@
           font-size: $size-16;
           font-weight: $font-light;
           color: themed("txt-main");
+          @include text(1);
         }
         &__info {
           &__artist {

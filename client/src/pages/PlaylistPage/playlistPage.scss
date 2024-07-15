@@ -125,6 +125,22 @@
 .ModalEdit {
   @include themify($themes) {
     padding: $space-14 $space-24;
+    &__error {
+      padding: $space-12 $space-14;
+      background-color: $color-red;
+      border-radius: $radius-4;
+      margin-bottom: $space-24;
+      @include flex(center, start, row);
+      i {
+        font-size: $size-16;
+        color: $color-white;
+      }
+      span {
+        font-size: $size-14;
+        color: $color-white;
+        margin-left: $space-8;
+      }
+    }
     &__top {
       @include flex(start, center, row);
       --size: 240px;
@@ -134,7 +150,7 @@
         align-items: center;
       }
       &__image {
-        background-color: themed('bg-2');
+        background-color: themed("bg-2");
         overflow: hidden;
         width: var(--size);
         height: var(--size);

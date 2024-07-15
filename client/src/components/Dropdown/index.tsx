@@ -49,6 +49,7 @@ const Dropdown = ({
     changeSelected(
       options.find((option) => option.id === e.target.id) || selected
     );
+    setActiveDropdown(false);
   };
 
   useEffect(() => {
@@ -93,6 +94,7 @@ const Dropdown = ({
                   type="radio"
                   id={`${option?.id}`}
                   name="options"
+                  checked={option?.id === selected?.id}
                   onChange={handleChange}
                 />
                 <span>{option?.title}</span>

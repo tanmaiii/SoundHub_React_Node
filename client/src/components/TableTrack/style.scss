@@ -4,7 +4,9 @@
   @include themify($themes) {
     z-index: 10;
     min-height: 200px;
+    overflow: hidden;
     &__body {
+      // overflow: hidden;
       &__header {
         @include flex(center, unset);
         // background-color: themed("bg-1");
@@ -14,9 +16,9 @@
         color: themed("txt-main");
         margin-bottom: $space-12;
 
-        position: sticky;
-        top: $height-header;
-        z-index: 80;
+        // position: sticky;
+        // top: $height-header;
+        // z-index: 80;
 
         &__line1 {
           @include flex(center, unset);

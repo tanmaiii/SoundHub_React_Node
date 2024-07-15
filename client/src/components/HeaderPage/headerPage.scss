@@ -126,6 +126,7 @@
           font-weight: $font-bold;
           color: themed("txt-main");
           overflow: hidden;
+          max-width: 500px;
           @include text(2);
           @include mobile {
             // font-size: $size-40;
@@ -135,6 +136,7 @@
         &__description {
           font-size: $size-14;
           color: themed("txt-second");
+          max-width: 500px;
           @include text(2);
           // display: -webkit-box;
           // -webkit-line-clamp: 1;
