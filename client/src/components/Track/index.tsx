@@ -22,11 +22,17 @@ import SongMenu from "../Menu/SongMenu";
 
 interface TrackProps {
   song: TSong;
+  playlistId?: string;
   number?: string;
   loading?: boolean;
 }
 
-export default function Track({ song, number, loading = false }: TrackProps) {
+export default function Track({
+  song,
+  playlistId,
+  number,
+  loading = false,
+}: TrackProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { token, currentUser } = useAuth();
@@ -69,9 +75,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
   });
 
   return (
-    <div
-      className="track"
-    >
+    <div className="track">
       <div
         className={`track__wrapper row ${
           songPlayId === song?.id ? "active" : ""
@@ -145,6 +149,7 @@ export default function Track({ song, number, loading = false }: TrackProps) {
             <div className={`button-edit ${activeMenu ? " active" : ""}`}>
               <SongMenu
                 id={song?.id}
+                playlistId={playlistId}
                 active={activeMenu}
                 onOpen={() => setActiveMenu(true)}
                 onClose={() => setActiveMenu(false)}

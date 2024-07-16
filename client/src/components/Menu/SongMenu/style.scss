@@ -51,6 +51,10 @@
       &__list {
         @include flex(start, unset);
         flex-direction: column;
+        hr {
+          width: 100%;
+          border-top: 1px solid themed("border");
+        }
 
         &__item {
           width: 100%;

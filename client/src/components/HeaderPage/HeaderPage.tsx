@@ -26,6 +26,7 @@ interface HeaderPageProps {
   song?: number;
   userId?: string;
   genreId?: string;
+  isPublic?: number;
   loading?: boolean;
   desc?: string;
   fnOpenEdit?: () => void;
@@ -44,6 +45,7 @@ export default function HeaderPage({
   like,
   song,
   userId,
+  isPublic,
   genreId,
   desc,
   fnOpenEdit,
@@ -109,10 +111,13 @@ export default function HeaderPage({
               <Skeleton count={1} />
             ) : (
               <>
+                {isPublic === 0 && (
+                  <i className="icon__private fa-regular fa-lock"></i>
+                )}
                 <p>{category}</p>
                 {genre && (
                   <>
-                    <i className="fa-sharp fa-solid fa-circle"></i>
+                    <i className="icon__dot fa-sharp fa-solid fa-circle"></i>
                     <p>{`${genre?.title}`}</p>
                   </>
                 )}

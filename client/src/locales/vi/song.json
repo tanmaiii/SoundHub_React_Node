@@ -4,6 +4,8 @@
     "comments" : "Bình luận",
     "Menu" : {
         "Add to playlist" : "Thêm vào danh sách phát",
+        "Remove to playlist" : "Xóa khỏi danh sách phát này",
+        "Remove to favorites list" : "Xóa khỏi danh sách yêu thích",
         "Add to favorites list" : "Thêm vào danh sách yêu thích",
         "Add to waiting list" : "Thêm vào danh sách chờ",
         "See details" : "Xem chi tiết",

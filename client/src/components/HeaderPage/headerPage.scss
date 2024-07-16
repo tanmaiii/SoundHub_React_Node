@@ -115,8 +115,12 @@
           @include mobile {
             justify-content: center;
           }
-          i {
+          .icon__dot {
             font-size: 6px;
+            color: themed("txt-main");
+          }
+          .icon__private {
+            font-size: $space-14;
             color: themed("txt-main");
           }
         }
@@ -130,6 +134,8 @@
           @include text(2);
           @include mobile {
             // font-size: $size-40;
+            align-items: center;
+            max-width: 100%;
           }
         }
 
@@ -138,12 +144,6 @@
           color: themed("txt-second");
           max-width: 500px;
           @include text(2);
-          // display: -webkit-box;
-          // -webkit-line-clamp: 1;
-          // -webkit-box-orient: vertical;
-          // max-height: 74px;
-          // overflow: hidden;
-          // word-break: break-word;
         }
         &__desc {
           @include flex(center, unset);

@@ -41,21 +41,17 @@ const Dropdown = ({
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.checked &&
-      setSelected(
-        options.find((option) => option.id === e.target.id) || selected
-      );
-    changeSelected(
-      options.find((option) => option.id === e.target.id) || selected
-    );
+  useEffect(() => {
+    console.log(selected);
+    
+    changeSelected(selected);
     setActiveDropdown(false);
-  };
+  }, [selected]);
 
   useEffect(() => {
-    console.log(options.find((option) => option.id === defaultSelected));
+    // console.log(options.find((option) => option?.id === defaultSelected));
     setSelected(
-      options.find((option) => option.id === defaultSelected) || {
+      options.find((option) => option?.id === defaultSelected) || {
         title: "",
         id: "",
       }
@@ -73,7 +69,7 @@ const Dropdown = ({
           readOnly
           onClick={() => setActiveDropdown(!activeDropdown)}
         />
-        <label>{t("EditPlaylist.Genre")}</label>
+        <label>{title}</label>
         <button
           className={`${activeDropdown ? "active" : ""}`}
           onClick={() => setActiveDropdown(!activeDropdown)}
@@ -87,15 +83,17 @@ const Dropdown = ({
             return (
               <label
                 key={index}
-                htmlFor={`${option?.id}`}
+                htmlFor={`${title}${option?.id}`}
                 className="Dropdown__body__item"
               >
                 <input
                   type="radio"
-                  id={`${option?.id}`}
-                  name="options"
+                  id={`${title}${option?.id}`}
+                  name={`${title}`}
                   checked={option?.id === selected?.id}
-                  onChange={handleChange}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    e.target.checked && setSelected(option);
+                  }}
                 />
                 <span>{option?.title}</span>
               </label>

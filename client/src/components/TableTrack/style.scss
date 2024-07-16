@@ -4,7 +4,7 @@
   @include themify($themes) {
     z-index: 10;
     min-height: 200px;
-    overflow: hidden;
+    // overflow: hidden;
     &__body {
       // overflow: hidden;
       &__header {

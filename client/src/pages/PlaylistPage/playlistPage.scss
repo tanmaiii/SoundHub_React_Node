@@ -143,7 +143,7 @@
     }
     &__top {
       @include flex(start, center, row);
-      --size: 240px;
+      --size: 300px;
       gap: $space-14;
       @include mobile {
         flex-direction: column;

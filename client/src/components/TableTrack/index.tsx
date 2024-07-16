@@ -21,11 +21,11 @@ const TableTrack = ({
   userId,
   playlistId,
 }: props) => {
-  const [activeDropdown, setActiveDropdown] = useState<boolean>(false);
   const { currentUser, token } = useAuth();
   const [songsNew, setSongsNew] = useState<{ id: string; num_song: number }[]>(
     []
   );
+  const [isDragEnabled, setIsDragEnabled] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -40,12 +40,13 @@ const TableTrack = ({
   }, [songs]);
 
   useEffect(() => {
-    // console.log(songsNew);
-  }, [songsNew]);
+    playlistId && currentUser?.id === userId
+      ? setIsDragEnabled(false)
+      : setIsDragEnabled(true);
+  }, [playlistId, currentUser]);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
-    console.log(result);
 
     const newItems = Array.from(songsNew);
     const [movedItem] = newItems.splice(result.source.index, 1);
@@ -148,7 +149,7 @@ const TableTrack = ({
                           key={item.id}
                           draggableId={item.id}
                           index={index}
-                          isDragDisabled={userId !== currentUser?.id}
+                          isDragDisabled={isDragEnabled}
                         >
                           {(provided) => (
                             <div
@@ -158,6 +159,7 @@ const TableTrack = ({
                             >
                               <Track
                                 key={index}
+                                playlistId={playlistId}
                                 number={`${index + 1}`}
                                 song={item}
                                 loading={isLoading}

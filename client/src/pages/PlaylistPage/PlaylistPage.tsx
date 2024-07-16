@@ -113,6 +113,7 @@ export default function PlaylistPage() {
           like={playlist?.count_like ?? 0}
           song={totalCount ?? 0}
           userId={playlist?.user_id}
+          isPublic={playlist?.public ?? 1}
           desc={playlist?.desc ?? ""}
           fnOpenEdit={() => setOpenModal(true)}
           genreId={playlist?.genre_id ?? ""}
@@ -148,30 +149,6 @@ export default function PlaylistPage() {
               />
             </button>
           </div>
-          {/* <div className="playlistPage__content__header__right">
-            {songs && songs?.length > 0 && (
-              <div className="dropdown">
-                <div
-                  className="dropdown__header"
-                  onClick={() => setActiveDropdown(!activeDropdown)}
-                >
-                  <i className="fa-light fa-bars-sort"></i>
-                  <span>Mới nhất</span>
-                  <i className="fa-light fa-chevron-down"></i>
-                </div>
-                <div
-                  className={`dropdown__content ${
-                    activeDropdown ? "active" : ""
-                  }`}
-                >
-                  <ul>
-                    <li>Mới nhất</li>
-                    <li>Phổ biến</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div> */}
         </div>
 
         <TableTrack
@@ -211,12 +188,14 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
     title: string;
     desc: string;
     genre_id: string;
+    public: number;
   }
 
   const [inputs, setInputs] = useState<Inputs>({
     title: playlist?.title ?? "",
     desc: playlist?.desc ?? "",
     genre_id: playlist?.genre_id ?? "",
+    public: playlist?.public ?? 1,
   });
 
   const handleChange = (
@@ -226,7 +205,7 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const { data: genres, refetch: refetchGenres } = useQuery({
+  const { data: genres } = useQuery({
     queryKey: ["genres"],
     queryFn: async () => {
       try {
@@ -249,6 +228,7 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
       title: playlist?.title ?? "",
       desc: playlist?.desc ?? "",
       genre_id: playlist?.genre_id ?? "",
+      public: playlist?.public ?? 1,
     });
   }, [playlist]);
 
@@ -290,11 +270,14 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
       title: playlist?.title ?? "",
       desc: playlist?.desc ?? "",
       genre_id: playlist?.genre_id ?? "",
+      public: playlist?.public ?? 1,
     });
   }, []);
 
   const mutionSave = useMutation(
     () => {
+      console.log({ inputs });
+
       return handleSave();
     },
     {
@@ -376,7 +359,7 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
               title={t("EditPlaylist.Genre")}
               defaultSelected={inputs?.genre_id ?? ""}
               changeSelected={(selected: { id: string; title: string }) =>
-                setInputs((prev) => ({ ...prev, genre_id: selected.id }))
+                setInputs((prev) => ({ ...prev, genre_id: selected?.id }))
               }
               options={
                 genres?.map((genre) => ({
@@ -384,6 +367,22 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
                   title: genre.title ?? "",
                 })) || []
               }
+            />
+          </div>
+          <div className="ModalEdit__top__body__select">
+            <Dropdown
+              title={"Public"}
+              defaultSelected={playlist?.public === 0 ? "0" : "1"}
+              changeSelected={(selected: { id: string; title: string }) =>
+                setInputs((prev) => ({
+                  ...prev,
+                  public: parseInt(selected?.id),
+                }))
+              }
+              options={[
+                { id: "0", title: "Private" },
+                { id: "1", title: "Public" },
+              ]}
             />
           </div>
         </div>
