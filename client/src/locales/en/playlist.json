@@ -6,6 +6,9 @@
     "Description": "Description",
     "Image": "Image",
     "Genre": "Genre",
+    "Mode" : "Mode",
+    "Public": "Public",
+    "Private": "Private",
     "Save": "Save",
     "Cancel": "Cancel"
   }

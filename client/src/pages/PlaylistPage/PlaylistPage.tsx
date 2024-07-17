@@ -7,7 +7,7 @@ import { genreApi, imageApi, playlistApi, songApi, userApi } from "../../apis";
 import Dropdown from "../../components/Dropdown";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import PlaylistMenu from "../../components/Menu/PlaylistMenu";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../components/Modal";
 import TableTrack from "../../components/TableTrack";
 import { apiConfig } from "../../configs";
 import Images from "../../constants/images";
@@ -164,6 +164,7 @@ export default function PlaylistPage() {
         setOpenModal={setOpenModal}
       >
         <EditPlaylist
+          openEdit={openModal}
           playlist={playlist ?? {}}
           closeModal={() => setOpenModal(false)}
         />
@@ -174,10 +175,11 @@ export default function PlaylistPage() {
 
 type props = {
   playlist: TPlaylist;
+  openEdit: boolean;
   closeModal: () => void;
 };
 
-const EditPlaylist = ({ playlist, closeModal }: props) => {
+const EditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
   const { t } = useTranslation("playlist");
   const [imageFile, setImageFile] = useState<any>(null);
   const [error, setError] = useState<string>("");
@@ -189,6 +191,7 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
     desc: string;
     genre_id: string;
     public: number;
+    image_path: string;
   }
 
   const [inputs, setInputs] = useState<Inputs>({
@@ -196,13 +199,18 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
     desc: playlist?.desc ?? "",
     genre_id: playlist?.genre_id ?? "",
     public: playlist?.public ?? 1,
+    image_path: playlist?.image_path ?? "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    e.preventDefault();
-    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   e.preventDefault();
+  //   setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  // };
+
+  const updateState = (newValue: Partial<Inputs>) => {
+    setInputs((prevState) => ({ ...prevState, ...newValue }));
   };
 
   const { data: genres } = useQuery({
@@ -224,13 +232,16 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
   };
 
   useEffect(() => {
+    setImageFile("");
+    setError("");
     setInputs({
       title: playlist?.title ?? "",
       desc: playlist?.desc ?? "",
       genre_id: playlist?.genre_id ?? "",
       public: playlist?.public ?? 1,
+      image_path: playlist?.image_path ?? "",
     });
-  }, [playlist]);
+  }, [playlist, openEdit]);
 
   const handleSave = async () => {
     const formData = new FormData();
@@ -264,20 +275,8 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
     }
   };
 
-  useEffect(() => {
-    setError("");
-    setInputs({
-      title: playlist?.title ?? "",
-      desc: playlist?.desc ?? "",
-      genre_id: playlist?.genre_id ?? "",
-      public: playlist?.public ?? 1,
-    });
-  }, []);
-
   const mutionSave = useMutation(
     () => {
-      console.log({ inputs });
-
       return handleSave();
     },
     {
@@ -303,23 +302,12 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
             src={
               imageFile
                 ? URL.createObjectURL(imageFile)
-                : playlist?.image_path
-                ? apiConfig.imageURL(playlist?.image_path ?? "")
+                : inputs.image_path
+                ? apiConfig.imageURL(inputs.image_path ?? "")
                 : Images.PLAYLIST
             }
             alt=""
           />
-          {/* <ImageWithFallback
-            src={
-              imageFile
-                ? imageFile
-                : playlist?.image_path
-                ? playlist?.image_path
-                : ""
-            }
-            fallbackSrc={Images.PLAYLIST}
-            alt=""
-          /> */}
           <label htmlFor="input-image" className="ModalEdit__top__image__edit">
             <i className="fa-regular fa-pen-to-square"></i>
             <span>Edit playlist</span>
@@ -329,6 +317,12 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
               onChange={onChangeImage}
               accept="image/png, image/jpeg"
             />
+            <button
+              className="ModalEdit__top__image__edit__delete"
+              onClick={() => updateState({ image_path: "" })}
+            >
+              <i className="fa-regular fa-trash"></i>
+            </button>
           </label>
         </div>
         <div className="ModalEdit__top__body">
@@ -339,9 +333,13 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
               value={inputs?.title}
               placeholder="Add title"
               name="title"
-              onChange={(e) => handleChange(e)}
+              maxLength={100}
+              onChange={(e) => updateState({ title: e.target.value })}
             />
             <label htmlFor="title">{t("EditPlaylist.Title")}</label>
+            {inputs.title.length > 80 && (
+              <span className="count-letter">{`${inputs.title.length}/100`}</span>
+            )}
           </div>
           <div className="ModalEdit__top__body__desc">
             <textarea
@@ -349,9 +347,13 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
               value={inputs?.desc}
               placeholder="Add description"
               name="desc"
-              onChange={(e) => handleChange(e)}
+              maxLength={200}
+              onChange={(e) => updateState({ desc: e.target.value })}
             />
             <label htmlFor="title">{t("EditPlaylist.Description")}</label>
+            {inputs.desc.length > 180 && (
+              <span className="count-letter">{`${inputs.desc.length}/200`}</span>
+            )}
           </div>
           {/* dropdown genre */}
           <div className="ModalEdit__top__body__select">
@@ -371,7 +373,7 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
           </div>
           <div className="ModalEdit__top__body__select">
             <Dropdown
-              title={"Public"}
+              title={t("EditPlaylist.Mode")}
               defaultSelected={playlist?.public === 0 ? "0" : "1"}
               changeSelected={(selected: { id: string; title: string }) =>
                 setInputs((prev) => ({
@@ -380,8 +382,8 @@ const EditPlaylist = ({ playlist, closeModal }: props) => {
                 }))
               }
               options={[
-                { id: "0", title: "Private" },
-                { id: "1", title: "Public" },
+                { id: "0", title: t("EditPlaylist.Private") },
+                { id: "1", title: t("EditPlaylist.Public") },
               ]}
             />
           </div>

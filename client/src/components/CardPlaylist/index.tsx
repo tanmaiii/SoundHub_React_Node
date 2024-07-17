@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { playlistApi } from "../../apis";
 import { useAuth } from "../../context/authContext";
+import Modal from "../Modal";
 
 export interface CardPlaylistProps {
   className?: string;
@@ -37,6 +38,7 @@ function CardPlaylist({
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const handleClick = () => {
     id && navigate(`${PATH.PLAYLIST}/${id}`);
@@ -50,20 +52,40 @@ function CardPlaylist({
     },
   });
 
+  const handleSuccess = () => {
+    setOpenModal(false);
+    queryClient.invalidateQueries({ queryKey: ["playlist-count", id] });
+    queryClient.invalidateQueries({ queryKey: ["like-playlist", id] });
+    queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
+    queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
+    queryClient.invalidateQueries({ queryKey: ["playlist", id] });
+    queryClient.invalidateQueries({ queryKey: ["playlists", currentUser?.id] });
+  };
+
+  // Xử lí thích playlist
   const mutationLike = useMutation({
     mutationFn: (like: boolean) => {
       if (like) return playlistApi.unLikePlaylist(id ?? "", token);
       return playlistApi.likePlaylist(id ?? "", token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["playlist-count", id] });
-      queryClient.invalidateQueries({ queryKey: ["like-playlist", id] });
-      queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
-      queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
+      return handleSuccess();
     },
   });
 
-  const handleRemove = () => {};
+  // Xử lí xóa playlist
+  const mutationDelete = useMutation({
+    mutationFn: async () => {
+      try {
+        await playlistApi.deletePlaylist(token, id ?? "");
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    },
+    onSuccess: () => {
+      return handleSuccess();
+    },
+  });
 
   return (
     <div className={`CardPlaylist ${className}`}>
@@ -87,7 +109,7 @@ function CardPlaylist({
                   <button
                     data-tooltip="Remove playlist"
                     className="btn__remove"
-                    onClick={handleRemove}
+                    onClick={() => setOpenModal(true)}
                   >
                     <i className="fa-light fa-trash-can"></i>
                   </button>
@@ -129,18 +151,35 @@ function CardPlaylist({
             ) : (
               <div className="CardPlaylist__container__desc__info__artist">
                 <Link to={`${PATH.ARTIST}/${userId}`}>{author}</Link>
-                {/* {artists &&
-                  Array.isArray(artists) &&
-                  artists.map((artist, index) => (
-                    <Link key={index} to={`${PATH.ARTIST}/${artist.id}`}>
-                      {artist.name}
-                    </Link>
-                  ))} */}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      <Modal
+        title={"Xóa playlist"}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      >
+        <div className="modal__content">
+          <p>Bạn có chắc chắn muốn xóa playlist này không?</p>
+          <div className="modal__content__button">
+            <button
+              className="btn btn__cancel"
+              onClick={() => setOpenModal(false)}
+            >
+              Hủy
+            </button>
+            <button
+              className="btn btn__delete"
+              onClick={() => mutationDelete.mutate()}
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

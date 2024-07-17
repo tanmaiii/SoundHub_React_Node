@@ -6,7 +6,6 @@
       padding: $space-14;
       border-radius: $radius-8;
       cursor: pointer;
-      // background-color: themed("bg-2");
       transition: $transition;
 
       @include mobile {
@@ -90,11 +89,11 @@
       }
       &__desc {
         padding: $space-8 0;
-        & > p{
+        & > p {
           font-size: $size-14;
           font-weight: $font-light;
           color: themed("txt-second");
-          @include flex(center, start, row)
+          @include flex(center, start, row);
         }
         .icon__private {
           font-size: $size-14;
@@ -126,6 +125,37 @@
                 color: $color-primary1;
               }
             }
+          }
+        }
+      }
+    }
+
+    .modal__content {
+      padding: $space-16 $space-24;
+      p {
+        font-size: $size-18;
+        color: themed("txt-main");
+      }
+      &__button {
+        margin-top: $space-24;
+        @include flex(center, end, row);
+        gap: $space-8;
+        & > .btn {
+          padding: $space-12 $space-24;
+          border-radius: $radius-4;
+          font-size: $size-16;
+          font-weight: $font-medium;
+          color: $color-white;
+          background-color: $color-primary1;
+          cursor: pointer;
+          transition: all 0.3s;
+
+          &:hover {
+            scale: 0.98;
+          }
+
+          &.btn__cancel {
+            background-color: themed("bg-3");
           }
         }
       }

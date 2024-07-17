@@ -5,9 +5,41 @@
     @include themify($themes) {
       // margin-top: $height-header;
       padding: 0 $space-24;
+      @include mobile{
+      padding: 0 $space-12;
+      }
       &__header {
+        margin-bottom: $space-24;
+        padding: 0 $space-12;
+        display: flex;
+        flex-direction: column;
+        gap: $space-16;
+        &__title {
+          @include flex(center, start, row);
+          gap: $space-8;
+          h2 {
+            font-size: $size-24;
+            color: themed("txt-main");
+          }
+          button {
+            i {
+              --size: 36px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+              color: themed("txt-main");
+              // background-color: themed("bg-2");
+              border-radius: 50%;
+              cursor: pointer;
+              transition: $transition;
+              &:hover {
+                background-color: themed("bg-3");
+              }
+            }
+          }
+        }
         &__nav {
-          padding: 0 $space-12;
           ul {
             @include flex(center, unset);
             gap: $space-8;
@@ -32,7 +64,7 @@
       }
       &__body {
         &__list {
-          @include flex(center, unset);
+          @include flex(start, unset, row);
           // gap: $space-16;
           flex-wrap: wrap;
           padding: $space-12 0;

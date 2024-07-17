@@ -193,6 +193,27 @@
             font-size: $size-16;
             color: $color-white;
           }
+          &__delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            i {
+              --size: 36px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+              color: themed("txt-second");
+              border-radius: 50%;
+              cursor: pointer;
+              transition: $transition;
+              &:hover {
+                color: themed("txt-main");
+                background-color: themed("bg-3");
+              }
+            }
+          }
         }
       }
       &__body {
@@ -202,6 +223,16 @@
         height: var(--size);
         @include mobile {
           width: 100%;
+        }
+        .count-letter {
+          font-size: $size-12;
+          color: themed("txt-second");
+          position: absolute;
+          bottom: 4px;
+          right: 10px;
+          background-color: rgba(themed("bg-3"), 0.8);
+          padding: 2px 4px;
+          border-radius: 4px;
         }
         &__title {
           position: relative;

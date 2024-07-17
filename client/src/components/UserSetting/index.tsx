@@ -120,7 +120,7 @@ export default function UserSetting() {
               <div className="UserSetting__dropdown__darkMode">
                 <div className="UserSetting__dropdown__darkMode__label">
                   <i className="fa-light fa-moon"></i>
-                  <span>{t("Dropdown.main.DarkMode")}</span>
+                  <h4>{t("Dropdown.main.DarkMode")}</h4>
                 </div>
                 <button>
                   <input

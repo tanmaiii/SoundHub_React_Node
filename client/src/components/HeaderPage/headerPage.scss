@@ -126,14 +126,12 @@
         }
 
         &__title {
-          // font-size: 60px;
           font-weight: $font-bold;
           color: themed("txt-main");
           overflow: hidden;
           max-width: 500px;
           @include text(2);
           @include mobile {
-            // font-size: $size-40;
             align-items: center;
             max-width: 100%;
           }

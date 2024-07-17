@@ -6,11 +6,15 @@ import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
 import { useAuth } from "../../context/authContext";
 import { useQuery } from "react-query";
 import CardPlaylist from "../../components/CardPlaylist";
+import Images from "../../constants/images";
+import Modal from "../../components/Modal";
+import ModalAddPlaylist from "../../components/Modal/ModalAddPlaylist";
 
 type TFilter = "all" | "my";
 
 const MyPlaylistPage = () => {
   const [filter, setFilter] = useState<TFilter>("all");
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -20,7 +24,13 @@ const MyPlaylistPage = () => {
     <div className="MyPlaylistPage">
       <div className="MyPlaylistPage__container">
         <div className="MyPlaylistPage__container__header">
-          <HeaderSection title="Playlist" />
+          {/* <HeaderSection title="Playlist" /> */}
+          <div className="MyPlaylistPage__container__header__title">
+            <h2>Playlist</h2>
+            <button onClick={() => setOpenModal(true)}>
+              <i className="fa-regular fa-plus"></i>
+            </button>
+          </div>
           <div className="MyPlaylistPage__container__header__nav">
             <ul>
               <li>
@@ -45,6 +55,14 @@ const MyPlaylistPage = () => {
         <div className="MyPlaylistPage__container__body">
           {filter === "all" ? <AllPlaylists /> : <MyPlaylists />}
         </div>
+
+        <Modal
+          title="Add Playlist"
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        >
+          <ModalAddPlaylist />
+        </Modal>
       </div>
     </div>
   );
@@ -163,8 +181,6 @@ const MyPlaylists = () => {
   };
 
   const getAllData = async (newPage?: number) => {
-    console.log("getAllData");
-
     updateState({ loading: true });
     try {
       const res = await playlistApi.getMe(
@@ -177,6 +193,7 @@ const MyPlaylists = () => {
       if (res.pagination.page === 1) {
         setData(null);
         setData(res.data);
+        console.log(res.data);
       } else {
         setData((prev) => [...(prev ?? []), ...res.data]);
       }

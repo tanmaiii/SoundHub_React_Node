@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./modal.scss";
+import "./style.scss";
 import Images from "../../constants/images";
 
 interface ModalProps {

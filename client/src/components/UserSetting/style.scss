@@ -92,15 +92,17 @@
         }
 
         &__label {
+          @include flex(center, unset);
           i {
             margin-right: $space-12;
             font-size: $size-18;
             color: themed("txt-main");
           }
-          span {
+          h4 {
             margin-right: $space-12;
             font-size: $size-16;
             color: themed("txt-main");
+            font-weight: $font-medium;
           }
         }
         button {
