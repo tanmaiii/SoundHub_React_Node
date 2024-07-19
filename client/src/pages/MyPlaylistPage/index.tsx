@@ -61,7 +61,10 @@ const MyPlaylistPage = () => {
           openModal={openModal}
           setOpenModal={setOpenModal}
         >
-          <ModalAddPlaylist />
+          <ModalAddPlaylist
+            openModal={openModal}
+            closeModal={() => setOpenModal(false)}
+          />
         </Modal>
       </div>
     </div>

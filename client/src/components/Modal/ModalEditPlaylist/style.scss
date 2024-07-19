@@ -1,6 +1,6 @@
 @use "../../../scss/" as *;
 
-.ModalAdd {
+.ModalEdit {
   @include themify($themes) {
     padding: $space-14 $space-24;
     &__error {

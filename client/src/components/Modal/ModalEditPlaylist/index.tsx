@@ -10,11 +10,12 @@ import Dropdown from "../../Dropdown";
 import "./style.scss";
 
 type props = {
-  openModal: boolean;
-  closeModal: () => void;
-};
+    playlist: TPlaylist;
+    openEdit: boolean;
+    closeModal: () => void;
+  };
 
-const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
+const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
   const { t } = useTranslation("playlist");
   const [imageFile, setImageFile] = useState<any>(null);
   const [error, setError] = useState<string>("");
@@ -30,11 +31,11 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
   }
 
   const [inputs, setInputs] = useState<Inputs>({
-    title: "",
-    desc: "",
-    genre_id: "",
-    public: 1,
-    image_path: "",
+    title: playlist?.title ?? "",
+    desc: playlist?.desc ?? "",
+    genre_id: playlist?.genre_id ?? "",
+    public: playlist?.public ?? 1,
+    image_path: playlist?.image_path ?? "",
   });
 
   const updateState = (newValue: Partial<Inputs>) => {
@@ -59,16 +60,77 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
     }
   };
 
+  useEffect(() => {
+    setImageFile("");
+    setError("");
+    setInputs({
+      title: playlist?.title ?? "",
+      desc: playlist?.desc ?? "",
+      genre_id: playlist?.genre_id ?? "",
+      public: playlist?.public ?? 1,
+      image_path: playlist?.image_path ?? "",
+    });
+  }, [playlist, openEdit]);
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    setError("");
+
+    if (inputs.title === "") {
+      return setError("Title is required");
+    }
+
+    if (inputs.genre_id === "") {
+      return setError("Genre is required");
+    }
+
+    try {
+      let updatedInputs;
+
+      if (imageFile) {
+        console.log("imageFile", imageFile);
+        formData.append("image", imageFile);
+        //Tải ảnh lên server
+        const res = await imageApi.upload(formData, token);
+        updatedInputs = { ...inputs, image_path: res.image };
+      } else {
+        updatedInputs = { ...inputs };
+      }
+
+      await playlistApi.updatePlaylist(
+        token,
+        playlist?.id ?? "",
+        updatedInputs
+      );
+      closeModal();
+    } catch (error: any) {
+      setError(error.response.data.conflictError);
+    }
+  };
+
+  const mutionSave = useMutation(
+    () => {
+      return handleSave();
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["playlist", playlist?.id] });
+        queryClient.invalidateQueries({
+          queryKey: ["playlist-songs", playlist.id],
+        });
+      },
+    }
+  );
   return (
-    <div className="ModalAdd">
+    <div className="ModalEdit">
       {error && (
-        <div className="ModalAdd__error">
+        <div className="ModalEdit__error">
           <i className="fa-regular fa-circle-exclamation"></i>
           <span>{error}</span>
         </div>
       )}
-      <div className="ModalAdd__top">
-        <div className="ModalAdd__top__image">
+      <div className="ModalEdit__top">
+        <div className="ModalEdit__top__image">
           <img
             src={
               imageFile
@@ -79,7 +141,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
             }
             alt=""
           />
-          <label htmlFor="input-image" className="ModalAdd__top__image__edit">
+          <label htmlFor="input-image" className="ModalEdit__top__image__edit">
             <i className="fa-regular fa-pen-to-square"></i>
             <span>Edit playlist</span>
             <input
@@ -89,15 +151,15 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               accept="image/png, image/jpeg"
             />
             <button
-              className="ModalAdd__top__image__edit__delete"
+              className="ModalEdit__top__image__edit__delete"
               onClick={() => updateState({ image_path: "" })}
             >
               <i className="fa-regular fa-trash"></i>
             </button>
           </label>
         </div>
-        <div className="ModalAdd__top__body">
-          <div className="ModalAdd__top__body__title">
+        <div className="ModalEdit__top__body">
+          <div className="ModalEdit__top__body__title">
             <input
               type="text"
               id="title"
@@ -112,7 +174,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               <span className="count-letter">{`${inputs.title.length}/100`}</span>
             )}
           </div>
-          <div className="ModalAdd__top__body__desc">
+          <div className="ModalEdit__top__body__desc">
             <textarea
               id="desc"
               value={inputs?.desc}
@@ -127,7 +189,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
             )}
           </div>
           {/* dropdown genre */}
-          <div className="ModalAdd__top__body__select">
+          <div className="ModalEdit__top__body__select">
             <Dropdown
               title={t("EditPlaylist.Genre")}
               defaultSelected={inputs?.genre_id ?? ""}
@@ -142,7 +204,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               }
             />
           </div>
-          {/* <div className="ModalAdd__top__body__select">
+          <div className="ModalEdit__top__body__select">
             <Dropdown
               title={t("EditPlaylist.Mode")}
               defaultSelected={playlist?.public === 0 ? "0" : "1"}
@@ -157,17 +219,17 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
                 { id: "1", title: t("EditPlaylist.Public") },
               ]}
             />
-          </div> */}
+          </div>
         </div>
       </div>
-      <div className="ModalAdd__bottom">
+      <div className="ModalEdit__bottom">
         <button onClick={closeModal}>{t("EditPlaylist.Cancel")}</button>
-        {/* <button onClick={() => mutionSave.mutate()}>
+        <button onClick={() => mutionSave.mutate()}>
           {t("EditPlaylist.Save")}
-        </button> */}
+        </button>
       </div>
     </div>
   );
 };
 
-export default ModalAddPlaylist;
+export default ModalEditPlaylist;
