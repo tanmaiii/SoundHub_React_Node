@@ -10,10 +10,10 @@ import Dropdown from "../../Dropdown";
 import "./style.scss";
 
 type props = {
-    playlist: TPlaylist;
-    openEdit: boolean;
-    closeModal: () => void;
-  };
+  playlist: TPlaylist;
+  openEdit: boolean;
+  closeModal: () => void;
+};
 
 const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
   const { t } = useTranslation("playlist");
@@ -143,7 +143,7 @@ const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
           />
           <label htmlFor="input-image" className="ModalEdit__top__image__edit">
             <i className="fa-regular fa-pen-to-square"></i>
-            <span>Edit playlist</span>
+            <span>{t("EditPlaylist.EditImage")}</span>
             <input
               type="file"
               id="input-image"
@@ -152,7 +152,10 @@ const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
             />
             <button
               className="ModalEdit__top__image__edit__delete"
-              onClick={() => updateState({ image_path: "" })}
+              onClick={() => {
+                updateState({ image_path: "" });
+                setImageFile(null);
+              }}
             >
               <i className="fa-regular fa-trash"></i>
             </button>

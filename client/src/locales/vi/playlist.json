@@ -6,10 +6,24 @@
     "Description": "Mô tả",
     "Image": "Hình ảnh",
     "Genre": "Thể loại",
-    "Mode" : "Chế độ",
+    "Mode": "Chế độ",
     "Public": "Công khai",
     "Private": "Riêng tư",
     "Save": "Lưu",
-    "Cancel": "Hủy"
+    "Cancel": "Hủy",
+     "EditImage": "Chỉnh sửa hình ảnh"
+  },
+  "AddNewPlaylist": {
+    "AddNewPlaylist": "Thêm playlist mới",
+    "Title": "Tiêu đề",
+    "Description": "Mô tả",
+    "Image": "Hình ảnh",
+    "Genre": "Thể loại",
+    "Mode": "Chế độ",
+    "Public": "Công khai",
+    "Private": "Riêng tư",
+    "Save": "Lưu",
+    "Cancel": "Hủy",
+     "EditImage": "Chỉnh sửa hình ảnh"
   }
 }

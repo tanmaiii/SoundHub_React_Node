@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useAuth } from "../../../context/authContext";
-import { TPlaylist } from "../../../types";
 import { genreApi, imageApi, playlistApi } from "../../../apis";
-import { apiConfig } from "../../../configs";
 import Images from "../../../constants/images";
+import { useAuth } from "../../../context/authContext";
 import Dropdown from "../../Dropdown";
 import "./style.scss";
 
@@ -19,7 +17,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
   const [imageFile, setImageFile] = useState<any>(null);
   const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
-  const { token } = useAuth();
+  const { token, currentUser } = useAuth();
 
   interface Inputs {
     title: string;
@@ -59,6 +57,53 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
     }
   };
 
+  const handleSave = async () => {
+    const formData = new FormData();
+    setError("");
+
+    if (inputs.title === "") {
+      return setError("Title is required");
+    }
+
+    if (inputs.genre_id === "") {
+      return setError("Genre is required");
+    }
+
+    try {
+      let updatedInputs;
+
+      if (imageFile) {
+        console.log("imageFile", imageFile);
+        formData.append("image", imageFile);
+        //Tải ảnh lên server
+        const res = await imageApi.upload(formData, token);
+        updatedInputs = { ...inputs, image_path: res.image };
+      } else {
+        updatedInputs = { ...inputs };
+      }
+
+      await playlistApi.createPlaylist(token, updatedInputs);
+      closeModal();
+    } catch (error) {
+      setError((error as any).response.data.conflictError);
+    }
+  };
+
+  const mutionSave = useMutation(
+    () => {
+      return handleSave();
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["playlists", currentUser?.id ?? ""],
+        });
+        queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
+        queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
+      },
+    }
+  );
+
   return (
     <div className="ModalAdd">
       {error && (
@@ -70,18 +115,12 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
       <div className="ModalAdd__top">
         <div className="ModalAdd__top__image">
           <img
-            src={
-              imageFile
-                ? URL.createObjectURL(imageFile)
-                : inputs.image_path
-                ? apiConfig.imageURL(inputs.image_path ?? "")
-                : Images.PLAYLIST
-            }
+            src={imageFile ? URL.createObjectURL(imageFile) : Images.PLAYLIST}
             alt=""
           />
           <label htmlFor="input-image" className="ModalAdd__top__image__edit">
             <i className="fa-regular fa-pen-to-square"></i>
-            <span>Edit playlist</span>
+            <span>{t("AddNewPlaylist.EditImage")}</span>
             <input
               type="file"
               id="input-image"
@@ -90,7 +129,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
             />
             <button
               className="ModalAdd__top__image__edit__delete"
-              onClick={() => updateState({ image_path: "" })}
+              onClick={() => setImageFile(null)}
             >
               <i className="fa-regular fa-trash"></i>
             </button>
@@ -107,7 +146,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               maxLength={100}
               onChange={(e) => updateState({ title: e.target.value })}
             />
-            <label htmlFor="title">{t("EditPlaylist.Title")}</label>
+            <label htmlFor="title">{t("AddNewPlaylist.Title")}</label>
             {inputs.title.length > 80 && (
               <span className="count-letter">{`${inputs.title.length}/100`}</span>
             )}
@@ -121,7 +160,7 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               maxLength={200}
               onChange={(e) => updateState({ desc: e.target.value })}
             />
-            <label htmlFor="title">{t("EditPlaylist.Description")}</label>
+            <label htmlFor="title">{t("AddNewPlaylist.Description")}</label>
             {inputs.desc.length > 180 && (
               <span className="count-letter">{`${inputs.desc.length}/200`}</span>
             )}
@@ -129,8 +168,8 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
           {/* dropdown genre */}
           <div className="ModalAdd__top__body__select">
             <Dropdown
-              title={t("EditPlaylist.Genre")}
-              defaultSelected={inputs?.genre_id ?? ""}
+              title={t("AddNewPlaylist.Genre")}
+              defaultSelected={genres?.[0]?.id ?? ""}
               changeSelected={(selected: { id: string; title: string }) =>
                 setInputs((prev) => ({ ...prev, genre_id: selected?.id }))
               }
@@ -142,10 +181,10 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
               }
             />
           </div>
-          {/* <div className="ModalAdd__top__body__select">
+          <div className="ModalAdd__top__body__select">
             <Dropdown
-              title={t("EditPlaylist.Mode")}
-              defaultSelected={playlist?.public === 0 ? "0" : "1"}
+              title={t("AddNewPlaylist.Mode")}
+              defaultSelected={"1"}
               changeSelected={(selected: { id: string; title: string }) =>
                 setInputs((prev) => ({
                   ...prev,
@@ -153,18 +192,18 @@ const ModalAddPlaylist = ({ closeModal, openModal }: props) => {
                 }))
               }
               options={[
-                { id: "0", title: t("EditPlaylist.Private") },
-                { id: "1", title: t("EditPlaylist.Public") },
+                { id: "0", title: t("AddNewPlaylist.Private") },
+                { id: "1", title: t("AddNewPlaylist.Public") },
               ]}
             />
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="ModalAdd__bottom">
-        <button onClick={closeModal}>{t("EditPlaylist.Cancel")}</button>
-        {/* <button onClick={() => mutionSave.mutate()}>
-          {t("EditPlaylist.Save")}
-        </button> */}
+        <button onClick={closeModal}>{t("AddNewPlaylist.Cancel")}</button>
+        <button onClick={() => mutionSave.mutate()}>
+          {t("AddNewPlaylist.Save")}
+        </button>
       </div>
     </div>
   );

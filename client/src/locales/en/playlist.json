@@ -6,10 +6,24 @@
     "Description": "Description",
     "Image": "Image",
     "Genre": "Genre",
-    "Mode" : "Mode",
+    "Mode": "Mode",
     "Public": "Public",
     "Private": "Private",
     "Save": "Save",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "EditImage": "Edit Image"
+  },
+  "AddNewPlaylist": {
+    "AddNewPlaylist": "Add New Playlist",
+    "Title": "Title",
+    "Description": "Description",
+    "Image": "Image",
+    "Genre": "Genre",
+    "Mode": "Mode",
+    "Public": "Public",
+    "Private": "Private",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "EditImage": "Edit Image"
   }
 }

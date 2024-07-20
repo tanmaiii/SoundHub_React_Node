@@ -1,4 +1,4 @@
-import {axiosClient} from "../../configs";
+import { axiosClient } from "../../configs";
 import { ListResponse, TPlaylist } from "../../types";
 
 interface CheckLikedResponse {
@@ -8,22 +8,14 @@ interface CheckLikedResponse {
 const playlistApi = {
   createPlaylist(
     token: string,
-    title: string,
-    isPublic: number
+    body: TPlaylist
   ): Promise<{ id: string; title: string; isPublic: number }> {
     const url = "playlist";
-    return axiosClient.post(
-      url,
-      {
-        title: title,
-        public: isPublic,
+    return axiosClient.post(url, body, {
+      headers: {
+        authorization: token,
       },
-      {
-        headers: {
-          authorization: token,
-        },
-      }
-    );
+    });
   },
   updatePlaylist(token: string, playlistId: string, body: TPlaylist) {
     const url = "playlist/";
@@ -45,7 +37,12 @@ const playlistApi = {
       }
     );
   },
-  getAll(page: number, limit: number, q?: string, sort?: string): Promise<ListResponse<TPlaylist>> {
+  getAll(
+    page: number,
+    limit: number,
+    q?: string,
+    sort?: string
+  ): Promise<ListResponse<TPlaylist>> {
     const url = "playlist";
     return axiosClient.get(url, {
       params: {
@@ -86,7 +83,7 @@ const playlistApi = {
     page: number,
     limit: number,
     sort?: string,
-    q?: string,
+    q?: string
   ): Promise<ListResponse<TPlaylist>> {
     const url = "playlist/me";
     return axiosClient.get(url, {
@@ -101,7 +98,10 @@ const playlistApi = {
       },
     });
   },
-  checkLikedPlaylist(playlistId: string, token: string): Promise<CheckLikedResponse> {
+  checkLikedPlaylist(
+    playlistId: string,
+    token: string
+  ): Promise<CheckLikedResponse> {
     const url = "playlist/checkLiked/";
     return axiosClient.get(url + playlistId, {
       headers: {
@@ -176,7 +176,11 @@ const playlistApi = {
       },
     });
   },
-  updateSong(token: string, playlistId: string, songs: { id: string; num_song: number }[]) {
+  updateSong(
+    token: string,
+    playlistId: string,
+    songs: { id: string; num_song: number }[]
+  ) {
     const url = "playlist/song/";
     return axiosClient.put(
       url + playlistId,

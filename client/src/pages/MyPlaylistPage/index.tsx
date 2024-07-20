@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./style.scss";
-import HeaderSection from "../../components/HeaderSection";
-import { favouriteApi, playlistApi } from "../../apis";
-import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
-import { useAuth } from "../../context/authContext";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
+import { favouriteApi, playlistApi } from "../../apis";
 import CardPlaylist from "../../components/CardPlaylist";
-import Images from "../../constants/images";
 import Modal from "../../components/Modal";
 import ModalAddPlaylist from "../../components/Modal/ModalAddPlaylist";
+import { useAuth } from "../../context/authContext";
+import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
+import "./style.scss";
 
 type TFilter = "all" | "my";
 
 const MyPlaylistPage = () => {
   const [filter, setFilter] = useState<TFilter>("all");
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { t } = useTranslation("playlist");
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -57,7 +57,7 @@ const MyPlaylistPage = () => {
         </div>
 
         <Modal
-          title="Add Playlist"
+          title={t("AddNewPlaylist.AddNewPlaylist")}
           openModal={openModal}
           setOpenModal={setOpenModal}
         >
@@ -164,7 +164,7 @@ const AllPlaylists = () => {
 
 const MyPlaylists = () => {
   const [data, setData] = useState<TPlaylist[] | null>(null);
-  const { token } = useAuth();
+  const { token, currentUser } = useAuth();
 
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
@@ -210,7 +210,7 @@ const MyPlaylists = () => {
   };
 
   const { data: dataAll } = useQuery({
-    queryKey: ["playlists-favorites"],
+    queryKey: ["playlists", currentUser?.id ?? ""],
     queryFn: async () => {
       return await getAllData(1);
     },
