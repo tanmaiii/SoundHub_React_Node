@@ -95,8 +95,6 @@ const AllPlaylists = () => {
   };
 
   const getAllData = async (newPage?: number) => {
-    console.log("getAllData");
-
     updateState({ loading: true });
     try {
       const res = await favouriteApi.getPlaylists(
@@ -141,9 +139,8 @@ const AllPlaylists = () => {
       <div className="MyPlaylistPage__container__body__list">
         {data?.map((playlist, index) => {
           return (
-            <div className={"pc-2 t-3 m-6"}>
+            <div key={index} className={"pc-2 t-3 m-6"}>
               <CardPlaylist
-                key={index}
                 id={playlist?.id}
                 title={playlist?.title}
                 image={playlist?.image_path}

@@ -51,13 +51,14 @@ export const AuthContextProvider = ({ children }: Props) => {
     const getInfo = async () => {
       try {
         const res = token && (await userApi.getMe(token));
+        console.log("get me", res);
         res && setCurrentUser(res);
       } catch (error) {
         setCurrentUser(null);
       }
     };
-    currentUser && getInfo();
-  }, [token]);
+    getInfo();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));
