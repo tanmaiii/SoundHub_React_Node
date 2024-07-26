@@ -11,13 +11,12 @@ import { RootState } from "./store";
 
 import { SkeletonTheme } from "react-loading-skeleton";
 import "../src/i18n/i18n";
+import { useAuth } from "./context/authContext";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "./constants/paths";
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
-
-  useEffect(() => {
-    // songApi.getAll().then((res) => console.log(res.data.map(x => x.title)))
-  });
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>

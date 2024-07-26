@@ -12,6 +12,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { playlistApi } from "../../apis";
 import { useAuth } from "../../context/authContext";
 import Modal from "../Modal";
+import { useTranslation } from "react-i18next";
 
 export interface CardPlaylistProps {
   className?: string;
@@ -39,6 +40,7 @@ function CardPlaylist({
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { t } = useTranslation("playlist");
 
   const handleClick = () => {
     id && navigate(`${PATH.PLAYLIST}/${id}`);
@@ -158,24 +160,24 @@ function CardPlaylist({
       </div>
 
       <Modal
-        title={"Xóa playlist"}
+        title={t("DeletePlaylist.DeletePlaylist")}
         openModal={openModal}
         setOpenModal={setOpenModal}
       >
         <div className="modal__content">
-          <p>Bạn có chắc chắn muốn xóa playlist này không?</p>
+          <p>{t("DeletePlaylist.AreYouSure")}</p>
           <div className="modal__content__button">
             <button
               className="btn btn__cancel"
               onClick={() => setOpenModal(false)}
             >
-              Hủy
+              {t("DeletePlaylist.Cancel")}
             </button>
             <button
               className="btn btn__delete"
               onClick={() => mutationDelete.mutate()}
             >
-              Xóa
+              {t("DeletePlaylist.Delete")}
             </button>
           </div>
         </div>

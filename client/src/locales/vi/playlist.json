@@ -25,5 +25,11 @@
     "Save": "Lưu",
     "Cancel": "Hủy",
      "EditImage": "Chỉnh sửa hình ảnh"
+  },
+  "DeletePlaylist": {
+    "DeletePlaylist": "Xóa playlist",
+    "AreYouSure": "Bạn có chắc chắn muốn xóa playlist này không?",
+    "Delete": "Xóa",
+    "Cancel": "Hủy"
   }
 }

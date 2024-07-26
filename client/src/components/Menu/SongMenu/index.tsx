@@ -11,6 +11,9 @@ import playlistApi from "../../../apis/playlist/playlistApi";
 import { useAuth } from "../../../context/authContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../../apis";
+import Modal from "../../Modal";
+import { AddSongToPlaylist } from "../../ModalSong";
+import { use } from "i18next";
 
 type Props = {
   id: string;
@@ -33,6 +36,9 @@ const SongMenu = ({
   const SongMenuRef = useRef<HTMLDivElement>(null);
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
+
+  const [openModalAddSongToPlaylist, setOpenModalAddSongToPlaylist] =
+    useState<boolean>(false);
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -89,70 +95,94 @@ const SongMenu = ({
   });
 
   return (
-    <div ref={SongMenuRef} className={`SongMenu`}>
-      <button
-        className="SongMenu__button"
-        onClick={() => {
-          active ? onClose() : onOpen();
-        }}
-      >
-        <i className="fa-solid fa-ellipsis"></i>
-      </button>
+    <>
+      <div ref={SongMenuRef} className={`SongMenu`}>
+        <button
+          className="SongMenu__button"
+          onClick={() => {
+            active ? onClose() : onOpen();
+          }}
+        >
+          <i className="fa-solid fa-ellipsis"></i>
+        </button>
 
-      <div
-        className={`SongMenu__context ${active ? "active" : ""}`}
-        data-placement={placement}
-      >
-        <ul className="SongMenu__context__list">
-          <ItemMenu
-            title={t("Menu.Add to playlist")}
-            icon={<i className="fa-solid fa-plus"></i>}
-            itemFunc={() => console.log("Add to playlist")}
-          />
-          {playlistId && (
+        <div
+          className={`SongMenu__context ${active ? "active" : ""}`}
+          data-placement={placement}
+        >
+          <ul className="SongMenu__context__list">
             <ItemMenu
-              title={t("Menu.Remove to playlist")}
-              icon={<i className="fa-light fa-trash-can"></i>}
-              itemFunc={() => mutationRemoveSongFromPlaylist.mutate()}
-            />
-          )}
-          {!isLike ? (
+              title={t("Menu.Add to playlist")}
+              icon={<i className="fa-solid fa-plus"></i>}
+              itemFunc={() => console.log("Add to playlist")}
+            >
+              <div className="SongMenu__submenu">
+                <div className="SongMenu__submenu__search">
+                  <i className="fa-light fa-magnifying-glass"></i>
+                  <input type="text" placeholder="Tìm playlist..." />
+                  <button>
+                    <i className="fa-light fa-xmark"></i>
+                  </button>
+                </div>
+                <button className="SongMenu__submenu__item">
+                  <i className="fa-light fa-plus"></i>
+                  <span>Thêm playlist</span>
+                </button>
+                <hr />
+              </div>
+            </ItemMenu>
+            {playlistId && (
+              <ItemMenu
+                title={t("Menu.Remove to playlist")}
+                icon={<i className="fa-light fa-trash-can"></i>}
+                itemFunc={() => mutationRemoveSongFromPlaylist.mutate()}
+              />
+            )}
+            {!isLike ? (
+              <ItemMenu
+                title={t("Menu.Add to favorites list")}
+                icon={<i className="fa-regular fa-circle-plus"></i>}
+                itemFunc={() => mutationLike.mutate(isLike ?? false)}
+              />
+            ) : (
+              <ItemMenu
+                title={t("Menu.Remove to favorites list")}
+                icon={<i className="fa-light fa-trash-can"></i>}
+                itemFunc={() => mutationLike.mutate(isLike)}
+              />
+            )}
             <ItemMenu
-              title={t("Menu.Add to favorites list")}
-              icon={<i className="fa-regular fa-circle-plus"></i>}
-              itemFunc={() => mutationLike.mutate(isLike ?? false)}
+              title={t("Menu.Add to waiting list")}
+              icon={<i className="fa-regular fa-list-music"></i>}
+              itemFunc={() => console.log("Add to playlist")}
             />
-          ) : (
+            <hr />
             <ItemMenu
-              title={t("Menu.Remove to favorites list")}
-              icon={<i className="fa-light fa-trash-can"></i>}
-              itemFunc={() => mutationLike.mutate(isLike)}
+              title={t("Menu.See details")}
+              icon={<i className="fa-regular fa-music"></i>}
+              itemFunc={() => console.log("Add to playlist")}
             />
-          )}
-          <ItemMenu
-            title={t("Menu.Add to waiting list")}
-            icon={<i className="fa-regular fa-list-music"></i>}
-            itemFunc={() => console.log("Add to playlist")}
-          />
-          <hr />
-          <ItemMenu
-            title={t("Menu.See details")}
-            icon={<i className="fa-regular fa-music"></i>}
-            itemFunc={() => console.log("Add to playlist")}
-          />
-          <ItemMenu
-            title={t("Menu.Artist Access")}
-            icon={<i className="fa-regular fa-user"></i>}
-            itemFunc={() => console.log("Add to playlist")}
-          />
-          <ItemMenu
-            title={t("Menu.Share")}
-            icon={<i className="fa-solid fa-share"></i>}
-            itemFunc={() => console.log("Add to playlist")}
-          />
-        </ul>
+            <ItemMenu
+              title={t("Menu.Artist Access")}
+              icon={<i className="fa-regular fa-user"></i>}
+              itemFunc={() => console.log("Add to playlist")}
+            />
+            <ItemMenu
+              title={t("Menu.Share")}
+              icon={<i className="fa-solid fa-share"></i>}
+              itemFunc={() => console.log("Add to playlist")}
+            />
+          </ul>
+        </div>
       </div>
-    </div>
+      <Modal
+        title="Add song to playlist"
+        openModal={openModalAddSongToPlaylist}
+        setOpenModal={() => setOpenModalAddSongToPlaylist(false)}
+      >
+        <AddSongToPlaylist />
+      </Modal>
+    </>
   );
 };
 
@@ -162,15 +192,32 @@ type PropsItemMenu = {
   icon: ReactElement<any, string | JSXElementConstructor<any>>;
   title: string;
   itemFunc: () => void;
+  children?: React.ReactNode;
 };
 
-const ItemMenu = (props: PropsItemMenu) => {
+const ItemMenu = ({ children, ...props }: PropsItemMenu) => {
+  const SongMenuItemRef = useRef<HTMLLIElement>(null);
+  const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (SongMenuItemRef.current) {
+      SongMenuItemRef.current.addEventListener("mouseenter", () => {
+        setOpenSubMenu(true);
+      });
+      SongMenuItemRef.current.addEventListener("mouseleave", () => {
+        setOpenSubMenu(false);
+      });
+    }
+  }, []);
+
   return (
-    <li className="SongMenu__context__list__item">
+    <li ref={SongMenuItemRef} className="SongMenu__context__list__item">
       <button onClick={props.itemFunc}>
         {props?.icon}
         <span>{props.title}</span>
+        {children && <i className="icon-subMenu fa-solid fa-chevron-right"></i>}
       </button>
+      {children && openSubMenu && <ul>{children}</ul>}
     </li>
   );
 };

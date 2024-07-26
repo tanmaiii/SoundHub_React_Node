@@ -61,14 +61,24 @@ export const AuthContextProvider = ({ children }: Props) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(currentUser));
-    // localStorage.setItem("token", JSON.stringify(token));
-    Cookies.set("token", token, {
-      expires: 7,
-      secure: true,
-      sameSite: "Strict",
-    });
+    if (currentUser && token) {
+      localStorage.setItem("user", JSON.stringify(currentUser));
+    } else {
+      setCurrentUser(null);
+      localStorage.removeItem("user");
+      Cookies.remove("token");
+    }
   }, [currentUser, token]);
+
+  // useEffect(() => {
+  //   localStorage.setItem("user", JSON.stringify(currentUser));
+  //   // localStorage.setItem("token", JSON.stringify(token));
+  //   Cookies.set("token", token, {
+  //     expires: 7,
+  //     secure: true,
+  //     sameSite: "Strict",
+  //   });
+  // }, [currentUser, token]);
 
   // Cập nhật giá trị của AuthContextProvider
   const contextValue: IAuthContext = {

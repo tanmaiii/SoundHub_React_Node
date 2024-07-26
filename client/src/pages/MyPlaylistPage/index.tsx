@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { favouriteApi, playlistApi } from "../../apis";
 import CardPlaylist from "../../components/CardPlaylist";
 import Modal from "../../components/Modal";
-import ModalAddPlaylist from "../../components/Modal/ModalAddPlaylist";
+import ModalAddPlaylist from "../../components/ModalPlaylist/AddPlaylist";
 import { useAuth } from "../../context/authContext";
 import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
 import "./style.scss";

@@ -25,5 +25,11 @@
     "Save": "Save",
     "Cancel": "Cancel",
     "EditImage": "Edit Image"
+  },
+  "DeletePlaylist": {
+    "DeletePlaylist": "Delete Playlist",
+    "AreYouSure": "Are you sure you want to delete this playlist?",
+    "Delete": "Delete",
+    "Cancel": "Cancel"
   }
 }

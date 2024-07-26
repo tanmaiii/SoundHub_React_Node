@@ -15,7 +15,7 @@ type props = {
   closeModal: () => void;
 };
 
-const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
+const EditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
   const { t } = useTranslation("playlist");
   const [imageFile, setImageFile] = useState<any>(null);
   const [error, setError] = useState<string>("");
@@ -235,4 +235,4 @@ const ModalEditPlaylist = ({ playlist, closeModal, openEdit }: props) => {
   );
 };
 
-export default ModalEditPlaylist;
+export default EditPlaylist;

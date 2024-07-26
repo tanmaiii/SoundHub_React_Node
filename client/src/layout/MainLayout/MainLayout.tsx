@@ -1,5 +1,5 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import "./mainLayout.scss";
 
@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Footer from "../../components/Footer";
 import WattingList from "../../components/WattingList";
+import { useAuth } from "../../context/authContext";
+import { PATH } from "../../constants/paths";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -17,7 +19,14 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   document.title = "Sound Hub";
-  const openWatting = useSelector((state: RootState) => state.waiting.state);
+
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) navigate(PATH.LOGIN);
+    return;
+  }, [currentUser]);
 
   return (
     <div className="MainLayout">
@@ -32,7 +41,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <Footer />
           </div>
           <div className={`MainLayout__top__main__waiting`}>
-            <WattingList/>
+            <WattingList />
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { playlistApi, songApi, userApi } from "../../apis";
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import PlaylistMenu from "../../components/Menu/PlaylistMenu";
 import Modal from "../../components/Modal";
-import ModalEditPlaylist from "../../components/Modal/ModalEditPlaylist";
+import ModalEditPlaylist from "../../components/ModalPlaylist/EditPlaylist";
 import TableTrack from "../../components/TableTrack";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
