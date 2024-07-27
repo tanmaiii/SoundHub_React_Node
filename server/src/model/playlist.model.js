@@ -204,7 +204,7 @@ Playlist.getMe = async (userId, query, result) => {
   const limit = query?.limit;
   const sort = query?.sortBy || "new";
 
-  const offset = (page - 1) * limit;
+  // const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
     `SELECT p.id, p.title, p.image_path, u.name as author, u.id as user_id, p.public, p.created_at ` +
@@ -212,9 +212,10 @@ Playlist.getMe = async (userId, query, result) => {
       ` LEFT JOIN users AS u ON p.user_id = u.id` +
       ` WHERE ${q ? ` title like "%${q}%" and` : ""}` +
       ` user_id = '${userId}' AND is_deleted = 0 ` +
-      `ORDER BY created_at ${
-        sort === "new" ? "DESC" : "ASC"
-      } limit ${+limit} offset ${+offset}`
+      ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(

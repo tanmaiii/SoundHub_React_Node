@@ -14,6 +14,7 @@ import { songApi } from "../../../apis";
 import Modal from "../../Modal";
 import { AddSongToPlaylist } from "../../ModalSong";
 import { use } from "i18next";
+import { TStateParams } from "../../../types";
 
 type Props = {
   id: string;
@@ -39,6 +40,41 @@ const SongMenu = ({
 
   const [openModalAddSongToPlaylist, setOpenModalAddSongToPlaylist] =
     useState<boolean>(false);
+
+  const [state, setState] = React.useState<TStateParams>({
+    page: 1,
+    limit: 0,
+    loading: false,
+    totalPages: 1,
+    totalCount: 0,
+    refreshing: false,
+    keyword: "",
+    sort: "new",
+  });
+
+  const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
+
+  const updateState = (newState: Partial<TStateParams>) => {
+    setState((prevState) => ({ ...prevState, ...newState }));
+  };
+
+  const { data: playlists } = useQuery({
+    queryKey: ["playlists", currentUser?.id ?? "", keyword],
+    queryFn: async () => {
+      try {
+        const res = await playlistApi.getMe(
+          token ?? "",
+          page,
+          limit,
+          sort,
+          keyword
+        );
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -116,7 +152,7 @@ const SongMenu = ({
               icon={<i className="fa-solid fa-plus"></i>}
               itemFunc={() => console.log("Add to playlist")}
             >
-              <div className="SongMenu__submenu">
+              <div className="SongMenu__submenu" data-placement={placement}>
                 <div className="SongMenu__submenu__search">
                   <i className="fa-light fa-magnifying-glass"></i>
                   <input type="text" placeholder="Tìm playlist..." />
@@ -129,6 +165,14 @@ const SongMenu = ({
                   <span>Thêm playlist</span>
                 </button>
                 <hr />
+                {playlists?.map((playlist, index) => {
+                  return (
+                    <button className="SongMenu__submenu__item">
+                      <i className="fa-solid fa-compact-disc"></i>
+                      <span>{playlist?.title}</span>
+                    </button>
+                  );
+                })}
               </div>
             </ItemMenu>
             {playlistId && (
@@ -193,9 +237,10 @@ type PropsItemMenu = {
   title: string;
   itemFunc: () => void;
   children?: React.ReactNode;
+  placement?: "top-start" | "bottom-start" | "top-end" | "bottom-end";
 };
 
-const ItemMenu = ({ children, ...props }: PropsItemMenu) => {
+const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
   const SongMenuItemRef = useRef<HTMLLIElement>(null);
   const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 

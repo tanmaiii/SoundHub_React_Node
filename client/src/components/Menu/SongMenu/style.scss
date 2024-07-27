@@ -74,16 +74,36 @@
 
           .SongMenu__submenu {
             position: absolute;
-            top: 0;
-            right: 100%;
+            // top: 0;
+            // right: 100%;
             min-width: 100%;
             // height: 100%;
             background-color: themed("bg-2");
             padding: $space-4;
             border-radius: $radius-8;
             box-shadow: themed("box-shadow");
-            @include flex(start, center, column);
-            gap: $space-4;
+            @include flex(start, start, column);
+            // gap: $space-4;
+
+            max-height: 400px;
+            overflow-y: auto;
+
+            &[data-placement="top-start"] {
+              top: 0;
+              right: 100%;
+            }
+            &[data-placement="bottom-start"] {
+              top: 0;
+              left: 100%;
+            }
+            &[data-placement="top-end"] {
+              top: 0;
+              right: 100%;
+            }
+            &[data-placement="bottom-end"] {
+              top: 0;
+              right: 100%;
+            }
 
             &__search {
               @include flex(center, center, row);
@@ -92,6 +112,7 @@
               background-color: themed("bg-3");
               border-radius: $radius-6;
               gap: $space-4;
+              margin-bottom: $space-4;
 
               i {
                 font-size: $size-16;
