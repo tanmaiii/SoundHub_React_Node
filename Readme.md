@@ -18,6 +18,7 @@ Dự án này là một ứng dụng âm nhạc đa nền tảng được phát 
 ### Công nghệ sử dụng
 
 #### Client (React)
+- Ngôn ngữ: Typescript
 - React: Thư viện JavaScript để xây dựng giao diện người dùng.
 - Redux: Quản lý trạng thái ứng dụng.
 - React Query: Quản lý và đồng bộ hóa dữ liệu server-side.
@@ -26,6 +27,7 @@ Dự án này là một ứng dụng âm nhạc đa nền tảng được phát 
 - Font Awesome: Bộ biểu tượng để sử dụng trong giao diện người dùng.
 
 #### Server (Node.js)
+- Ngôn ngữ: JavaScript
 - Node.js: Môi trường chạy JavaScript phía server.
 - Express.js: Framework để xây dựng API RESTful.
 - JWT (JSON Web Token): Xác thực và phân quyền người dùng.
