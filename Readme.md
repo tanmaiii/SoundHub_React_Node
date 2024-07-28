@@ -1,4 +1,4 @@
-![Alt text](client\src\assets\images\template.png)
+![Alt text](client/src/assets/images/template.png)
 
 # Tên đề tài: Website nghe nhạc SoundHub bằng ReactJS
 
