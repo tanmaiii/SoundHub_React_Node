@@ -1,3 +1,5 @@
+![Alt text](client\src\assets\images\template.png)
+
 # Tên đề tài: Website nghe nhạc SoundHub bằng ReactJS
 
 * Người thực hiện: Đinh Tấn Mãi       
