@@ -49,7 +49,7 @@ const ToastMessage = forwardRef(({
             <p>{description}</p>
           </div>
           <button onClick={() => setIsVisible(false)}>
-            <i className="fa-solid fa-xmark"></i>
+            <i className="fa-solid fa-xmark">    </i>
           </button>
         </div>
       )}
