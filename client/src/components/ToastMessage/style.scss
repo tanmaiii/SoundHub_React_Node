@@ -1,0 +1,50 @@
+@use "../../scss/" as *;
+
+.toast-messages {
+  // @include themify($themes) {
+  position: fixed;
+  bottom: calc($height-barPlaying + $space-12);
+  left: 50%;
+  background-color: $color-bg-1;
+  z-index: 999999;
+  padding: $space-8 $space-14;
+  border-radius: $radius-6;
+  max-width: 400px;
+  transform: translateX(-50%);
+  @include flex(center, center, row);
+  box-shadow: $box-shadow-light;
+
+  &__body {
+    @include flex(center, center, row);
+
+    &__icon {
+      margin-right: 6px;
+      i {
+        font-size: $size-24;
+        color: $color-txt-main
+      }
+    }
+    p {
+      color: $color-txt-main;
+      font-size: $size-16;
+      // @include hideText(2);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      // -webkit-line-clamp: $line;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+    }
+  }
+  button {
+    margin-left: 6px;
+    cursor: pointer;
+    i {
+      @include flex(center, center);
+      border-radius: 50%;
+      color: $color-txt-main;
+      font-size: $size-20;
+    }
+  }
+  // }
+}

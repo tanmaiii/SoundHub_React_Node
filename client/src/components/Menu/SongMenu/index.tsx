@@ -12,9 +12,8 @@ import { useAuth } from "../../../context/authContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../../apis";
 import Modal from "../../Modal";
-import { AddSongToPlaylist } from "../../ModalSong";
-import { use } from "i18next";
-import { TStateParams } from "../../../types";
+import { TPlaylist, TStateParams } from "../../../types";
+import { useToast } from "../../../context/ToastContext";
 
 type Props = {
   id: string;
@@ -37,44 +36,6 @@ const SongMenu = ({
   const SongMenuRef = useRef<HTMLDivElement>(null);
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
-
-  const [openModalAddSongToPlaylist, setOpenModalAddSongToPlaylist] =
-    useState<boolean>(false);
-
-  const [state, setState] = React.useState<TStateParams>({
-    page: 1,
-    limit: 0,
-    loading: false,
-    totalPages: 1,
-    totalCount: 0,
-    refreshing: false,
-    keyword: "",
-    sort: "new",
-  });
-
-  const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
-
-  const updateState = (newState: Partial<TStateParams>) => {
-    setState((prevState) => ({ ...prevState, ...newState }));
-  };
-
-  const { data: playlists } = useQuery({
-    queryKey: ["playlists", currentUser?.id ?? "", keyword],
-    queryFn: async () => {
-      try {
-        const res = await playlistApi.getMe(
-          token ?? "",
-          page,
-          limit,
-          sort,
-          keyword
-        );
-        return res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -130,6 +91,12 @@ const SongMenu = ({
     },
   });
 
+  useEffect(() => {
+    // active
+    //   ? (document.body.style.overflow = "hidden")
+    //   : (document.body.style.overflow = "auto");
+  });
+
   return (
     <>
       <div ref={SongMenuRef} className={`SongMenu`}>
@@ -152,28 +119,7 @@ const SongMenu = ({
               icon={<i className="fa-solid fa-plus"></i>}
               itemFunc={() => console.log("Add to playlist")}
             >
-              <div className="SongMenu__submenu" data-placement={placement}>
-                <div className="SongMenu__submenu__search">
-                  <i className="fa-light fa-magnifying-glass"></i>
-                  <input type="text" placeholder="Tìm playlist..." />
-                  <button>
-                    <i className="fa-light fa-xmark"></i>
-                  </button>
-                </div>
-                <button className="SongMenu__submenu__item">
-                  <i className="fa-light fa-plus"></i>
-                  <span>Thêm playlist</span>
-                </button>
-                <hr />
-                {playlists?.map((playlist, index) => {
-                  return (
-                    <button className="SongMenu__submenu__item">
-                      <i className="fa-solid fa-compact-disc"></i>
-                      <span>{playlist?.title}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <AddSongToPlaylist songId={id} placement={placement} />
             </ItemMenu>
             {playlistId && (
               <ItemMenu
@@ -219,13 +165,6 @@ const SongMenu = ({
           </ul>
         </div>
       </div>
-      <Modal
-        title="Add song to playlist"
-        openModal={openModalAddSongToPlaylist}
-        setOpenModal={() => setOpenModalAddSongToPlaylist(false)}
-      >
-        <AddSongToPlaylist />
-      </Modal>
     </>
   );
 };
@@ -264,5 +203,165 @@ const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
       </button>
       {children && openSubMenu && <ul>{children}</ul>}
     </li>
+  );
+};
+
+type props = {
+  songId: string;
+  placement: "top-start" | "bottom-start" | "top-end" | "bottom-end";
+};
+
+const AddSongToPlaylist = ({ songId, placement }: props) => {
+  const { currentUser, token } = useAuth();
+  const [state, setState] = React.useState<TStateParams>({
+    page: 1,
+    limit: 0,
+    loading: false,
+    totalPages: 1,
+    totalCount: 0,
+    refreshing: false,
+    keyword: "",
+    sort: "new",
+  });
+
+  const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
+
+  const updateState = (newState: Partial<TStateParams>) => {
+    setState((prevState) => ({ ...prevState, ...newState }));
+  };
+
+  const { data: playlists } = useQuery({
+    queryKey: ["playlists", currentUser?.id ?? "", keyword],
+    queryFn: async () => {
+      try {
+        const res = await playlistApi.getMe(
+          token ?? "",
+          page,
+          limit,
+          sort,
+          keyword
+        );
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+  return (
+    <ul>
+      <div className="SongMenu__submenu" data-placement={placement}>
+        <div className="SongMenu__submenu__search">
+          <i className="fa-light fa-magnifying-glass"></i>
+          <input
+            type="text"
+            value={keyword}
+            placeholder="Tìm playlist..."
+            onChange={(e) => updateState({ keyword: e.target.value })}
+          />
+          {keyword.length > 0 && (
+            <button
+              className="btn_clear"
+              onClick={() => updateState({ keyword: "" })}
+            >
+              <i className="fa-light fa-xmark"></i>
+            </button>
+          )}
+        </div>
+        <button className="SongMenu__submenu__item">
+          <i className="fa-light fa-plus"></i>
+          <span>Thêm playlist</span>
+        </button>
+        <hr />
+        {playlists?.map((playlist, index) => {
+          return <ItemPlaylist playlist={playlist} songId={songId} />;
+        })}
+      </div>
+    </ul>
+  );
+};
+
+const ItemPlaylist = ({
+  playlist,
+  songId,
+}: {
+  playlist: TPlaylist;
+  songId: string;
+}) => {
+  const { token } = useAuth();
+  const queryClient = useQueryClient();
+  const { setToastMessage } = useToast();
+
+  const { data: countSongs } = useQuery({
+    queryKey: ["count-songs", playlist.id],
+    queryFn: async () => {
+      const res = await songApi.getAllByPlaylistId(
+        token,
+        playlist?.id ?? "",
+        1,
+        0
+      );
+      return res.pagination.totalCount;
+    },
+  });
+
+  const { data: isAdd } = useQuery({
+    queryKey: ["check-song", songId, playlist.id],
+    queryFn: async () => {
+      try {
+        const res = await playlistApi.checkSongInPlaylist(
+          playlist.id ?? "",
+          songId,
+          token
+        );
+        return res.isAdd;
+      } catch (error: any) {
+        console.log(error.response.data);
+        return false;
+      }
+    },
+  });
+
+  const mutationAdd = useMutation({
+    mutationFn: async (isAdd: boolean) => {
+      if (isAdd) {
+        setToastMessage(`Đã xóa bài hát khỏi danh sách phát ${playlist.title}`);
+        return await playlistApi.removeSong(playlist.id ?? "", songId, token);
+      }
+      if (countSongs && countSongs < 10) {
+        setToastMessage("Playlist đã đầy, không thể thêm bài hát");
+      }
+      setToastMessage(`Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`);
+      return await playlistApi.addSong(playlist.id ?? "", songId, token);
+      // setOpenModal(true);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["check-song", songId, playlist.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["count-songs", playlist.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["songs", playlist.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["playlist-songs", playlist.id],
+      });
+    },
+  });
+
+  return (
+    <button
+      className="SongMenu__submenu__item"
+      onClick={() => mutationAdd.mutate(isAdd ?? false)}
+    >
+      {isAdd ? (
+        <i className="fa-solid fa-compact-disc"></i>
+      ) : (
+        <i className="fa-solid fa-plus"></i>
+      )}
+      <span>{playlist?.title}</span>
+    </button>
   );
 };
