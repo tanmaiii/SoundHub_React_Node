@@ -14,6 +14,8 @@ import { songApi } from "../../../apis";
 import Modal from "../../Modal";
 import { TPlaylist, TStateParams } from "../../../types";
 import { useToast } from "../../../context/ToastContext";
+import ImageWithFallback from "../../ImageWithFallback/index";
+import Images from "../../../constants/images";
 
 type Props = {
   id: string;
@@ -181,18 +183,18 @@ type PropsItemMenu = {
 
 const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
   const SongMenuItemRef = useRef<HTMLLIElement>(null);
-  const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
+  const [openSubMenu, setOpenSubMenu] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (SongMenuItemRef.current) {
-      SongMenuItemRef.current.addEventListener("mouseenter", () => {
-        setOpenSubMenu(true);
-      });
-      SongMenuItemRef.current.addEventListener("mouseleave", () => {
-        setOpenSubMenu(false);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (SongMenuItemRef.current) {
+  //     SongMenuItemRef.current.addEventListener("mouseenter", () => {
+  //       setOpenSubMenu(true);
+  //     });
+  //     SongMenuItemRef.current.addEventListener("mouseleave", () => {
+  //       setOpenSubMenu(false);
+  //     });
+  //   }
+  // }, []);
 
   return (
     <li ref={SongMenuItemRef} className="SongMenu__context__list__item">
@@ -331,7 +333,9 @@ const ItemPlaylist = ({
       if (countSongs && countSongs < 10) {
         setToastMessage("Playlist đã đầy, không thể thêm bài hát");
       }
-      setToastMessage(`Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`);
+      setToastMessage(
+        `Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`
+      );
       return await playlistApi.addSong(playlist.id ?? "", songId, token);
       // setOpenModal(true);
     },
@@ -356,12 +360,24 @@ const ItemPlaylist = ({
       className="SongMenu__submenu__item"
       onClick={() => mutationAdd.mutate(isAdd ?? false)}
     >
+      <div className="SongMenu__submenu__item__image">
+        <ImageWithFallback
+          src={playlist?.image_path ?? ""}
+          fallbackSrc={Images.PLAYLIST}
+          alt="playlist.png"
+        />
+      </div>
+      <div className="SongMenu__submenu__item__body">
+        <span>{playlist?.title}</span>
+      </div>
       {isAdd ? (
-        <i className="fa-solid fa-compact-disc"></i>
+        <>
+          <i className="icon-remove fa-solid fa-circle-xmark"></i>
+          <i className="icon-check fa-solid fa-circle-check"></i>
+        </>
       ) : (
-        <i className="fa-solid fa-plus"></i>
+        <i className="icon-add fa-solid fa-circle-plus"></i>
       )}
-      <span>{playlist?.title}</span>
     </button>
   );
 };

@@ -30,6 +30,7 @@
       &.active {
         display: block;
       }
+
       &__list {
         @include flex(start, unset);
         flex-direction: column;
@@ -43,8 +44,10 @@
           position: relative;
 
           & > button {
+            --size: 44px;
+            height: var(--size);
             cursor: pointer;
-            padding: $space-12;
+            padding: 0 $space-12;
             border-radius: $radius-4;
             @include flex(center, start);
             gap: $space-8;
@@ -129,14 +132,13 @@
                 right: 10px;
                 transform: translateY(-50%);
 
-                
                 i {
                   --size: 20px;
                   width: var(--size);
                   height: var(--size);
                   border-radius: 50%;
                   font-size: $size-16;
-                  @include flex(center, center);  
+                  @include flex(center, center);
                   color: themed("txt-second");
                   transition: all 0.3s;
                   &:hover {
@@ -146,9 +148,10 @@
               }
             }
 
-            & > button {
+            .SongMenu__submenu__item {
+              min-height: 44px;
               cursor: pointer;
-              padding: $space-12;
+              padding: 0 $space-12;
               border-radius: $radius-4;
               @include flex(center, start);
               gap: $space-8;
@@ -156,11 +159,50 @@
               transition: $transition;
 
               &:hover {
+                .icon-remove {
+                  display: block;
+                }
+                .icon-check {
+                  display: none;
+                }
+              }
+
+              &__image {
+                --size: 34px;
+                height: var(--size);
+                width: var(--size);
+                overflow: hidden;
+                background-color: themed("bg-3");
+                border-radius: $radius-4;
+                img {
+                  height: 100%;
+                  width: 100%;
+                }
+              }
+
+              &__body {
+                flex: 1;
+                @include flex(start, center, column);
+              }
+
+              &:hover {
                 background-color: themed("bg-3");
               }
               i {
                 font-size: $size-16;
                 color: themed("txt-second");
+                transition: $transition;
+
+                &.icon-remove {
+                  color: $color-red;
+                  display: none;
+                }
+                &.icon-check {
+                  color: $color-green;
+                }
+                &.icon-add {
+                  color: $color-primary1;
+                }
               }
 
               span {
