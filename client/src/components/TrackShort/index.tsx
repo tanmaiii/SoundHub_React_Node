@@ -84,6 +84,7 @@ function TrackShort({ song, number, loading }: props) {
           </button>
           <div className={`button-edit ${activeMenu ? " active" : ""}`}>
             <SongMenu
+              song={song}
               id={song?.id}
               active={activeMenu}
               onOpen={() => setActiveMenu(true)}

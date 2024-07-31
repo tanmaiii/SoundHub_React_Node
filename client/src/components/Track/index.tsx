@@ -149,6 +149,7 @@ export default function Track({
             <div className={`button-edit ${activeMenu ? " active" : ""}`}>
               <SongMenu
                 id={song?.id}
+                song={song}
                 playlistId={playlistId}
                 active={activeMenu}
                 onOpen={() => setActiveMenu(true)}

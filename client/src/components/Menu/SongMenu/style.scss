@@ -2,6 +2,26 @@
 
 .SongMenu {
   @include themify($themes) {
+    /* width */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: themed("bg-3");
+      border: none;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    }
+
     &__context {
       position: absolute;
       background-color: themed("bg-2");
@@ -78,6 +98,7 @@
           .SongMenu__submenu {
             position: absolute;
             min-width: 100%;
+            max-width: 300px;
             background-color: themed("bg-2");
             padding: $space-4;
             border-radius: $radius-8;
@@ -105,7 +126,7 @@
             }
 
             &__search {
-              @include flex(center, center, row);
+              @include flex(start, center, row);
               width: 100%;
               padding: $space-12;
               background-color: themed("bg-3");
@@ -174,20 +195,28 @@
                 overflow: hidden;
                 background-color: themed("bg-3");
                 border-radius: $radius-4;
+                border: 1px solid themed("bg-2");
                 img {
                   height: 100%;
                   width: 100%;
+                  object-fit: cover;
                 }
               }
 
               &__body {
                 flex: 1;
                 @include flex(start, center, column);
+                span {
+                  font-size: $size-16;
+                  color: themed("txt-main");
+                  @include text(1);
+                }
               }
 
               &:hover {
                 background-color: themed("bg-3");
               }
+
               i {
                 font-size: $size-16;
                 color: themed("txt-second");

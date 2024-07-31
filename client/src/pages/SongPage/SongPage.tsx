@@ -24,7 +24,7 @@ export default function SongPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  })
+  });
 
   const {
     data: song,
@@ -120,13 +120,16 @@ export default function SongPage() {
             </button>
           )}
           <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
-            <SongMenu
-              id={id || ""}
-              active={activeMenu}
-              onOpen={() => setActiveMenu(true)}
-              onClose={() => setActiveMenu(false)}
-              placement="bottom-start"
-            />
+            {song && (
+              <SongMenu
+                song={song}
+                id={id || ""}
+                active={activeMenu}
+                onOpen={() => setActiveMenu(true)}
+                onClose={() => setActiveMenu(false)}
+                placement="bottom-start"
+              />
+            )}
           </button>
         </div>
 

@@ -13,11 +13,11 @@ type Props = {
 
 export default function AuthLayout({ children }: Props) {
   document.title = "Sound - Đăng nhập";
-  const navigete = useNavigate();
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    if (currentUser) return navigete(PATH.HOME);
+    if (currentUser) return navigate(PATH.HOME);
   });
 
   return (

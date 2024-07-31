@@ -12,13 +12,17 @@ import { useAuth } from "../../../context/authContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../../apis";
 import Modal from "../../Modal";
-import { TPlaylist, TStateParams } from "../../../types";
+import { TPlaylist, TSong, TStateParams } from "../../../types";
 import { useToast } from "../../../context/ToastContext";
 import ImageWithFallback from "../../ImageWithFallback/index";
 import Images from "../../../constants/images";
+import { AddPlaylist } from "../../ModalPlaylist";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../../constants/paths";
 
 type Props = {
   id: string;
+  song: TSong;
   playlistId?: string;
   active: boolean;
   placement?: "top-start" | "bottom-start" | "top-end" | "bottom-end";
@@ -28,6 +32,7 @@ type Props = {
 
 const SongMenu = ({
   id,
+  song,
   playlistId,
   active,
   onOpen,
@@ -38,6 +43,7 @@ const SongMenu = ({
   const SongMenuRef = useRef<HTMLDivElement>(null);
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
+  const navigation = useNavigate();
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -121,7 +127,11 @@ const SongMenu = ({
               icon={<i className="fa-solid fa-plus"></i>}
               itemFunc={() => console.log("Add to playlist")}
             >
-              <AddSongToPlaylist songId={id} placement={placement} />
+              <AddSongToPlaylist
+                songId={id}
+                placement={placement}
+                closeMenu={() => onClose()}
+              />
             </ItemMenu>
             {playlistId && (
               <ItemMenu
@@ -133,13 +143,13 @@ const SongMenu = ({
             {!isLike ? (
               <ItemMenu
                 title={t("Menu.Add to favorites list")}
-                icon={<i className="fa-regular fa-circle-plus"></i>}
+                icon={<i className="fa-regular fa-heart"></i>}
                 itemFunc={() => mutationLike.mutate(isLike ?? false)}
               />
             ) : (
               <ItemMenu
                 title={t("Menu.Remove to favorites list")}
-                icon={<i className="fa-light fa-trash-can"></i>}
+                icon={<i className="fa-solid fa-heart"></i>}
                 itemFunc={() => mutationLike.mutate(isLike)}
               />
             )}
@@ -152,12 +162,14 @@ const SongMenu = ({
             <ItemMenu
               title={t("Menu.See details")}
               icon={<i className="fa-regular fa-music"></i>}
-              itemFunc={() => console.log("Add to playlist")}
+              itemFunc={() => id && navigation(`${PATH.SONG}/${id}`)}
             />
             <ItemMenu
               title={t("Menu.Artist Access")}
               icon={<i className="fa-regular fa-user"></i>}
-              itemFunc={() => console.log("Add to playlist")}
+              itemFunc={() =>
+                id && navigation(`${PATH.ARTIST}/${song.user_id}`)
+              }
             />
             <ItemMenu
               title={t("Menu.Share")}
@@ -183,18 +195,18 @@ type PropsItemMenu = {
 
 const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
   const SongMenuItemRef = useRef<HTMLLIElement>(null);
-  const [openSubMenu, setOpenSubMenu] = useState<boolean>(true);
+  const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   if (SongMenuItemRef.current) {
-  //     SongMenuItemRef.current.addEventListener("mouseenter", () => {
-  //       setOpenSubMenu(true);
-  //     });
-  //     SongMenuItemRef.current.addEventListener("mouseleave", () => {
-  //       setOpenSubMenu(false);
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (SongMenuItemRef.current) {
+      SongMenuItemRef.current.addEventListener("mouseenter", () => {
+        setOpenSubMenu(true);
+      });
+      SongMenuItemRef.current.addEventListener("mouseleave", () => {
+        setOpenSubMenu(false);
+      });
+    }
+  }, []);
 
   return (
     <li ref={SongMenuItemRef} className="SongMenu__context__list__item">
@@ -211,10 +223,13 @@ const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
 type props = {
   songId: string;
   placement: "top-start" | "bottom-start" | "top-end" | "bottom-end";
+  closeMenu?: () => void;
 };
 
 const AddSongToPlaylist = ({ songId, placement }: props) => {
   const { currentUser, token } = useAuth();
+  const [openModalAddPlaylist, setOpenModalAddPlaylist] =
+    useState<boolean>(false);
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
     limit: 0,
@@ -251,35 +266,50 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
   });
 
   return (
-    <ul>
-      <div className="SongMenu__submenu" data-placement={placement}>
-        <div className="SongMenu__submenu__search">
-          <i className="fa-light fa-magnifying-glass"></i>
-          <input
-            type="text"
-            value={keyword}
-            placeholder="Tìm playlist..."
-            onChange={(e) => updateState({ keyword: e.target.value })}
-          />
-          {keyword.length > 0 && (
-            <button
-              className="btn_clear"
-              onClick={() => updateState({ keyword: "" })}
-            >
-              <i className="fa-light fa-xmark"></i>
-            </button>
-          )}
+    <>
+      <ul>
+        <div className="SongMenu__submenu" data-placement={placement}>
+          <div className="SongMenu__submenu__search">
+            <i className="fa-light fa-magnifying-glass"></i>
+            <input
+              type="text"
+              value={keyword}
+              placeholder="Tìm playlist..."
+              onChange={(e) => updateState({ keyword: e.target.value })}
+            />
+            {keyword.length > 0 && (
+              <button
+                className="btn_clear"
+                onClick={() => updateState({ keyword: "" })}
+              >
+                <i className="fa-light fa-xmark"></i>
+              </button>
+            )}
+          </div>
+          <button
+            className="SongMenu__submenu__item"
+            onClick={() => setOpenModalAddPlaylist(true)}
+          >
+            <i className="fa-light fa-plus"></i>
+            <span>Thêm playlist</span>
+          </button>
+          <hr />
+          {playlists?.map((playlist, index) => {
+            return <ItemPlaylist playlist={playlist} songId={songId} />;
+          })}
         </div>
-        <button className="SongMenu__submenu__item">
-          <i className="fa-light fa-plus"></i>
-          <span>Thêm playlist</span>
-        </button>
-        <hr />
-        {playlists?.map((playlist, index) => {
-          return <ItemPlaylist playlist={playlist} songId={songId} />;
-        })}
-      </div>
-    </ul>
+      </ul>
+      <Modal
+        title={"Thêm playlist mới"}
+        openModal={openModalAddPlaylist}
+        setOpenModal={setOpenModalAddPlaylist}
+      >
+        <AddPlaylist
+          openModal={openModalAddPlaylist}
+          closeModal={() => setOpenModalAddPlaylist(false)}
+        />
+      </Modal>
+    </>
   );
 };
 
