@@ -5,8 +5,11 @@
     @include themify($themes) {
       // margin-top: $height-header;
       padding: 0 $space-24;
-      @include mobile{
-      padding: 0 $space-12;
+      @include tablet {
+        padding: 0 $space-14;
+      }
+      @include mobile {
+        padding: 0 $space-12;
       }
       &__header {
         margin-bottom: $space-24;

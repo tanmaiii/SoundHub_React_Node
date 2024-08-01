@@ -3,17 +3,23 @@ import { ComponentType } from "react";
 import MyPlaylistPage from "../pages/MyPlaylistPage";
 import MyArtistPage from "../pages/MyArtistPage";
 
-const HomePage: FunctionComponent<any> = lazy(() => import("../pages/HomePage") as Promise<{ default: ComponentType<any> }>);
+const HomePage: FunctionComponent<any> = lazy(
+  () => import("../pages/HomePage") as Promise<{ default: ComponentType<any> }>
+);
 const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));
-const DiscographyPage = lazy(() => import("../pages/DiscographyPage/DiscographyPage"));
+const ArtistSongPage = lazy(() => import("../pages/ArtistSongPage"));
 const PlaylistPage = lazy(() => import("../pages/PlaylistPage/PlaylistPage"));
-const FavouritePage = lazy(() => import("../pages/FavouritePage/FavouritePage"));
+const FavouritePage = lazy(
+  () => import("../pages/FavouritePage/FavouritePage")
+);
 const RecentlyPage = lazy(() => import("../pages/RecentlyPage/RecentlyPage"));
 const SongPage = lazy(() => import("../pages/SongPage/SongPage"));
-const VerifyPage = lazy(() => import("../pages/AuthPages/VerifyPage/VerifyPage"));
-const SearchPage = lazy(() => import("../pages/SearchPage/SearchPage"));
+const VerifyPage = lazy(
+  () => import("../pages/AuthPages/VerifyPage/VerifyPage")
+);
+const SearchPage = lazy(() => import("../pages/SearchPage"));
 
 const NotFoundPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
 
@@ -29,8 +35,12 @@ const PATH = {
   SEARCH: "/search",
   SEARCH_SHOW: "/search/:keyword",
 
-  DISCOGRAPHY: "/discography",
-  DISCOGRAPHY_SHOW: "/artist/:username/discography",
+  ARTIST_PLAYLIST: "/playlist",
+  ARTIST_PLAYLIST_SHOW: "/artist/:id/playlist",
+
+  ARTIST_SONG: "/song",
+  ARTIST_SONG_SHOW: "/artist/:id/song",
+
   PLAYLIST: "/playlist",
   PLAYLIST_SHOW: "/playlist/:id",
   SONG: "/song",
@@ -51,19 +61,20 @@ const publicRoutes = [
   { path: PATH.FAVOURITE, layout: null, component: FavouritePage },
 
   { path: PATH.SEARCH, layout: null, component: SearchPage },
+  { path: PATH.SEARCH_SHOW, layout: null, component: SearchPage },
 
   { path: PATH.LOGIN, layout: AuthLayout, component: LoginPage },
   { path: PATH.SIGNUP, layout: AuthLayout, component: SignupPage },
   { path: PATH.VERIFY, layout: AuthLayout, component: VerifyPage },
 
   { path: PATH.ARTIST_SHOW, layout: null, component: ArtistPage },
-  { path: PATH.DISCOGRAPHY_SHOW, layout: null, component: DiscographyPage },
+  { path: PATH.ARTIST_SONG_SHOW, layout: null, component: ArtistSongPage },
+
   { path: PATH.PLAYLIST_SHOW, layout: null, component: PlaylistPage },
   { path: PATH.SONG_SHOW, layout: null, component: SongPage },
 
   { path: PATH.MY_PLAYLIST, layout: null, component: MyPlaylistPage },
   { path: PATH.MY_ARTIST, layout: null, component: MyArtistPage },
-  
 
   { path: "*", layout: null, component: NotFoundPage },
 ];

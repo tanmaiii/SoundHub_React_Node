@@ -5,7 +5,6 @@ import Images from "../../constants/images";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { playlistApi, searchApi, songApi, userApi } from "../../apis";
-import { log } from "console";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { apiConfig } from "../../configs";
 import { useEffect } from "react";
@@ -17,6 +16,7 @@ import CardPlaylist from "../../components/CardPlaylist";
 import { TSong } from "../../types";
 import HeaderSection from "../../components/HeaderSection";
 import CardArtist from "../../components/CardArtist";
+import { PATH } from "../../constants/paths";
 
 export default function ArtistPage() {
   const { id } = useParams();
@@ -32,7 +32,6 @@ export default function ArtistPage() {
         return res;
       } catch (error) {
         console.log(error);
-
         return null;
       }
     },
@@ -57,7 +56,6 @@ export default function ArtistPage() {
   const mutationFollow = useMutation({
     mutationFn: async (follow: boolean) => {
       try {
-        console.log("follow");
         if (follow) return await userApi.unFollow(id ?? "", token);
         return await userApi.follow(id ?? "", token);
       } catch (err: any) {
@@ -99,8 +97,6 @@ export default function ArtistPage() {
     queryKey: ["songs-artist", id],
     queryFn: async () => {
       const res = await songApi.getAllByUserId(token, id ?? "", 1, 6);
-      console.log(res);
-
       return res.data;
     },
   });
@@ -181,7 +177,10 @@ export default function ArtistPage() {
           <div className="artist__container__content__top__section row">
             {songs && songs?.length > 0 && (
               <>
-                <HeaderSection title="Popular" />
+                <HeaderSection
+                  title="Popular"
+                  to={`${PATH.ARTIST}/${user?.id}${PATH.ARTIST_SONG}`}
+                />
                 <div>
                   {songs?.map((song: TSong, index: number) => (
                     <Track song={song} key={index} />
@@ -192,7 +191,10 @@ export default function ArtistPage() {
           </div>
           <div>
             {playlists && playlists.length > 0 && (
-              <Section title={"Playlist"}>
+              <Section
+                title={"Playlist"}
+                to={`${PATH.ARTIST}/${user?.id}${PATH.ARTIST_PLAYLIST}`}
+              >
                 {playlists?.map((playlist, index) => (
                   <CardPlaylist
                     key={index}

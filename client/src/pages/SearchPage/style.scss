@@ -1,0 +1,62 @@
+@use "../../scss/" as *;
+
+.SearchPage {
+  @include themify($themes) {
+    padding: 0 $space-24;
+    @include tablet {
+      padding: 0 $space-14;
+    }
+    @include mobile {
+      padding: 0 $space-12;
+    }
+    &__container {
+      &__body {
+      }
+    }
+  }
+}
+
+.GenresPage {
+  @include themify($themes) {
+    &__list {
+      flex-wrap: wrap;
+      .item__genre {
+        background-color: themed("bg-2");
+        border-radius: $radius-8;
+        padding: $space-16 $space-14;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+
+        transition: $transition;
+        position: relative;
+        overflow: hidden;
+        height: 180px;
+        @include mobile {
+          height: 150px;
+        }
+        &:hover {
+          transform: scale(0.98);
+        }
+        p {
+          font-size: $size-24;
+          color: $color-white;
+          font-weight: $font-bold;
+        }
+        img {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          -webkit-transform: rotate(25deg) translate(18%, -2%);
+          transform: rotate(25deg) translate(18%, -2%);
+          width: 45%;
+          //   transform: rotate(30deg);
+          object-fit: cover;
+          border-radius: $radius-8;
+          box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}

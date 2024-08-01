@@ -24,15 +24,19 @@ Genre.findById = (id, result) => {
 };
 
 Genre.create = (newGenre, result) => {
-  db.query(`insert into genre set ? , id = ? `, [newGenre, uuidv4()], (err, res) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
+  db.query(
+    `insert into genre set ? , id = ? `,
+    [newGenre, uuidv4()],
+    (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      console.log("CREATE : ", { res });
+      result(null, { id: res.insertId, ...newGenre });
     }
-    console.log("CREATE : ", { res });
-    result(null, { id: res.insertId, ...newGenre });
-  });
+  );
 };
 
 Genre.update = (id, newGenre, result) => {
@@ -61,19 +65,21 @@ Genre.delete = (id, result) => {
 Genre.findAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page || 1;
-  const limit = query?.limit || 10;
+  const limit = query?.limit;
   const sort = query?.sortBy || "new";
-
-  const offset = (page - 1) * limit;
 
   const [data] = await promiseDb.query(
     `SELECT * FROM genre ${q ? `WHERE title LIKE "%${q}%" ` : ""} ` +
       ` ORDER BY created_at ${sort === "new" ? "DESC" : "ASC"} ` +
-      ` ${limit ? ` limit ${limit} offset ${+offset}` : ""} `
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(
-    `SELECT COUNT(*) AS totalCount FROM genre ${q ? `WHERE title LIKE "%${q}%"` : ""}`
+    `SELECT COUNT(*) AS totalCount FROM genre ${
+      q ? `WHERE title LIKE "%${q}%"` : ""
+    }`
   );
 
   if (data && totalCount) {

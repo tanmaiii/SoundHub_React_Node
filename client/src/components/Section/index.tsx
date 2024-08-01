@@ -15,7 +15,6 @@ function Section({
   children,
   title,
   to,
-  // colunm = 6,
   loading = false,
 }: SectionProps) {
   if (loading) {

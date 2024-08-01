@@ -6,7 +6,7 @@ import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbarSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useAuth();
   const { t } = useTranslation("header");
+  const navigation = useNavigate();
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -51,10 +52,6 @@ export default function Header() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(window.history);
-  // });
-
   return (
     <>
       <div className="header" ref={headerRef}>
@@ -85,6 +82,7 @@ export default function Header() {
             <i className="fa-thin fa-magnifying-glass"></i>
             <input
               type="text"
+              onChange={(e) => navigation(`/search/${e.target.value}`)}
               placeholder={t("Search artist, title, ablum,...")}
             />
           </div>

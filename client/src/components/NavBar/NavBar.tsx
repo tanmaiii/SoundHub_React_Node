@@ -13,6 +13,7 @@ export default function Navbar() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
   const navbarRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation("home");
+  const { pathname } = useLocation();
 
   const navbar = [
     {
@@ -65,14 +66,14 @@ export default function Navbar() {
 
   const dispatch = useDispatch();
 
-  const { pathname } = useLocation();
-
   const handleClick = (PATH: string) => {
     dispatch(changePath(PATH));
   };
 
   useEffect(() => {
-    dispatch(changePath(pathname));
+    const pathParts = pathname.split("/");
+    const targetValue = `/${pathParts[1]}`;
+    dispatch(changePath(targetValue));
   }, [pathname]);
 
   useEffect(() => {

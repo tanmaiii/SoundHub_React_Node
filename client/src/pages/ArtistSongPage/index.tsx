@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Track from "../../components/Track";
-import "./discographyPage.scss";
+import "./style.scss";
 import Card from "../../components/CardSong";
 import { TSong } from "../../types";
 import { songApi } from "../../apis";
 
 import { useQuery, useMutation } from "react-query";
 import { useAuth } from "../../context/authContext";
+import { useParams } from "react-router-dom";
 
 const song: TSong = {
   id: "1",
@@ -20,15 +21,16 @@ const song: TSong = {
   created_at: "song",
 };
 
-export default function DiscographyPage() {
+export default function ArtistSongPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [songs, setSongs] = useState<TSong[] | null>(null);
-  const {token} = useAuth();
+  const { token } = useAuth();
+  const { id } = useParams();
 
   const handleGetSong = async () => {
     try {
-      // const res = await songApi.getAllByUserId(token,1, 10, 10);
-      // res.data && setSongs(res.data);
+      const res = await songApi.getAllByUserId(token, id ?? "", 1, 0);
+      res.data && setSongs(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -45,12 +47,19 @@ export default function DiscographyPage() {
           </div>
           <div className="discography__container__header__right">
             <div className="dropdown">
-              <div className="dropdown__header" onClick={() => setActiveDropdown(!activeDropdown)}>
+              <div
+                className="dropdown__header"
+                onClick={() => setActiveDropdown(!activeDropdown)}
+              >
                 <i className="fa-light fa-bars-sort"></i>
                 <span>Mới nhất</span>
                 <i className="fa-light fa-chevron-down"></i>
               </div>
-              <div className={`dropdown__content ${activeDropdown ? "active" : ""}`}>
+              <div
+                className={`dropdown__content ${
+                  activeDropdown ? "active" : ""
+                }`}
+              >
                 <ul>
                   <li>Mới nhất</li>
                   <li>Phổ biến</li>
@@ -72,22 +81,15 @@ export default function DiscographyPage() {
               <div>Time</div>
             </div>
           </div>
-          {/* <div className="discography__container__body__list">
+          <div className="discography__container__body__list">
             {songs &&
               songs.map((song, index) => (
                 <Track
                   key={index}
-                  loading={isLoading}
-                  id={song.id}
-                  number={`${index + 1}`}
-                  time="3:03"
-                  title={song.title}
-                  created_at={song.created_at}
-                  image={song.image_path}
-                  artist={"Sơn Tùng M-TP"}
+                  song={song}
                 />
               ))}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
