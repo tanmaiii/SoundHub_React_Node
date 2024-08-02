@@ -18,8 +18,7 @@ const cookieSchema = {
 export default class songValidation {
   static getAllUserConfirm = {
     params: Joi.object().keys({
-      songId: Joi.number().integer().required(),
+      songId: Joi.string().min(0).max(36).required(),
     }),
-    ...cookieSchema,
   };
 }

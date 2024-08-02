@@ -6,10 +6,11 @@ import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbarSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
+import CustomInput from "../CustomInput";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
@@ -18,6 +19,8 @@ export default function Header() {
   const { currentUser } = useAuth();
   const { t } = useTranslation("header");
   const navigation = useNavigate();
+  const [keyword, setKeyword] = useState("");
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -52,6 +55,17 @@ export default function Header() {
     }
   };
 
+  useEffect(() => {
+    const pathParts = pathname.split("/");
+    const targetValue = `/${pathParts[1]}`;
+
+    if (keyword) {
+      navigation(`${PATH.SEARCH}/${keyword}`);
+    } else {
+      targetValue === PATH.SEARCH && navigation(`${PATH.SEARCH}`);
+    }
+  }, [keyword]);
+
   return (
     <>
       <div className="header" ref={headerRef}>
@@ -80,9 +94,8 @@ export default function Header() {
         <div className="header__center">
           <div className="header__center__search">
             <i className="fa-thin fa-magnifying-glass"></i>
-            <input
-              type="text"
-              onChange={(e) => navigation(`/search/${e.target.value}`)}
+            <CustomInput
+              onSubmit={(text) => setKeyword(text)}
               placeholder={t("Search artist, title, ablum,...")}
             />
           </div>

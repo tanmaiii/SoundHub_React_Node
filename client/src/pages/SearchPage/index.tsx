@@ -11,7 +11,6 @@ export default function SearchPage() {
   const params = useParams();
 
   useEffect(() => {
-    console.log(params.keyword);
     params.keyword ? setKeyWord(params.keyword) : setKeyWord("");
   });
 

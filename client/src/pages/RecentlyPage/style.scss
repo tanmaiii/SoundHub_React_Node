@@ -1,0 +1,21 @@
+@use "../../scss/" as *;
+
+.recently {
+  @include themify($themes) {
+    &__container {
+      padding: 0 $space-24;
+      @include tablet {
+        padding: 0 $space-14;
+      }
+      @include mobile {
+        padding: 0 $space-12;
+      }
+
+      &__body{
+        &__list{
+            flex-wrap: wrap;
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ const UserSong = (song) => {
   this.confirm = song.created_at;
 };
 
+//Tạo mới người dùng tham gia vào bài hát 
 UserSong.create = (userId, songId, result) => {
   db.query(
     `INSERT INTO user_songs (song_id, user_id) VALUES (?, ?)`,
@@ -24,6 +25,7 @@ UserSong.create = (userId, songId, result) => {
   );
 };
 
+//Xác nhận tham gia vào bài hát
 UserSong.confirm = (userId, songId, result) => {
   db.query(
     `update user_songs set confirm = 1 where song_id = ${songId} and user_id = ${userId}`,
@@ -39,6 +41,7 @@ UserSong.confirm = (userId, songId, result) => {
   );
 };
 
+//Xóa người dùng khỏi bài hát
 UserSong.delete = (userId, songId, result) => {
   db.query(
     `DELETE FROM user_songs WHERE user_id = ${userId} and song_id = ${songId} `,
@@ -77,9 +80,12 @@ UserSong.find = (userId, songId, result) => {
   );
 };
 
+//Lấy các người dùng đã xác nhận tham gia vào bài hát
 UserSong.findAllUserConfirm = (songId, result) => {
   db.query(
-    `SELECT u.id, u.name, u.image_path ,u.verified, us.confirm from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id and us.confirm = 1`,
+    `SELECT u.id, u.name, u.image_path, u.verified, us.confirm ` +
+      ` from user_songs as us, users as u ` +
+      ` WHERE song_id = "${songId}" and us.user_id = u.id and us.confirm = 1`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -96,9 +102,12 @@ UserSong.findAllUserConfirm = (songId, result) => {
   );
 };
 
+//Lấy các người dùng
 UserSong.findAllUser = (songId, result) => {
   db.query(
-    `SELECT u.id, u.name, u.image_path , u.verified, us.confirm from user_songs as us, users as u WHERE song_id = ${songId} and us.user_id = u.id `,
+    ` SELECT u.id, u.name, u.image_path , u.verified, us.confirm ` +
+      ` from user_songs as us, users as u ` +
+      ` WHERE song_id = "${songId}" and us.user_id = u.id `,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -120,6 +129,7 @@ UserSong.findAllUser = (songId, result) => {
   );
 };
 
+//Lấy tất cả bài hát mà người dùng đã tham gia
 UserSong.findAllSong = (userId, result) => {
   db.query(
     `SELECT s.* from user_songs as us, song as s WHERE user_id = ${userId} and us.song_id = s.id`,

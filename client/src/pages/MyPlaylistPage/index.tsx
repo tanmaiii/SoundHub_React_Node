@@ -24,7 +24,6 @@ const MyPlaylistPage = () => {
     <div className="MyPlaylistPage">
       <div className="MyPlaylistPage__container">
         <div className="MyPlaylistPage__container__header">
-          {/* <HeaderSection title="Playlist" /> */}
           <div className="MyPlaylistPage__container__header__title">
             <h2>Playlist</h2>
             <button onClick={() => setOpenModal(true)}>

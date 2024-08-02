@@ -10,11 +10,12 @@ const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));
 const ArtistSongPage = lazy(() => import("../pages/ArtistSongPage"));
+const ArtistPlaylistPage = lazy(() => import("../pages/ArtistPlaylistPage"));
 const PlaylistPage = lazy(() => import("../pages/PlaylistPage/PlaylistPage"));
 const FavouritePage = lazy(
   () => import("../pages/FavouritePage/FavouritePage")
 );
-const RecentlyPage = lazy(() => import("../pages/RecentlyPage/RecentlyPage"));
+const RecentlyPage = lazy(() => import("../pages/RecentlyPage"));
 const SongPage = lazy(() => import("../pages/SongPage/SongPage"));
 const VerifyPage = lazy(
   () => import("../pages/AuthPages/VerifyPage/VerifyPage")
@@ -69,6 +70,11 @@ const publicRoutes = [
 
   { path: PATH.ARTIST_SHOW, layout: null, component: ArtistPage },
   { path: PATH.ARTIST_SONG_SHOW, layout: null, component: ArtistSongPage },
+  {
+    path: PATH.ARTIST_PLAYLIST_SHOW,
+    layout: null,
+    component: ArtistPlaylistPage,
+  },
 
   { path: PATH.PLAYLIST_SHOW, layout: null, component: PlaylistPage },
   { path: PATH.SONG_SHOW, layout: null, component: SongPage },

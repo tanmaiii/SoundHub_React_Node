@@ -1,25 +1,12 @@
-import React, { useState } from "react";
-import Track from "../../components/Track";
-import "./style.scss";
-import Card from "../../components/CardSong";
-import { TSong } from "../../types";
+import { useState } from "react";
 import { songApi } from "../../apis";
+import { TSong } from "../../types";
+import "./style.scss";
 
-import { useQuery, useMutation } from "react-query";
-import { useAuth } from "../../context/authContext";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-
-const song: TSong = {
-  id: "1",
-  title: "song",
-  user_id: "song",
-  genre_id: "song",
-  song_path: "song",
-  image_path: "song",
-  public: 1,
-  author: "song",
-  created_at: "song",
-};
+import TableTrack from "../../components/TableTrack";
+import { useAuth } from "../../context/authContext";
 
 export default function ArtistSongPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
@@ -69,27 +56,11 @@ export default function ArtistSongPage() {
           </div>
         </div>
         <div className="discography__container__body">
-          <div className="discography__container__body__header">
-            <div className="discography__container__body__header__line1 pc-6 m-8">
-              <div className="count">#</div>
-              <div className="title">Title</div>
-            </div>
-            <div className="discography__container__body__header__line2 pc-3 m-0">
-              <div>Date Add</div>
-            </div>
-            <div className="discography__container__body__header__line3 pc-3 m-4">
-              <div>Time</div>
-            </div>
-          </div>
-          <div className="discography__container__body__list">
-            {songs &&
-              songs.map((song, index) => (
-                <Track
-                  key={index}
-                  song={song}
-                />
-              ))}
-          </div>
+          <TableTrack
+            songs={songs || []}
+            isLoading={true}
+            userId={id}
+          />
         </div>
       </div>
     </div>

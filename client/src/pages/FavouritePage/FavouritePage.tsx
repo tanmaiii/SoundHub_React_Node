@@ -12,7 +12,6 @@ import { apiConfig } from "../../configs";
 import { Helmet } from "react-helmet-async";
 
 export default function FavouritePage() {
-  const [activeDropdown, setActiveDropdown] = useState(false);
   const [songs, setSongs] = useState<TSong[] | null>(null);
   const { token, currentUser } = useAuth();
 
