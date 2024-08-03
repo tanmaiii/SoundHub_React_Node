@@ -102,8 +102,6 @@ export default function PlaylistPage() {
           fbAvt={Images.PLAYLIST}
           avt={playlist?.image_path ?? ""}
           title={playlist?.title ?? ""}
-          author={author?.name ?? ""}
-          avtAuthor={author?.image_path ?? ""}
           time={playlist?.created_at ?? ""}
           category="Playlist"
           like={playlist?.count_like ?? 0}

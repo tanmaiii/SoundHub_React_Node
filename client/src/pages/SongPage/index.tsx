@@ -1,19 +1,18 @@
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import TrackArtist from "../../components/TrackArtist/TrackArtist";
-import "./songPage.scss";
+import "./style.scss";
 
 import CommentItem from "../../components/CommentItem";
 
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { songApi, userApi } from "../../apis";
-import playApi from "../../apis/play/playApi";
+import { authorApi, songApi, userApi } from "../../apis";
 import CommentInput from "../../components/CommentInput/CommentInput";
+import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
-import { Helmet } from "react-helmet-async";
-import SongMenu from "../../components/Menu/SongMenu";
-import { useEffect, useState } from "react";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -26,11 +25,7 @@ export default function SongPage() {
     window.scrollTo(0, 0);
   });
 
-  const {
-    data: song,
-    isLoading: loading,
-    refetch,
-  } = useQuery({
+  const { data: song } = useQuery({
     queryKey: ["song", id],
     queryFn: async () => {
       try {
@@ -44,11 +39,11 @@ export default function SongPage() {
     },
   });
 
-  const { data: author } = useQuery({
-    queryKey: ["author", song?.user_id],
+  const { data: authors } = useQuery({
+    queryKey: ["authors", song?.user_id],
     queryFn: async () => {
       try {
-        const res = await userApi.getDetail(song?.user_id ?? "");
+        const res = await authorApi.getAllUserConfirm(id ?? "");
         return res;
       } catch (error) {
         return null;
@@ -56,7 +51,7 @@ export default function SongPage() {
     },
   });
 
-  const { data: isLike, refetch: refetchLike } = useQuery({
+  const { data: isLike } = useQuery({
     queryKey: ["like-song", id],
     queryFn: async () => {
       const res = await songApi.checkLikedSong(id ?? "", token);
@@ -93,13 +88,13 @@ export default function SongPage() {
           fbAvt={Images.SONG}
           avt={song?.image_path ?? ""}
           title={song?.title ?? ""}
-          author={author?.name ?? ""}
-          avtAuthor={Images.AVATAR}
           time={song?.created_at ?? ""}
           like={song?.count_like ?? 0}
           listen={song?.count_listen ?? 0}
           category="Song"
           userId={song?.user_id}
+          isPublic={song?.public}
+          genreId={song?.genre_id}
         />
       </div>
       <div className="songPage__content">
@@ -107,18 +102,16 @@ export default function SongPage() {
           <button className="btn__play">
             <i className="fa-solid fa-play"></i>
           </button>
-          {currentUser?.id !== song?.user_id && (
-            <button
-              className={`btn__like ${isLike ? "active" : ""}`}
-              onClick={() => mutationLike.mutate(isLike ?? false)}
-            >
-              {isLike ? (
-                <i className="fa-solid fa-heart"></i>
-              ) : (
-                <i className="fa-light fa-heart"></i>
-              )}
-            </button>
-          )}
+          <button
+            className={`btn__like ${isLike ? "active" : ""}`}
+            onClick={() => mutationLike.mutate(isLike ?? false)}
+          >
+            {isLike ? (
+              <i className="fa-solid fa-heart"></i>
+            ) : (
+              <i className="fa-light fa-heart"></i>
+            )}
+          </button>
           <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
             {song && (
               <SongMenu
@@ -196,33 +189,12 @@ export default function SongPage() {
             </div>
           </div>
           <div className="songPage__content__body__artist col pc-4 t-12">
-            <TrackArtist id={author?.id ?? ""} className="col pc-12" />
-            {/* <TrackArtist
-              name="Phương Ly"
-              avatarUrl={Images.AVATAR}
-              className="col pc-12"
-            />
-            <TrackArtist
-              name="Phương Ly"
-              avatarUrl={Images.AVATAR}
-              className="col pc-12"
-            /> */}
+            <TrackArtist id={song?.user_id ?? ""} className="col pc-12" />
+            {authors?.map((author) => (
+              <TrackArtist id={author ?? ""} className="col pc-12" />
+            ))}
           </div>
         </div>
-
-        {/* <Section title={"Recommended"}>
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-          <Card id={1} title={"Nấu ăn cho em"} artist={["Đen"]} image={img} />
-        </Section> */}
       </div>
     </div>
   );

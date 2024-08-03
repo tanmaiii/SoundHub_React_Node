@@ -10,16 +10,15 @@ import { apiConfig } from "../../configs";
 import { Link, useParams } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useEffect, useState } from "react";
-import { genreApi } from "../../apis";
+import { genreApi, userApi } from "../../apis";
 import { TGenre } from "../../types/genre.type";
+import { TUser } from "../../types";
 
 interface HeaderPageProps {
   avt: string;
   fbAvt: string;
   title: string;
   category: string;
-  author?: string;
-  avtAuthor?: string;
   time?: string;
   listen?: number;
   like?: number;
@@ -37,8 +36,6 @@ export default function HeaderPage({
   fbAvt,
   title,
   category,
-  avtAuthor,
-  author,
   time,
   listen,
   loading = false,
@@ -54,6 +51,7 @@ export default function HeaderPage({
   const { id } = useParams();
   const [genre, setGenre] = useState<TGenre | null>(null);
   const [sizeTitle, setSizeTitle] = useState<number>(60);
+  const [author, setAuthor] = useState<TUser | undefined>(undefined);
 
   useEffect(() => {
     const getGenre = async () => {
@@ -68,12 +66,22 @@ export default function HeaderPage({
   }, [genreId]);
 
   useEffect(() => {
-    console.log(title.length);
-
     if (title.length > 24) {
       setSizeTitle(30);
     }
   }, [title]);
+
+  useEffect(() => {
+    const getAuthor = async () => {
+      try {
+        const res = await userApi.getDetail(userId || "");
+        res && setAuthor(res ?? undefined);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAuthor();
+  });
 
   return (
     <div className="HeaderPage">
@@ -135,14 +143,14 @@ export default function HeaderPage({
           ) : (
             <div className="info__desc">
               <div className="info__desc__author">
-                {avtAuthor && (
+                {author?.image_path && (
                   <ImageWithFallback
-                    src={avtAuthor}
+                    src={author?.image_path}
                     alt="image.png"
                     fallbackSrc={Images.AVATAR}
                   />
                 )}
-                <Link to={`${PATH.ARTIST + "/" + userId}`}>{author}</Link>
+                <Link to={`${PATH.ARTIST + "/" + userId}`}>{author?.name}</Link>
               </div>
               {time !== undefined && (
                 <div className="info__desc__item">

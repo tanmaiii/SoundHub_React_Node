@@ -8,7 +8,7 @@ const UserSong = (song) => {
   this.confirm = song.created_at;
 };
 
-//Tạo mới người dùng tham gia vào bài hát 
+//Tạo mới người dùng tham gia vào bài hát
 UserSong.create = (userId, songId, result) => {
   db.query(
     `INSERT INTO user_songs (song_id, user_id) VALUES (?, ?)`,
@@ -16,11 +16,9 @@ UserSong.create = (userId, songId, result) => {
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
-        result(err, null);
-        return;
+        return result(err, null);
       }
-      console.log("CREATE : ", { res });
-      result(null, { song_id: songId, user_id: userId });
+      return result(null, { song_id: songId, user_id: userId });
     }
   );
 };
@@ -37,6 +35,7 @@ UserSong.confirm = (userId, songId, result) => {
       }
       console.log("UPDATE : ", { res });
       result(null, { song_id: songId, user_id: userId });
+      return;
     }
   );
 };
@@ -44,7 +43,7 @@ UserSong.confirm = (userId, songId, result) => {
 //Xóa người dùng khỏi bài hát
 UserSong.delete = (userId, songId, result) => {
   db.query(
-    `DELETE FROM user_songs WHERE user_id = ${userId} and song_id = ${songId} `,
+    `DELETE FROM user_songs WHERE user_id = "${userId}" and song_id = "${songId}" `,
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
@@ -58,15 +57,10 @@ UserSong.delete = (userId, songId, result) => {
 
 UserSong.find = (userId, songId, result) => {
   db.query(
-    `SELECT * from user_songs WHERE user_id = ${userId} and song_id = ${songId} `,
+    `SELECT user_songs.confirm from user_songs WHERE user_id = "${userId}" and song_id = "${songId}"`,
     (err, res) => {
       if (err) {
         result(err, null);
-        return;
-      }
-
-      if (!res.length) {
-        result("Không tìm thấy !", null);
         return;
       }
 
@@ -83,9 +77,10 @@ UserSong.find = (userId, songId, result) => {
 //Lấy các người dùng đã xác nhận tham gia vào bài hát
 UserSong.findAllUserConfirm = (songId, result) => {
   db.query(
-    `SELECT u.id, u.name, u.image_path, u.verified, us.confirm ` +
-      ` from user_songs as us, users as u ` +
-      ` WHERE song_id = "${songId}" and us.user_id = u.id and us.confirm = 1`,
+    `SELECT u.id ` +
+      `FROM music.user_songs as us ` +
+      `LEFT JOIN music.users as u ON us.user_id = u.id ` +
+      `WHERE song_id = "${songId}" and us.user_id = u.id and us.confirm = 1`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -93,34 +88,32 @@ UserSong.findAllUserConfirm = (songId, result) => {
       }
 
       if (res.length) {
-        result(null, res);
+        const ids = res.map((row) => row.id);
+        result(null, ids);
         return;
       }
 
-      result(null, null);
+      result(null, []);
     }
   );
 };
 
 //Lấy các người dùng
-UserSong.findAllUser = (songId, result) => {
+UserSong.findAllUser = (songId, userId, result) => {
   db.query(
-    ` SELECT u.id, u.name, u.image_path , u.verified, us.confirm ` +
-      ` from user_songs as us, users as u ` +
-      ` WHERE song_id = "${songId}" and us.user_id = u.id `,
+    `SELECT u.id ` +
+      `FROM music.user_songs as us ` +
+      `LEFT JOIN music.users as u ON us.user_id = u.id ` +
+      `WHERE song_id = "${songId}" and us.user_id = u.id `,
     (err, res) => {
       if (err) {
         result(err, null);
         return;
       }
 
-      if (!res.length) {
-        result("Không tìm thấy !", null);
-        return;
-      }
-
       if (res.length) {
-        result(null, res[0]);
+        const ids = res.map((row) => row.id);
+        result(null, ids);
         return;
       }
 

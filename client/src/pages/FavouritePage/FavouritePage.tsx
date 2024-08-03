@@ -78,8 +78,6 @@ export default function FavouritePage() {
           avt={Images.LIKED_SONGS}
           fbAvt={Images.LIKED_SONGS}
           title="Liked songs"
-          avtAuthor={apiConfig.imageURL(currentUser?.image_path || "")}
-          author={currentUser?.name || ""}
           category="Playlist"
           userId={currentUser?.id || ""}
           song={songs?.length ?? 0}

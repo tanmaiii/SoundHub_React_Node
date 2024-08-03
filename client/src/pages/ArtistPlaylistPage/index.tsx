@@ -27,7 +27,7 @@ export default function ArtistPlaylistPage() {
 
   const getAllData = async (newPage: number) => {
     try {
-      const res = await playlistApi.getAllByUserId(id ?? "", 1, 12);
+      const res = await playlistApi.getAllByUserId(id ?? "", 1, 0);
       if (res?.data) return res?.data;
     } catch (error) {
       return null;

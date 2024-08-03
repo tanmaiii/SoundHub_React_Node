@@ -16,7 +16,7 @@ const FavouritePage = lazy(
   () => import("../pages/FavouritePage/FavouritePage")
 );
 const RecentlyPage = lazy(() => import("../pages/RecentlyPage"));
-const SongPage = lazy(() => import("../pages/SongPage/SongPage"));
+const SongPage = lazy(() => import("../pages/SongPage"));
 const VerifyPage = lazy(
   () => import("../pages/AuthPages/VerifyPage/VerifyPage")
 );
