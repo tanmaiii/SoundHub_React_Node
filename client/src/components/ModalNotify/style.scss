@@ -1,0 +1,100 @@
+@use "../../scss/" as *;
+
+.Notify {
+  @include themify($themes) {
+    padding: $space-8 $space-24;
+    &__body {
+      width: 400px;
+      &__list {
+        @include flex(unset, unset, column);
+        gap: $space-8;
+      }
+    }
+  }
+}
+
+.notify__item {
+  @include themify($themes) {
+    padding: $space-8 $space-12;
+    border-radius: $radius-8;
+    @include flex(flex-start, center, row);
+    transition: $transition;
+    cursor: pointer;
+
+    &:hover {
+      background-color: themed("bg-2");
+    }
+
+    &__image {
+      --size: 54px;
+      width: var(--size);
+      height: var(--size);
+      border-radius: $radius-4;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__body {
+      flex: 1;
+      margin-left: $space-8;
+      &__desc {
+        margin-bottom: $space-8;
+        a {
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-medium;
+        }
+        span {
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-light;
+        }
+
+        p {
+          font-size: $size-14;
+          color: themed("txt-second");
+          font-weight: $font-light;
+        }
+      }
+
+      &__button {
+        display: flex;
+        gap: $space-8;
+
+        button {
+          height: 36px;
+          padding: 0 $space-16;
+          border-radius: $radius-8;
+          font-size: $size-16;
+          color: themed("txt-main");
+          cursor: pointer;
+          transition: $transition;
+          &:hover {
+            transform: scale(0.98);
+          }
+          &.btn-submit {
+            background-color: $color-primary1;
+          }
+          &.btn-remove {
+            background-color: themed("bg-3");
+          }
+        }
+      }
+    }
+
+    &__send {
+      min-height: 100%;
+      @include flex(center, center, row);
+      .dot {
+        width: 10px;
+        height: 10px;
+        background-color: $color-primary1;
+        border-radius: 50%;
+      }
+    }
+  }
+}

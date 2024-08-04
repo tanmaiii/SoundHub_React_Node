@@ -113,6 +113,37 @@
       @include flex(center, unset);
       gap: $space-12;
 
+      &__notify {
+        border-radius: 50%;
+        padding: $space-4;
+        cursor: pointer;
+        color: themed("txt-main");
+        transition: $transition;
+        color: themed("txt-main");
+        // background-color: themed("bg-2");
+        opacity: 0.8;
+
+        @include tooltip(bottom, center);
+
+        &:hover {
+          opacity: 1;
+          background-color: themed("bg-2");
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        i {
+          --size: 36px;
+          width: var(--size);
+          height: var(--size);
+          @include flex(center, center);
+          font-size: $size-20;
+        }
+      }
+
       .btn__auth {
         padding: $space-12 $space-14;
         border-radius: $radius-25;

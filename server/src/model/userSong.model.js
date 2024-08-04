@@ -26,7 +26,26 @@ UserSong.create = (userId, songId, result) => {
 //Xác nhận tham gia vào bài hát
 UserSong.confirm = (userId, songId, result) => {
   db.query(
-    `update user_songs set confirm = 1 where song_id = ${songId} and user_id = ${userId}`,
+    `update user_songs set confirm = 1 where song_id = ? and user_id = ?`,
+    [songId, userId],
+    (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      console.log("UPDATE : ", { res });
+      result(null, { song_id: songId, user_id: userId });
+      return;
+    }
+  );
+};
+
+//Hủy xác nhận tham gia vào bài hát
+UserSong.unConfirm = (userId, songId, result) => {
+  db.query(
+    `update user_songs set confirm = 0 where song_id = ? and user_id = ?`,
+    [songId, userId],
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
@@ -57,7 +76,7 @@ UserSong.delete = (userId, songId, result) => {
 
 UserSong.find = (userId, songId, result) => {
   db.query(
-    `SELECT user_songs.confirm from user_songs WHERE user_id = "${userId}" and song_id = "${songId}"`,
+    `SELECT * from user_songs WHERE user_id = "${userId}" and song_id = "${songId}"`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -122,29 +141,47 @@ UserSong.findAllUser = (songId, userId, result) => {
   );
 };
 
-//Lấy tất cả bài hát mà người dùng đã tham gia
-UserSong.findAllSong = (userId, result) => {
-  db.query(
-    `SELECT s.* from user_songs as us, song as s WHERE user_id = ${userId} and us.song_id = s.id`,
-    (err, res) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
+//Lấy tất cả bài hát bởi người dùng
+UserSong.findAllSong = async (userId, query, result) => {
+  const q = query?.q;
+  const page = query?.page || 1;
+  const limit = query?.limit || 0;
+  const sort = query?.sort || "new";
 
-      if (!res.length) {
-        result("Không tìm thấy !", null);
-        return;
-      }
-
-      if (res.length) {
-        result(null, res[0]);
-        return;
-      }
-
-      result(null, null);
-    }
+  const [data] = await promiseDb.query(
+    `SELECT us.* from user_songs as us ` +
+      ` LEFT JOIN songs as s ON us.song_id = s.id ` +
+      ` WHERE us.user_id = "${userId}" ` +
+      ` ${q ? ` AND u.title LIKE "%${q}%" AND` : ""} ` +
+      ` ORDER BY us.created_at ${sort === "new" ? "DESC" : "ASC"} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) as total FROM user_songs as us ` +
+      ` WHERE us.user_id = "${userId}" `
+  );
+
+  console.log(totalCount);
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0].total / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].total || 0,
+        totalPages: totalPages || 1,
+        sort,
+      },
+    });
+    return;
+  }
+  result(null, null);
 };
 
 export default UserSong;

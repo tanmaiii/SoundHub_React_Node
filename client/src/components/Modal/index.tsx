@@ -11,14 +11,16 @@ interface ModalProps {
 
 export default function Modal(props: ModalProps) {
   const modalBodyRef = useRef<HTMLInputElement>(null);
-  //   const [openModal,setOpenModal] = useState(false)
 
   const { openModal, setOpenModal } = props;
 
   useEffect(() => {
     if (openModal === true) {
+      console.log("open");
+      
       document.body.style.overflow = "hidden";
     } else {
+      console.log("close");
       document.body.style.overflow = "unset";
     }
   }, [openModal]);

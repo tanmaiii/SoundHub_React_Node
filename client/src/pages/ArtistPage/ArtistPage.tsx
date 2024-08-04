@@ -216,7 +216,6 @@ export default function ArtistPage() {
                 {artists?.map((artist, index) => {
                   if (artist.id === id) return;
                   if (artist.id === currentUser?.id) return;
-
                   return (
                     <CardArtist
                       key={index}

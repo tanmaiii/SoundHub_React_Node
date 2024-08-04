@@ -11,6 +11,8 @@ import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 import CustomInput from "../CustomInput";
+import ModalNotify from "../ModalNotify";
+import Modal from "../Modal";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
@@ -21,6 +23,7 @@ export default function Header() {
   const navigation = useNavigate();
   const [keyword, setKeyword] = useState("");
   const { pathname } = useLocation();
+  const [openModalNotify, setOpenModalNotify] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -102,7 +105,15 @@ export default function Header() {
         </div>
         <div className="header__right">
           {currentUser ? (
-            <UserSetting />
+            <>
+              <button
+                className="header__right__notify"
+                onClick={() => setOpenModalNotify(true)}
+              >
+                <i className="fa-light fa-bell"></i>
+              </button>
+              <UserSetting />
+            </>
           ) : (
             <>
               <Link to={PATH.SIGNUP}>
@@ -119,6 +130,14 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      <Modal
+        openModal={openModalNotify}
+        setOpenModal={setOpenModalNotify}
+        title="Notification"
+      >
+        <ModalNotify />
+      </Modal>
     </>
   );
 }

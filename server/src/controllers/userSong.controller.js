@@ -66,6 +66,35 @@ export const checkUserConfirm = async (req, res) => {
   }
 };
 
+//Lấy tất cả bài hát mà người dùng đã tham gia
+
+//Lấy tất cả các yêu cầu
+export const getAllSongByMe = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+      }
+
+      UserSong.findAllSong(userInfo.id, req.query , (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
 //Tạo user_song
 export const createUserSong = async (req, res) => {
   try {
@@ -122,8 +151,59 @@ export const confirmUserSong = async (req, res) => {
       if (!song) {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
-      if (song.user_id !== userInfo.id) {
-        return res.status(401).json({ conflictError: "Không có quyền !" });
+
+      //Kiểm tra xem user đã được thêm vào bài hát chưa
+      UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        }
+        if (!data) {
+          return res
+            .status(401)
+            .json({ conflictError: "Người dùng chưa tham gia" });
+        }
+
+        //Kiểm tra xem user đã xác nhận tham gia vào bài hát chưa
+        if (data.confirm === 1) {
+          return res
+            .status(401)
+            .json({ conflictError: "Người dùng đã xác nhận" });
+        }
+
+        //Kiểm tra xem user có phải là chính mình không
+        if (data.user_id !== userInfo.id) {
+          return res
+            .status(401)
+            .json({ conflictError: "Không thể xác nhận chính mình" });
+        }
+
+        //Xác nhận tham gia vào bài hát
+        UserSong.confirm(req.body.userId, req.body.songId, (err, data) => {
+          if (err) {
+            return res.status(401).json({ conflictError: err });
+          } else {
+            return res.json(data);
+          }
+        });
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+//Hủy xác nhận tham gia vào bài hát
+export const unConfirmUserSong = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
 
       //Kiểm tra xem user đã được thêm vào bài hát chưa
@@ -137,8 +217,66 @@ export const confirmUserSong = async (req, res) => {
             .json({ conflictError: "Người dùng chưa tham gia" });
         }
 
-        //Xác nhận user_song
-        UserSong.confirm(req.body.userId, req.body.songId, (err, data) => {
+        //Kiểm tra xem user đã xác nhận tham gia vào bài hát chưa
+        if (data.confirm === 1) {
+          return res
+            .status(401)
+            .json({ conflictError: "Người dùng đã xác nhận" });
+        }
+
+        //Kiểm tra xem user có phải là chính mình không
+        if (data.user_id !== userInfo.id) {
+          return res
+            .status(401)
+            .json({ conflictError: "Không thể xác nhận chính mình" });
+        }
+
+        //Xác nhận tham gia vào bài hát
+        UserSong.unConfirm(req.body.userId, req.body.songId, (err, data) => {
+          if (err) {
+            return res.status(401).json({ conflictError: err });
+          } else {
+            return res.json(data);
+          }
+        });
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+//Xóa người dùng khỏi bài hát
+export const deleteUserSong = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+      }
+
+      //Kiểm tra xem user đã được thêm vào bài hát chưa
+      UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        }
+        if (!data) {
+          return res
+            .status(401)
+            .json({ conflictError: "Người dùng chưa tham gia" });
+        }
+
+        if (data.user_id !== userInfo.id && song.user_id !== userInfo.id) {
+          return res.status(401).json({ conflictError: "Không có quyền !" });
+        }
+
+        //Xác nhận tham gia vào bài hát
+        UserSong.delete(req.body.userId, req.body.songId, (err, data) => {
           if (err) {
             return res.status(401).json({ conflictError: err });
           } else {
@@ -155,6 +293,10 @@ export const confirmUserSong = async (req, res) => {
 export default {
   getAllUserConfirm,
   getAllUser,
+  getAllSongByMe,
   checkUserConfirm,
   createUserSong,
+  confirmUserSong,
+  unConfirmUserSong,
+  deleteUserSong,
 };
