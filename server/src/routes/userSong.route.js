@@ -5,6 +5,13 @@ import userSongController from "../controllers/userSong.controller.js";
 import userSongValodation from "..//validations/userSong.validation.js";
 import validate from "../middlewares/validate.js";
 
+//Lấy tất cả các yêu cầu
+router.get(
+  "/me",
+  validate(userSongValodation.getAllSongByMe),
+  userSongController.getAllSongByMe
+);
+
 //Lay tat ca nguoi dung da them vao bai hat (bao gom ca nguoi dung chua xac nhan)
 router.get(
   "/:songId/me",
@@ -13,8 +20,7 @@ router.get(
 );
 
 //Kiem tra xem nguoi dung da xac nhan tham gia vao bai hat chua
-router.get("/:songId/check", userSongController.checkUserConfirm);
-router.get("/me", userSongController.getAllSongByMe);
+router.get("/:songId/detail", userSongController.checkUserConfirm);
 
 //Lay tat ca nguoi dung da xac nhan tham gia vao bai hat
 router.get(
@@ -39,14 +45,14 @@ router.delete(
 
 //Xac nhan tham gia vao bai hat
 router.put(
-  "/confirm",
+  "/:songId/confirm",
   //   validate(userSongValodation.confirmUserSong),
   userSongController.confirmUserSong
 );
 
 //Huy xac nhan tham gia vao bai hat
 router.delete(
-  "/confirm",
+  "/:songId/confirm",
   //   validate(userSongValodation.confirmUserSong),
   userSongController.unConfirmUserSong
 );

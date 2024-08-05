@@ -10,7 +10,7 @@
     left: 0;
     @include flex(center, center);
     z-index: 99;
-    transform: translateY(-100%);
+    transform: translateY(-200%);
     &.active {
       transform: translateY(0);
     }

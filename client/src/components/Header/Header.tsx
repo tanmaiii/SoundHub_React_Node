@@ -111,6 +111,9 @@ export default function Header() {
                 onClick={() => setOpenModalNotify(true)}
               >
                 <i className="fa-light fa-bell"></i>
+                <div className="header__right__notify__num">
+                  <span>20</span>
+                </div>
               </button>
               <UserSetting />
             </>
@@ -136,7 +139,7 @@ export default function Header() {
         setOpenModal={setOpenModalNotify}
         title="Notification"
       >
-        <ModalNotify />
+        <ModalNotify onClose={() => setOpenModalNotify(false)} />
       </Modal>
     </>
   );

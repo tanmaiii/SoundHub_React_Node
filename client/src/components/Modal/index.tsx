@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./style.scss";
-import Images from "../../constants/images";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -16,11 +15,8 @@ export default function Modal(props: ModalProps) {
 
   useEffect(() => {
     if (openModal === true) {
-      console.log("open");
-      
       document.body.style.overflow = "hidden";
     } else {
-      console.log("close");
       document.body.style.overflow = "unset";
     }
   }, [openModal]);

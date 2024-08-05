@@ -68,27 +68,18 @@ export const checkUserConfirm = async (req, res) => {
 
 //Lấy tất cả bài hát mà người dùng đã tham gia
 
-//Lấy tất cả các yêu cầu
+//Lấy tất cả các yêu cầu cuả người dùng
 export const getAllSongByMe = async (req, res) => {
   try {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+    UserSong.findAllSong(userInfo.id, req.query, (err, data) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
+      } else {
+        return res.json(data);
       }
-      if (!song) {
-        return res.status(404).json({ conflictError: "Không tìm thấy !" });
-      }
-
-      UserSong.findAllSong(userInfo.id, req.query , (err, data) => {
-        if (err) {
-          return res.status(401).json({ conflictError: err });
-        } else {
-          return res.json(data);
-        }
-      });
     });
   } catch (error) {
     return res.status(400).json(error);
@@ -144,7 +135,7 @@ export const confirmUserSong = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       }
@@ -153,7 +144,7 @@ export const confirmUserSong = async (req, res) => {
       }
 
       //Kiểm tra xem user đã được thêm vào bài hát chưa
-      UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+      UserSong.find(userInfo.id, req.params.songId, (err, data) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         }
@@ -178,7 +169,7 @@ export const confirmUserSong = async (req, res) => {
         }
 
         //Xác nhận tham gia vào bài hát
-        UserSong.confirm(req.body.userId, req.body.songId, (err, data) => {
+        UserSong.confirm(userInfo.id, req.params.songId, (err, data) => {
           if (err) {
             return res.status(401).json({ conflictError: err });
           } else {
@@ -198,7 +189,7 @@ export const unConfirmUserSong = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       }
@@ -207,7 +198,7 @@ export const unConfirmUserSong = async (req, res) => {
       }
 
       //Kiểm tra xem user đã được thêm vào bài hát chưa
-      UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+      UserSong.find(userInfo.id, req.params.songId, (err, data) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         }
@@ -218,11 +209,12 @@ export const unConfirmUserSong = async (req, res) => {
         }
 
         //Kiểm tra xem user đã xác nhận tham gia vào bài hát chưa
-        if (data.confirm === 1) {
+        if (data.confirm === 0) {
           return res
             .status(401)
-            .json({ conflictError: "Người dùng đã xác nhận" });
+            .json({ conflictError: "Người dùng đã từ chối" });
         }
+
 
         //Kiểm tra xem user có phải là chính mình không
         if (data.user_id !== userInfo.id) {
@@ -232,7 +224,7 @@ export const unConfirmUserSong = async (req, res) => {
         }
 
         //Xác nhận tham gia vào bài hát
-        UserSong.unConfirm(req.body.userId, req.body.songId, (err, data) => {
+        UserSong.unConfirm(userInfo.id, req.params.songId, (err, data) => {
           if (err) {
             return res.status(401).json({ conflictError: err });
           } else {

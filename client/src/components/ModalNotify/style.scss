@@ -2,9 +2,39 @@
 
 .Notify {
   @include themify($themes) {
-    padding: $space-8 $space-24;
+    /* width */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: themed("bg-3");
+      border: none;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    }
+
+    padding: $space-8 $space-12 $space-8 $space-12;
+    overflow: hidden;
     &__body {
-      width: 400px;
+      width: 500px;
+      height: 600px;
+      overflow-x: scroll;
+      padding-right: $space-4;
+      background-color: themed("bg-1");
+      @include mobile {
+        width: 100%;
+        height: 100%;
+        overflow-x: scroll;
+      }
       &__list {
         @include flex(unset, unset, column);
         gap: $space-8;
@@ -20,6 +50,7 @@
     @include flex(flex-start, center, row);
     transition: $transition;
     cursor: pointer;
+    height: 100%;
 
     &:hover {
       background-color: themed("bg-2");
@@ -35,6 +66,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        background-color: themed('bg-2');
+        border: 1px solid themed('bg-1');
       }
     }
 
@@ -70,7 +103,7 @@
           padding: 0 $space-16;
           border-radius: $radius-8;
           font-size: $size-16;
-          color: themed("txt-main");
+          color: $color-white;
           cursor: pointer;
           transition: $transition;
           &:hover {
@@ -81,14 +114,15 @@
           }
           &.btn-remove {
             background-color: themed("bg-3");
+            color: themed('txt-main');
           }
         }
       }
     }
 
     &__send {
-      min-height: 100%;
       @include flex(center, center, row);
+      margin: auto 0 auto $space-4;
       .dot {
         width: 10px;
         height: 10px;
