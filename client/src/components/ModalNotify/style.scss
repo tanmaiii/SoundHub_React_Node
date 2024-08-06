@@ -117,6 +117,12 @@
             color: themed('txt-main');
           }
         }
+
+        span{
+          font-size: $size-14;
+          color: themed("txt-second");
+          font-weight: $font-light;
+        }
       }
     }
 

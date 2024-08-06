@@ -8,6 +8,8 @@ import ImageWithFallback from "../ImageWithFallback";
 import Images from "../../constants/images";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/paths";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import moment from "moment";
 
 const ModalNotify = ({ onClose }: { onClose: () => void }) => {
   const { token } = useAuth();
@@ -17,8 +19,9 @@ const ModalNotify = ({ onClose }: { onClose: () => void }) => {
     // get notify
     try {
       const res = await authorApi.getAllUserRequest(token, 1, 10);
+      console.log(res.data);
+
       setData(res.data);
-      console.log(res);
     } catch (error) {}
   };
 
@@ -49,8 +52,10 @@ type props = {
 
 const Item = (props: props) => {
   const [song, setSong] = useState<TSong>();
-  const { token } = useAuth();
+  const [detail, setDetail] = useState<TAuthor>();
+  const { token, currentUser } = useAuth();
   const navigation = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const getSong = async () => {
@@ -62,22 +67,50 @@ const Item = (props: props) => {
     getSong();
   }, []);
 
-  const handleClickSubmit = () => {
-    try {
-      authorApi.confirmRequest(token, song?.id || "");
-    } catch (error) {}
-  };
+  const {} = useQuery({
+    queryKey: ["notify-detail", [props.id, currentUser?.id]],
+    queryFn: async () => {
+      try {
+        const res = await authorApi.getDetail(
+          token,
+          currentUser?.id || "",
+          props.id
+        );
+        res && setDetail(res || undefined);
+      } catch (error) {}
+    },
+  });
 
-  const handleClickRemove = () => {
-    try {
-      authorApi.rejectRequest(token, song?.id || "");
-    } catch (error) {}
-  };
+  const mutationSubmit = useMutation(
+    () => authorApi.confirmRequest(token, song?.id || ""),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "notify-detail",
+          [props.id, currentUser?.id],
+        ]);
+      },
+    }
+  );
+
+  const mutationRemove = useMutation(
+    () => authorApi.rejectRequest(token, song?.id || ""),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "notify-detail",
+          [props.id, currentUser?.id],
+        ]);
+      },
+    }
+  );
 
   const handleClick = () => {
     navigation(`${PATH.SONG}/${song?.id}`);
     props.onClose();
   };
+
+  if (!song || !detail) return null;
 
   return (
     <div className="notify__item">
@@ -93,15 +126,31 @@ const Item = (props: props) => {
           <a>{song?.author} </a>
           <span>đã gửi yêu cầu tham gia bài hát</span>
           <a> {song?.title}</a>
-          <p>1 giờ trước</p>
+          <p>{moment(detail?.created_at).startOf("hour").fromNow()}</p>
         </div>
         <div className="notify__item__body__button">
-          <button className="btn-submit" onClick={handleClickSubmit}>
-            Xác nhận
-          </button>
-          <button className="btn-remove" onClick={handleClickRemove}>
-            Từ chối
-          </button>
+          {detail && detail?.status === "Pending" && (
+            <>
+              <button
+                className="btn-submit"
+                onClick={() => mutationSubmit.mutate()}
+              >
+                Xác nhận
+              </button>
+              <button
+                className="btn-remove"
+                onClick={() => mutationRemove.mutate()}
+              >
+                Từ chối
+              </button>
+            </>
+          )}
+          {detail?.status === "Accepted" && (
+            <span>Bạn đã chấp nhận lời mời tham gia</span>
+          )}
+          {detail?.status === "Rejected" && (
+            <span>Bạn đã từ chối lời mời tham gia</span>
+          )}
         </div>
       </div>
       <div className="notify__item__send">

@@ -2,10 +2,14 @@ import { db, promiseDb } from "../config/connect.js";
 import moment from "moment";
 import User from "./user.model.js";
 
-const UserSong = (song) => {
-  this.user_id = song.user_id;
-  this.song_id = song.song_id;
-  this.confirm = song.created_at;
+//'Pending' là trạng thái chờ xác nhận tham gia vào bài hát
+//'Accepted' là trạng thái đã xác nhận tham gia vào bài hát
+//'Rejected' là trạng thái bị từ chối tham gia vào bài hát
+
+const UserSong = (userSong) => {
+  this.user_id = userSong.user_id;
+  this.song_id = userSong.song_id;
+  this.status = userSong.status;
 };
 
 //Tạo mới người dùng tham gia vào bài hát
@@ -26,8 +30,8 @@ UserSong.create = (userId, songId, result) => {
 //Xác nhận tham gia vào bài hát
 UserSong.confirm = (userId, songId, result) => {
   db.query(
-    `update user_songs set confirm = 1 where song_id = ? and user_id = ?`,
-    [songId, userId],
+    `update user_songs set status = "Accepted", response_at = ? where song_id = ? and user_id = ?`,
+    [moment().format("YYYY-MM-DD HH:mm:ss"), songId, userId],
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
@@ -41,11 +45,11 @@ UserSong.confirm = (userId, songId, result) => {
   );
 };
 
-//Hủy xác nhận tham gia vào bài hát
+//Từ chối tham gia vào bài hát
 UserSong.unConfirm = (userId, songId, result) => {
   db.query(
-    `update user_songs set confirm = 0 where song_id = ? and user_id = ?`,
-    [songId, userId],
+    `update user_songs set status = "Rejected", response_at = ? where song_id = ? and user_id = ?`,
+    [moment().format("YYYY-MM-DD HH:mm:ss"), songId, userId],
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
@@ -74,6 +78,7 @@ UserSong.delete = (userId, songId, result) => {
   );
 };
 
+//Tìm kiếm
 UserSong.find = (userId, songId, result) => {
   db.query(
     `SELECT * from user_songs WHERE user_id = "${userId}" and song_id = "${songId}"`,
@@ -99,7 +104,7 @@ UserSong.findAllUserConfirm = (songId, result) => {
     `SELECT u.id ` +
       `FROM music.user_songs as us ` +
       `LEFT JOIN music.users as u ON us.user_id = u.id ` +
-      `WHERE song_id = "${songId}" and us.user_id = u.id and us.confirm = 1`,
+      `WHERE song_id = "${songId}" and us.user_id = u.id and us.status = "Accepted"`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -163,8 +168,6 @@ UserSong.findAllSong = async (userId, query, result) => {
     `SELECT COUNT(*) as total FROM user_songs as us ` +
       ` WHERE us.user_id = "${userId}" `
   );
-
-  console.log(totalCount);
 
   if (data && totalCount) {
     const totalPages = Math.ceil(totalCount[0].total / limit);

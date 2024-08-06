@@ -53,13 +53,29 @@ export const checkUserConfirm = async (req, res) => {
   try {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
-
-    UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+       
+    Song.findById(req.query.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
-      } else {
-        return res.json(data);
       }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+      }
+
+      console.log(req.query);
+      
+
+      UserSong.find(req.query.userId, req.query.songId, (err, data) => {
+        if (err || !data) {
+          return res.status(401).json({ conflictError: "Không tìm thấy !" });
+        }
+
+        if (userInfo.id === song.user_id || userInfo.id === data.user_id) {
+          return res.json(data);
+        }
+
+        return res.status(400).json({ conflictError: "Không có quyền !" });
+      });
     });
   } catch (error) {
     res.status(400).json(error);
@@ -108,6 +124,7 @@ export const createUserSong = async (req, res) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         }
+
         if (data) {
           return res
             .status(401)
@@ -155,7 +172,7 @@ export const confirmUserSong = async (req, res) => {
         }
 
         //Kiểm tra xem user đã xác nhận tham gia vào bài hát chưa
-        if (data.confirm === 1) {
+        if (data.status === "Accepted") {
           return res
             .status(401)
             .json({ conflictError: "Người dùng đã xác nhận" });
@@ -209,12 +226,11 @@ export const unConfirmUserSong = async (req, res) => {
         }
 
         //Kiểm tra xem user đã xác nhận tham gia vào bài hát chưa
-        if (data.confirm === 0) {
+        if (data.status === "Rejected") {
           return res
             .status(401)
             .json({ conflictError: "Người dùng đã từ chối" });
         }
-
 
         //Kiểm tra xem user có phải là chính mình không
         if (data.user_id !== userInfo.id) {

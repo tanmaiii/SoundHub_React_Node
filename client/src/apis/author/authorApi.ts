@@ -6,6 +6,7 @@ const authorApi = {
     const url = "userSong/";
     return axiosClient.get(url + songId);
   },
+  
   getAllUserRequest(
     token: string,
     page: number,
@@ -27,19 +28,26 @@ const authorApi = {
     });
   },
 
+  getDetail(token: string, userId: string, songId: string): Promise<TAuthor> {
+    const url = `userSong/detail`;
+    return axiosClient.get(url, {
+      params: { userId: userId, songId: songId },
+      headers: {
+        authorization: token,
+      },
+    });
+  },
+
   //Xác nhận yêu cầu
   confirmRequest(token: string, songId: string): Promise<void> {
     const url = `userSong/${songId}/confirm`;
-    return axiosClient.put(
-      url,
-      undefined,
-      {
-        headers: {
-          authorization: token,
-        },
-      }
-    );
+    return axiosClient.put(url, undefined, {
+      headers: {
+        authorization: token,
+      },
+    });
   },
+
   //Từ chối yêu cầu
   rejectRequest(token: string, songId: string): Promise<void> {
     const url = `userSong/${songId}/confirm`;

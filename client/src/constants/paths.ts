@@ -54,6 +54,8 @@ const PATH = {
   MY_PROFILE: "/my-profile",
   MY_PLAYLIST: "/my-playlist",
   MY_ARTIST: "/my-artist",
+
+  ERROR: "/error",
 };
 
 const publicRoutes = [

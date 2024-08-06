@@ -13,6 +13,7 @@ import CommentInput from "../../components/CommentInput/CommentInput";
 import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
+import { PATH } from "../../constants/paths";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -34,6 +35,7 @@ export default function SongPage() {
           return res;
         }
       } catch (error) {
+        navigation(`${PATH.ERROR}`);
         return null;
       }
     },
@@ -188,10 +190,18 @@ export default function SongPage() {
               />
             </div>
           </div>
-          <div className="songPage__content__body__artist col pc-4 t-12">
-            <TrackArtist id={song?.user_id ?? ""} className="col pc-12" />
+          <div className="songPage__content__body__artist col pc-4 t-12 row">
+            <TrackArtist
+              id={song?.user_id ?? ""}
+              songId={song?.id}
+              className="col pc-12"
+            />
             {authors?.map((author) => (
-              <TrackArtist id={author ?? ""} className="col pc-12" />
+              <TrackArtist
+                id={author ?? ""}
+                songId={song?.id}
+                className="col pc-12"
+              />
             ))}
           </div>
         </div>

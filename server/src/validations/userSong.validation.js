@@ -19,4 +19,11 @@ export default class songValidation {
   static getAllSongByMe = {
     ...querySchema,
   };
+
+  static checkUserConfirm = {
+    query: Joi.object().keys({
+      songId: Joi.string().min(0).max(36).required(),
+      userId: Joi.string().min(0).max(36).required(),
+    }),
+  }
 }
