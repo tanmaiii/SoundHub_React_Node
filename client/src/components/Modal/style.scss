@@ -35,7 +35,8 @@
 
       &__header {
         @include flex(center, space-between, row);
-        padding: $space-12 $space-8 $space-12 $space-24;
+        padding: 0 $space-8 0 $space-24;
+        height: $height-header-modal;
         h3 {
           font-size: $size-20;
           font-weight: $font-bold;

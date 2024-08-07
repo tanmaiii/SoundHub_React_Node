@@ -11,12 +11,14 @@ const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));
 const ArtistSongPage = lazy(() => import("../pages/ArtistSongPage"));
 const ArtistPlaylistPage = lazy(() => import("../pages/ArtistPlaylistPage"));
-const PlaylistPage = lazy(() => import("../pages/PlaylistPage/PlaylistPage"));
+const PlaylistPage = lazy(() => import("../pages/PlaylistPage"));
 const FavouritePage = lazy(
   () => import("../pages/FavouritePage/FavouritePage")
 );
+
 const RecentlyPage = lazy(() => import("../pages/RecentlyPage"));
 const SongPage = lazy(() => import("../pages/SongPage"));
+
 const VerifyPage = lazy(
   () => import("../pages/AuthPages/VerifyPage/VerifyPage")
 );
@@ -32,6 +34,8 @@ const PATH = {
   FAVOURITE: "/favourite",
   ARTIST_SHOW: "/artist/:id",
   RECENTLY: "/recently",
+
+  UPLOAD: "/upload",
 
   SEARCH: "/search",
   SEARCH_SHOW: "/search/:keyword",

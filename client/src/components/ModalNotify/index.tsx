@@ -89,6 +89,7 @@ const Item = (props: props) => {
           "notify-detail",
           [props.id, currentUser?.id],
         ]);
+        queryClient.invalidateQueries(["authors", song?.id]);
       },
     }
   );
@@ -101,6 +102,7 @@ const Item = (props: props) => {
           "notify-detail",
           [props.id, currentUser?.id],
         ]);
+        queryClient.invalidateQueries(["authors", song?.id]);
       },
     }
   );
@@ -126,7 +128,7 @@ const Item = (props: props) => {
           <a>{song?.author} </a>
           <span>đã gửi yêu cầu tham gia bài hát</span>
           <a> {song?.title}</a>
-          <p>{moment(detail?.created_at).startOf("hour").fromNow()}</p>
+          <p>{moment(detail?.created_at).fromNow()}</p>
         </div>
         <div className="notify__item__body__button">
           {detail && detail?.status === "Pending" && (
@@ -153,9 +155,11 @@ const Item = (props: props) => {
           )}
         </div>
       </div>
-      <div className="notify__item__send">
-        <div className="dot"></div>
-      </div>
+      {!detail?.response_at && (
+        <div className="notify__item__send">
+          <div className="dot"></div>
+        </div>
+      )}
     </div>
   );
 };

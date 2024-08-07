@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import { authorApi } from "../../../apis";
+import { PATH } from "../../../constants/paths";
 
 type Props = {
   id: string;
@@ -56,6 +57,7 @@ const ArtistMenu = ({
           "notify-detail",
           [songId, currentUser?.id],
         ]);
+        queryClient.invalidateQueries(["authors", songId]);
         onClose();
       },
     }
@@ -83,6 +85,11 @@ const ArtistMenu = ({
               itemFunc={() => mutationRemoveAuthor.mutate()}
             />
           )}
+          <ItemMenu
+            title={"Xem thông tin"}
+            icon={<i className="fa-light fa-user"></i>}
+            itemFunc={() => navigation(`${PATH.ARTIST}/${id}`)}
+          />
         </div>
       </div>
     </div>

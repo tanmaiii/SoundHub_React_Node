@@ -1,0 +1,93 @@
+@use "../../../scss/" as *;
+
+.AddSong {
+  padding: $space-24;
+  height: 75vh;
+  width: 75vw;
+
+  @include mobile {
+    width: 100vw;
+    height: calc(100vh - $height-header-modal);
+  }
+
+  &__body {
+    height: 100%;
+  }
+}
+
+.UploadSong {
+  @include themify($themes) {
+    width: 100%;
+    @include flex(center, center, column);
+    margin: auto 0;
+    height: 100%;
+
+    @include mobile {
+      margin-top: $space-12;
+    }
+
+    &__icon {
+      margin-bottom: $space-24;
+      margin-top: auto;
+      i {
+        background-color: themed("bg-2");
+        padding: 40px;
+        width: max-content;
+        border-radius: 50%;
+        @include flex(center, center);
+        font-size: 60px;
+        color: themed("txt-second");
+      }
+    }
+
+    h4 {
+      font-size: $size-18;
+      color: themed("txt-main");
+      font-weight: $font-medium;
+      text-align: center;
+    }
+
+    & > p {
+      font-size: $size-14;
+      color: themed("txt-second");
+      font-weight: $font-light;
+      text-align: center;
+    }
+
+    button {
+      margin-top: $space-24;
+      padding: $space-8 $space-16;
+      background-color: $color-primary1;
+      color: $color-white;
+      font-size: $size-16;
+      font-weight: $font-medium;
+      border-radius: $radius-4;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: auto;
+      &:hover {
+        background-color: $color-primary2;
+      }
+    }
+
+    &__desc {
+      @include flex(center, center, column);
+      margin-top: auto;
+      & > p {
+        font-size: $size-14;
+        color: themed("txt-second");
+        font-weight: $font-light;
+        text-align: center;
+      }
+
+      a {
+        color: $color-blue;
+        font-weight: $font-medium;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

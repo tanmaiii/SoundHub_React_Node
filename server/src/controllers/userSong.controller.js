@@ -53,7 +53,7 @@ export const checkUserConfirm = async (req, res) => {
   try {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
-       
+
     Song.findById(req.query.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
@@ -61,10 +61,6 @@ export const checkUserConfirm = async (req, res) => {
       if (!song) {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
-
-      console.log(req.query);
-      
-
       UserSong.find(req.query.userId, req.query.songId, (err, data) => {
         if (err || !data) {
           return res.status(401).json({ conflictError: "Không tìm thấy !" });
@@ -125,10 +121,24 @@ export const createUserSong = async (req, res) => {
           return res.status(401).json({ conflictError: err });
         }
 
-        if (data) {
+        if (data.status === "Rejected") {
+          UserSong.delete(req.body.userId, req.body.songId, (err, data) => {
+            if (err) {
+              return res.status(401).json({ conflictError: err });
+            }
+          });
+        }
+
+        if (data.status === "Accepted") {
           return res
             .status(401)
-            .json({ conflictError: "Người dùng đã tham gia" });
+            .json({ conflictError: "Người dùng đã chấp nhận lời mời !" });
+        }
+
+        if (data.status === "Pending") {
+          return res
+            .status(401)
+            .json({ conflictError: "Lời mời đã được gửi từ trước !" });
         }
 
         //Tạo user_song

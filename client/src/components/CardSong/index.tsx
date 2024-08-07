@@ -18,6 +18,7 @@ export interface CardSongProps {
   title: string | undefined;
   author: string | undefined;
   userId: string;
+  isPublic?: number;
 }
 
 function CardSong({
@@ -28,6 +29,7 @@ function CardSong({
   title,
   author,
   userId,
+  isPublic = 0,
 }: CardSongProps) {
   const navigate = useNavigate();
 
@@ -56,14 +58,21 @@ function CardSong({
         </div>
 
         <div className="CardSong__container__desc">
-          <div>
-            <h4
-              onClick={handleClick}
-              className="CardSong__container__desc__title"
-            >
-              {loading ? <Skeleton height={24} /> : title}
-            </h4>
-          </div>
+          {loading ? (
+            <Skeleton height={24} />
+          ) : (
+            <p>
+              {isPublic === 0 && (
+                <i className="icon__private fa-light fa-lock"></i>
+              )}
+              <h4
+                onClick={handleClick}
+                className="CardSong__container__desc__title"
+              >
+                {title}
+              </h4>
+            </p>
+          )}
           <div className="CardSong__container__desc__info">
             <div className="CardSong__container__desc__info__artist">
               {loading ? (

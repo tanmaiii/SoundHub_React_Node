@@ -42,7 +42,7 @@ export default function SongPage() {
   });
 
   const { data: authors } = useQuery({
-    queryKey: ["authors", song?.user_id],
+    queryKey: ["authors", song?.id],
     queryFn: async () => {
       try {
         const res = await authorApi.getAllUserConfirm(id ?? "");
@@ -193,7 +193,7 @@ export default function SongPage() {
           <div className="songPage__content__body__artist col pc-4 t-12 row">
             <TrackArtist
               id={song?.user_id ?? ""}
-              songId={song?.id}
+              // songId={song?.id}
               className="col pc-12"
             />
             {authors?.map((author) => (

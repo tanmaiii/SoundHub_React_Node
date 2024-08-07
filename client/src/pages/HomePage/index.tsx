@@ -69,7 +69,7 @@ function HomePage(props: any) {
         1,
         10,
         undefined,
-        "new"
+        "count"
       );
       return res.data;
     },
@@ -136,6 +136,7 @@ function HomePage(props: any) {
               author={song.author}
               userId={song.user_id ?? ""}
               id={song.id}
+              isPublic={song.public ?? 1}
             />
           ))}
         </Section>
@@ -151,6 +152,7 @@ function HomePage(props: any) {
               author={song.author}
               userId={song.user_id ?? ""}
               id={song.id}
+              isPublic={song.public ?? 1}
             />
           ))}
         </Section>

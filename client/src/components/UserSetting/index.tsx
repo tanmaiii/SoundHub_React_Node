@@ -150,7 +150,9 @@ export default function UserSetting() {
               func={() => setActiveMenu("main")}
             >
               <DropdownItem
-                func={() => changeLanguage("en")}
+                func={() => {
+                  changeLanguage("en");
+                }}
                 iconLeft={
                   i18n.language === "en" ? (
                     <i className="fa-solid fa-circle-o"></i>
@@ -161,7 +163,9 @@ export default function UserSetting() {
                 title={locales["en"]}
               />
               <DropdownItem
-                func={() => changeLanguage("vi")}
+                func={() => {
+                  changeLanguage("vi");
+                }}
                 iconLeft={
                   i18n.language === "vi" ? (
                     <i className="fa-solid fa-circle-o"></i>

@@ -11,7 +11,7 @@ import ModalEditPlaylist from "../../components/ModalPlaylist/EditPlaylist";
 import TableTrack from "../../components/TableTrack";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
-import "./playlistPage.scss";
+import "./style.scss";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
