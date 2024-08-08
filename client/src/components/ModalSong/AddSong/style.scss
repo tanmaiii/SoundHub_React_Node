@@ -188,7 +188,9 @@
       margin-top: $space-12;
       @include flex(unset, unset, row);
       &__left {
+        @include flex(unset, unset, column);
         flex: 1;
+        gap: $space-12;
         .Form-box {
           position: relative;
           width: 100%;
@@ -220,6 +222,19 @@
             &:focus + .Form-box {
               border-color: themed("txt-second");
             }
+          }
+
+          textarea {
+            background-color: themed("bg-2");
+            border-radius: $radius-4;
+            width: 100%;
+            height: 100px;
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            outline: none;
+            border: 1px solid transparent;
+            resize: none;
           }
 
           .count-letter {

@@ -150,6 +150,31 @@ export const FormSong = () => {
               <span className="count-letter">{`${inputs.title.length}/100`}</span>
             )} */}
           </div>
+
+          <div className="Form-box">
+            <div className="Form-box__label">
+              <span>Tiêu đề (bắc buộc): </span>
+            </div>
+            {/* <input
+              type="text"
+              id="title"
+              // value={inputs?.title}
+              placeholder="Add title"
+              name="title"
+              maxLength={100}
+              // onChange={(e) => updateState({ title: e.target.value })}
+            /> */}
+            <textarea
+              id="desc"
+              placeholder="Add description"
+              name="desc"
+              maxLength={400}
+            />
+            <p className="count-letter">{`123s/100`}</p>
+            {/* {inputs.title.length > 80 && (
+              <span className="count-letter">{`${inputs.title.length}/100`}</span>
+            )} */}
+          </div>
         </div>
         <div className="FormSong__body__right"></div>
       </div>
