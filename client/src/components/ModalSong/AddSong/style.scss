@@ -3,7 +3,12 @@
 .AddSong {
   padding: $space-24;
   height: 75vh;
-  width: 75vw;
+  width: 60vw;
+
+  @include tablet {
+    width: 90vw;
+    height: calc(90vh - $height-header-modal);
+  }
 
   @include mobile {
     width: 100vw;
@@ -12,6 +17,21 @@
 
   &__body {
     height: 100%;
+    .div-drag {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+
+      input {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        // background-color: turquoise;
+      }
+    }
   }
 }
 
@@ -38,6 +58,12 @@
         font-size: 60px;
         color: themed("txt-second");
       }
+
+      &.dragIn {
+        i {
+          animation: dropAnimation 2s linear 0s infinite alternate;
+        }
+      }
     }
 
     h4 {
@@ -54,7 +80,7 @@
       text-align: center;
     }
 
-    button {
+    label {
       margin-top: $space-24;
       padding: $space-8 $space-16;
       background-color: $color-primary1;
@@ -64,9 +90,68 @@
       border-radius: $radius-4;
       cursor: pointer;
       transition: all 0.3s;
-      margin-bottom: auto;
       &:hover {
-        background-color: $color-primary2;
+        transform: scale(0.98);
+      }
+    }
+
+    &__file {
+      .error {
+        @include flex(center, center, row);
+        margin-top: $space-24;
+        i {
+          color: $color-red;
+        }
+        p {
+          color: themed("txt-main");
+          font-size: $size-14;
+          font-weight: $font-light;
+          margin-left: $space-8;
+        }
+      }
+      .file-item {
+        @include flex(unset, center, row);
+        gap: $space-12;
+        padding: $space-12 $space-16;
+        background-color: themed("bg-2");
+        border-radius: $radius-8;
+        margin-top: $space-24;
+        cursor: pointer;
+        &__icon {
+          font-size: 40px;
+          color: themed("txt-main");
+        }
+        &__desc {
+          font-size: $size-14;
+          color: themed("txt-main");
+          font-weight: $font-light;
+          @include flex(space-between, space-between, column);
+          padding: $space-4 0;
+          h6 {
+            font-size: $size-16;
+            color: themed("txt-main");
+          }
+          p {
+            font-size: $size-14;
+            color: themed("txt-second");
+          }
+        }
+
+        button {
+          i {
+            font-size: $space-16;
+            color: themed("txt-second");
+            cursor: pointer;
+            padding: $space-4;
+            @include flex(center, center);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            &:hover {
+              background-color: themed("bg-1");
+            }
+          }
+        }
       }
     }
 
@@ -74,7 +159,7 @@
       @include flex(center, center, column);
       margin-top: auto;
       & > p {
-        font-size: $size-14;
+        font-size: $size-12;
         color: themed("txt-second");
         font-weight: $font-light;
         text-align: center;
@@ -89,5 +174,77 @@
         }
       }
     }
+  }
+}
+
+.FormSong {
+  @include themify($themes) {
+    &__top {
+      width: 100%;
+      height: 100px;
+      background-color: themed("bg-2");
+    }
+    &__body {
+      margin-top: $space-12;
+      @include flex(unset, unset, row);
+      &__left {
+        flex: 1;
+        .Form-box {
+          position: relative;
+          width: 100%;
+          // padding-top: $space-24;
+          background-color: themed("bg-2");
+          border-radius: $radius-4;
+          border: 1.4px solid themed("border");
+          padding: 0 $space-12 $space-4 $space-12;
+
+          &:hover {
+            border-color: themed("txt-second");
+          }
+
+          &__label {
+            font-size: $size-14;
+            font-weight: $font-light;
+            color: themed("txt-second");
+            transition: opacity 0.3s ease-in-out;
+            margin: $space-4 0;
+          }
+
+          input {
+            width: 100%;
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            outline: none;
+            padding: $space-4 0;
+            &:focus + .Form-box {
+              border-color: themed("txt-second");
+            }
+          }
+
+          .count-letter {
+            font-size: $size-12;
+            color: themed("txt-second");
+            font-weight: $font-light;
+            text-align: right;
+            margin-top: $space-4;
+            text-align: right;
+          }
+        }
+      }
+
+      &__right {
+        width: 200px;
+      }
+    }
+  }
+}
+
+@keyframes dropAnimation {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
   }
 }
