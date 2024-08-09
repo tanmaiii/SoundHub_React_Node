@@ -41,9 +41,7 @@ const Dropdown = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log(selected);
-    
+  useEffect(() => {    
     changeSelected(selected);
     setActiveDropdown(false);
   }, [selected]);

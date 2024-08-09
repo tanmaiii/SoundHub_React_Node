@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./style.scss";
+import Dropdown from "../../Dropdown";
+import { genreApi } from "../../../apis";
+import { useQuery } from "react-query";
+import Images from "../../../constants/images";
+import WavesurferPlayer from "@wavesurfer/react";
 
 const AddSong = () => {
   const [openDrop, setOpenDrop] = useState(false);
@@ -127,56 +132,179 @@ export const UploadSong = ({
 };
 
 export const FormSong = () => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  interface Inputs {
+    title: string;
+    desc: string;
+    genre_id: string;
+    public: number;
+    image_path: string;
+  }
+
+  const [inputs, setInputs] = useState<Inputs>({
+    title: "",
+    desc: "",
+    genre_id: "",
+    public: 1,
+    image_path: "",
+  });
+
+  const updateState = (newValue: Partial<Inputs>) => {
+    setInputs((prevState) => ({ ...prevState, ...newValue }));
+  };
+
+  const { data: genres } = useQuery({
+    queryKey: ["genres"],
+    queryFn: async () => {
+      try {
+        const res = await genreApi.getAll(1, 100);
+        return res.data;
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    },
+  });
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const resetFileInputImage = () => {
+    const fileInput = document.getElementById(
+      "input-image-song"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    setImageFile(null);
+  };
+
   return (
     <div className="FormSong">
-      <div className="FormSong__top"></div>
+      <div className="FormSong__top">
+        <div className="box-audio">
+          <button className="btn-play">
+            <i className="fa-solid fa-pause"></i>
+          </button>
+          <div className="box-audio__body">
+            <div className="progress"></div>
+            <div className="time">
+              <span>00:00</span>
+              <span>03:12</span>
+            </div>
+          </div>
+          <div>
+            <button className="btn-volume">
+              <i className="fa-light fa-volume"></i>
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="FormSong__body">
         <div className="FormSong__body__left">
           <div className="Form-box">
             <div className="Form-box__label">
-              <span>Tiêu đề (bắc buộc): </span>
+              <span>Tiêu đề (bắt buộc): </span>
             </div>
             <input
               type="text"
               id="title"
-              // value={inputs?.title}
-              placeholder="Add title"
+              value={inputs?.title}
+              placeholder="Thêm tiêu đề để thu hút người nghe"
               name="title"
               maxLength={100}
-              // onChange={(e) => updateState({ title: e.target.value })}
+              onChange={(e) => updateState({ title: e.target.value })}
             />
-            <p className="count-letter">{`123s/100`}</p>
-            {/* {inputs.title.length > 80 && (
-              <span className="count-letter">{`${inputs.title.length}/100`}</span>
-            )} */}
+            <p className="count-letter">{`${inputs.title.length || 0}/100`}</p>
           </div>
 
           <div className="Form-box">
             <div className="Form-box__label">
-              <span>Tiêu đề (bắc buộc): </span>
+              <span>Mô tả: </span>
             </div>
-            {/* <input
-              type="text"
-              id="title"
-              // value={inputs?.title}
-              placeholder="Add title"
-              name="title"
-              maxLength={100}
-              // onChange={(e) => updateState({ title: e.target.value })}
-            /> */}
             <textarea
               id="desc"
-              placeholder="Add description"
+              value={inputs?.desc}
+              placeholder="Thêm mô tả để mô tả bài hát của bạn"
               name="desc"
               maxLength={400}
+              onChange={(e) => updateState({ desc: e.target.value })}
             />
-            <p className="count-letter">{`123s/100`}</p>
-            {/* {inputs.title.length > 80 && (
-              <span className="count-letter">{`${inputs.title.length}/100`}</span>
-            )} */}
+            <p className="count-letter">{`${inputs.desc.length || 0}/400`}</p>
+          </div>
+
+          <div className="dropdowns">
+            <Dropdown
+              title={"Thể loại"}
+              defaultSelected={"1"}
+              changeSelected={
+                (selected: { id: string; title: string }) =>
+                  console.log(selected)
+
+                // setInputs((prev) => ({
+                //   ...prev,
+                //   public: parseInt(selected?.id),
+                // }))
+              }
+              options={[
+                { id: "0", title: "Public" },
+                { id: "1", title: "Private" },
+              ]}
+            />
+            <Dropdown
+              title={"Thể loại"}
+              defaultSelected={genres?.[0]?.id ?? ""}
+              changeSelected={(selected: { id: string; title: string }) =>
+                // setInputs((prev) => ({ ...prev, genre_id: selected?.id }))
+                console.log(selected)
+              }
+              options={
+                genres?.map((genre) => ({
+                  id: genre.id ?? "",
+                  title: genre.title ?? "",
+                })) || []
+              }
+            />
           </div>
         </div>
-        <div className="FormSong__body__right"></div>
+        <div className="FormSong__body__right">
+          <h4>Hình ảnh đại diện</h4>
+          <span>
+            Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem
+          </span>
+          <div className="FormSong__body__right__image">
+            {imageFile && (
+              <img src={imageFile && URL.createObjectURL(imageFile)} alt="" />
+            )}
+            <label
+              htmlFor="input-image-song"
+              className="FormSong__body__right__image__default"
+            >
+              <i className="fa-light fa-image"></i>
+              <span>Tải tệp lên</span>
+              <input
+                type="file"
+                id="input-image-song"
+                onChange={onChangeImage}
+                accept="image/png, image/jpeg"
+              />
+            </label>
+            {imageFile && (
+              <button
+                className="btn-delete-image"
+                onClick={() => resetFileInputImage()}
+              >
+                <i className="fa-regular fa-trash"></i>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="FormSong__bottom">
+        <button className="btn-cancel">Thoát</button>
+        <button className="btn-submit">Tiếp</button>
       </div>
     </div>
   );

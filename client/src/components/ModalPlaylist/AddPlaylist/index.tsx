@@ -104,6 +104,16 @@ const AddPlaylist = ({ closeModal, openModal }: props) => {
     }
   );
 
+  const resetFileInput = () => {
+    const fileInput = document.getElementById(
+      "input-image-playlist"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    setImageFile(null);
+  };
+
   return (
     <div className="ModalAdd">
       {error && (
@@ -118,22 +128,27 @@ const AddPlaylist = ({ closeModal, openModal }: props) => {
             src={imageFile ? URL.createObjectURL(imageFile) : Images.PLAYLIST}
             alt=""
           />
-          <label htmlFor="input-image" className="ModalAdd__top__image__edit">
+          <label
+            htmlFor="input-image-playlist"
+            className="ModalAdd__top__image__edit"
+          >
             <i className="fa-regular fa-pen-to-square"></i>
             <span>{t("AddNewPlaylist.EditImage")}</span>
             <input
               type="file"
-              id="input-image"
+              id="input-image-playlist"
               onChange={onChangeImage}
               accept="image/png, image/jpeg"
             />
+          </label>
+          {imageFile && (
             <button
               className="ModalAdd__top__image__edit__delete"
-              onClick={() => setImageFile(null)}
+              onClick={() => resetFileInput()}
             >
               <i className="fa-regular fa-trash"></i>
             </button>
-          </label>
+          )}
         </div>
         <div className="ModalAdd__top__body">
           <div className="ModalAdd__top__body__title">

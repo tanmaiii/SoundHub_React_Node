@@ -4,6 +4,23 @@
   @include themify($themes) {
     width: 100%;
     position: relative;
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: themed("bg-3");
+      border: none;
+    }
+
     &__header {
       @include flex(center, space-between, row);
       cursor: pointer;
@@ -113,7 +130,7 @@
             display: none;
             width: 12px;
             height: 12px;
-            background-color: themed('bg-3');
+            background-color: themed("bg-3");
             border-radius: 50%;
             position: absolute;
             top: 50%;

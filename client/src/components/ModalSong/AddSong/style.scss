@@ -1,7 +1,7 @@
 @use "../../../scss/" as *;
 
 .AddSong {
-  padding: $space-24;
+  // padding: $space-24;
   height: 75vh;
   width: 60vw;
 
@@ -179,14 +179,90 @@
 
 .FormSong {
   @include themify($themes) {
+    @include flex(unset, space-between, column);
+    height: 100%;
     &__top {
+      border-top: 1px solid themed("border");
       width: 100%;
       height: 100px;
-      background-color: themed("bg-2");
+      // background-color: themed("bg-2");
+      padding: $space-24;
+
+      .box-audio {
+        background-color: themed("bg-2");
+        padding: $space-12;
+        border-radius: $radius-8;
+        @include flex(center, space-between, row);
+        gap: $space-8;
+        .btn-play {
+          cursor: pointer;
+          i {
+            --size: 36px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-18;
+            color: $color-white;
+            background-color: $color-primary1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: $transition;
+            &:hover {
+              transform: scale(0.98);
+            }
+          }
+        }
+
+        .btn-volume {
+          cursor: pointer;
+          i {
+            --size: 36px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-18;
+            color: $color-white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: $transition;
+            &:hover {
+              transform: scale(0.98);
+            }
+          }
+        }
+
+        &__body {
+          flex: 1;
+          position: relative;
+          .progress {
+            height: 6px;
+            width: 100%;
+            background-color: $color-primary1;
+            border-radius: $radius-4;
+          }
+          .time {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: calc(100% + 4px);
+            @include flex(center, space-between);
+            span{
+              font-size: $size-12;
+              color: themed("txt-second");
+              font-weight: $font-light;
+            }
+          }
+        }
+      }
     }
     &__body {
-      margin-top: $space-12;
+      padding: 0 $space-24;
       @include flex(unset, unset, row);
+      gap: $space-24;
+      @include mobile {
+        @include flex(unset, unset, column-reverse);
+      }
+
       &__left {
         @include flex(unset, unset, column);
         flex: 1;
@@ -246,10 +322,127 @@
             text-align: right;
           }
         }
+
+        .dropdowns {
+          @include flex(unset, unset, row);
+          gap: $space-12;
+          @include mobile {
+            @include flex(unset, unset, column);
+          }
+        }
       }
 
       &__right {
-        width: 200px;
+        width: 240px;
+        h4 {
+          font-size: $size-16;
+          color: themed("txt-main");
+          font-weight: $font-light;
+        }
+        span {
+          font-size: $size-14;
+          color: themed("txt-second");
+          font-weight: $font-light;
+        }
+        &__image {
+          size: 100%;
+          width: var(--size);
+          height: var(--size);
+          position: relative;
+          aspect-ratio: 1/1;
+          margin-top: $space-12;
+
+          img {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            border-radius: $radius-4;
+            object-fit: cover;
+          }
+
+          .btn-delete-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            i {
+              --size: 36px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+              color: themed("txt-second");
+              border-radius: 50%;
+              cursor: pointer;
+              transition: $transition;
+              &:hover {
+                color: themed("txt-main");
+                background-color: themed("bg-3");
+              }
+            }
+          }
+
+          &__default {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            border-radius: $radius-4;
+            border: 2px dashed themed("border");
+            @include flex(center, center, column);
+            gap: $space-4;
+            color: themed("border");
+            cursor: pointer;
+            input {
+              opacity: 0;
+              display: none;
+            }
+            i {
+              font-size: 40px;
+              color: themed("border");
+            }
+            span {
+              font-size: $size-14;
+              color: themed("border");
+            }
+            &:hover {
+              background-color: rgba(themed("bg-1"), 0.9);
+              border-color: themed("txt-second");
+              i,
+              span {
+                color: themed("txt-second");
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &__bottom {
+      @include flex(center, end, row);
+      border-top: 1px solid themed("border");
+      padding: $space-12 $space-24;
+      margin-top: auto;
+      gap: $space-14;
+
+      button {
+        padding: $space-12 $space-24;
+        border-radius: $radius-4;
+        font-size: $size-16;
+        font-weight: $font-medium;
+        color: $color-white;
+        background-color: $color-primary1;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+          scale: 0.98;
+        }
+      }
+      & > button:first-child {
+        background-color: themed("bg-3");
       }
     }
   }
