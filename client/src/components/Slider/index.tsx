@@ -10,7 +10,6 @@ const Slider = ({ percentage = 0, onChange }: props) => {
   const [position, setPosition] = useState(0);
   const [marginLeft, setMarginLeft] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
-  const [progress, setProgress] = useState<number>(0);
 
   const rangeRef = useRef<HTMLInputElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -26,11 +25,6 @@ const Slider = ({ percentage = 0, onChange }: props) => {
     setPosition(percentage);
     setMarginLeft(centerThumb);
     setProgressBarWidth(centerProgressBar);
-
-    centerProgressBar && rangeWidth && setProgress((centerProgressBar / rangeWidth) * 100)
-
-    console.log(percentage);
-    
   }, [percentage]);
 
   return (

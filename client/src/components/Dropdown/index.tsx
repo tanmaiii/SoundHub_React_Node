@@ -18,7 +18,6 @@ const Dropdown = ({
   changeSelected,
 }: props) => {
   const [activeDropdown, setActiveDropdown] = React.useState<boolean>(false);
-  const { t } = useTranslation("playlist");
   const [selected, setSelected] = React.useState<{ id: string; title: string }>(
     options[1]
   );
@@ -41,7 +40,7 @@ const Dropdown = ({
     };
   }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     changeSelected(selected);
     setActiveDropdown(false);
   }, [selected]);

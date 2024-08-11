@@ -70,7 +70,7 @@ const CardSong = ({ song }: CardSongProps) => {
 
   const checkLiked = async () => {
     try {
-      const res: any = await songApi.checkLikedSong(song.id, token ?? "");
+      const res: any = await songApi.checkLikedSong(song.id ?? '', token ?? "");
       setLike(res.isLiked);
     } catch (error) {
       console.log(error);
@@ -83,8 +83,8 @@ const CardSong = ({ song }: CardSongProps) => {
 
   const likeMutation = useMutation(
     async (like: boolean) => {
-      if (!like) return songApi.likeSong(song.id, token ?? "");
-      return songApi.unLikeSong(song.id, token ?? "");
+      if (!like) return songApi.likeSong(song.id ?? '', token ?? "");
+      return songApi.unLikeSong(song.id ?? '', token ?? "");
     },
     {
       onSuccess: () => {

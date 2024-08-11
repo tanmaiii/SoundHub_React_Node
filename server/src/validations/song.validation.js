@@ -4,6 +4,7 @@ const bodySchema = {
   body: Joi.object().keys({
     title: Joi.string().min(0).max(255),
     genre_id: Joi.number(),
+    desc: Joi.string().min(0).max(500),
     image_path: Joi.string().min(0).max(255),
     song_path: Joi.string().min(0).max(255),
     public: Joi.number().valid(0, 1),

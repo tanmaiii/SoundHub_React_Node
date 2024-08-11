@@ -158,7 +158,7 @@ export default function Header() {
         setOpenModal={setOpenModalUpload}
         title="Upload"
       >
-        <AddSong />
+        <AddSong closeModal={() => setOpenModalUpload(false)} />
       </Modal>
     </>
   );

@@ -1,34 +1,19 @@
 import { TUser } from "./../../types/user.type";
 import { ListResponse, TSong } from "../../types";
-import {axiosClient} from "../../configs";
+import { axiosClient } from "../../configs";
 
 interface CheckLikedResponse {
   isLiked: boolean;
 }
 
 const songApi = {
-  createSong(
-    token: string,
-    title: string,
-    isPublic: number,
-    image_path: string,
-    song_path: string
-  ) {
+  createSong(token: string, body: TSong) {
     const url = "song";
-    return axiosClient.post(
-      url,
-      {
-        title: title,
-        public: isPublic,
-        image_path: image_path,
-        song_path: song_path,
+    return axiosClient.post(url, body, {
+      headers: {
+        authorization: token,
       },
-      {
-        headers: {
-          authorization: token,
-        },
-      }
-    );
+    });
   },
   updateSong(token: string, songId: string, body: any) {
     // Update song
@@ -51,7 +36,12 @@ const songApi = {
       }
     );
   },
-  getAll(page: number, limit: number, q?: string, sort?: string): Promise<ListResponse<TSong>> {
+  getAll(
+    page: number,
+    limit: number,
+    q?: string,
+    sort?: string
+  ): Promise<ListResponse<TSong>> {
     const url = "song";
     return axiosClient.get(url, {
       params: {

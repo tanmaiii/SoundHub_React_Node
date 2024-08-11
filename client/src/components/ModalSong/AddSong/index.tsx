@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./style.scss";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { genreApi, imageApi, mp3Api, songApi } from "../../../apis";
 import Dropdown from "../../Dropdown";
-import { genreApi } from "../../../apis";
-import { useQuery } from "react-query";
-import Images from "../../../constants/images";
-import WavesurferPlayer from "@wavesurfer/react";
-import { apiConfig } from "../../../configs";
 import Slider from "../../Slider";
+import "./style.scss";
+import { useAuth } from "../../../context/authContext";
 
-const AddSong = () => {
+type TAddSong = {
+  closeModal: () => void;
+};
+
+const AddSong = ({ closeModal }: TAddSong) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [errorFile, setErrorFile] = useState(false);
@@ -52,7 +54,7 @@ const AddSong = () => {
           />
         )}
 
-        {file && !errorFile && <FormSong file={file} />}
+        {file && !errorFile && <FormSong file={file} closeModal={closeModal} />}
         {/* <FormSong /> */}
       </div>
     </div>
@@ -133,28 +135,60 @@ export const UploadSong = ({
   );
 };
 
-export const FormSong = ({ file: fileMp3 }: { file: File }) => {
+type TFormSong = {
+  file: File;
+  closeModal: () => void;
+};
+
+export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const { token, currentUser } = useAuth();
+  const queryClient = useQueryClient();
+  interface TError {
+    title: string;
+    desc: string;
+    genre_id: string;
+    public: string;
+    image_path: string;
+    song_path: string;
+  }
+
   interface Inputs {
     title: string;
     desc: string;
     genre_id: string;
     public: number;
     image_path: string;
+    song_path: string;
   }
 
-  const [inputs, setInputs] = useState<Inputs>({
+  const [error, setError] = useState<TError>({
     title: "",
+    desc: "",
+    genre_id: "",
+    public: "",
+    image_path: "",
+    song_path: "",
+  });
+
+  const [inputs, setInputs] = useState<Inputs>({
+    title: fileMp3?.name?.split(".")[0] || "",
     desc: "",
     genre_id: "",
     public: 1,
     image_path: "",
+    song_path: "",
   });
+
+  const updateError = (newValue: Partial<TError>) => {
+    setError((prevState) => ({ ...prevState, ...newValue }));
+  };
 
   const updateState = (newValue: Partial<Inputs>) => {
     setInputs((prevState) => ({ ...prevState, ...newValue }));
   };
 
+  //Lấy danh sách thể loại
   const { data: genres } = useQuery({
     queryKey: ["genres"],
     queryFn: async () => {
@@ -167,12 +201,14 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
     },
   });
 
+  //Xử lý sự kiện thay đổi file hình ảnh
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
     }
   };
 
+  //Reset file input image
   const resetFileInputImage = () => {
     const fileInput = document.getElementById(
       "input-image-song"
@@ -183,6 +219,72 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
     setImageFile(null);
   };
 
+  //Xử lý sự kiện click nút submit
+  const handleClickSubmit = async () => {
+    try {
+      if (
+        error.title.trim() !== "" ||
+        error.desc.trim() !== "" ||
+        error.image_path.trim() !== "" ||
+        error.song_path.trim() !== "" ||
+        error.public.trim() !== "" ||
+        error.genre_id.trim() !== ""
+      )
+        return;
+      let updatedInputs;
+
+      const formDataImage = new FormData();
+      imageFile && formDataImage.append("image", imageFile);
+
+      const formDataMp3 = new FormData();
+      fileMp3 && formDataMp3.append("mp3", fileMp3);
+
+      //Tải ảnh lên server
+      const resImage = await imageApi.upload(formDataImage, token);
+      const resMp3 = await mp3Api.upload(formDataMp3, token);
+
+      updatedInputs = {
+        ...inputs,
+        image_path: resImage.image,
+        song_path: resMp3.mp3,
+      };
+
+      await songApi.createSong(token, updatedInputs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const mutionSave = useMutation(
+    () => {
+      return handleClickSubmit();
+    },
+    {
+      onSuccess: () => {
+        closeModal();
+        queryClient.invalidateQueries({
+          queryKey: ["songs", currentUser?.id],
+        });
+        // queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
+        // queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (inputs.title.trim() === "") {
+      updateError({ title: "Title is required" });
+    } else {
+      updateError({ title: "" });
+    }
+
+    if (!imageFile) {
+      updateError({ image_path: "Image is required" });
+    } else {
+      updateError({ image_path: "" });
+    }
+  }, [inputs, imageFile]);
+
   return (
     <div className="FormSong">
       <div className="FormSong__top">
@@ -190,7 +292,7 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
       </div>
       <div className="FormSong__body">
         <div className="FormSong__body__left">
-          <div className="Form-box">
+          <div className={`Form-box ${error.title ? "error" : ""}`}>
             <div className="Form-box__label">
               <span>Tiêu đề (bắt buộc): </span>
             </div>
@@ -198,6 +300,7 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
               type="text"
               id="title"
               value={inputs?.title}
+              defaultValue={inputs?.title}
               placeholder="Thêm tiêu đề để thu hút người nghe"
               name="title"
               maxLength={100}
@@ -225,26 +328,19 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
             <Dropdown
               title={"Thể loại"}
               defaultSelected={"1"}
-              changeSelected={
-                (selected: { id: string; title: string }) =>
-                  console.log(selected)
-
-                // setInputs((prev) => ({
-                //   ...prev,
-                //   public: parseInt(selected?.id),
-                // }))
-              }
+              changeSelected={(selected: { id: string; title: string }) => {
+                updateState({ public: parseInt(selected?.id) });
+              }}
               options={[
-                { id: "0", title: "Public" },
-                { id: "1", title: "Private" },
+                { id: "0", title: "Private" },
+                { id: "1", title: "Public" },
               ]}
             />
             <Dropdown
               title={"Thể loại"}
               defaultSelected={genres?.[0]?.id ?? ""}
               changeSelected={(selected: { id: string; title: string }) =>
-                // setInputs((prev) => ({ ...prev, genre_id: selected?.id }))
-                console.log(selected)
+                updateState({ genre_id: selected?.id })
               }
               options={
                 genres?.map((genre) => ({
@@ -266,7 +362,9 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
             )}
             <label
               htmlFor="input-image-song"
-              className="FormSong__body__right__image__default"
+              className={`FormSong__body__right__image__default ${
+                error.image_path ? "error" : ""
+              }`}
             >
               <i className="fa-light fa-image"></i>
               <span>Tải tệp lên</span>
@@ -289,8 +387,10 @@ export const FormSong = ({ file: fileMp3 }: { file: File }) => {
         </div>
       </div>
       <div className="FormSong__bottom">
-        <button className="btn-cancel">Thoát</button>
-        <button className="btn-submit">Tiếp</button>
+        <button className="btn-cancel" onClick={() => closeModal()}>Thoát</button>
+        <button className="btn-submit" onClick={() => mutionSave.mutate()}>
+          Tiếp
+        </button>
       </div>
     </div>
   );
@@ -314,8 +414,6 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
   let [minutesPlay, setMinutesPlay] = useState<string>("00");
   let [secondsPlay, setSecondsPlay] = useState<string>("00");
 
-  const [progress, setProgress] = useState<number>(0);
-
   useEffect(() => {
     fileMp3 ? setUrlMp3(URL.createObjectURL(fileMp3)) : setUrlMp3(null);
   }, [fileMp3]);
@@ -329,28 +427,30 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
   };
 
   const handlePlay = () => {
-    setPlay(!play);
     if (audioRef.current?.paused) {
+      setPlay(true);
       audioRef.current?.play();
     } else {
+      setPlay(false);
       audioRef.current?.pause();
     }
   };
 
   useEffect(() => {
-    if (audioRef.current?.duration) {
+    const duration = audioRef.current?.duration;
+    if (duration) {
       setMinutes(
-        Math.floor(audioRef.current?.duration / 60)
+        Math.floor(duration / 60)
           .toString()
           .padStart(2, "0")
       );
       setSeconds(
-        Math.floor(audioRef.current?.duration % 60)
+        Math.floor(duration % 60)
           .toString()
           .padStart(2, "0")
       );
     }
-  }, [urlMp3]);
+  }, [audioRef]);
 
   const onPlaying = () => {
     const duration = audioRef.current?.duration;
@@ -385,8 +485,13 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
           .toString()
           .padStart(2, "0")
       );
+  };
 
-    ct && duration && setProgress((ct / duration) * 100);
+  const onEndedAuido = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; // Đặt thời gian phát lại về 0
+      audioRef.current.play(); // Phát lại âm thanh từ đầu
+    }
   };
 
   useEffect(() => {
@@ -400,6 +505,7 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
         id="audio"
         src={urlMp3 ? urlMp3 : ""}
         onTimeUpdate={onPlaying}
+        onEnded={onEndedAuido}
       ></audio>
 
       <button className="btn-play" onClick={() => handlePlay()}>
@@ -410,7 +516,6 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
         )}
       </button>
       <div className="box-audio__body">
-        {/* <div className="progress"></div> */}
         <Slider percentage={percentage} onChange={onChangeSlider} />
         <div className="time">
           <span>{`${minutesPlay}:${secondsPlay}`}</span>

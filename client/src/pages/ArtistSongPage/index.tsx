@@ -23,7 +23,9 @@ export default function ArtistSongPage() {
     }
   };
 
-  const { isLoading, error, data } = useQuery(["songs"], () => handleGetSong());
+  const { isLoading, error, data } = useQuery(["songs", id], () =>
+    handleGetSong()
+  );
 
   return (
     <div className="discography">
@@ -56,11 +58,7 @@ export default function ArtistSongPage() {
           </div>
         </div>
         <div className="discography__container__body">
-          <TableTrack
-            songs={songs || []}
-            isLoading={true}
-            userId={id}
-          />
+          <TableTrack songs={songs || []} isLoading={true} userId={id} />
         </div>
       </div>
     </div>

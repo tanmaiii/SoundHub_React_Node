@@ -34,7 +34,7 @@ const TableTrack = ({
       songs.map((item) =>
         setSongsNew((prev) => [
           ...prev,
-          { id: item?.id, num_song: item?.num_song ?? 0 },
+          { id: item?.id ?? "", num_song: item?.num_song ?? 0 },
         ])
       );
   }, [songs]);
@@ -147,7 +147,7 @@ const TableTrack = ({
                       songs.map((item, index) => (
                         <Draggable
                           key={item.id}
-                          draggableId={item.id}
+                          draggableId={item.id ?? ""}
                           index={index}
                           isDragDisabled={isDragEnabled}
                         >

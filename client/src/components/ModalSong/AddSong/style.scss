@@ -188,6 +188,10 @@
       // background-color: themed("bg-2");
       padding: $space-24;
 
+      @include mobile {
+        padding: $space-12;
+      }
+
       .box-audio {
         background-color: themed("bg-2");
         padding: $space-12;
@@ -259,8 +263,10 @@
       padding: 0 $space-24;
       @include flex(unset, unset, row);
       gap: $space-24;
+
       @include mobile {
         @include flex(unset, unset, column-reverse);
+        padding: 0 $space-12;
       }
 
       &__left {
@@ -276,7 +282,12 @@
           border: 1.4px solid themed("border");
           padding: 0 $space-12 $space-4 $space-12;
 
-          &:hover {
+          &.error {
+            border-width: 1.8px;
+            border-color: $color-red;
+          }
+
+          &:not(.error):hover {
             border-color: themed("txt-second");
           }
 
@@ -395,6 +406,23 @@
             gap: $space-4;
             color: themed("border");
             cursor: pointer;
+
+            &.error {
+              border-color: $color-red;
+            }
+
+            &:not(.error):hover {
+              background-color: rgba(themed("bg-1"), 0.9);
+              border-color: themed("txt-second");
+            }
+
+            &:hover {
+              i,
+              span {
+                color: themed("txt-second");
+              }
+            }
+
             input {
               opacity: 0;
               display: none;
@@ -406,14 +434,6 @@
             span {
               font-size: $size-14;
               color: themed("border");
-            }
-            &:hover {
-              background-color: rgba(themed("bg-1"), 0.9);
-              border-color: themed("txt-second");
-              i,
-              span {
-                color: themed("txt-second");
-              }
             }
           }
         }
