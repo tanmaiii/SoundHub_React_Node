@@ -10,6 +10,7 @@ const Slider = ({ percentage = 0, onChange }: props) => {
   const [position, setPosition] = useState(0);
   const [marginLeft, setMarginLeft] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const [isMouseDown, setIsMouseDown] = useState(false);
 
   const rangeRef = useRef<HTMLInputElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -31,10 +32,10 @@ const Slider = ({ percentage = 0, onChange }: props) => {
     <div className="slider">
       <div
         className="slider__progress"
-        style={{ width: `${progressBarWidth}px`}}
+        style={{ width: `${progressBarWidth}px` }}
       ></div>
       <div
-        className="slider__thumb"
+        className={`slider__thumb ${isMouseDown ? "active" : ""}`}
         ref={thumbRef}
         style={{ left: `${position}%`, marginLeft: `${marginLeft}px` }}
       ></div>
@@ -44,6 +45,8 @@ const Slider = ({ percentage = 0, onChange }: props) => {
         ref={rangeRef}
         step="0.01"
         className="slider__range"
+        onMouseDown={() => setIsMouseDown(true)}
+        onMouseUp={() => setIsMouseDown(false)}
         onChange={onChange}
       />
     </div>

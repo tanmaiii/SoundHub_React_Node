@@ -33,10 +33,10 @@
         border-radius: $radius-4;
         background-color: themed("bg-2");
         color: themed("txt-main");
-        border: 1px solid transparent;
+        border: 1.4px solid themed("border");
         cursor: pointer;
         &:focus {
-          border: 1px solid themed("border");
+          border: 1.4px solid themed("border");
         }
         &:not(:placeholder-shown) + label,
         &:focus + label {
@@ -44,6 +44,10 @@
           font-size: $size-14;
           font-weight: $font-medium;
           color: themed("txt-second");
+        }
+
+        &:hover{
+          border: 1.4px solid themed("txt-second");
         }
       }
       label {
@@ -128,9 +132,9 @@
             content: "";
             font-weight: 999;
             display: none;
-            width: 12px;
-            height: 12px;
-            background-color: themed("bg-3");
+            width: 10px;
+            height: 10px;
+            background-color: themed("bg-2");
             border-radius: 50%;
             position: absolute;
             top: 50%;

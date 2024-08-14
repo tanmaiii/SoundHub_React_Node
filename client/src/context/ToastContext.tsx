@@ -1,9 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import ToastMessage from "../components/ToastMessage";
 
+type TToast = {
+  value: string;
+  type?: "success" | "error" | "warning";
+};
+
 interface IToastContext {
-  toastMessage: string;
-  setToastMessage: (value: string) => void;
+  toastMessage: TToast | null;
+  setToastMessage: React.Dispatch<React.SetStateAction<TToast | null>>;
 }
 
 export const ToastContext = createContext<IToastContext | null>(null);
@@ -17,7 +22,7 @@ export function useToast() {
 }
 
 export const ToastContextProvider = ({ children }: Props) => {
-  const [toastMessage, setToastMessage] = useState<string>("");
+  const [toastMessage, setToastMessage] = useState<TToast | null>(null);
   const toastRef = React.useRef<any>(null);
 
   useEffect(() => {
@@ -34,7 +39,8 @@ export const ToastContextProvider = ({ children }: Props) => {
   return (
     <ToastContext.Provider value={contextValue}>
       <ToastMessage
-        description={toastMessage}
+        type={toastMessage?.type || "success"}
+        description={toastMessage?.value || ""}
         showToast={() => console.log("asdas")}
         ref={toastRef}
       />

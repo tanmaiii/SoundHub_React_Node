@@ -357,15 +357,22 @@ const ItemPlaylist = ({
   const mutationAdd = useMutation({
     mutationFn: async (isAdd: boolean) => {
       if (isAdd) {
-        setToastMessage(`Đã xóa bài hát khỏi danh sách phát ${playlist.title}`);
+        setToastMessage({
+          value: `Đã xóa bài hát khỏi danh sách phát ${playlist.title}`,
+          type: "success",
+        });
         return await playlistApi.removeSong(playlist.id ?? "", songId, token);
       }
       if (countSongs && countSongs < 10) {
-        setToastMessage("Playlist đã đầy, không thể thêm bài hát");
+        setToastMessage({
+          value: "Playlist đã đầy, không thể thêm bài hát",
+          type: "error",
+        });
       }
-      setToastMessage(
-        `Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`
-      );
+      setToastMessage({
+        value: `Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`,
+        type: "success",
+      });
       return await playlistApi.addSong(playlist.id ?? "", songId, token);
       // setOpenModal(true);
     },

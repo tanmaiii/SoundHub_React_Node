@@ -21,6 +21,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useAuth();
   const { t } = useTranslation("header");
+  const { t: tSong } = useTranslation("song");
   const navigation = useNavigate();
   const [keyword, setKeyword] = useState("");
   const { pathname } = useLocation();
@@ -156,7 +157,7 @@ export default function Header() {
       <Modal
         openModal={openModalUpload}
         setOpenModal={setOpenModalUpload}
-        title="Upload"
+        title={tSong('Upload.Post song')}
       >
         <AddSong closeModal={() => setOpenModalUpload(false)} />
       </Modal>

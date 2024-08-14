@@ -5,6 +5,8 @@ import Dropdown from "../../Dropdown";
 import Slider from "../../Slider";
 import "./style.scss";
 import { useAuth } from "../../../context/authContext";
+import { useToast } from "../../../context/ToastContext";
+import { useTranslation } from "react-i18next";
 
 type TAddSong = {
   closeModal: () => void;
@@ -14,6 +16,7 @@ const AddSong = ({ closeModal }: TAddSong) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [errorFile, setErrorFile] = useState(false);
+  const { t } = useTranslation("song");
 
   const onDragEnter = () => {
     setOpenDrop(true);
@@ -54,7 +57,9 @@ const AddSong = ({ closeModal }: TAddSong) => {
           />
         )}
 
-        {file && !errorFile && <FormSong file={file} closeModal={closeModal} />}
+        {file && !errorFile && (
+          <FormSong file={file} setFile={setFile} closeModal={closeModal} />
+        )}
         {/* <FormSong /> */}
       </div>
     </div>
@@ -80,14 +85,16 @@ export const UploadSong = ({
     return `${(size / 1024).toFixed()} KB`;
   };
 
+  const { t } = useTranslation("song");
+
   return (
     <div className="UploadSong">
       <div className={`UploadSong__icon ${DragIn ? "dragIn" : ""}`}>
         <i className="fa-solid fa-upload"></i>
       </div>
-      <h4>Drag and drop audio files to upload</h4>
-      <p>Your song will be private until you publish it.</p>
-      <label htmlFor="file-1">Choose file</label>
+      <h4>{t("Upload.Drag and drop audio files to upload")}</h4>
+      <p>{t("Upload.Your song will be private until you publish it.")}</p>
+      <label htmlFor="file-1">{t("Upload.Chose file")}</label>
       <input
         onChange={handleUpload}
         id="file-1"
@@ -99,7 +106,7 @@ export const UploadSong = ({
         {file && errorFile && (
           <div className="error">
             <i className="fa-regular fa-triangle-exclamation"></i>
-            <p>File type not supported. Please choose another file.</p>
+            <p>{t("Upload.Error file mp3")}</p>
           </div>
         )}
 
@@ -111,7 +118,6 @@ export const UploadSong = ({
             <div className="file-item__desc">
               <h6>{file.name}</h6>
               <p>{formatFileSize(file.size)}</p>
-              {/* <p>{file.type}</p> */}
             </div>
             <button onClick={() => setFile(null)}>
               <i className="fa-solid fa-xmark"></i>
@@ -121,15 +127,8 @@ export const UploadSong = ({
       </div>
 
       <div className="UploadSong__desc">
-        <p>
-          By uploading a video to YouTube, you confirm that you agree to
-          YouTube's <a href="">Terms of Service</a> and{" "}
-          <a href="">Community Guidelines</a>.
-        </p>
-        <p>
-          You must ensure that you do not violate the copyrights or privacy of
-          others.
-        </p>
+        <p>{t("Upload.Regulations 1")}</p>
+        <p>{t("Upload.Regulations 2")}</p>
       </div>
     </div>
   );
@@ -137,13 +136,20 @@ export const UploadSong = ({
 
 type TFormSong = {
   file: File;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
   closeModal: () => void;
 };
 
-export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
+export const FormSong = ({
+  file: fileMp3,
+  setFile: setFileMp3,
+  closeModal,
+}: TFormSong) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { token, currentUser } = useAuth();
+  const { setToastMessage } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useTranslation("song");
   interface TError {
     title: string;
     desc: string;
@@ -229,8 +235,13 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
         error.song_path.trim() !== "" ||
         error.public.trim() !== "" ||
         error.genre_id.trim() !== ""
-      )
+      ) {
+        setToastMessage({
+          value: "Vui lòng kiểm tra lại thông tin",
+          type: "error",
+        });
         return;
+      }
       let updatedInputs;
 
       const formDataImage = new FormData();
@@ -250,6 +261,8 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
       };
 
       await songApi.createSong(token, updatedInputs);
+      closeModal();
+      setToastMessage({ value: "Thêm bài hát thành công", type: "success" });
     } catch (error) {
       console.log(error);
     }
@@ -261,7 +274,6 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
     },
     {
       onSuccess: () => {
-        closeModal();
         queryClient.invalidateQueries({
           queryKey: ["songs", currentUser?.id],
         });
@@ -271,19 +283,44 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
     }
   );
 
-  useEffect(() => {
+  const handleSubmit = () => {
     if (inputs.title.trim() === "") {
       updateError({ title: "Title is required" });
+      return;
     } else {
       updateError({ title: "" });
     }
 
     if (!imageFile) {
       updateError({ image_path: "Image is required" });
+      return;
     } else {
       updateError({ image_path: "" });
     }
-  }, [inputs, imageFile]);
+
+    mutionSave.mutate();
+  };
+
+  const handleCancel = () => {
+    updateState({
+      title: "",
+      desc: "",
+      genre_id: "",
+      public: 1,
+      image_path: "",
+      song_path: "",
+    });
+    setFileMp3(null);
+    updateError({
+      title: "",
+      desc: "",
+      genre_id: "",
+      public: "",
+      image_path: "",
+      song_path: "",
+    });
+    closeModal();
+  };
 
   return (
     <div className="FormSong">
@@ -294,14 +331,14 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
         <div className="FormSong__body__left">
           <div className={`Form-box ${error.title ? "error" : ""}`}>
             <div className="Form-box__label">
-              <span>Tiêu đề (bắt buộc): </span>
+              <span>{t("Upload.Title")}</span>
             </div>
             <input
               type="text"
               id="title"
               value={inputs?.title}
               defaultValue={inputs?.title}
-              placeholder="Thêm tiêu đề để thu hút người nghe"
+              placeholder={t("Upload.Title desc")}
               name="title"
               maxLength={100}
               onChange={(e) => updateState({ title: e.target.value })}
@@ -311,12 +348,12 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
 
           <div className="Form-box">
             <div className="Form-box__label">
-              <span>Mô tả: </span>
+              <span>{t("Upload.Describe")}</span>
             </div>
             <textarea
               id="desc"
               value={inputs?.desc}
-              placeholder="Thêm mô tả để mô tả bài hát của bạn"
+              placeholder={t("Upload.Describe desc")}
               name="desc"
               maxLength={400}
               onChange={(e) => updateState({ desc: e.target.value })}
@@ -326,18 +363,18 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
 
           <div className="dropdowns">
             <Dropdown
-              title={"Thể loại"}
+              title={t("Upload.Visibility")}
               defaultSelected={"1"}
               changeSelected={(selected: { id: string; title: string }) => {
                 updateState({ public: parseInt(selected?.id) });
               }}
               options={[
-                { id: "0", title: "Private" },
-                { id: "1", title: "Public" },
+                { id: "0", title: t("Upload.Private") },
+                { id: "1", title: t("Upload.Public") },
               ]}
             />
             <Dropdown
-              title={"Thể loại"}
+              title={t("Upload.Genre")}
               defaultSelected={genres?.[0]?.id ?? ""}
               changeSelected={(selected: { id: string; title: string }) =>
                 updateState({ genre_id: selected?.id })
@@ -352,10 +389,8 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
           </div>
         </div>
         <div className="FormSong__body__right">
-          <h4>Hình ảnh đại diện</h4>
-          <span>
-            Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem
-          </span>
+          <h4>{t("Upload.Image")}</h4>
+          <span>{t("Upload.Image desc")}</span>
           <div className="FormSong__body__right__image">
             {imageFile && (
               <img src={imageFile && URL.createObjectURL(imageFile)} alt="" />
@@ -367,7 +402,7 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
               }`}
             >
               <i className="fa-light fa-image"></i>
-              <span>Tải tệp lên</span>
+              <span>{t("Upload.Upload image")}</span>
               <input
                 type="file"
                 id="input-image-song"
@@ -387,9 +422,11 @@ export const FormSong = ({ file: fileMp3, closeModal }: TFormSong) => {
         </div>
       </div>
       <div className="FormSong__bottom">
-        <button className="btn-cancel" onClick={() => closeModal()}>Thoát</button>
-        <button className="btn-submit" onClick={() => mutionSave.mutate()}>
-          Tiếp
+        <button className="btn-cancel" onClick={() => handleCancel()}>
+          {t("Upload.Cancel")}
+        </button>
+        <button className="btn-submit" onClick={() => handleSubmit()}>
+          {t("Upload.Post")}
         </button>
       </div>
     </div>

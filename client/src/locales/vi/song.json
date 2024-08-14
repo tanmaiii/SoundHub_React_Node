@@ -1,15 +1,37 @@
 {
-    "song" : "Bài hát",
-    "playlist" : "Danh sách phát",
-    "comments" : "Bình luận",
-    "Menu" : {
-        "Add to playlist" : "Thêm vào danh sách phát",
-        "Remove to playlist" : "Xóa khỏi danh sách phát này",
-        "Remove to favorites list" : "Xóa khỏi danh sách yêu thích",
-        "Add to favorites list" : "Thêm vào danh sách yêu thích",
-        "Add to waiting list" : "Thêm vào danh sách chờ",
-        "See details" : "Xem chi tiết",
-        "Artist Access" : "Truy cập nghệ sĩ",
-        "Share" : "Chia sẻ"
-    }
+  "song": "Bài hát",
+  "playlist": "Danh sách phát",
+  "comments": "Bình luận",
+  "Menu": {
+    "Add to playlist": "Thêm vào danh sách phát",
+    "Remove to playlist": "Xóa khỏi danh sách phát này",
+    "Remove to favorites list": "Xóa khỏi danh sách yêu thích",
+    "Add to favorites list": "Thêm vào danh sách yêu thích",
+    "Add to waiting list": "Thêm vào danh sách chờ",
+    "See details": "Xem chi tiết",
+    "Artist Access": "Truy cập nghệ sĩ",
+    "Share": "Chia sẻ"
+  },
+  "Upload": {
+    "Post song": "Tải lên bài hát",
+    "Drag and drop audio files to upload": "Kéo và thả tệp âm thanh để tải lên",
+    "Error file mp3": "Loại tệp không được hỗ trợ. Vui lòng chọn tệp khác",
+    "Your song will be private until you publish it.": "Bài hát của bạn sẽ được giữ riêng tư cho đến khi bạn xuất bản nó.",
+    "Chose file": "Chọn tệp",
+    "Regulations 1": "Bằng cách tải video lên SoudHub, bạn xác nhận rằng bạn đồng ý với Điều khoản dịch vụ và Hướng dẫn cộng đồng của SoudHub.",
+    "Regulations 2": "Bạn phải đảm bảo rằng bạn không vi phạm bản quyền hoặc quyền riêng tư của người khác.",
+    "Title": "Tiêu đề (bắt buộc):",
+    "Title desc" : "Thêm tiêu đề thu hút người xem",
+    "Describe": "Mô tả:",
+    "Describe desc": "Mô tả video của bạn",
+    "Visibility": "Chế độ hiển thị:",
+    "Private": "Riêng tư",
+    "Public": "Công khai",
+    "Genre": "Thể loại:",
+    "Image": "Hình ảnh:",
+    "Image desc" : "Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem",
+    "Upload image": "Tải hình ảnh lên",
+    "Cancel": "Hủy",
+    "Post": "Đăng"
+  }
 }

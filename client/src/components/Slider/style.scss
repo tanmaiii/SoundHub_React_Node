@@ -24,8 +24,8 @@
       pointer-events: none;
     }
 
-    &:hover{
-      .slider__thumb{
+    &:hover {
+      .slider__thumb {
         opacity: 1;
       }
     }
@@ -46,7 +46,6 @@
     .slider__thumb {
       width: var(--thumb-width);
       height: var(--thumb-height);
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.753);
       z-index: 3;
       background: rgb(255, 255, 255);
       position: absolute;
@@ -55,8 +54,11 @@
       transform: translate(0%, -50%);
       pointer-events: none; /* Remove pointer events on thumb so user can click on the actual thumb beaneath it!  */
       user-select: none; /*  Prevent Accidentally highlighting the number while sliding the cursor  */
-
       opacity: 0;
+      &.active {
+        -webkit-box-shadow: 0px 0px 2px 6px $color-hover;
+        box-shadow: 0px 0px 2px 6px $color-hover;
+      }
     }
     .slider__range {
       -webkit-appearance: none;
@@ -69,9 +71,6 @@
       &::-webkit-slider-thumb {
         width: var(--thumb-width);
         height: var(--thumb-height);
-
-        background: #350f2d;
-        border: 1px solid #000000;
         border-radius: 50%;
         cursor: pointer;
         -webkit-appearance: none;

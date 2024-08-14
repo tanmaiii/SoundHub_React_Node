@@ -41,9 +41,10 @@
     @include flex(center, center, column);
     margin: auto 0;
     height: 100%;
+    padding: $space-24;
 
     @include mobile {
-      margin-top: $space-12;
+      padding: $space-12;
     }
 
     &__icon {
@@ -190,73 +191,6 @@
 
       @include mobile {
         padding: $space-12;
-      }
-
-      .box-audio {
-        background-color: themed("bg-2");
-        padding: $space-12;
-        border-radius: $radius-8;
-        @include flex(center, space-between, row);
-        gap: $space-8;
-        .btn-play {
-          cursor: pointer;
-          i {
-            --size: 36px;
-            width: var(--size);
-            height: var(--size);
-            @include flex(center, center);
-            font-size: $size-18;
-            color: $color-white;
-            background-color: $color-primary1;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: $transition;
-            &:hover {
-              transform: scale(0.98);
-            }
-          }
-        }
-
-        .btn-volume {
-          cursor: pointer;
-          i {
-            --size: 36px;
-            width: var(--size);
-            height: var(--size);
-            @include flex(center, center);
-            font-size: $size-18;
-            color: $color-white;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: $transition;
-            &:hover {
-              transform: scale(0.98);
-            }
-          }
-        }
-
-        &__body {
-          flex: 1;
-          position: relative;
-          .progress {
-            height: 6px;
-            width: 100%;
-            background-color: $color-primary1;
-            border-radius: $radius-4;
-          }
-          .time {
-            position: absolute;
-            width: 100%;
-            left: 0;
-            top: calc(100% + 4px);
-            @include flex(center, space-between);
-            span {
-              font-size: $size-12;
-              color: themed("txt-second");
-              font-weight: $font-light;
-            }
-          }
-        }
       }
     }
     &__body {
@@ -497,12 +431,6 @@
     &__body {
       flex: 1;
       position: relative;
-      // .progress {
-      //   height: 6px;
-      //   width: 100%;
-      //   background-color: $color-primary1;
-      //   border-radius: $radius-4;
-      // }
       .time {
         position: absolute;
         width: 100%;
@@ -534,7 +462,7 @@
           height: var(--size);
           @include flex(center, center);
           font-size: $size-18;
-          color: $color-white;
+          color: themed('txt-main');
           border-radius: 50%;
           cursor: pointer;
           transition: $transition;
@@ -545,7 +473,7 @@
       }
 
       .volume-progress {
-        background-color: themed("txt-second");
+        background-color: themed("bg-3");
         border-radius: $radius-10;
         height: 6px;
         position: relative;
@@ -555,7 +483,7 @@
           height: 100%;
           left: 0;
           position: absolute;
-          background-color: themed("txt-main");
+          background-color: themed("txt-second");
           border-radius: $radius-10;
         }
         input {
@@ -571,7 +499,7 @@
           height: 12px;
           width: 12px;
           border-radius: 50%;
-          background: themed("txt-main");
+          background: themed("txt-second");
           pointer-events: auto;
           appearance: none;
           cursor: pointer;

@@ -14,6 +14,8 @@
   @include flex(center, center, row);
   box-shadow: $box-shadow-light;
 
+  user-select: none;
+
   &__body {
     @include flex(center, center, row);
 
