@@ -2,20 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { genreApi, imageApi, mp3Api, songApi } from "../../../apis";
 import Dropdown from "../../Dropdown";
-import Slider from "../../Slider";
 import "./style.scss";
 import { useAuth } from "../../../context/authContext";
-import { useToast } from "../../../context/ToastContext";
 import { useTranslation } from "react-i18next";
+import BoxAudio from "../../BoxAudio";
+import { toast } from "sonner";
 
-type TAddSong = {
-  closeModal: () => void;
-};
-
-const AddSong = ({ closeModal }: TAddSong) => {
+const AddSong = ({ closeModal }: { closeModal: () => void }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [errorFile, setErrorFile] = useState(false);
+  const [errorFile, setErrorFile] = useState("");
   const { t } = useTranslation("song");
 
   const onDragEnter = () => {
@@ -33,7 +29,18 @@ const AddSong = ({ closeModal }: TAddSong) => {
 
   useEffect(() => {
     file && setOpenDrop(false);
-    file?.type === "audio/mpeg" ? setErrorFile(false) : setErrorFile(true);
+    setErrorFile("");
+
+    if (file && file?.type !== "audio/mpeg") {
+      return setErrorFile(t("Upload.Error type file"));
+    }
+
+    if (file && file?.size > 5000000) {
+      console.log(file.size);
+
+      setErrorFile(t("Upload.Error size file"));
+      return;
+    }
   }, [file]);
 
   return (
@@ -79,7 +86,7 @@ export const UploadSong = ({
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   file: File | null;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  errorFile: boolean;
+  errorFile: string;
 }) => {
   const formatFileSize = (size: number) => {
     return `${(size / 1024).toFixed()} KB`;
@@ -106,7 +113,7 @@ export const UploadSong = ({
         {file && errorFile && (
           <div className="error">
             <i className="fa-regular fa-triangle-exclamation"></i>
-            <p>{t("Upload.Error file mp3")}</p>
+            <p>{errorFile}</p>
           </div>
         )}
 
@@ -134,20 +141,17 @@ export const UploadSong = ({
   );
 };
 
-type TFormSong = {
-  file: File;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  closeModal: () => void;
-};
-
 export const FormSong = ({
   file: fileMp3,
   setFile: setFileMp3,
   closeModal,
-}: TFormSong) => {
+}: {
+  file: File;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  closeModal: () => void;
+}) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { token, currentUser } = useAuth();
-  const { setToastMessage } = useToast();
   const queryClient = useQueryClient();
   const { t } = useTranslation("song");
   interface TError {
@@ -209,8 +213,14 @@ export const FormSong = ({
 
   //Xử lý sự kiện thay đổi file hình ảnh
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]?.size > 1 * 1024 * 1024) {
+      setImageFile(null);
+      updateError({ image_path: "Image size must be less than 5MB" });
+      return;
+    }
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
+      updateError({ image_path: "" });
     }
   };
 
@@ -236,10 +246,7 @@ export const FormSong = ({
         error.public.trim() !== "" ||
         error.genre_id.trim() !== ""
       ) {
-        setToastMessage({
-          value: "Vui lòng kiểm tra lại thông tin",
-          type: "error",
-        });
+        toast.error("Vui lòng kiểm tra lại thông tin");
         return;
       }
       let updatedInputs;
@@ -262,8 +269,10 @@ export const FormSong = ({
 
       await songApi.createSong(token, updatedInputs);
       closeModal();
-      setToastMessage({ value: "Thêm bài hát thành công", type: "success" });
+      resetInput();
+      toast.success("Thêm bài hát thành công");
     } catch (error) {
+      toast.error("Thêm bài hát thất bại");
       console.log(error);
     }
   };
@@ -277,8 +286,6 @@ export const FormSong = ({
         queryClient.invalidateQueries({
           queryKey: ["songs", currentUser?.id],
         });
-        // queryClient.invalidateQueries({ queryKey: ["all-favorites"] });
-        // queryClient.invalidateQueries({ queryKey: ["playlists-favorites"] });
       },
     }
   );
@@ -301,7 +308,7 @@ export const FormSong = ({
     mutionSave.mutate();
   };
 
-  const handleCancel = () => {
+  const resetInput = () => {
     updateState({
       title: "",
       desc: "",
@@ -319,16 +326,26 @@ export const FormSong = ({
       image_path: "",
       song_path: "",
     });
+  };
+
+  const handleCancel = () => {
+    resetInput();
     closeModal();
   };
 
   return (
     <div className="FormSong">
+      <div className="FormSong__danger">
+        <div className="FormSong__danger__wrapper">
+          <i className="fa-light fa-circle-exclamation"></i>
+          <span>Lưu trước khi thoát. </span>
+        </div>
+      </div>
       <div className="FormSong__top">
         <BoxAudio file={fileMp3} />
       </div>
-      <div className="FormSong__body">
-        <div className="FormSong__body__left">
+      <div className="FormSong__body row">
+        <div className="FormSong__body__left pc-9 t-8 m-12">
           <div className={`Form-box ${error.title ? "error" : ""}`}>
             <div className="Form-box__label">
               <span>{t("Upload.Title")}</span>
@@ -361,34 +378,38 @@ export const FormSong = ({
             <p className="count-letter">{`${inputs.desc.length || 0}/400`}</p>
           </div>
 
-          <div className="dropdowns">
-            <Dropdown
-              title={t("Upload.Visibility")}
-              defaultSelected={"1"}
-              changeSelected={(selected: { id: string; title: string }) => {
-                updateState({ public: parseInt(selected?.id) });
-              }}
-              options={[
-                { id: "0", title: t("Upload.Private") },
-                { id: "1", title: t("Upload.Public") },
-              ]}
-            />
-            <Dropdown
-              title={t("Upload.Genre")}
-              defaultSelected={genres?.[0]?.id ?? ""}
-              changeSelected={(selected: { id: string; title: string }) =>
-                updateState({ genre_id: selected?.id })
-              }
-              options={
-                genres?.map((genre) => ({
-                  id: genre.id ?? "",
-                  title: genre.title ?? "",
-                })) || []
-              }
-            />
+          <div className="dropdowns row row__gutter">
+            <div className="dropdowns__item col pc-6 t-12 m-12">
+              <Dropdown
+                title={t("Upload.Visibility")}
+                defaultSelected={"1"}
+                changeSelected={(selected: { id: string; title: string }) => {
+                  updateState({ public: parseInt(selected?.id) });
+                }}
+                options={[
+                  { id: "0", title: t("Upload.Private") },
+                  { id: "1", title: t("Upload.Public") },
+                ]}
+              />
+            </div>
+            <div className="dropdowns__item col pc-6 t-12 m-12">
+              <Dropdown
+                title={t("Upload.Genre")}
+                defaultSelected={genres?.[0]?.id ?? ""}
+                changeSelected={(selected: { id: string; title: string }) =>
+                  updateState({ genre_id: selected?.id })
+                }
+                options={
+                  genres?.map((genre) => ({
+                    id: genre.id ?? "",
+                    title: genre.title ?? "",
+                  })) || []
+                }
+              />
+            </div>
           </div>
         </div>
-        <div className="FormSong__body__right">
+        <div className="FormSong__body__right pc-3 t-4 m-12">
           <h4>{t("Upload.Image")}</h4>
           <span>{t("Upload.Image desc")}</span>
           <div className="FormSong__body__right__image">
@@ -427,167 +448,6 @@ export const FormSong = ({
         </button>
         <button className="btn-submit" onClick={() => handleSubmit()}>
           {t("Upload.Post")}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
-  const [play, setPlay] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const ValRef = useRef<HTMLInputElement>(null);
-  const [urlMp3, setUrlMp3] = useState<string | null>(() =>
-    fileMp3 ? URL.createObjectURL(fileMp3) : null
-  );
-
-  const [percentage, setPercentage] = useState(0);
-
-  const [valueVolume, setValueVolume] = useState<string>("50");
-
-  let [minutes, setMinutes] = useState<string>("00");
-  let [seconds, setSeconds] = useState<string>("00");
-
-  let [minutesPlay, setMinutesPlay] = useState<string>("00");
-  let [secondsPlay, setSecondsPlay] = useState<string>("00");
-
-  useEffect(() => {
-    fileMp3 ? setUrlMp3(URL.createObjectURL(fileMp3)) : setUrlMp3(null);
-  }, [fileMp3]);
-
-  const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (audio && audio.duration) {
-      audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
-    }
-    setPercentage(parseFloat(e.target.value));
-  };
-
-  const handlePlay = () => {
-    if (audioRef.current?.paused) {
-      setPlay(true);
-      audioRef.current?.play();
-    } else {
-      setPlay(false);
-      audioRef.current?.pause();
-    }
-  };
-
-  useEffect(() => {
-    const duration = audioRef.current?.duration;
-    if (duration) {
-      setMinutes(
-        Math.floor(duration / 60)
-          .toString()
-          .padStart(2, "0")
-      );
-      setSeconds(
-        Math.floor(duration % 60)
-          .toString()
-          .padStart(2, "0")
-      );
-    }
-  }, [audioRef]);
-
-  const onPlaying = () => {
-    const duration = audioRef.current?.duration;
-    const ct: number | undefined = audioRef.current?.currentTime;
-
-    const percent =
-      ct && duration ? ((ct / duration) * 100).toFixed(2) : undefined;
-    percent && setPercentage(+percent);
-
-    ct &&
-      setMinutesPlay(
-        Math.floor(ct / 60)
-          .toString()
-          .padStart(2, "0")
-      );
-    ct &&
-      setSecondsPlay(
-        Math.floor(ct % 60)
-          .toString()
-          .padStart(2, "0")
-      );
-
-    duration &&
-      setMinutes(
-        Math.floor(duration / 60)
-          .toString()
-          .padStart(2, "0")
-      );
-    duration &&
-      setSeconds(
-        Math.floor(duration % 60)
-          .toString()
-          .padStart(2, "0")
-      );
-  };
-
-  const onEndedAuido = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0; // Đặt thời gian phát lại về 0
-      audioRef.current.play(); // Phát lại âm thanh từ đầu
-    }
-  };
-
-  useEffect(() => {
-    audioRef.current!.volume = parseInt(valueVolume || "0") / 100;
-  }, [valueVolume]);
-
-  return (
-    <div className="box-audio">
-      <audio
-        ref={audioRef}
-        id="audio"
-        src={urlMp3 ? urlMp3 : ""}
-        onTimeUpdate={onPlaying}
-        onEnded={onEndedAuido}
-      ></audio>
-
-      <button className="btn-play" onClick={() => handlePlay()}>
-        {play ? (
-          <i className="fa-solid fa-pause"></i>
-        ) : (
-          <i className="fa-solid fa-play"></i>
-        )}
-      </button>
-      <div className="box-audio__body">
-        <Slider percentage={percentage} onChange={onChangeSlider} />
-        <div className="time">
-          <span>{`${minutesPlay}:${secondsPlay}`}</span>
-          <span>{`${minutes}:${seconds}`}</span>
-        </div>
-      </div>
-      <div className="box-audio__volume">
-        <div className="volume-progress">
-          <span
-            className="slider-track"
-            style={{ width: `${valueVolume ?? 0 * 100}%` }}
-          ></span>
-
-          <input
-            type="range"
-            name="volume"
-            className="max-val"
-            ref={ValRef}
-            onInput={(e) => setValueVolume(e.currentTarget?.value)}
-            max={100}
-            min={0}
-            value={valueVolume}
-          />
-        </div>
-        <button
-          className="btn-volume"
-          onClick={() => {
-            setValueVolume(valueVolume !== "0" ? "0" : "50");
-          }}
-        >
-          {valueVolume !== "0" ? (
-            <i className="fa-light fa-volume"></i>
-          ) : (
-            <i className="fa-light fa-volume-slash"></i>
-          )}
         </button>
       </div>
     </div>

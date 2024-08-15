@@ -6,19 +6,23 @@
     "Add to playlist": "Add to playlist",
     "Remove to playlist": "Remove to playlist",
     "Remove to favorites list": "Remove to favorites list",
+    "Delete song": "Delete song",
     "Add to favorites list": "Add to favorites list",
     "Add to waiting list": "Add to waiting list",
     "See details": "See details",
     "Artist Access": "Artist Access",
-    "Share": "Share"
+    "Share": "Share",
+    "Close": "Close"
+
   },
   "Upload": {
     "Post song": "Post song",
     "Drag and drop audio files to upload": "Drag and drop audio files to upload",
     "Your song will be private until you publish it.": "Your song will be private until you publish it.",
-    "Error file mp3": "File type not supported. Please choose another file",
+    "Error type file": "File type not supported. Please choose another file",
+    "Error size file": "File size too large. Please choose another file",
     "Chose file": "Choose file",
-    "Regulations 1": "By uploading a video to SoudHub, you confirm that you agree to SoudHub's Terms of Service and Community Guidelines.",
+    "Regulations 1": "By uploading a sound to SoudHub, you confirm that you agree to SoudHub's Terms of Service and Community Guidelines.",
     "Regulations 2": "You must ensure that you do not violate the copyrights or privacy of others.",
     "Title": "Title (obligatory):",
     "Title desc": "Add an attention-grabbing title",

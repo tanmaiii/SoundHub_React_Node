@@ -147,6 +147,9 @@
           @include flex(center, center);
           visibility: hidden;
           gap: $space-8;
+          @include mobile{
+            visibility: inherit;
+          }
           .button-like {
             cursor: pointer;
             color: themed("txt-main");

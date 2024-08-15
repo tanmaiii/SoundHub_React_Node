@@ -10,7 +10,13 @@ $magrin: 24px;
   display: flex;
   // margin-left: -12px;
   // margin-right: -12px;
+
+  &__gutter {
+    margin-left: -12px;
+    margin-right: -12px;
+  }
 }
+
 
 .row.no-gutters {
   margin-left: 0;

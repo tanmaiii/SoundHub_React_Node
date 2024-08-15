@@ -152,7 +152,7 @@
   }
 }
 
-.Dropdown {
+.Dropdown__wrapper {
   @include flex(start, start, row);
   min-width: 260px;
   position: relative;

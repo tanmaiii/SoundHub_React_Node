@@ -5,7 +5,6 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
 import { AuthContextProvider } from "./context/authContext";
-import { ToastContextProvider } from "./context/ToastContext";
 
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -19,11 +18,9 @@ root.render(
     {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 
     <Provider store={store}>
-      <ToastContextProvider>
-        <AuthContextProvider>
-          <App />
-        </AuthContextProvider>
-      </ToastContextProvider>
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
     </Provider>
   </QueryClientProvider>
 );

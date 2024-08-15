@@ -14,6 +14,7 @@ import "moment/locale/vi"; // Ví dụ: 'vi' là mã locale cho tiếng Việt
 import { useTranslation } from "react-i18next";
 import { SkeletonTheme } from "react-loading-skeleton";
 import "../src/i18n/i18n";
+import { Toaster, toast } from "sonner";
 
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
@@ -45,6 +46,7 @@ function App() {
       >
         {/* <Loading /> */}
         <Routes />
+        <Toaster position={"bottom-center"} />
       </SkeletonTheme>
     </div>
   );

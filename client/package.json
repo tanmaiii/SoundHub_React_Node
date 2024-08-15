@@ -34,6 +34,7 @@
     "redux": "^5.0.1",
     "sass": "^1.70.0",
     "slick-carousel": "^1.8.1",
+    "sonner": "^1.5.0",
     "swiper": "^11.0.5",
     "web-vitals": "^2.1.4"
   },

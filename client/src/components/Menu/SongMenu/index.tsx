@@ -13,12 +13,12 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../../apis";
 import Modal from "../../Modal";
 import { TPlaylist, TSong, TStateParams } from "../../../types";
-import { useToast } from "../../../context/ToastContext";
 import ImageWithFallback from "../../ImageWithFallback/index";
 import Images from "../../../constants/images";
 import { AddPlaylist } from "../../ModalPlaylist";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constants/paths";
+import { toast } from "sonner";
 
 type Props = {
   id: string;
@@ -75,6 +75,7 @@ const SongMenu = ({
     },
   });
 
+  // Kiểm tra bài hát đã like chưa
   const { data: isLike, refetch: refetchLike } = useQuery({
     queryKey: ["like-song", id],
     queryFn: async () => {
@@ -96,6 +97,21 @@ const SongMenu = ({
       queryClient.invalidateQueries({
         queryKey: ["songs-favorites", currentUser?.id],
       });
+    },
+  });
+
+  //Xử lí like bài hát
+  const mutationLikeDelete = useMutation({
+    mutationFn: async () => {
+      await songApi.deleteSong(token, id ?? "");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["songs", currentUser?.id],
+      });
+    },
+    onError: (error: any) => {
+      console.log(error);
     },
   });
 
@@ -153,10 +169,17 @@ const SongMenu = ({
                 itemFunc={() => mutationLike.mutate(isLike)}
               />
             )}
+            {currentUser?.id === song.user_id && (
+              <ItemMenu
+                title={t("Menu.Delete song")}
+                icon={<i className="fa-light fa-trash"></i>}
+                itemFunc={() => mutationLikeDelete.mutate()}
+              />
+            )}
             <ItemMenu
               title={t("Menu.Add to waiting list")}
               icon={<i className="fa-regular fa-list-music"></i>}
-              itemFunc={() => console.log("Add to playlist")}
+              itemFunc={() => toast.success("Đã thêm vào danh sách chờ")}
             />
             <hr />
             <ItemMenu
@@ -177,6 +200,9 @@ const SongMenu = ({
               itemFunc={() => console.log("Add to playlist")}
             />
           </ul>
+          <button className="btn-close" onClick={() => onClose()}>
+            <span>{t("Menu.Close")}</span>
+          </button>
         </div>
       </div>
     </>
@@ -322,7 +348,6 @@ const ItemPlaylist = ({
 }) => {
   const { token } = useAuth();
   const queryClient = useQueryClient();
-  const { setToastMessage } = useToast();
 
   const { data: countSongs } = useQuery({
     queryKey: ["count-songs", playlist.id],
@@ -357,22 +382,14 @@ const ItemPlaylist = ({
   const mutationAdd = useMutation({
     mutationFn: async (isAdd: boolean) => {
       if (isAdd) {
-        setToastMessage({
-          value: `Đã xóa bài hát khỏi danh sách phát ${playlist.title}`,
-          type: "success",
-        });
+        toast.success(`Đã xóa bài hát khỏi danh sách phát ${playlist.title}`);
         return await playlistApi.removeSong(playlist.id ?? "", songId, token);
       }
-      if (countSongs && countSongs < 10) {
-        setToastMessage({
-          value: "Playlist đã đầy, không thể thêm bài hát",
-          type: "error",
-        });
+      if (countSongs && countSongs + 1 > 10) {
+        toast.error("Danh sách phát có tối đa 10 bài hát !");
+        return;
       }
-      setToastMessage({
-        value: `Đã thêm bài hát vào danh sách phát ${playlist.title} thành công`,
-        type: "success",
-      });
+      toast.success(`Đã thêm bài hát vào danh sách phát ${playlist.title}`);
       return await playlistApi.addSong(playlist.id ?? "", songId, token);
       // setOpenModal(true);
     },

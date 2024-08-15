@@ -72,7 +72,7 @@ export default function UserSetting() {
         </div>
 
         <div className={`UserSetting__dropdown ${active ? "active" : ""}`}>
-          <div className="Dropdown" style={{ height: `${height}px` }}>
+          <div className="Dropdown__wrapper" style={{ height: `${height}px` }}>
             <DropdownGroup
               name="main"
               active={activeMenu === "main"}
