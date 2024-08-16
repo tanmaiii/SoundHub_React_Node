@@ -16,6 +16,8 @@ const FavouritePage = lazy(
   () => import("../pages/FavouritePage/FavouritePage")
 );
 
+const UploadPage = lazy(() => import("../pages/UploadPage"));
+
 const RecentlyPage = lazy(() => import("../pages/RecentlyPage"));
 const SongPage = lazy(() => import("../pages/SongPage"));
 
@@ -66,6 +68,7 @@ const publicRoutes = [
   { path: PATH.HOME, layout: null, component: HomePage },
   { path: PATH.RECENTLY, layout: null, component: RecentlyPage },
   { path: PATH.FAVOURITE, layout: null, component: FavouritePage },
+  { path: PATH.UPLOAD, layout: null, component: UploadPage },
 
   { path: PATH.SEARCH, layout: null, component: SearchPage },
   { path: PATH.SEARCH_SHOW, layout: null, component: SearchPage },

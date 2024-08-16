@@ -3,15 +3,18 @@ import "./style.scss";
 
 interface ModalProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
 }
 
-export default function Modal(props: ModalProps) {
+export default function Modal({
+  children,
+  title,
+  openModal,
+  setOpenModal,
+}: ModalProps) {
   const modalBodyRef = useRef<HTMLInputElement>(null);
-
-  const { openModal, setOpenModal } = props;
 
   useEffect(() => {
     if (openModal === true) {
@@ -39,13 +42,16 @@ export default function Modal(props: ModalProps) {
   return (
     <div className={`Modal ${openModal ? "active" : ""}`}>
       <div ref={modalBodyRef} className="Modal__wrapper">
-        <div className="Modal__wrapper__header">
-          <h3>{props.title}</h3>
-          <button className="btn_close" onClick={() => setOpenModal(false)}>
+        <div className={`Modal__wrapper__header ${!title ? "not-title" : ""}`}>
+          <h3>{title && title}</h3>
+          <button
+            className={`btn_close ${!title ? "not-title" : ""}`}
+            onClick={() => setOpenModal(false)}
+          >
             <i className="fa-solid fa-times"></i>
           </button>
         </div>
-        <div className="Modal__wrapper__body">{props.children}</div>
+        <div className="Modal__wrapper__body">{children}</div>
       </div>
     </div>
   );

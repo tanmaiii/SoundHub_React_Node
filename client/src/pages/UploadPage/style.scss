@@ -1,24 +1,37 @@
-@use "../../../scss/" as *;
+@use "../../scss/" as *;
 
-.AddSong {
+.UploadPage {
   @include themify($themes) {
-    // padding: $space-24;
-    height: 75vh;
-    width: 60vw;
-    border-top: 1px solid themed("border");
+    height: calc(100vh - $height-header - $space-10);
+    padding: 0 $space-24;
+
+    @include flex(center, center, unset);
 
     @include tablet {
-      width: 90vw;
-      height: calc(90vh - $height-header-modal);
+      padding: 0 $space-14;
+      height: calc(100vh - $height-header - $space-10);
     }
 
     @include mobile {
-      width: 100vw;
-      height: calc(100vh - $height-header-modal);
+      padding: 0 $space-12;
     }
 
     &__body {
       height: 100%;
+      width: 80%;
+      background-color: themed("bg-1");
+      border-radius: $radius-8;
+      border: 1px solid themed("border");
+      box-shadow: themed("box-shadow");
+
+      @include mobile {
+        width: 100%;
+      }
+
+      @include tablet {
+        width: 100%;
+      }
+
       .div-drag {
         width: 100%;
         height: 100%;
@@ -41,9 +54,9 @@
 .UploadSong {
   @include themify($themes) {
     width: 100%;
-    @include flex(center, center, column);
-    margin: auto 0;
     height: 100%;
+
+    @include flex(center, center, column);
     padding: $space-24;
 
     @include mobile {
@@ -186,10 +199,6 @@
     @include flex(unset, space-between, column);
     height: 100%;
     gap: $space-12;
-    @include mobile {
-      overflow: auto;
-      height: auto;
-    }
     &__danger {
       padding: 0 $space-24;
       margin-top: $space-12;
@@ -239,7 +248,6 @@
         .Form-box {
           position: relative;
           width: 100%;
-          // padding-top: $space-24;
           background-color: themed("bg-2");
           border-radius: $radius-4;
           border: 1.4px solid themed("border");
@@ -301,15 +309,102 @@
           @include flex(unset, unset, row);
           flex-wrap: wrap;
           @include mobile {
-            @include flex(unset, unset, column);
+            // @include flex(unset, unset, column);
+            flex-wrap: wrap;
+          }
+        }
+
+        .Form-author {
+          &__input {
+            width: 100%;
+            background-color: themed("bg-2");
+            border-radius: $radius-4;
+            border: 1.4px solid themed("border");
+            padding: 0 $space-12 $space-4 $space-12;
+            cursor: pointer;
+            &__label {
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              transition: opacity 0.3s ease-in-out;
+              margin: $space-4 0;
+            }
+
+            h4 {
+              width: 100%;
+              font-size: $size-16;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              outline: none;
+              padding: $space-4 0;
+              &:focus + .Form-box {
+                border-color: themed("txt-second");
+              }
+            }
+            &:not(.error):hover {
+              border-color: themed("txt-second");
+            }
+          }
+
+          &__list {
+            margin-top: $space-12;
+            @include flex(center, start, row);
+            gap: $space-8;
+            &__item {
+              padding: $space-4 $space-12;
+              border: 1px solid themed("bg-3");
+              background-color: themed("bg-2");
+              border-radius: $radius-4;
+              cursor: pointer;
+              transition: all 0.3s;
+              @include flex(center, center, row);
+              width: max-content;
+              gap: $space-8;
+              position: relative;
+              &:hover {
+                background-color: $color-hover;
+              }
+              span {
+                font-size: $size-16;
+                color: themed("txt-main");
+              }
+
+              img {
+                --size: 34px;
+                height: var(--size);
+                width: var(--size);
+                overflow: hidden;
+                object-fit: cover;
+                border-radius: 50%;
+              }
+
+              .btn-remove {
+                --size: 20px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                background-color: $color-red;
+                color: $color-white;
+                border-radius: 50%;
+                font-size: $size-12;
+                cursor: pointer;
+                transition: all 0.3s;
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                &:hover {
+                  scale: 0.94;
+                }
+              }
+            }
           }
         }
       }
 
       &__right {
-        width: 100%;
+        width: 200px;
         @include mobile {
-          width: 200px;
+          // width: 400px;
         }
         h4 {
           font-size: $size-16;
@@ -322,11 +417,11 @@
           font-weight: $font-light;
         }
         &__image {
-          size: 100%;
+          --size: 200px;
           width: var(--size);
           height: var(--size);
           position: relative;
-          aspect-ratio: 1/1;
+          // aspect-ratio: 1/1;
           margin-top: $space-12;
 
           img {
@@ -412,6 +507,8 @@
       padding: $space-12 $space-24;
       margin-top: auto;
       gap: $space-14;
+      @include mobile {
+      }
 
       button {
         padding: $space-12 $space-24;
@@ -429,6 +526,115 @@
       }
       & > button:first-child {
         background-color: themed("bg-3");
+      }
+    }
+  }
+}
+
+.modal__search-author {
+  @include themify($themes) {
+    padding: $space-12;
+    &__input {
+      --size: 36px;
+
+      border-radius: $radius-4;
+      background-color: themed("bg-2");
+      @include flex(center, center, row);
+      height: 100%;
+      padding: $space-4;
+      margin-bottom: $space-12;
+
+      input {
+        flex: 1;
+        width: 100%;
+        height: var(--size);
+        font-size: $size-16;
+        font-weight: $font-light;
+        color: themed("txt-main");
+        outline: none;
+        padding-left: $space-12;
+        &:focus + .Form-box {
+          border-color: themed("txt-second");
+        }
+      }
+
+      button {
+        background-color: $color-primary1;
+        height: var(--size);
+        padding: 0 $space-12;
+        border-radius: $radius-4;
+        transition: $transition;
+        cursor: pointer;
+        i {
+          font-size: $size-18;
+          color: $color-white;
+        }
+
+        &:hover {
+          transform: scale(0.98);
+        }
+      }
+    }
+
+    &__list {
+      @include flex(start, start, column);
+      gap: $space-8;
+      width: 100%;
+      &__item {
+        padding: $space-8 $space-12;
+        border-radius: $radius-4;
+        background-color: themed("bg-2");
+        // border: 1px solid themed("border");
+        cursor: pointer;
+        transition: all 0.3s;
+        @include flex(center, start, row);
+        gap: $space-8;
+        width: 100%;
+        max-width: 400px;
+        &:hover {
+          background-color: $color-hover;
+        }
+
+        img {
+          --size: 34px;
+          height: var(--size);
+          width: var(--size);
+          overflow: hidden;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 1px solid themed("border");
+        }
+
+        &__desc {
+          flex: 1;
+          h6 {
+            font-size: $size-16;
+            color: themed("txt-main");
+            font-weight: $font-medium;
+            @include text(1);
+          }
+          span {
+            font-size: $size-14;
+            color: themed("txt-second");
+            font-weight: $font-light;
+          }
+        }
+
+        .btn-add {
+          --size: 24px;
+          width: var(--size);
+          height: var(--size);
+          @include flex(center, center);
+          background-color: $color-green;
+          color: $color-white;
+          border-radius: 50%;
+          font-size: $size-14;
+          cursor: pointer;
+          transition: all 0.3s;
+          &:hover {
+            scale: 0.94;
+          }
+        }
       }
     }
   }

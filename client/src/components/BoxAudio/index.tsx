@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Slider from "../Slider";
 import "./style.scss";
 
-const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
+const BoxAudio = ({ file: fileMp3, stop }: { file: File; stop: boolean }) => {
   const [play, setPlay] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const ValRef = useRef<HTMLInputElement>(null);
@@ -103,6 +103,13 @@ const BoxAudio = ({ file: fileMp3 }: { file: File }) => {
   useEffect(() => {
     audioRef.current!.volume = parseInt(valueVolume || "0") / 100;
   }, [valueVolume]);
+
+  useEffect(() => {
+    if (stop) {
+      setPlay(false);
+      audioRef.current?.pause();
+    }
+  }, [stop]);
 
   return (
     <div className="box-audio">

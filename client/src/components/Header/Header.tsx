@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 import CustomInput from "../CustomInput";
 import ModalNotify from "../ModalNotify";
 import Modal from "../Modal";
-import AddSong from "../ModalSong/AddSong";
 
 export default function Header() {
   const openMenu = useSelector((state: RootState) => state.navbar.openMenu);
@@ -26,7 +25,6 @@ export default function Header() {
   const [keyword, setKeyword] = useState("");
   const { pathname } = useLocation();
   const [openModalNotify, setOpenModalNotify] = useState<boolean>(false);
-  const [openModalUpload, setOpenModalUpload] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScrollHeader = () => {
@@ -111,7 +109,7 @@ export default function Header() {
             <>
               <button
                 className="header__right__upload"
-                onClick={() => setOpenModalUpload(true)}
+                onClick={() => navigation(PATH.UPLOAD)}
                 data-tooltip={"Upload"}
               >
                 <i className="fa-regular fa-arrow-up-from-bracket"></i>
@@ -152,14 +150,6 @@ export default function Header() {
         title="Notification"
       >
         <ModalNotify onClose={() => setOpenModalNotify(false)} />
-      </Modal>
-
-      <Modal
-        openModal={openModalUpload}
-        setOpenModal={setOpenModalUpload}
-        title={tSong('Upload.Post song')}
-      >
-        <AddSong closeModal={() => setOpenModalUpload(false)} />
       </Modal>
     </>
   );

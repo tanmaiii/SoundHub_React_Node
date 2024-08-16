@@ -27,6 +27,7 @@
     @include flex(center, center);
     z-index: 99;
     transform: translateY(-200%);
+
     &.active {
       transform: translateY(0);
     }
@@ -58,11 +59,21 @@
           font-weight: $font-bold;
           color: themed("txt-main");
         }
+        &.not-title {
+          height: 0;
+        }
+
         .btn_close {
           border-radius: 50%;
           overflow: hidden;
           color: themed("txt-main");
           cursor: pointer;
+          &.not-title {
+            // margin-left: $space-8;
+            position: absolute;
+            top: -16px;
+            right: -16px;
+          }
           &:hover {
             background-color: $color-hover;
           }
@@ -74,9 +85,6 @@
             font-size: $size-20;
           }
         }
-      }
-
-      &__body {
       }
     }
   }
