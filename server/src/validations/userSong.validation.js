@@ -25,5 +25,12 @@ export default class songValidation {
       songId: Joi.string().min(0).max(36).required(),
       userId: Joi.string().min(0).max(36).required(),
     }),
-  }
+  };
+
+  static createUserSong = {
+    body: Joi.object().keys({
+      songId: Joi.string().min(0).max(36).required(),
+      userId: Joi.string().min(0).max(36).required(),
+    }),
+  };
 }

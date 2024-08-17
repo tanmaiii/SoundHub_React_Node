@@ -5,6 +5,9 @@ type props = {
   focus?: boolean;
   textInputRef?: React.RefObject<HTMLInputElement>;
   placeholder?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 const CustomInput = (props: props) => {
@@ -40,6 +43,9 @@ const CustomInput = (props: props) => {
         type="text"
         placeholder={placeholder && placeholder}
         onChange={onChangeInput}
+        onKeyDown={props.onKeyDown}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
       />
       {keyword && (
         <button

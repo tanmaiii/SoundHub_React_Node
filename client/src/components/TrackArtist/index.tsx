@@ -1,12 +1,11 @@
 import React from "react";
-import "./trackArtist.scss";
+import "./style.scss";
 import Skeleton from "react-loading-skeleton";
 import ImageWithFallback from "../ImageWithFallback";
 import Images from "../../constants/images";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../../apis";
-import { apiConfig } from "../../configs";
 import ArtistMenu from "../Menu/ArtistMenu";
 
 interface TrackArtistProps {

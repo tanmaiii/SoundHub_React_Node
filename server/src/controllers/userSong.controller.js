@@ -108,9 +108,11 @@ export const createUserSong = async (req, res) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       }
+
       if (!song) {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
+
       if (song.user_id !== userInfo.id) {
         return res.status(401).json({ conflictError: "Không có quyền !" });
       }
@@ -121,7 +123,7 @@ export const createUserSong = async (req, res) => {
           return res.status(401).json({ conflictError: err });
         }
 
-        if (data.status === "Rejected") {
+        if (data && data?.status === "Rejected") {
           UserSong.delete(req.body.userId, req.body.songId, (err, data) => {
             if (err) {
               return res.status(401).json({ conflictError: err });
@@ -129,13 +131,13 @@ export const createUserSong = async (req, res) => {
           });
         }
 
-        if (data.status === "Accepted") {
+        if (data && data?.status === "Accepted") {
           return res
             .status(401)
             .json({ conflictError: "Người dùng đã chấp nhận lời mời !" });
         }
 
-        if (data.status === "Pending") {
+        if (data && data?.status === "Pending") {
           return res
             .status(401)
             .json({ conflictError: "Lời mời đã được gửi từ trước !" });

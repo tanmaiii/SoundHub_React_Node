@@ -6,7 +6,7 @@ const authorApi = {
     const url = "userSong/";
     return axiosClient.get(url + songId);
   },
-  
+
   getAllUserRequest(
     token: string,
     page: number,
@@ -56,6 +56,23 @@ const authorApi = {
         authorization: token,
       },
     });
+  },
+
+  //Tao yeu cau
+  createRequest(token: string, songId: string, userId: string): Promise<void> {
+    const url = `userSong/`;
+    return axiosClient.post(
+      url,
+      {
+        songId: songId,
+        userId: userId,
+      },
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
   },
 };
 

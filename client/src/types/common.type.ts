@@ -30,6 +30,7 @@ export type ResSoPaAr = {
   user_id?: string;
   image_path?: string;
   public?: number;
+  count?: number;
   created_at: string;
 };
 

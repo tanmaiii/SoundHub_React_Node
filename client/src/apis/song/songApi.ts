@@ -7,7 +7,7 @@ interface CheckLikedResponse {
 }
 
 const songApi = {
-  createSong(token: string, body: TSong) {
+  createSong(token: string, body: TSong): Promise<{ id: string }> {
     const url = "song";
     return axiosClient.post(url, body, {
       headers: {

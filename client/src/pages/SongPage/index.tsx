@@ -1,5 +1,5 @@
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
-import TrackArtist from "../../components/TrackArtist/TrackArtist";
+import TrackArtist from "../../components/TrackArtist";
 import "./style.scss";
 
 import CommentItem from "../../components/CommentItem";
@@ -129,7 +129,7 @@ export default function SongPage() {
         </div>
 
         <div className="songPage__content__body row">
-          <div className="songPage__content__body__comment col pc-8 t-12">
+          <div className="songPage__content__body__comment col pc-8 t-12 ">
             <CommentInput avatarUrl={Images.AVATAR} />
 
             <div className="songPage__content__body__comment__header">
@@ -190,19 +190,21 @@ export default function SongPage() {
               />
             </div>
           </div>
-          <div className="songPage__content__body__artist col pc-4 t-12 row">
-            <TrackArtist
-              id={song?.user_id ?? ""}
-              // songId={song?.id}
-              className="col pc-12"
-            />
-            {authors?.map((author) => (
+          <div className="songPage__content__body__artist col pc-4 t-12">
+            <div className="row">
               <TrackArtist
-                id={author ?? ""}
-                songId={song?.id}
-                className="col pc-12"
+                id={song?.user_id ?? ""}
+                // songId={song?.id}
+                className="col pc-12 t-6 m-12"
               />
-            ))}
+              {authors?.map((author) => (
+                <TrackArtist
+                  id={author ?? ""}
+                  songId={song?.id}
+                  className="col pc-12 t-6 m-12"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

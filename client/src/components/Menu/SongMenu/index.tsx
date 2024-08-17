@@ -109,6 +109,9 @@ const SongMenu = ({
       queryClient.invalidateQueries({
         queryKey: ["songs", currentUser?.id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["songs-artist", currentUser?.id],
+      });
     },
     onError: (error: any) => {
       console.log(error);

@@ -8,5 +8,6 @@ export type TUser = {
     email_verified_at?: string;
     gender?: string;
     brithday?: string;
+    count?: number;
   };
   

@@ -174,7 +174,7 @@ export default function ArtistPage() {
               <i className="fa-solid fa-ellipsis"></i>
             </button>
           </div>
-          <div className="artist__container__content__top__section row">
+          <div className="artist__container__content__top__section">
             {songs && songs?.length > 0 && (
               <>
                 <HeaderSection

@@ -11,9 +11,10 @@ const Song = function (song) {
 };
 
 Song.create = (userId, newSong, result) => {
+  const idSong = uuidv4();
   db.query(
     `insert into songs set ?, user_id = ?, id = ? `,
-    [newSong, userId, uuidv4()],
+    [newSong, userId, idSong],
     (err, res) => {
       if (err) {
         console.log("ERROR", err);
@@ -21,7 +22,7 @@ Song.create = (userId, newSong, result) => {
         return;
       }
       console.log("CREATE SONG : ", { res });
-      result(null, { id: res.insertId, ...newSong });
+      result(null, { id: idSong, ...newSong });
     }
   );
 };
@@ -193,7 +194,9 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
       ` WHERE ${q ? ` s.title LIKE "%${q}%" AND` : ""}` +
       ` ((s.public = 1 AND pvs.playlist_id = '${playlistId}' ) OR (pvs.playlist_id = '${playlistId}' AND s.user_id = '${userId}')) AND is_deleted = 0 ` +
       ` ORDER BY pvs.num_song ${sort === "new" ? "ASC" : "DESC"} ` +
-      ` ${!+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""} `
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
 
   const [totalCount] = await promiseDb.query(

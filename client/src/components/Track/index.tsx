@@ -77,7 +77,7 @@ export default function Track({
   return (
     <div className="track">
       <div
-        className={`track__wrapper row ${
+        className={`track__wrapper row no-gutters ${
           songPlayId === song?.id ? "active" : ""
         }`}
       >

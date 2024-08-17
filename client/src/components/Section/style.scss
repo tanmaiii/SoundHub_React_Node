@@ -12,6 +12,7 @@
         @include flex(row, flex-start);
         align-items: start;
         width: 100%;
+        flex-wrap: nowrap !important;
       }
     }
   }

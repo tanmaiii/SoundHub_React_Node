@@ -36,7 +36,7 @@ router.get(
 //Them nguoi dung khoi bai hat
 router.post(
   "/",
-  //   validate(userSongValodation.createUserSong),
+    validate(userSongValodation.createUserSong),
   userSongController.createUserSong
 );
 

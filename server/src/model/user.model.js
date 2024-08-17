@@ -14,15 +14,19 @@ const User = function (user) {
 };
 
 User.create = (newUser, result) => {
-  db.query(`insert into users set ? , id = ?`, [newUser, uuidv4()], (err, res) => {
-    if (err) {
-      console.log("ERROR", err);
-      result(err, null);
-      return;
+  db.query(
+    `insert into users set ? , id = ?`,
+    [newUser, uuidv4()],
+    (err, res) => {
+      if (err) {
+        console.log("ERROR", err);
+        result(err, null);
+        return;
+      }
+      console.log("CREATE USER : ", { res });
+      result(null, { id: res.insertId, ...newUser });
     }
-    console.log("CREATE USER : ", { res });
-    result(null, { id: res.insertId, ...newUser });
-  });
+  );
 };
 
 User.update = (userId, newUser, result) => {
@@ -31,15 +35,19 @@ User.update = (userId, newUser, result) => {
       result(err, null);
       return;
     }
-    db.query(`update users set ? where id = ?`, [newUser, userId], (err, res) => {
-      if (err) {
-        console.log("ERROR", err);
-        result(err, null);
-        return;
+    db.query(
+      `update users set ? where id = ?`,
+      [newUser, userId],
+      (err, res) => {
+        if (err) {
+          console.log("ERROR", err);
+          result(err, null);
+          return;
+        }
+        console.log("UPDATE USER : ", { res });
+        result(null, { id: userId, ...newUser });
       }
-      console.log("UPDATE USER : ", { res });
-      result(null, { id: userId, ...newUser });
-    });
+    );
   });
 };
 
@@ -58,25 +66,26 @@ User.findByEmail = (email, result) => {
   });
 };
 
-User.findById = (id, result) => {
-  db.query(`SELECT * from users WHERE id = ?`, id, (err, user) => {
-    if (err) {
-      result(err, null);
-      return;
-    }
-    if (user.length) {
-      result(null, user[0]);
-      return;
-    }
-    result(`Không tìm thấy người dùng có id là ${id}`, null);
-  });
+User.findById = async (id, result) => {
+  const [data] = await promiseDb.query(
+    ` SELECT u.* , fl.count as count from users as u ` +
+      ` LEFT JOIN followers_count as fl on fl.user_id = u.id ` +
+      ` WHERE id = "${id}" `
+  );
+
+  if (data) {
+    result(null, data[0]);
+    return;
+  }
+
+  result(`Không tìm thấy người dùng có id là ${id}`, null);
 };
 
 User.getAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sort || "count";
 
   const offset = (page - 1) * limit;
 

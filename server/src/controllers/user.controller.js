@@ -19,7 +19,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const getUser = (req, res) => {
+export const getUser = async (req, res) => {
   try {
     User.findById(req.params.userId, (err, user) => {
       if (!user) {
