@@ -272,7 +272,7 @@ export const deleteUserSong = async (req, res) => {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
-    Song.findById(req.body.songId, userInfo.id, (err, song) => {
+    Song.findById(req.query.songId, userInfo.id, (err, song) => {
       if (err) {
         return res.status(401).json({ conflictError: err });
       }
@@ -280,8 +280,10 @@ export const deleteUserSong = async (req, res) => {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
 
+      console.log(req.query);
+
       //Kiểm tra xem user đã được thêm vào bài hát chưa
-      UserSong.find(req.body.userId, req.body.songId, (err, data) => {
+      UserSong.find(req.query.userId, req.query.songId, (err, data) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         }
@@ -296,7 +298,7 @@ export const deleteUserSong = async (req, res) => {
         }
 
         //Xác nhận tham gia vào bài hát
-        UserSong.delete(req.body.userId, req.body.songId, (err, data) => {
+        UserSong.delete(req.query.userId, req.query.songId, (err, data) => {
           if (err) {
             return res.status(401).json({ conflictError: err });
           } else {

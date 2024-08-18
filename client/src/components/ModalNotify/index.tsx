@@ -19,8 +19,6 @@ const ModalNotify = ({ onClose }: { onClose: () => void }) => {
     // get notify
     try {
       const res = await authorApi.getAllUserRequest(token, 1, 10);
-      console.log(res.data);
-
       setData(res.data);
     } catch (error) {}
   };
@@ -35,7 +33,7 @@ const ModalNotify = ({ onClose }: { onClose: () => void }) => {
       <div className="Notify__body">
         <div className="Notify__body__list">
           {data.map((item) => (
-            <Item id={item.song_id} onClose={onClose} />
+            <Item key={item.song_id} id={item.song_id} onClose={onClose} />
           ))}
         </div>
       </div>

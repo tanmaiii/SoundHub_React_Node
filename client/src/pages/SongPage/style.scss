@@ -86,7 +86,6 @@
         @include mobile {
           padding: $space-14 $space-12;
         }
-        
 
         &__comment {
           width: 100%;
@@ -219,9 +218,38 @@
         }
 
         &__artist {
-          @include flex(center, unset);
+          @include flex(unset, unset, column);
           flex-wrap: wrap;
-          & > .row{
+
+          &__header {
+            margin-left: $space-12;
+            @include flex(center, unset, row);
+            gap: $space-8;
+
+            h3 {
+              font-size: $size-18;
+              color: themed("txt-main");
+              font-weight: $font-medium;
+            }
+            .btn-add-author {
+              i {
+                --size: 36px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                font-size: $size-18;
+                color: themed("txt-main");
+                // background-color: themed("bg-2");
+                border-radius: 50%;
+                cursor: pointer;
+                transition: $transition;
+                &:hover {
+                  background-color: themed("bg-3");
+                }
+              }
+            }
+          }
+          & > .row {
             flex: 1;
           }
         }

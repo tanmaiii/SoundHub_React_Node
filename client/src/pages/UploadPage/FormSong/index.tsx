@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import "./style.scss";
-import { useState } from "react";
+import numeral from "numeral";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   authorApi,
@@ -14,16 +14,16 @@ import {
   userApi,
 } from "../../../apis";
 import BoxAudio from "../../../components/BoxAudio";
-import Dropdown from "../../../components/Dropdown";
-import Modal from "../../../components/Modal";
-import { useAuth } from "../../../context/authContext";
-import ImageWithFallback from "../../../components/ImageWithFallback";
-import Images from "../../../constants/images";
-import { ResSoPaAr, TUser } from "../../../types";
 import CustomInput from "../../../components/CustomInput";
-import numeral from "numeral";
-import { useNavigate, useNavigation } from "react-router-dom";
+import Dropdown from "../../../components/Dropdown";
+import ImageWithFallback from "../../../components/ImageWithFallback";
+import Modal from "../../../components/Modal";
+import Images from "../../../constants/images";
 import { PATH } from "../../../constants/paths";
+import { useAuth } from "../../../context/authContext";
+import { ResSoPaAr, TUser } from "../../../types";
+import "./style.scss";
+import ModalAddAuthor, { AuthorItem } from "../../../components/ModalAddAuthor";
 
 interface TError {
   title: string;
@@ -57,6 +57,20 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
   const [openModalAuthor, setOpenModalAuthor] = useState(false);
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = ""; // Một chuỗi trống sẽ kích hoạt cảnh báo.
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const [error, setError] = useState<TError>({
     title: "",
@@ -238,14 +252,14 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
   return (
     <>
       <div className="FormSong">
-        <div className="FormSong__danger">
+        {/* <div className="FormSong__danger">
           {exit && (
             <div className="FormSong__danger__wrapper">
               <i className="fa-light fa-circle-exclamation"></i>
               <span>{t("Upload.Danger exit")}</span>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="FormSong__top">
           <BoxAudio file={fileMp3} stop={true} />
         </div>
@@ -396,6 +410,25 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
           </button>
         </div>
       </div>
+      <Modal openModal={exit} setOpenModal={setExit}>
+        <div className="FormSong__modal">
+          <h4>Bạn có chắc chắn muốn thoát không !</h4>
+          <div className="FormSong__modal__footer">
+            <button className="btn-cancel" onClick={() => setExit(false)}>
+              {t("Upload.Cancel")}
+            </button>
+            <button
+              className="btn-submit"
+              onClick={() => {
+                setExit(false);
+                handleCancel();
+              }}
+            >
+              {t("Upload.Exit")}
+            </button>
+          </div>
+        </div>
+      </Modal>
       <Modal openModal={openModalAuthor} setOpenModal={setOpenModalAuthor}>
         <ModalAddAuthor
           authors={selectedAuthors}
@@ -403,139 +436,6 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
         />
       </Modal>
     </>
-  );
-};
-
-const ModalAddAuthor = ({
-  authors: selectedAuthors,
-  setAuthors: setSelectedAuthors,
-}: {
-  authors: string[];
-  setAuthors: (authors: string[]) => void;
-}) => {
-  const [authors, setAuthors] = useState<ResSoPaAr[] | undefined>(undefined);
-  const [keyword, setKeyword] = useState("");
-  const { token } = useAuth();
-
-  const handleGetAuthor = async () => {
-    try {
-      const res = await searchApi.getArtists(token, 1, 10, keyword);
-      res.data && setAuthors(res?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetAuthor();
-  }, [keyword]);
-
-  const handleClick = () => {
-    handleGetAuthor();
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      console.log(e.key);
-
-      handleClick();
-    }
-  };
-
-  return (
-    <div className="modal__search-author">
-      <div className="modal__search-author__header">
-        <div className="modal__search-author__header__input">
-          <CustomInput
-            onSubmit={(text) => setKeyword(text)}
-            placeholder="Nhập tên tác giả"
-            onKeyDown={handleKeyPress}
-          />
-          <button className="btn-search" onClick={handleClick}>
-            <i className="fa-regular fa-magnifying-glass"></i>
-          </button>
-        </div>
-      </div>
-      <div className="modal__search-author__body">
-        <div className="modal__search-author__body__list">
-          {authors?.length === 0 && (
-            <div className="modal__search-author__body__list__empty">
-              <span>Không tìm thấy tác giả</span>
-            </div>
-          )}
-          {authors?.map((author) => (
-            <AuthorItem
-              authors={selectedAuthors}
-              setAuthors={setSelectedAuthors}
-              key={author.id}
-              id={author?.id}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AuthorItem = ({
-  id,
-  authors,
-  setAuthors,
-}: {
-  id: string;
-  authors: string[];
-  setAuthors: (authors: string[]) => void;
-}) => {
-  const [author, setAuthor] = useState<TUser | null>(null);
-  const { currentUser } = useAuth();
-
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const res = await userApi.getDetail(id);
-        res && setAuthor(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAuthor();
-  }, [id]);
-
-  const handleAdd = () => {
-    setAuthors([...authors, id]);
-  };
-
-  const handleRemove = () => {
-    setAuthors(authors.filter((authorId) => authorId !== id));
-  };
-
-  if (currentUser?.id === id) return null;
-
-  return (
-    author && (
-      <div className="author-item">
-        <ImageWithFallback
-          src={author?.image_path}
-          alt={author?.name}
-          fallbackSrc={Images.AVATAR}
-        />
-        <div className="author-item__desc">
-          <h6>{author?.name}</h6>
-          <span>
-            {numeral(author?.count).format("0a").toUpperCase()} followers
-          </span>
-        </div>
-        {authors.filter((authorId) => authorId === id).length > 0 ? (
-          <button className="btn-remove" onClick={() => handleRemove()}>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        ) : (
-          <button className="btn-add" onClick={() => handleAdd()}>
-            <i className="fa-solid fa-plus"></i>
-          </button>
-        )}
-      </div>
-    )
   );
 };
 

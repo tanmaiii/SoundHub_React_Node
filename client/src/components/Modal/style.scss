@@ -61,6 +61,9 @@
         }
         &.not-title {
           height: 0;
+          @include mobile {
+            height: $height-header-modal;
+          }
         }
 
         .btn_close {
@@ -69,10 +72,12 @@
           color: themed("txt-main");
           cursor: pointer;
           &.not-title {
-            // margin-left: $space-8;
             position: absolute;
             top: -16px;
             right: -16px;
+            @include mobile {
+              position: unset;
+            }
           }
           &:hover {
             background-color: $color-hover;

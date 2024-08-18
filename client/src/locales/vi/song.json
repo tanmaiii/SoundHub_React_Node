@@ -25,7 +25,7 @@
     "Regulations 2": "Bạn phải đảm bảo rằng bạn không vi phạm bản quyền hoặc quyền riêng tư của người khác.",
     "Danger exit": " Lưu ý: Nếu không đăng trước khi thoát mọi thứ sẽ bị xóa.",
     "Title": "Tiêu đề (bắt buộc):",
-    "Title desc" : "Thêm tiêu đề thu hút người xem",
+    "Title desc": "Thêm tiêu đề thu hút người xem",
     "Describe": "Mô tả:",
     "Describe desc": "Mô tả video của bạn",
     "Visibility": "Chế độ hiển thị:",
@@ -33,9 +33,10 @@
     "Public": "Công khai",
     "Genre": "Thể loại:",
     "Image": "Hình ảnh:",
-    "Image desc" : "Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem",
+    "Image desc": "Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem",
     "Upload image": "Tải hình ảnh lên",
     "Cancel": "Hủy",
-    "Post": "Đăng"
+    "Post": "Đăng",
+    "Exit": "Thoát"
   }
 }

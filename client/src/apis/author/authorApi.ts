@@ -2,6 +2,15 @@ import { axiosClient } from "../../configs";
 import { ListResponse, TAuthor } from "../../types";
 
 const authorApi = {
+  getAllUser(songId: string, token: string): Promise<string[]> {
+    const url = `userSong/${songId}/me`;
+    return axiosClient.get(url, {
+      headers: {
+        authorization: token,
+      },
+    });
+  },
+
   getAllUserConfirm(songId: string): Promise<string[]> {
     const url = "userSong/";
     return axiosClient.get(url + songId);
@@ -73,6 +82,17 @@ const authorApi = {
         },
       }
     );
+  },
+
+  //Xóa yêu cầu
+  deleteAuthor(token: string, songId: string, userId: string): Promise<void> {
+    const url = `userSong/`;
+    return axiosClient.delete(url, {
+      params: { userId: userId, songId: songId },
+      headers: {
+        authorization: token,
+      },
+    });
   },
 };
 

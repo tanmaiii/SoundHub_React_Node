@@ -57,7 +57,7 @@
 
       &__desc {
         padding: $space-8 0;
-        & > p {
+        & > div {
           font-size: $size-14;
           font-weight: $font-light;
           color: themed("txt-second");

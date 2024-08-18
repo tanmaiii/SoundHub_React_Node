@@ -27,16 +27,15 @@ export default function TrackArtist({
     queryKey: ["user", id],
     queryFn: async () => {
       try {
-        const res = await userApi.getDetail(id);
-        console.log(res);
+        const res = id && (await userApi.getDetail(id));
         return res;
       } catch (error) {
-        return null;
+        console.log(error);
       }
     },
   });
 
-  return (
+  return user ? (
     <div className={`trackArtist  ${className}`}>
       <div className={`trackArtist__swapper `}>
         <Link className="trackArtist__swapper__link" to={`/artist/${id}`}>
@@ -57,15 +56,17 @@ export default function TrackArtist({
           </div>
         </Link>
         <div className={`button-edit ${activeMenu ? " active" : ""}`}>
-          <ArtistMenu
-            id={user?.id ?? ""}
-            songId={songId}
-            active={activeMenu}
-            onOpen={() => setActiveMenu(true)}
-            onClose={() => setActiveMenu(false)}
-          />
+          {
+            <ArtistMenu
+              id={user.id}
+              songId={songId}
+              active={activeMenu}
+              onOpen={() => setActiveMenu(true)}
+              onClose={() => setActiveMenu(false)}
+            />
+          }
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }

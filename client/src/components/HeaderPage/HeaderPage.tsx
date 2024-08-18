@@ -74,14 +74,14 @@ export default function HeaderPage({
   useEffect(() => {
     const getAuthor = async () => {
       try {
-        const res = await userApi.getDetail(userId || "");
+        const res = userId && (await userApi.getDetail(userId));
         res && setAuthor(res ?? undefined);
       } catch (error) {
         console.log(error);
       }
     };
     getAuthor();
-  });
+  }, [userId]);
 
   return (
     <div className="HeaderPage">

@@ -5,9 +5,10 @@
     @include flex(unset, space-between, column);
     min-height: calc(100vh - $height-header - $space-10);
     gap: $space-12;
+    padding-top: $space-24;
     &__danger {
       padding: 0 $space-24;
-      margin-top: $space-12;
+      // margin-top: $space-12;
 
       @include mobile {
         padding: 0 $space-12;
@@ -301,149 +302,41 @@
   }
 }
 
-.modal__search-author {
+.FormSong__modal {
   @include themify($themes) {
-    width: 400px;
-    &__header {
-      background-color: themed("bg-1");
-      padding: $space-12 $space-12 0 $space-12;
-      &__input {
-        padding: $space-12;
-        --size: 36px;
+    padding: $space-24;
 
+    h4 {
+      font-size: $size-16;
+      color: themed("txt-main");
+      font-weight: $font-medium;
+      display: block;
+      // border-top: 1px solid themed('border');
+    }
+    &__footer {
+      @include flex(center, end, row);
+      margin-top: $space-24;
+      // border-top: 1px solid themed("border");
+      gap: $space-14;
+      @include mobile {
+      }
+
+      button {
+        padding: $space-12 $space-24;
         border-radius: $radius-4;
-        background-color: themed("bg-2");
-        @include flex(center, center, row);
-        height: 100%;
-        padding: $space-4;
-        margin-bottom: $space-12;
-
-        input {
-          flex: 1;
-          width: 100%;
-          height: var(--size);
-          font-size: $size-16;
-          font-weight: $font-light;
-          color: themed("txt-main");
-          outline: none;
-          padding-left: $space-12;
-          &:focus + .Form-box {
-            border-color: themed("txt-second");
-          }
-        }
-
-        .btn-search {
-          background-color: $color-primary1;
-          height: var(--size);
-          padding: 0 $space-12;
-          border-radius: $radius-4;
-          transition: $transition;
-          cursor: pointer;
-          i {
-            font-size: $size-18;
-            color: $color-white;
-          }
-
-          &:hover {
-            transform: scale(0.98);
-          }
-        }
-
-        .btn-clear {
-          cursor: pointer;
-          margin-right: 4px;
-          i {
-            font-size: $size-16;
-            color: themed("txt-main");
-          }
-        }
-      }
-    }
-
-    &__body {
-      max-height: 500px;
-      min-height: 500px;
-      overflow: auto;
-      &__list {
-        @include flex(start, start, column);
-        width: 100%;
-        height: 100%;
-
-        overflow: auto;
-        padding: $space-4 $space-12 $space-12 $space-12;
-
-        &__empty {
-          font-size: $size-14;
-          color: themed("txt-second");
-          font-weight: $font-light;
-          text-align: center;
-        }
-      }
-    }
-  }
-}
-
-.author-item {
-  @include themify($themes) {
-    padding: $space-8 $space-12;
-    border-radius: $radius-4;
-    background-color: themed("bg-2");
-    cursor: pointer;
-    transition: all 0.3s;
-    @include flex(center, start, row);
-    gap: $space-8;
-    width: 100%;
-    margin-bottom: $space-12;
-    &:hover {
-      background-color: $color-hover;
-    }
-
-    img {
-      --size: 34px;
-      height: var(--size);
-      width: var(--size);
-      overflow: hidden;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 1px solid themed("border");
-    }
-
-    &__desc {
-      flex: 1;
-      h6 {
         font-size: $size-16;
-        color: themed("txt-main");
         font-weight: $font-medium;
-        @include text(1);
-      }
-      span {
-        font-size: $size-14;
-        color: themed("txt-second");
-        font-weight: $font-light;
-        @include text(1);
-      }
-    }
+        color: $color-white;
+        background-color: $color-primary1;
+        cursor: pointer;
+        transition: all 0.3s;
 
-    button {
-      --size: 22px;
-      width: var(--size);
-      height: var(--size);
-      @include flex(center, center);
-      background-color: $color-green;
-      color: $color-white;
-      border-radius: 50%;
-      font-size: $size-14;
-      cursor: pointer;
-      transition: all 0.3s;
-      &.btn-add {
-        background-color: $color-green;
+        &:hover {
+          scale: 0.98;
+        }
       }
-
-      &.btn-remove {
-        background-color: $color-red;
-      }
-      &:hover {
-        scale: 0.94;
+      & > button:first-child {
+        background-color: themed("bg-3");
       }
     }
   }

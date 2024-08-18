@@ -61,7 +61,7 @@ function CardSong({
           {loading ? (
             <Skeleton height={24} />
           ) : (
-            <p>
+            <div>
               {isPublic === 0 && (
                 <i className="icon__private fa-light fa-lock"></i>
               )}
@@ -71,7 +71,7 @@ function CardSong({
               >
                 {title}
               </h4>
-            </p>
+            </div>
           )}
           <div className="CardSong__container__desc__info">
             <div className="CardSong__container__desc__info__artist">
