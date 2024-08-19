@@ -9,6 +9,8 @@
     &__header {
       background-color: themed("bg-1");
       padding: $space-12 $space-12 0 $space-12;
+      border-radius: $space-8;
+
       &__input {
         padding: $space-12;
         --size: 36px;
@@ -53,7 +55,7 @@
 
         .btn-clear {
           cursor: pointer;
-          margin-right: 4px;
+          margin-right: 8px;
           i {
             font-size: $size-16;
             color: themed("txt-main");

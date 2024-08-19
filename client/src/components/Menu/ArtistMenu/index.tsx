@@ -5,10 +5,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { TSong } from "../../../types";
+import { TAuthor, TSong } from "../../../types";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/authContext";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import { authorApi, songApi } from "../../../apis";
@@ -37,6 +37,7 @@ const ArtistMenu = ({
   const queryClient = useQueryClient();
   const navigation = useNavigate();
   const [song, setSong] = useState<TSong | null>(null);
+  const [author, setAuthor] = useState<TAuthor | null>(null);
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -60,6 +61,20 @@ const ArtistMenu = ({
     };
     getSong();
   }, [songId, id, token]);
+
+  const {} = useQuery({
+    queryKey: ["author", [id, songId]],
+    queryFn: async () => {
+      try {
+        const res =
+          id && songId && (await authorApi.getDetail(token, id, songId || ""));
+        res && setAuthor(res);
+        return res;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
 
   // Xóa người dùng khỏi danh sách tác giả của bài hát bởi chính người dùng đó
   const mutationRemoveAuthor = useMutation(
@@ -112,21 +127,36 @@ const ArtistMenu = ({
         data-placement={placement}
       >
         <div className="ArtistMenu__context__list">
-          {songId && currentUser?.id === id && (
-            <ItemMenu
-              title={"Rời khỏi danh sách tác giả"}
-              icon={<i className="fa-light fa-xmark"></i>}
-              itemFunc={() => mutationRemoveAuthor.mutate()}
-            />
-          )}
+          {author &&
+            author?.status === "Accepted" &&
+            songId &&
+            currentUser?.id === id && (
+              <ItemMenu
+                title={"Rời khỏi danh sách tác giả"}
+                icon={<i className="fa-light fa-xmark"></i>}
+                itemFunc={() => mutationRemoveAuthor.mutate()}
+              />
+            )}
 
-          {song?.user_id && currentUser?.id && currentUser?.id !== id && (
-            <ItemMenu
-              title={"Xóa khỏi danh sách tác giả"}
-              icon={<i className="fa-light fa-xmark"></i>}
-              itemFunc={() => mutationRemoveAuthorByPoster.mutate()}
-            />
-          )}
+          {author &&
+            author?.status === "Accepted" &&
+            song?.user_id === currentUser?.id && (
+              <ItemMenu
+                title={"Xóa tác giả khỏi bài hát"}
+                icon={<i className="fa-light fa-xmark"></i>}
+                itemFunc={() => mutationRemoveAuthorByPoster.mutate()}
+              />
+            )}
+
+          {author &&
+            author?.status === "Pending" &&
+            song?.user_id === currentUser?.id && (
+              <ItemMenu
+                title={"Huỷ yêu cầu tham gia tác giả"}
+                icon={<i className="fa-light fa-xmark"></i>}
+                itemFunc={() => mutationRemoveAuthorByPoster.mutate()}
+              />
+            )}
 
           <ItemMenu
             title={"Xem thông tin"}

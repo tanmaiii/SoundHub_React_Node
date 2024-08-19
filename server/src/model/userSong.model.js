@@ -98,52 +98,54 @@ UserSong.find = (userId, songId, result) => {
   );
 };
 
-//Lấy các người dùng đã xác nhận tham gia vào bài hát
-UserSong.findAllUserConfirm = (songId, result) => {
-  db.query(
-    `SELECT u.id ` +
-      `FROM music.user_songs as us ` +
-      `LEFT JOIN music.users as u ON us.user_id = u.id ` +
-      `WHERE song_id = "${songId}" and us.user_id = u.id and us.status = "Accepted"`,
-    (err, res) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
-
-      if (res.length) {
-        const ids = res.map((row) => row.id);
-        result(null, ids);
-        return;
-      }
-
-      result(null, []);
-    }
-  );
-};
-
 //Lấy các người dùng
-UserSong.findAllUser = (songId, userId, result) => {
-  db.query(
-    `SELECT u.id ` +
+UserSong.findAllUser = async (songId, query, result) => {
+  const q = query?.q;
+  const page = query?.page || 1;
+  const limit = query?.limit;
+  const sort = query?.sortBy || "new";
+  const status = query?.status || "all";
+
+  const [data] = await promiseDb.query(
+    `SELECT us.* ` +
       `FROM music.user_songs as us ` +
       `LEFT JOIN music.users as u ON us.user_id = u.id ` +
-      `WHERE song_id = "${songId}" and us.user_id = u.id `,
-    (err, res) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
-
-      if (res.length) {
-        const ids = res.map((row) => row.id);
-        result(null, ids);
-        return;
-      }
-
-      result(null, null);
-    }
+      `WHERE song_id = "${songId}" and us.user_id = u.id ` +
+      ` ${status === "all" ? "" : `AND us.status = "${status}"`} ` +
+      ` ${q ? `AND u.name LIKE "%${q}%"` : ""} ` +
+      ` ORDER BY us.created_at ${sort === "new" ? "DESC" : "ASC"} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
   );
+
+  const [totalCount] = await promiseDb.query(
+    `SELECT COUNT(*) as total ` +
+      `FROM music.user_songs as us ` +
+      `LEFT JOIN music.users as u ON us.user_id = u.id ` +
+      `WHERE song_id = "${songId}" and us.user_id = u.id ` +
+      ` ${status === "all" ? "" : `AND us.status = "${status}"`} `
+  );
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0]?.totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0]?.totalCount || 0,
+        totalPages,
+        sort,
+        q,
+        status,
+      },
+    });
+
+    return;
+  }
+  result(null, null);
 };
 
 //Lấy tất cả bài hát bởi người dùng

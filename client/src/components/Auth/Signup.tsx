@@ -99,9 +99,13 @@ export default function Signup() {
                   )}
                   <div className="title">
                     <span>Step {step} of 3</span>
-                    {step === 1 && <h4>{t("signup.Sign up to start listening")}</h4>}
+                    {step === 1 && (
+                      <h4>{t("signup.Sign up to start listening")}</h4>
+                    )}
                     {step === 2 && <h4>{t("signup.Create a password")}</h4>}
-                    {step === 3 && <h4>{t("signup.Tell us about yourself")}</h4>}
+                    {step === 3 && (
+                      <h4>{t("signup.Tell us about yourself")}</h4>
+                    )}
                   </div>
                 </div>
               </div>
@@ -117,7 +121,11 @@ export default function Signup() {
             </div>
 
             {step === 1 && (
-              <SignupEmail handleClickNext={handleClickNext} email={email} setEmail={setEmail} />
+              <SignupEmail
+                handleClickNext={handleClickNext}
+                email={email}
+                setEmail={setEmail}
+              />
             )}
 
             {step === 2 && (
@@ -154,7 +162,11 @@ export default function Signup() {
   );
 }
 
-export function SignupEmail({ handleClickNext, email, setEmail }: PropsSignupEmail) {
+export function SignupEmail({
+  handleClickNext,
+  email,
+  setEmail,
+}: PropsSignupEmail) {
   const [err, setErr] = useState("");
   const { t } = useTranslation("auth");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -206,7 +218,11 @@ export function SignupEmail({ handleClickNext, email, setEmail }: PropsSignupEma
   );
 }
 
-export function SignupPassword({ handleClickNext, password, setPassword }: PropsSignupPassword) {
+export function SignupPassword({
+  handleClickNext,
+  password,
+  setPassword,
+}: PropsSignupPassword) {
   const [show, setShow] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation("auth");
@@ -257,7 +273,11 @@ export function SignupPassword({ handleClickNext, password, setPassword }: Props
             onChange={(e) => setPassword(e.target.value)}
           />
           <span className="tooglePassword" onClick={() => setShow(!show)}>
-            {show ? <i className="fa-light fa-eye"></i> : <i className="fa-light fa-eye-slash"></i>}
+            {show ? (
+              <i className="fa-light fa-eye"></i>
+            ) : (
+              <i className="fa-light fa-eye-slash"></i>
+            )}
           </span>
         </div>
         <div className="desc">
@@ -392,7 +412,8 @@ export function SignupInfo({
         <h4 className="title">{t("signup.Gender")}</h4>
         <div className="desc">
           <span>
-            We use your gender to help personalize our content recommendations and ads for you.
+            We use your gender to help personalize our content recommendations
+            and ads for you.
           </span>
         </div>
         <div className="input__gender">

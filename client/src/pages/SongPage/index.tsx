@@ -17,6 +17,7 @@ import { PATH } from "../../constants/paths";
 import Modal from "../../components/Modal";
 import ModalAddAuthor from "../../components/ModalAddAuthor";
 import { toast } from "sonner";
+import { TAuthor } from "../../types";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -25,8 +26,10 @@ export default function SongPage() {
   const queryClient = useQueryClient();
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModalAuthor, setOpenModalAuthor] = useState<boolean>(false);
-  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
-  const [authors, setAuthors] = useState<string[]>([]);
+  const [authors, setAuthors] = useState<TAuthor[]>([]);
+  const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
+  const [authorsAll, setAuthorsAll] = useState<TAuthor[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<TAuthor[]>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,12 +50,14 @@ export default function SongPage() {
     },
   });
 
-  const { data } = useQuery({
-    queryKey: ["authors", song?.id],
+  const {} = useQuery({
+    queryKey: ["authors-all", song?.id],
     queryFn: async () => {
       try {
-        const res = id && (await authorApi.getAllUserConfirm(id));
-        res && setAuthors(res);
+        const res =
+          id && (await authorApi.getAllUser(id, token, 1, 0, "", "new", "all"));
+        res && setAuthorsAll(res.data);
+        res && setSelectedAuthors(res.data);
         return res;
       } catch (error) {
         return null;
@@ -61,14 +66,32 @@ export default function SongPage() {
   });
 
   const {} = useQuery({
-    queryKey: ["authors-all", song?.id],
+    queryKey: ["authors", song?.id],
     queryFn: async () => {
       try {
-        const res = id && (await authorApi.getAllUser(id, token));
-        res && setSelectedAuthors(res);
+        const res =
+          id &&
+          (await authorApi.getAllUser(id, token, 1, 0, "", "new", "Accepted"));
+        res && setAuthors(res.data);
         return res;
       } catch (error) {
         return null;
+      }
+    },
+  });
+
+  const {} = useQuery({
+    queryKey: ["authors-pending", song?.id],
+    queryFn: async () => {
+      try {
+        const res =
+          currentUser?.id === song?.user_id &&
+          id &&
+          (await authorApi.getAllUser(id, token, 1, 0, "", "new", "Pending"));
+        res && setAuthorPending(res?.data);
+        return res;
+      } catch (error) {
+        console.log(error);
       }
     },
   });
@@ -100,24 +123,22 @@ export default function SongPage() {
   });
 
   useEffect(() => {
-    console.log(selectedAuthors);
+    // selectedAuthors.map((author) => {
+    //   const fetchAuthor = async () => {
+    //     try {
+    //       console.log(author);
 
-    selectedAuthors.map((author) => {
-      const fetchAuthor = async () => {
-        try {
-          console.log({ author });
-
-          if (!authors.includes(author)) {
-            // toast.success("Add author success");
-          }
-          // const res = await userApi.getDetail(author);
-          // console.log(res);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchAuthor();
-    });
+    //       // if (!selectedAuthorsDefault.includes(author)) {
+    //       // setSelectedAuthorsDefault(selectedAuthors);
+    //       // toast.success("Add author success");
+    //       // }
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   };
+    //   fetchAuthor();
+    // });
+    console.log({ selectedAuthors });
   }, [selectedAuthors]);
 
   return (
@@ -254,21 +275,42 @@ export default function SongPage() {
                 {authors &&
                   authors.map((author) => (
                     <TrackArtist
-                      id={author}
+                      id={author.user_id}
                       songId={song?.id}
                       className="col pc-12 t-6 m-12"
                     />
                   ))}
               </div>
+              {currentUser?.id === song?.user_id && (
+                <>
+                  {authorPending.length > 0 && (
+                    <div className="songPage__content__body__artist__header">
+                      <h3>Chưa xác nhận</h3>
+                    </div>
+                  )}
+                  <div className="row">
+                    {authorPending &&
+                      authorPending.map((author) => (
+                        <TrackArtist
+                          id={author.user_id}
+                          songId={song?.id}
+                          className="col pc-12 t-6 m-12"
+                        />
+                      ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
       <Modal openModal={openModalAuthor} setOpenModal={setOpenModalAuthor}>
-        <ModalAddAuthor
+        <div>
+          {/* <ModalAddAuthor
           authors={selectedAuthors}
           setAuthors={setSelectedAuthors}
-        />
+        /> */}
+        </div>
       </Modal>
     </>
   );

@@ -5,7 +5,7 @@ import userSongController from "../controllers/userSong.controller.js";
 import userSongValodation from "../validations/userSong.validation.js";
 import validate from "../middlewares/validate.js";
 
-//Lấy tất cả các yêu cầu
+//Lấy tất cả các yêu cầu gửi
 router.get(
   "/me",
   validate(userSongValodation.getAllSongByMe),
@@ -21,43 +21,36 @@ router.get(
 
 //Lay tat ca nguoi dung da them vao bai hat (bao gom ca nguoi dung chua xac nhan)
 router.get(
-  "/:songId/me",
-  //   validate(userSongValodation.getAllUserConfirm),
+  "/:songId/all",
+  validate(userSongValodation.getAllUser),
   userSongController.getAllUser
-);
-
-//Lay tat ca nguoi dung da xac nhan tham gia vao bai hat
-router.get(
-  "/:songId",
-  validate(userSongValodation.getAllUserConfirm),
-  userSongController.getAllUserConfirm
 );
 
 //Them nguoi dung khoi bai hat
 router.post(
   "/",
-    validate(userSongValodation.createUserSong),
+  validate(userSongValodation.createUserSong),
   userSongController.createUserSong
 );
 
 //Xoa nguoi dung khoi bai hat
 router.delete(
   "/",
-  //   validate(userSongValodation.unConfirmUserSong),
+  validate(userSongValodation.deleteUserSong),
   userSongController.deleteUserSong
 );
 
 //Xac nhan tham gia vao bai hat
 router.put(
   "/:songId/confirm",
-  //   validate(userSongValodation.confirmUserSong),
+  validate(userSongValodation.confirmUserSong),
   userSongController.confirmUserSong
 );
 
 //Huy xac nhan tham gia vao bai hat
 router.delete(
   "/:songId/confirm",
-  //   validate(userSongValodation.confirmUserSong),
+  validate(userSongValodation.unConfirmUserSong),
   userSongController.unConfirmUserSong
 );
 

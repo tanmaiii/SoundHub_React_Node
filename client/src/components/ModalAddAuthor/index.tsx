@@ -38,8 +38,6 @@ const ModalAddAuthor = ({
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      console.log(e.key);
-
       handleClick();
     }
   };

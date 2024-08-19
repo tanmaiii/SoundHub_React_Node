@@ -20,28 +20,13 @@ export const getAllUser = async (req, res) => {
         return res.status(401).json({ conflictError: "Không có quyền xem" });
       }
 
-      UserSong.findAllUser(req.params.songId, userInfo.id, (err, data) => {
+      UserSong.findAllUser(req.params.songId, req.query, (err, data) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         } else {
           return res.json(data);
         }
       });
-    });
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
-//Lấy tất cả user đã xác nhận tham gia vào bài hát
-export const getAllUserConfirm = async (req, res) => {
-  try {
-    UserSong.findAllUserConfirm(req.params.songId, (err, data) => {
-      if (err) {
-        return res.status(401).json({ conflictError: err });
-      } else {
-        return res.json(data);
-      }
     });
   } catch (error) {
     res.status(400).json(error);
@@ -313,7 +298,6 @@ export const deleteUserSong = async (req, res) => {
 };
 
 export default {
-  getAllUserConfirm,
   getAllUser,
   getAllSongByMe,
   checkUserConfirm,

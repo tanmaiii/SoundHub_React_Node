@@ -2,18 +2,28 @@ import { axiosClient } from "../../configs";
 import { ListResponse, TAuthor } from "../../types";
 
 const authorApi = {
-  getAllUser(songId: string, token: string): Promise<string[]> {
-    const url = `userSong/${songId}/me`;
+  getAllUser(
+    songId: string,
+    token: string,
+    page: number,
+    limit: number,
+    q?: string,
+    sort?: "new" | "old",
+    status?: "Pending" | "Accepted" | "Rejected" | "all"
+  ): Promise<ListResponse<TAuthor>> {
+    const url = `userSong/${songId}/all`;
     return axiosClient.get(url, {
       headers: {
         authorization: token,
       },
+      params: {
+        page: page,
+        limit: limit,
+        q: q,
+        sortBy: sort,
+        status: status,
+      },
     });
-  },
-
-  getAllUserConfirm(songId: string): Promise<string[]> {
-    const url = "userSong/";
-    return axiosClient.get(url + songId);
   },
 
   getAllUserRequest(

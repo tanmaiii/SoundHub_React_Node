@@ -225,12 +225,14 @@
             margin-left: $space-12;
             @include flex(center, unset, row);
             gap: $space-8;
+            margin-bottom: $space-12;
 
             h3 {
               font-size: $size-18;
               color: themed("txt-main");
               font-weight: $font-medium;
             }
+
             .btn-add-author {
               i {
                 --size: 36px;
