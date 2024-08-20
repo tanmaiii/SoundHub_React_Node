@@ -255,7 +255,7 @@ export default function SongPage() {
             </div>
             <div className="songPage__content__body__artist col pc-4 t-12">
               <div className="songPage__content__body__artist__header">
-                <h3>Artist</h3>
+                <h3>Artist 123</h3>
                 {currentUser?.id === song?.user_id && (
                   <button
                     className="btn-add-author"
