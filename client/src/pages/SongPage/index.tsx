@@ -8,16 +8,20 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { authorApi, songApi, userApi } from "../../apis";
+import { authorApi, searchApi, songApi, userApi } from "../../apis";
 import CommentInput from "../../components/CommentInput/CommentInput";
 import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/authContext";
 import { PATH } from "../../constants/paths";
 import Modal from "../../components/Modal";
-import ModalAddAuthor from "../../components/ModalAddAuthor";
 import { toast } from "sonner";
-import { TAuthor } from "../../types";
+import { ResSoPaAr, TAuthor, TUser } from "../../types";
+import CustomInput from "../../components/CustomInput";
+import ImageWithFallback from "../../components/ImageWithFallback";
+import numeral from "numeral";
+import { useTranslation } from "react-i18next";
+import { EditSong } from "../../components/ModalSong";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -26,10 +30,10 @@ export default function SongPage() {
   const queryClient = useQueryClient();
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModalAuthor, setOpenModalAuthor] = useState<boolean>(false);
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const [authors, setAuthors] = useState<TAuthor[]>([]);
   const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
-  const [authorsAll, setAuthorsAll] = useState<TAuthor[]>([]);
-  const [selectedAuthors, setSelectedAuthors] = useState<TAuthor[]>([]);
+  const { t } = useTranslation("song");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,21 +49,6 @@ export default function SongPage() {
         }
       } catch (error) {
         navigation(`${PATH.ERROR}`);
-        return null;
-      }
-    },
-  });
-
-  const {} = useQuery({
-    queryKey: ["authors-all", song?.id],
-    queryFn: async () => {
-      try {
-        const res =
-          id && (await authorApi.getAllUser(id, token, 1, 0, "", "new", "all"));
-        res && setAuthorsAll(res.data);
-        res && setSelectedAuthors(res.data);
-        return res;
-      } catch (error) {
         return null;
       }
     },
@@ -122,25 +111,6 @@ export default function SongPage() {
     },
   });
 
-  useEffect(() => {
-    // selectedAuthors.map((author) => {
-    //   const fetchAuthor = async () => {
-    //     try {
-    //       console.log(author);
-
-    //       // if (!selectedAuthorsDefault.includes(author)) {
-    //       // setSelectedAuthorsDefault(selectedAuthors);
-    //       // toast.success("Add author success");
-    //       // }
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   };
-    //   fetchAuthor();
-    // });
-    console.log({ selectedAuthors });
-  }, [selectedAuthors]);
-
   return (
     <>
       <div className="songPage">
@@ -160,6 +130,7 @@ export default function SongPage() {
             userId={song?.user_id}
             isPublic={song?.public}
             genreId={song?.genre_id}
+            fnOpenEdit={() => setOpenModalEdit(true)}
           />
         </div>
         <div className="songPage__content">
@@ -255,7 +226,7 @@ export default function SongPage() {
             </div>
             <div className="songPage__content__body__artist col pc-4 t-12">
               <div className="songPage__content__body__artist__header">
-                <h3>Artist 123</h3>
+                <h3>{t("Artist")}</h3>
                 {currentUser?.id === song?.user_id && (
                   <button
                     className="btn-add-author"
@@ -285,7 +256,7 @@ export default function SongPage() {
                 <>
                   {authorPending.length > 0 && (
                     <div className="songPage__content__body__artist__header">
-                      <h3>Chưa xác nhận</h3>
+                      <h3>{t("Invitation sent")}</h3>
                     </div>
                   )}
                   <div className="row">
@@ -304,14 +275,173 @@ export default function SongPage() {
           </div>
         </div>
       </div>
-      <Modal openModal={openModalAuthor} setOpenModal={setOpenModalAuthor}>
+      {song && (
+        <Modal openModal={openModalAuthor} setOpenModal={setOpenModalAuthor}>
+          <div>
+            <ModalAuthor songId={song?.id ?? ""} />
+          </div>
+        </Modal>
+      )}
+
+      <Modal openModal={openModalEdit} setOpenModal={setOpenModalEdit}>
         <div>
-          {/* <ModalAddAuthor
-          authors={selectedAuthors}
-          setAuthors={setSelectedAuthors}
-        /> */}
+          <EditSong
+            songId={song?.id ?? ""}
+            open={openModalEdit}
+            closeModal={() => setOpenModalEdit(false)}
+          />
         </div>
       </Modal>
     </>
   );
 }
+
+const ModalAuthor = ({ songId }: { songId: string }) => {
+  const [authors, setAuthors] = useState<ResSoPaAr[] | undefined>(undefined);
+  const [keyword, setKeyword] = useState("");
+  const { token } = useAuth();
+
+  const handleGetAuthor = async () => {
+    try {
+      const res = await searchApi.getArtists(token, 1, 10, keyword);
+      res.data && setAuthors(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetAuthor();
+  }, [keyword]);
+
+  const handleClick = () => {
+    handleGetAuthor();
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleClick();
+    }
+  };
+
+  return (
+    <div className="ModalAuthor__search-author">
+      <div className="ModalAuthor__search-author__header">
+        <div className="ModalAuthor__search-author__header__input">
+          <CustomInput
+            onSubmit={(text) => setKeyword(text)}
+            placeholder="Nhập tên tác giả"
+            onKeyDown={handleKeyPress}
+          />
+          <button className="btn-search" onClick={handleClick}>
+            <i className="fa-regular fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+      <div className="ModalAuthor__search-author__body">
+        <div className="ModalAuthor__search-author__body__list">
+          {authors?.length === 0 && (
+            <div className="ModalAuthor__search-author__body__list__empty">
+              <span>Không tìm thấy tác giả</span>
+            </div>
+          )}
+          {authors?.map((author) => (
+            <AuthorItem key={author.id} id={author?.id} songId={songId} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AuthorItem = ({ id, songId }: { id: string; songId: string }) => {
+  const [author, setAuthor] = useState<TUser | null>(null);
+  const { currentUser, token } = useAuth();
+  const queryClient = useQueryClient();
+  const { t } = useTranslation("song");
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const res = await userApi.getDetail(id);
+        res && setAuthor(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAuthor();
+  }, [id]);
+
+  const { data: status } = useQuery({
+    queryKey: ["author-song", { id, songId }],
+    queryFn: async () => {
+      try {
+        const res =
+          songId && id && (await authorApi.getDetail(token, id, songId));
+        return res && res.status;
+      } catch (error) {
+        console.log(error);
+
+        return null;
+      }
+    },
+  });
+
+  const mutationConfirm = useMutation({
+    mutationFn: async (status: boolean) => {
+      if (status) {
+        toast.success(t("Toast.Delete request successfully"));
+        return await authorApi.deleteAuthor(token, songId, id);
+      } else {
+        toast.success(t("Toast.Sent success"));
+        return await authorApi.createRequest(token, songId, id);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["author-song", { id, songId }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["authors", songId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["authors-pending", songId],
+      });
+    },
+  });
+
+  if (currentUser?.id === id) return null;
+
+  return (
+    author && (
+      <div className="ModalAuthor__author-item">
+        <ImageWithFallback
+          src={author?.image_path}
+          alt={author?.name}
+          fallbackSrc={Images.AVATAR}
+        />
+        <div className="ModalAuthor__author-item__desc">
+          <h6>{author?.name}</h6>
+          <span>
+            {numeral(author?.count).format("0a").toUpperCase()} followers
+          </span>
+        </div>
+        {!status || status === "Rejected" ? (
+          <button
+            className="btn-add"
+            onClick={() => mutationConfirm.mutate(false)}
+          >
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        ) : (
+          <button
+            className="btn-remove"
+            onClick={() => mutationConfirm.mutate(true)}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        )}
+      </div>
+    )
+  );
+};

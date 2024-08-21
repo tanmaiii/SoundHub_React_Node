@@ -7,7 +7,7 @@ const querySchema = {
     limit: Joi.number().integer().required(),
     page: Joi.number().integer().required(),
     status: Joi.string()
-      .valid("Pending", "Accepted", "Rejected")
+      .valid("Pending", "Accepted", "Rejected", "all")
       .default("all"),
   }),
 };

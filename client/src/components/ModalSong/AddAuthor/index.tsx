@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { searchApi, userApi } from "../../apis";
-import CustomInput from "../../components/CustomInput";
-import { useAuth } from "../../context/authContext";
-import { ResSoPaAr, TUser } from "../../types";
+import { searchApi, userApi } from "../../../apis";
+import CustomInput from "../../../components/CustomInput";
+import { useAuth } from "../../../context/authContext";
+import { ResSoPaAr, TUser } from "../../../types";
 import "./style.scss";
-import ImageWithFallback from "../ImageWithFallback";
-import Images from "../../constants/images";
+import ImageWithFallback from "../../ImageWithFallback";
+import Images from "../../../constants/images";
 import numeral from "numeral";
 
 const ModalAddAuthor = ({

@@ -2,6 +2,8 @@
   "song": "Bài hát",
   "playlist": "Danh sách phát",
   "comments": "Bình luận",
+  "Artist": "Nghệ sĩ",
+  "Invitation sent": "Đã gửi lời mời",
   "Menu": {
     "Add to playlist": "Thêm vào danh sách phát",
     "Remove to playlist": "Xóa khỏi danh sách phát này",
@@ -38,5 +40,17 @@
     "Cancel": "Hủy",
     "Post": "Đăng",
     "Exit": "Thoát"
+  },
+  "Author": {
+    "Enter artist name": "Nhập tên nghệ sĩ",
+    "No results found": "Không tìm thấy kết quả"
+  },
+  "Comment": {},
+  "Toast": {
+    "Sent success": "Đã gửi lời mời thành công",
+    "Delete request successfully": "Xóa yêu cầu thành công",
+    "Error": "Error",
+    "Warning": "Warning",
+    "Info": "Info"
   }
 }

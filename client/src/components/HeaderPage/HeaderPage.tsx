@@ -107,7 +107,6 @@ export default function HeaderPage({
                   className="avatar__overlay"
                 >
                   <i className="fa-regular fa-pen-to-square"></i>
-                  <span>Edit playlist</span>
                 </div>
               )}
             </>

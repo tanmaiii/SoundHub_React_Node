@@ -48,7 +48,7 @@ export const checkUserConfirm = async (req, res) => {
       }
       UserSong.find(req.query.userId, req.query.songId, (err, data) => {
         if (err || !data) {
-          return res.status(401).json({ conflictError: "Không tìm thấy !" });
+          return res.status(200).json("Không tìm thấy !");
         }
 
         if (userInfo.id === song.user_id || userInfo.id === data.user_id) {

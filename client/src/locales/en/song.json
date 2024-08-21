@@ -2,6 +2,8 @@
   "song": "Song",
   "playlist": "Playlist",
   "comments": "Comments",
+  "Artist": "Artist",
+  "Invitation sent": "Invitation sent",
   "Menu": {
     "Add to playlist": "Add to playlist",
     "Remove to playlist": "Remove to playlist",
@@ -13,7 +15,6 @@
     "Artist Access": "Artist Access",
     "Share": "Share",
     "Close": "Close"
-
   },
   "Upload": {
     "Post song": "Post song",
@@ -39,5 +40,17 @@
     "Cancel": "Cancel",
     "Post": "Post",
     "Exit": "Exit"
+  },
+  "Author": {
+    "Enter artist name": "Enter artist name",
+    "No results found": "No results found"
+  },
+  "Comment": {},
+  "Toast": {
+    "Sent success": "Invitation sent successfully",
+    "Delete request successfully": "Delete request successfully",
+    "Error": "Error",
+    "Warning": "Warning",
+    "Info": "Info"
   }
 }

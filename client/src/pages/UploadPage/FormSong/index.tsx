@@ -1,4 +1,3 @@
-import numeral from "numeral";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -9,21 +8,16 @@ import {
   genreApi,
   imageApi,
   mp3Api,
-  searchApi,
-  songApi,
-  userApi,
+  songApi
 } from "../../../apis";
 import BoxAudio from "../../../components/BoxAudio";
-import CustomInput from "../../../components/CustomInput";
 import Dropdown from "../../../components/Dropdown";
-import ImageWithFallback from "../../../components/ImageWithFallback";
 import Modal from "../../../components/Modal";
-import Images from "../../../constants/images";
+import { ModalAddAuthor } from "../../../components/ModalSong";
+import { AuthorItem } from "../../../components/ModalSong/AddAuthor";
 import { PATH } from "../../../constants/paths";
 import { useAuth } from "../../../context/authContext";
-import { ResSoPaAr, TUser } from "../../../types";
 import "./style.scss";
-import ModalAddAuthor, { AuthorItem } from "../../../components/ModalAddAuthor";
 
 interface TError {
   title: string;

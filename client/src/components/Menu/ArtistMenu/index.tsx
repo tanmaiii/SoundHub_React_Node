@@ -62,6 +62,22 @@ const ArtistMenu = ({
     getSong();
   }, [songId, id, token]);
 
+  const handleSuccess = () => {
+    onClose();
+    
+    queryClient.invalidateQueries(["notify-detail", [songId, currentUser?.id]]);
+
+    queryClient.invalidateQueries({
+      queryKey: ["author-song", { id, songId }],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["authors", songId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["authors-pending", songId],
+    });
+  };
+
   const {} = useQuery({
     queryKey: ["author", [id, songId]],
     queryFn: async () => {
@@ -81,12 +97,7 @@ const ArtistMenu = ({
     () => authorApi.rejectRequest(token, songId || ""),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "notify-detail",
-          [songId, currentUser?.id],
-        ]);
-        queryClient.invalidateQueries(["authors", songId]);
-        onClose();
+        return handleSuccess();
       },
     }
   );
@@ -102,12 +113,7 @@ const ArtistMenu = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "notify-detail",
-          [songId, currentUser?.id],
-        ]);
-        queryClient.invalidateQueries(["authors", songId]);
-        onClose();
+        return handleSuccess();
       },
     }
   );
