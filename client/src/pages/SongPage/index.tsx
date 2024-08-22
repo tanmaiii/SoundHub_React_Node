@@ -123,6 +123,7 @@ export default function SongPage() {
             fbAvt={Images.SONG}
             avt={song?.image_path ?? ""}
             title={song?.title ?? ""}
+            desc={song?.desc ?? ""}
             time={song?.created_at ?? ""}
             like={song?.count_like ?? 0}
             listen={song?.count_listen ?? 0}
@@ -283,14 +284,16 @@ export default function SongPage() {
         </Modal>
       )}
 
-      <Modal openModal={openModalEdit} setOpenModal={setOpenModalEdit}>
-        <div>
-          <EditSong
-            songId={song?.id ?? ""}
-            open={openModalEdit}
-            closeModal={() => setOpenModalEdit(false)}
-          />
-        </div>
+      <Modal
+        title="Edit song"
+        openModal={openModalEdit}
+        setOpenModal={setOpenModalEdit}
+      >
+        <EditSong
+          songId={song?.id ?? ""}
+          open={openModalEdit}
+          closeModal={() => setOpenModalEdit(false)}
+        />
       </Modal>
     </>
   );

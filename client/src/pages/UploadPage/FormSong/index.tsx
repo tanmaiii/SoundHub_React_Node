@@ -51,7 +51,6 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
   const [openModalAuthor, setOpenModalAuthor] = useState(false);
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -246,14 +245,6 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
   return (
     <>
       <div className="FormSong">
-        {/* <div className="FormSong__danger">
-          {exit && (
-            <div className="FormSong__danger__wrapper">
-              <i className="fa-light fa-circle-exclamation"></i>
-              <span>{t("Upload.Danger exit")}</span>
-            </div>
-          )}
-        </div> */}
         <div className="FormSong__top">
           <BoxAudio file={fileMp3} stop={true} />
         </div>

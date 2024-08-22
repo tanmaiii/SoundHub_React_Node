@@ -1,6 +1,7 @@
 export type TSong = {
   id?: string;
   title: string;
+  desc?: string;
   image_path: string;
   author?: string;
   user_id?: string;

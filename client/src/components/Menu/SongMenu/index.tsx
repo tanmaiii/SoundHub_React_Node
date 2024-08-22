@@ -19,6 +19,7 @@ import { AddPlaylist } from "../../ModalPlaylist";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constants/paths";
 import { toast } from "sonner";
+import { EditSong } from "../../ModalSong";
 
 type Props = {
   id: string;
@@ -44,6 +45,7 @@ const SongMenu = ({
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
   const navigation = useNavigate();
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -208,6 +210,17 @@ const SongMenu = ({
           </button>
         </div>
       </div>
+      <Modal
+        title="Edit song"
+        openModal={openModalEdit}
+        setOpenModal={setOpenModalEdit}
+      >
+        <EditSong
+          songId={song?.id ?? ""}
+          open={openModalEdit}
+          closeModal={() => setOpenModalEdit(false)}
+        />
+      </Modal>
     </>
   );
 };
