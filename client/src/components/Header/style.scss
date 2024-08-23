@@ -12,7 +12,6 @@
     top: 0;
     right: 0;
     width: 100%;
-    // width: calc(100% - $width-navbar);
     z-index: 9;
 
     @include tablet {
@@ -41,7 +40,7 @@
       }
       button {
         border-radius: 50%;
-        padding: $space-4;
+
         cursor: pointer;
         color: themed("txt-main");
         transition: $transition;
@@ -62,7 +61,7 @@
         }
 
         i {
-          --size: 36px;
+          --size: 44px;
           width: var(--size);
           height: var(--size);
           @include flex(center, center);
@@ -115,7 +114,7 @@
 
       &__upload {
         border-radius: 50%;
-        padding: $space-4;
+        //
         cursor: pointer;
         color: themed("txt-main");
         transition: $transition;
@@ -132,7 +131,7 @@
         }
 
         i {
-          --size: 36px;
+          --size: 44px;
           width: var(--size);
           height: var(--size);
           @include flex(center, center);
@@ -142,7 +141,7 @@
 
       &__notify {
         border-radius: 50%;
-        padding: $space-4;
+
         cursor: pointer;
         color: themed("txt-main");
         transition: $transition;
@@ -164,7 +163,7 @@
         }
 
         i {
-          --size: 36px;
+          --size: 44px;
           width: var(--size);
           height: var(--size);
           @include flex(center, center);
@@ -174,8 +173,8 @@
         &__num {
           position: absolute;
           background-color: $color-red;
-          padding: $space-4;
           border-radius: 50%;
+          padding: 2px;
           top: -4px;
           right: -4px;
           span {

@@ -4,10 +4,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import "./mainLayout.scss";
 
 import NavBar from "../../components/NavBar/NavBar";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import BarPlaying from "../../components/BarPlaying/BarPlaying";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import Footer from "../../components/Footer";
 import WattingList from "../../components/WattingList";
 import { useAuth } from "../../context/authContext";

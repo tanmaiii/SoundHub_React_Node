@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import UserSetting from "../UserSetting";
 
-import "./header.scss";
+import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbarSlice";

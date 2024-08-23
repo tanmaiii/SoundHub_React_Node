@@ -30,6 +30,8 @@ const NotFoundPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
 
 const AuthLayout = lazy(() => import("../layout/AuthLayout/AuthLayout"));
 
+const AccountPage = lazy(() => import("../pages/SettingPage/Account"));
+
 const PATH = {
   HOME: "/",
   ARTIST: "/artist",
@@ -38,6 +40,12 @@ const PATH = {
   RECENTLY: "/recently",
 
   UPLOAD: "/upload",
+
+  ACCOUNT: "/account",
+  EDIT: "/edit",
+  NOTIFY: "/notify",
+  CHANGE_PASSWORD: "/change-password",
+  CHANGE_EMAIL: "/change-email",
 
   SEARCH: "/search",
   SEARCH_SHOW: "/search/:keyword",
@@ -69,6 +77,8 @@ const publicRoutes = [
   { path: PATH.RECENTLY, layout: null, component: RecentlyPage },
   { path: PATH.FAVOURITE, layout: null, component: FavouritePage },
   { path: PATH.UPLOAD, layout: null, component: UploadPage },
+
+  { path: PATH.ACCOUNT + PATH.EDIT, layout: null, component: AccountPage },
 
   { path: PATH.SEARCH, layout: null, component: SearchPage },
   { path: PATH.SEARCH_SHOW, layout: null, component: SearchPage },

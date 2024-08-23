@@ -1,0 +1,190 @@
+@use "../../../scss/" as *;
+
+.Account {
+  @include themify($themes) {
+    padding: 0 $space-24;
+    @include tablet {
+      padding: 0 $space-14;
+    }
+    @include mobile {
+      padding: 0 $space-12;
+    }
+
+    min-height: 100vh;
+    @include flex(center, start, column);
+
+    &__wrapper {
+      width: 100%;
+      height: 100%;
+      @include flex(start, start, row);
+      &__nav {
+        background-color: red;
+        height: 100%;
+      }
+      &__content {
+        height: 100%;
+        // background-color: themed("bg-2");
+        border-radius: $radius-8;
+        padding: $space-24;
+        max-width: 700px;
+        margin: 0 auto;
+        &__header {
+          margin-bottom: $space-24;
+          h4 {
+            font-size: $size-18;
+            font-weight: $font-medium;
+            color: themed("txt-main");
+            margin-bottom: $space-12;
+          }
+        }
+
+        &__body {
+          .Account__avatar {
+            @include flex(center, center);
+            gap: $space-12;
+            margin-bottom: $space-24;
+            background-color: themed("bg-2");
+            border-radius: $radius-8;
+            padding: $space-12 $space-24;
+            &__img {
+              img {
+                --size: 60px;
+                width: var(--size);
+                height: var(--size);
+                border-radius: 50%;
+                object-fit: cover;
+              }
+            }
+            &__desc {
+              flex: 1;
+              h5 {
+                font-size: $size-16;
+                font-weight: $font-medium;
+                color: themed("txt-main");
+              }
+              p {
+                font-size: $size-14;
+                font-weight: $font-light;
+                color: themed("txt-second");
+              }
+            }
+            & > button {
+              @include flex(center, center);
+              padding: $space-8 $space-12;
+              border-radius: $radius-4;
+              font-size: $size-14;
+              font-weight: $font-medium;
+              color: $color-white;
+              background-color: $color-primary1;
+              transition: all 0.3s;
+              cursor: pointer;
+              &:hover {
+                transform: scale(0.98);
+              }
+            }
+          }
+
+          .Account__item {
+            & > .title {
+              font-size: $size-16;
+              font-weight: $font-medium;
+              color: themed("txt-main");
+              margin-bottom: $space-8;
+            }
+            & > .desc {
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              margin-bottom: $space-8;
+            }
+            &__body {
+              //   background-color: themed("bg-2");
+              border-radius: $radius-8;
+              padding: $space-12;
+              border: 1px solid themed("border");
+              margin-bottom: $space-24;
+              @include flex(center, start, row);
+              gap: $space-8;
+              &__desc {
+                flex: 1;
+                span {
+                  font-size: $size-16;
+                  font-weight: $font-light;
+                  color: themed("txt-main");
+                }
+                input {
+                  font-size: $size-16;
+                  font-weight: $font-light;
+                  color: themed("txt-main");
+                  width: 100%;
+                }
+              }
+              &__buttons {
+                .btn-edit {
+                  transition: all 0.3s;
+                  cursor: pointer;
+                  i {
+                    --size: 32px;
+                    width: var(--size);
+                    height: var(--size);
+                    background-color: themed("bg-2");
+                    font-size: $size-14;
+                    @include flex(center, center);
+                    color: themed("txt-second");
+                    border-radius: 50%;
+                  }
+                  &:hover {
+                    transform: scale(0.96);
+                    i {
+                      //   color: themed("txt-main");
+                    }
+                  }
+                }
+
+                .btn-clear {
+                  i {
+                    --size: 22px;
+                    width: var(--size);
+                    height: var(--size);
+                    // background-color: themed("bg-2");
+                    font-size: $size-16;
+                    @include flex(center, center);
+                    color: themed("txt-second");
+                    border-radius: 50%;
+                    cursor: pointer;
+                    &:hover {
+                      background-color: themed("bg-2");
+                    }
+                  }
+                }
+              }
+            }
+
+            &__bottom {
+              &__buttons {
+                @include flex(center, end, row);
+                gap: $space-8;
+                button {
+                  transition: all 0.3s;
+                  cursor: pointer;
+                  font-size: $size-16;
+                  color: $color-white;
+                  background-color: $color-primary1;
+                  padding: $space-8 $space-16;
+                  border-radius: $radius-4;
+                  &:hover {
+                    transform: scale(0.96);
+                  }
+                  &:first-child {
+                    color: themed("txt-main");
+                    background-color: themed("bg-2");
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

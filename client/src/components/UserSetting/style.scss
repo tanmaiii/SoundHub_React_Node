@@ -4,14 +4,14 @@
   @include themify($themes) {
     position: relative;
     &__avt {
-      --size: 52px;
+      --size: 44px;
       width: var(--size);
       height: var(--size);
       position: relative;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid $color-primary1;
-      @include tooltip(bottom, center);
+      @include tooltip(bottom, right);
 
       img {
         z-index: 1;

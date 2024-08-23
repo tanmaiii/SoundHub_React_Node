@@ -1,19 +1,17 @@
-import React, { ReactHTML, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { changeDarkMode } from "../../slices/darkModeSlice";
+import { RootState } from "../../store";
+import "./style.scss";
 
-import { useAuth } from "../../context/authContext";
-import { PATH } from "../../constants/paths";
-import { Link } from "react-router-dom";
-import Images from "../../constants/images";
-import { apiConfig } from "../../configs";
-import ImageWithFallback from "../ImageWithFallback";
-import { CSSTransition } from "react-transition-group";
 import { useTranslation } from "react-i18next";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Images from "../../constants/images";
+import { PATH } from "../../constants/paths";
+import { useAuth } from "../../context/authContext";
 import { locales } from "../../i18n/i18n";
+import ImageWithFallback from "../ImageWithFallback";
 
 export default function UserSetting() {
   const [active, setActive] = useState(false);
@@ -25,6 +23,8 @@ export default function UserSetting() {
   const dispatch = useDispatch();
   const { t } = useTranslation("header");
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -56,13 +56,17 @@ export default function UserSetting() {
     logout();
   };
 
+  useEffect(() => {
+    if (active) return setActive(false);
+  }, [location.pathname]);
+
   return (
     currentUser && (
       <div ref={dropdownRef} className="UserSetting">
         <div
           className="UserSetting__avt"
           onClick={() => setActive(!active)}
-          // data-tooltip={currentUser?.name}
+          data-tooltip={currentUser?.name}
         >
           <ImageWithFallback
             alt=""
@@ -184,9 +188,28 @@ export default function UserSetting() {
               setHeight={(num) => setHeight(num)}
               func={() => setActiveMenu("main")}
             >
-              <div>
-                <span>{t("Dropdown.main.Setting")}</span>
-              </div>
+              <DropdownItem
+                iconLeft={<i className="fa-light fa-user"></i>}
+                title={"Account"}
+                func={() => navigate(PATH.ACCOUNT + PATH.EDIT)}
+              />
+
+              <DropdownItem
+                iconLeft={<i className="fa-light fa-bell"></i>}
+                title={"Notification"}
+                func={() => navigate(PATH.ACCOUNT)}
+              />
+              <DropdownItem
+                iconLeft={<i className="fa-light fa-lock"></i>}
+                title={"Change Password"}
+                func={() => navigate(PATH.ACCOUNT)}
+              />
+
+              <DropdownItem
+                iconLeft={<i className="fa-light fa-envelope"></i>}
+                title={"Change Email"}
+                func={() => navigate(PATH.ACCOUNT)}
+              />
             </DropdownGroup>
           </div>
         </div>

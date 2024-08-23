@@ -174,6 +174,13 @@ const SongMenu = ({
                 itemFunc={() => mutationLike.mutate(isLike)}
               />
             )}
+             {currentUser?.id === song.user_id && (
+              <ItemMenu
+                title={t("Menu.Edit song")}
+                icon={<i className="fa-light fa-pen-to-square"></i>}
+                itemFunc={() => setOpenModalEdit(true)}
+              />
+            )}
             {currentUser?.id === song.user_id && (
               <ItemMenu
                 title={t("Menu.Delete song")}
