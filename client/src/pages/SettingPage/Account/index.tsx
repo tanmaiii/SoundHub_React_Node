@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./style.scss";
 import { useAuth } from "../../../context/authContext";
 
@@ -42,8 +42,12 @@ const ItemAccount = ({ title, value }: { title: string; value: string }) => {
 
   const handleOpenEdit = () => {
     setIsEdit(true);
-    inputRef && inputRef.current?.focus();
+    inputRef.current && inputRef.current.focus();
   };
+
+  useEffect(() => {
+    inputRef.current && inputRef.current.focus();
+  }, [inputRef.current]);
 
   return (
     <div className="Account__item">
@@ -53,17 +57,14 @@ const ItemAccount = ({ title, value }: { title: string; value: string }) => {
         temporibus quam
       </p>
       <div className="Account__item__body">
-        <div className="Account__item__body__desc">
-          {!isEdit ? (
-            <span>{value}</span>
-          ) : (
-            <input
-              ref={inputRef}
-              type="text"
-              defaultValue={value}
-              placeholder="Enter your name..."
-            />
-          )}
+        <div className={`Account__item__body__desc ${isEdit ? "edit" : ""}`}>
+          <span>{value}</span>
+          <input
+            ref={inputRef}
+            type="text"
+            defaultValue={value}
+            placeholder="Enter your name..."
+          />
         </div>
         <div className="Account__item__body__buttons">
           {!isEdit ? (

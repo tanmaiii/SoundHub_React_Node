@@ -23,7 +23,7 @@
       }
       &__content {
         height: 100%;
-        // background-color: themed("bg-2");
+        background-color: themed("bg-2");
         border-radius: $radius-8;
         padding: $space-24;
         max-width: 700px;
@@ -43,7 +43,7 @@
             @include flex(center, center);
             gap: $space-12;
             margin-bottom: $space-24;
-            background-color: themed("bg-2");
+            background-color: themed("bg-3");
             border-radius: $radius-8;
             padding: $space-12 $space-24;
             &__img {
@@ -98,25 +98,34 @@
               margin-bottom: $space-8;
             }
             &__body {
-              //   background-color: themed("bg-2");
               border-radius: $radius-8;
               padding: $space-12;
               border: 1px solid themed("border");
-              margin-bottom: $space-24;
+              margin-bottom: $space-12;
               @include flex(center, start, row);
               gap: $space-8;
               &__desc {
                 flex: 1;
+                &.edit {
+                  span {
+                    display: none;
+                  }
+                  input {
+                    display: block;
+                  }
+                }
                 span {
                   font-size: $size-16;
                   font-weight: $font-light;
                   color: themed("txt-main");
+                  display: block;
                 }
                 input {
                   font-size: $size-16;
                   font-weight: $font-light;
                   color: themed("txt-main");
                   width: 100%;
+                  display: none;
                 }
               }
               &__buttons {
@@ -127,7 +136,7 @@
                     --size: 32px;
                     width: var(--size);
                     height: var(--size);
-                    background-color: themed("bg-2");
+                    background-color: themed("bg-3");
                     font-size: $size-14;
                     @include flex(center, center);
                     color: themed("txt-second");
@@ -153,7 +162,7 @@
                     border-radius: 50%;
                     cursor: pointer;
                     &:hover {
-                      background-color: themed("bg-2");
+                      background-color: themed("bg-3");
                     }
                   }
                 }
@@ -167,7 +176,7 @@
                 button {
                   transition: all 0.3s;
                   cursor: pointer;
-                  font-size: $size-16;
+                  font-size: $size-14;
                   color: $color-white;
                   background-color: $color-primary1;
                   padding: $space-8 $space-16;
@@ -177,7 +186,7 @@
                   }
                   &:first-child {
                     color: themed("txt-main");
-                    background-color: themed("bg-2");
+                    background-color: themed("bg-3");
                   }
                 }
               }
