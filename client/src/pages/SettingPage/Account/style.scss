@@ -53,6 +53,8 @@
                 height: var(--size);
                 border-radius: 50%;
                 object-fit: cover;
+                background-color: themed('bg-2');
+                // border: 1px solid themed("border");
               }
             }
             &__desc {
@@ -104,6 +106,10 @@
               margin-bottom: $space-12;
               @include flex(center, start, row);
               gap: $space-8;
+              &.focus {
+                border: 1px solid themed("txt-main");
+              }
+
               &__desc {
                 flex: 1;
                 &.edit {
@@ -197,3 +203,4 @@
     }
   }
 }
+

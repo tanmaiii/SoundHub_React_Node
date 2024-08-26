@@ -7,11 +7,14 @@ const imageApi = {
       headers: { "Content-Type": "multipart/form-data", authorization: token },
     });
   },
-  delete: (fileName: string) => {
+  delete: (fileName: string, token: string) => {
     const url = "image";
     return axiosClient.delete(url, {
       data: {
         fileName: fileName,
+      },
+      headers: {
+        authorization: token,
       },
     });
   },

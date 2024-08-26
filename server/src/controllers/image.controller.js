@@ -52,6 +52,8 @@ export const deleteImage = async (req, res) => {
               return res.status(500).json({ conflictError });
             }
 
+            console.log("DELETE IMAGE: ", { message: "File deleted successfully" });
+            
             return res.json({ message: "File deleted successfully" });
           });
         });

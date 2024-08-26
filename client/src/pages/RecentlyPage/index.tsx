@@ -70,10 +70,10 @@ export default function RecentlyPage() {
           <HeaderSection title={"Recently"} />
         </div>
         <div className="recently__container__body">
-          <div className="recently__container__body__list row">
+          <div className="recently__container__body__list row sm-gutter">
             {songs?.map((song, index) => {
               return (
-                <div key={index} className={"pc-2 t-3 m-6"}>
+                <div key={index} className={"col pc-2 t-3 m-6"}>
                   <CardSong
                     id={song?.id}
                     title={song?.title}

@@ -347,7 +347,7 @@ const EditSong = ({
           {t("Upload.Cancel")}
         </button>
         <button className="btn-submit" onClick={() => handleSubmit()}>
-          {t("Upload.Post")}
+          {t("Upload.Save")}
         </button>
       </div>
     </div>

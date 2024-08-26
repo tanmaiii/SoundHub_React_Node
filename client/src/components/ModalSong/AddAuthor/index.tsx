@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { searchApi, userApi } from "../../../apis";
 import CustomInput from "../../../components/CustomInput";
 import { useAuth } from "../../../context/authContext";
@@ -7,6 +7,7 @@ import "./style.scss";
 import ImageWithFallback from "../../ImageWithFallback";
 import Images from "../../../constants/images";
 import numeral from "numeral";
+import { useTranslation } from "react-i18next";
 
 const ModalAddAuthor = ({
   authors: selectedAuthors,
@@ -18,6 +19,7 @@ const ModalAddAuthor = ({
   const [authors, setAuthors] = useState<ResSoPaAr[] | undefined>(undefined);
   const [keyword, setKeyword] = useState("");
   const { token } = useAuth();
+  const { t } = useTranslation("song");
 
   const handleGetAuthor = async () => {
     try {
@@ -48,7 +50,7 @@ const ModalAddAuthor = ({
         <div className="modal__search-author__header__input">
           <CustomInput
             onSubmit={(text) => setKeyword(text)}
-            placeholder="Nhập tên tác giả"
+            placeholder={t("Author.Enter artist name")}
             onKeyDown={handleKeyPress}
           />
           <button className="btn-search" onClick={handleClick}>
@@ -60,7 +62,7 @@ const ModalAddAuthor = ({
         <div className="modal__search-author__body__list">
           {authors?.length === 0 && (
             <div className="modal__search-author__body__list__empty">
-              <span>Không tìm thấy tác giả</span>
+              <span>{t("Author.No results found")}</span>
             </div>
           )}
           {authors?.map((author) => (

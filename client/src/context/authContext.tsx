@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { authApi, userApi } from "../apis";
 import { TUser } from "../types";
 import Cookies from "js-cookie";
+import { useQuery } from "react-query";
 
 // Khai báo kiểu dữ liệu cho AuthContext
 interface IAuthContext {
@@ -70,15 +71,17 @@ export const AuthContextProvider = ({ children }: Props) => {
     }
   }, [currentUser, token]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("user", JSON.stringify(currentUser));
-  //   // localStorage.setItem("token", JSON.stringify(token));
-  //   Cookies.set("token", token, {
-  //     expires: 7,
-  //     secure: true,
-  //     sameSite: "Strict",
-  //   });
-  // }, [currentUser, token]);
+  const {} = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: async () => {
+      try {
+        const res = token && (await userApi.getMe(token));
+        res && setCurrentUser(res);
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    },
+  });
 
   // Cập nhật giá trị của AuthContextProvider
   const contextValue: IAuthContext = {

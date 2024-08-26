@@ -35,12 +35,12 @@
         margin: $space-12 0;
 
         @include tablet {
-          margin: $space-10 0;
+          margin: $space-8 0;
         }
 
         @include mobile {
           height: 150px;
-          margin: $space-8 0;
+          margin: $space-2 0;
         }
         &:hover {
           transform: scale(0.98);

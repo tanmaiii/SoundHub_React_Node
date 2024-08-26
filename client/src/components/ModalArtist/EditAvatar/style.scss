@@ -1,0 +1,55 @@
+@use "../../../scss/" as *;
+
+.Modal__edit__avatar {
+  @include themify($themes) {
+    @include flex(center, center, column);
+    & > div {
+      padding: $space-24 $space-12;
+      width: 100%;
+      text-align: center;
+      h3 {
+        font-size: $size-20;
+        font-weight: $font-light;
+        color: themed("txt-main");
+      }
+    }
+    button,
+    label {
+      padding: $space-18 $space-12;
+      border-top: 1px solid themed("border");
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.3s;
+      overflow: hidden;
+
+      h4 {
+        font-size: $size-16;
+        font-weight: $font-medium;
+        color: themed("txt-main");
+        text-align: center;
+      }
+      input{
+        display: none;
+      }
+      &.btn-delete {
+        h4 {
+          color: $color-red;
+        }
+      }
+      &.btn-submit {
+        h4 {
+          color: $color-blue;
+        }
+      }
+
+      &:hover {
+        background-color: themed("bg-3");
+      }
+
+      &:last-child {
+        border-bottom-left-radius: $space-8;
+        border-bottom-right-radius: $space-8;
+      }
+    }
+  }
+}

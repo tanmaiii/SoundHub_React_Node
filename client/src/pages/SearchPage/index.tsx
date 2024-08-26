@@ -54,7 +54,7 @@ const GenresPage = () => {
       <div className="GenresPage__header">
         <HeaderSection title="Duyệt tìm tất cả" />
       </div>
-      <div className="GenresPage__list row ">
+      <div className="GenresPage__list row">
         {genres?.map((genre) => (
           <div className="col pc-2-4 t-3 m-6">
             <div

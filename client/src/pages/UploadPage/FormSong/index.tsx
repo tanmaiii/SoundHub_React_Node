@@ -3,13 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import {
-  authorApi,
-  genreApi,
-  imageApi,
-  mp3Api,
-  songApi
-} from "../../../apis";
+import { authorApi, genreApi, imageApi, mp3Api, songApi } from "../../../apis";
 import BoxAudio from "../../../components/BoxAudio";
 import Dropdown from "../../../components/Dropdown";
 import Modal from "../../../components/Modal";

@@ -7,7 +7,7 @@ const bodySchema = {
     password: Joi.string().min(6).max(255),
     name: Joi.string().min(6).max(255),
     gender: Joi.string().min(0).max(10).allow(null, ""),
-    image_path: Joi.string().min(10).max(255),
+    image_path: Joi.string().min(10).max(255).allow(null, ""),
     verified: Joi.number().valid(0, 1),
     is_admin: Joi.number().valid(0, 1),
     email_verified_at: Joi.string().min(0).max(255),
