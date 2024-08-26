@@ -1,0 +1,46 @@
+{
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "theme": "Theme",
+        "dark": "Dark",
+        "light": "Light",
+        "logout": "Logout"
+    },
+    "button": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete"
+    },
+    "notify": {
+        "updateSuccess": "Update successfully !",
+        "updateFail": "Update failed !",
+        "deleteSuccess": "Delete successfully !",
+        "deleteFail": "Delete failed !",
+        "addSuccess": "Add successfully !",
+        "errorNameLength6Char": "The name must have at least 6 characters"
+    },
+    "account": {
+        "title": "Edit Account",
+        "email": "Email",
+        "password": "Password",
+        "changePassword": "Change Password",
+        "deleteAccount": "Delete Account",
+        "changeAvatar": "Change Avatar",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleteConfirmation": "Are you sure you want to delete your account?",
+        "name": "Name",
+        "nameDesc": "Your name will be displayed on your profile",
+        "birthday": "Birthday",
+        "birthdayDesc": "Your birthday will be displayed on your profile",
+        "gender":  "Gender",
+        "genderDesc": "Your gender will be displayed on your profile page"
+    },
+    "gender": {
+        "Female": "Female",
+        "Male" : "Male",
+        "No disclosure": "No disclosure"
+    }
+}

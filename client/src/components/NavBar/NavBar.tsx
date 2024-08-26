@@ -103,9 +103,6 @@ export default function Navbar() {
         <div className={`navbar__container__content`}>
           {navbar.map((navbar, index) => (
             <div key={index} className="navbar__container__content__group">
-              {/* <h4 className="navbar__container__content__group__title">
-                {navbar.title}
-              </h4> */}
               <hr />
               <div className="navbar__container__content__group__list">
                 {navbar.items.map((item, index) => (

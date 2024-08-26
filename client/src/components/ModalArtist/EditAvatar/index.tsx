@@ -30,7 +30,8 @@ const EditAvatar = ({
     },
     {
       onSuccess: () => {
-        queryClient.refetchQueries(["currentUser"]);
+        queryClient.invalidateQueries(["currentUser"]);
+        queryClient.invalidateQueries(["artist", currentUser?.id]);
       },
     }
   );
@@ -70,6 +71,7 @@ const EditAvatar = ({
     {
       onSuccess: () => {
         queryClient.refetchQueries(["currentUser"]);
+        queryClient.refetchQueries(["artist", currentUser?.id]);
       },
     }
   );

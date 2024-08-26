@@ -1,30 +1,24 @@
 @use "./scss/" as *;
 
 html {
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 10rem;
-    border: 1px solid #fff;
+  // //
+   /* width */
+   ::-webkit-scrollbar {
+    width: 6px;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    position: absolute;
-    right: -3rem;
-    top: -50rem;
     background: transparent;
   }
 
-  ::-webkit-scrollbar-track-piece:start {
-    background: transparent;
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $color-txt-second;
+    border: none;
+    border-radius: $radius-4;
   }
-
-  ::-webkit-scrollbar-track-piece:end {
-    background: transparent;
-  }
+  
 }
 
 * {

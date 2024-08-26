@@ -33,7 +33,7 @@
         display: none;
       }
 
-      @include tablet {
+      @include mobile {
         &__menu {
           display: block;
         }

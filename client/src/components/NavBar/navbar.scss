@@ -10,13 +10,23 @@
     top: 0;
     left: 0;
     z-index: 99;
+    // border-right: 1px solid themed("border");
     @include flex(unset, space-between);
     flex-direction: column;
+    padding: $space-12;
 
     @include tablet {
+      width: $width-navbar-tablet;
+      min-width: $width-navbar-tablet;
+    }
+
+    @include mobile {
       position: fixed;
       transform: translateY(-100%);
       box-shadow: themed("box-shadow");
+      width: $width-navbar;
+      min-width: $width-navbar;
+
       &.openMenu {
         transform: translateY(0);
       }
@@ -24,21 +34,16 @@
 
     &__container {
       overflow-y: auto;
-      // padding: $space-14;
-
       &__top {
         @include flex(center, center);
         flex: row;
         gap: $space-8;
-        // height: $height-header;
-        padding: $space-24 $space-24;
+        padding: $space-12;
 
         &__logo {
           font-weight: $font-bold;
-          // @include text-gradient($color-gradient);
           @include flex(center, center);
           color: $color-primary1;
-
           gap: $space-4;
           flex-direction: row;
 
@@ -50,19 +55,24 @@
             --size: 50px;
             width: var(--size);
             height: var(--size);
+            @include tablet {
+              --size: 40px;
+            }
           }
           h2 {
             font-size: $size-30;
+            @include tablet {
+              display: none;
+            }
+            @include mobile {
+              display: unset;
+            }
           }
         }
       }
 
       &__content {
-        padding: 0 $space-24;
-
         &__group {
-          // padding: $space-4 0;
-
           &:first-child {
             hr {
               display: none;
@@ -80,20 +90,30 @@
             color: themed("txt-second");
             font-weight: $font-bold;
             margin-bottom: $space-8;
-            // @include tablet {
-            //   display: none;
-            // }
+            @include tablet {
+              display: none;
+            }
           }
           &__list {
             &__item {
               @include flex(center, unset);
               gap: 10px;
               padding: $space-14 $space-18;
-              color: themed("txt-second");
+              color: themed("txt-main");
               border-radius: $radius-12;
               transition: $transition;
-              // margin-bottom: $space-8;
               cursor: pointer;
+
+              @include tablet {
+                padding: $space-12 0;
+                @include flex(center, center);
+              }
+
+              @include mobile {
+                padding: $space-14 $space-18;
+                @include flex(center, start);
+              }
+
               &:not(:last-child) {
                 margin-bottom: $space-8;
               }
@@ -116,6 +136,13 @@
               &__title {
                 font-size: $size-16;
                 font-weight: $font-medium;
+                @include tablet {
+                  display: none;
+                }
+
+                @include mobile {
+                  display: unset;
+                }
               }
             }
           }

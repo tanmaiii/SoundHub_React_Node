@@ -77,7 +77,6 @@
         &__info {
           &__artist {
             @include flex(center, unset);
-            @include text(1);
             a {
               font-size: $size-14;
               font-weight: $font-light;
@@ -85,6 +84,7 @@
               position: relative;
               padding-right: 4px;
               display: inline-block;
+              @include text(1);
               &:not(:last-child)::after {
                 content: ", ";
               }

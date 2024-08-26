@@ -23,7 +23,7 @@ function Section({ children, title, to, loading = false }: SectionProps) {
         <div className="section__main__slide row no-gutters">
           {React.Children.map(children, (child, index) => {
             if (child === null) return null;
-            return <div className={"pc-2 t-3 m-6"}>{child}</div>;
+            return <div className={"pc-2 t-3 m-4"}>{child}</div>;
           })}
         </div>
       </div>

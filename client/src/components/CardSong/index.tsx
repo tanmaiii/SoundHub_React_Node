@@ -5,8 +5,6 @@ import Skeleton from "react-loading-skeleton";
 
 import { PATH } from "../../constants/paths";
 import Images from "../../constants/images";
-import { TSong, TUser, ResSoPaAr } from "../../types";
-import { apiConfig } from "../../configs";
 import ImageWithFallback from "../ImageWithFallback";
 
 export interface CardSongProps {

@@ -2,13 +2,13 @@
 
 .Account {
   @include themify($themes) {
-    padding: 0 $space-24;
-    @include tablet {
-      padding: 0 $space-14;
-    }
-    @include mobile {
-      padding: 0 $space-12;
-    }
+    // padding: 0 $space-24;
+    // @include tablet {
+    //   padding: 0 $space-14;
+    // }
+    // @include mobile {
+    //   padding: 0 $space-12;
+    // }
 
     min-height: 100vh;
     @include flex(center, start, column);
@@ -18,16 +18,22 @@
       height: 100%;
       @include flex(start, start, row);
       &__nav {
-        background-color: red;
-        height: 100%;
+        // height: 100%;
+        // position: sticky !important;
+        // top: $height-header;
       }
       &__content {
         height: 100%;
-        background-color: themed("bg-2");
+        // background-color: themed("bg-2");
         border-radius: $radius-8;
         padding: $space-24;
         max-width: 700px;
         margin: 0 auto;
+        
+        @include mobile {
+          padding: 0 $space-12;
+        }
+
         &__header {
           margin-bottom: $space-24;
           h4 {
@@ -44,8 +50,8 @@
             gap: $space-12;
             margin-bottom: $space-24;
             background-color: themed("bg-3");
-            border-radius: $radius-8;
-            padding: $space-12 $space-24;
+            border-radius: $radius-16;
+            padding: $space-16;
             &__img {
               img {
                 --size: 60px;
@@ -53,7 +59,7 @@
                 height: var(--size);
                 border-radius: 50%;
                 object-fit: cover;
-                background-color: themed('bg-2');
+                background-color: themed("bg-2");
                 // border: 1px solid themed("border");
               }
             }
@@ -110,28 +116,82 @@
                 border: 1px solid themed("txt-main");
               }
 
+              &.error {
+                border: 1px solid $color-red;
+              }
+
               &__desc {
                 flex: 1;
                 &.edit {
-                  span {
+                  & > span {
                     display: none;
                   }
-                  input {
-                    display: block;
+                  & > input,
+                  & > .Account__radio {
+                    display: flex;
                   }
                 }
-                span {
+                & > span {
                   font-size: $size-16;
                   font-weight: $font-light;
                   color: themed("txt-main");
                   display: block;
                 }
-                input {
+                & > input {
                   font-size: $size-16;
                   font-weight: $font-light;
                   color: themed("txt-main");
                   width: 100%;
                   display: none;
+                }
+
+                & > .Account__radio {
+                  @include flex(center, start, row);
+                  display: none;
+
+                  & > label {
+                    font-size: $size-16;
+                    font-weight: $font-light;
+                    color: themed("txt-main");
+                    margin-right: $space-12;
+                    @include flex(center, start, row);
+                    gap: $space-8;
+                  }
+                  input[type="radio"] {
+                    appearance: none;
+                    --webkit-appearance: none;
+                    height: $space-20;
+                    width: $space-20;
+                    border: 2px solid themed("border");
+                    border-radius: 50%;
+                    cursor: pointer;
+                    position: relative;
+                    @include flex(center, center);
+                    //   transition: all 0.3s ease-in-out;
+                    &:hover {
+                      border-color: $color-primary1;
+                    }
+                    &::after {
+                      content: "";
+                      font-weight: 999;
+                      display: none;
+                      width: 10px;
+                      height: 10px;
+                      background-color: themed("bg-2");
+                      border-radius: 50%;
+                      position: absolute;
+                      top: 50%;
+                      right: 50%;
+                      transform: translate(50%, -50%);
+                    }
+                    &:checked {
+                      border-color: $color-primary1;
+                      background-color: $color-primary1;
+                      &::after {
+                        display: block;
+                      }
+                    }
+                  }
                 }
               }
               &__buttons {
@@ -203,4 +263,3 @@
     }
   }
 }
-

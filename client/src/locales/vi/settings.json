@@ -1,0 +1,43 @@
+{
+    "settings": {
+        "title": "Cài đặt",
+        "language": "Ngôn ngữ",
+        "theme": "Giao diện",
+        "dark": "Tối",
+        "light": "Sáng",
+        "logout": "Đăng xuất"
+    },
+    "button": {
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "delete": "Xóa"
+    },
+    "notify": {
+        "updateSuccess": "Cập nhật thành công!",
+        "updateFail": "Cập nhật thất bại!",
+        "deleteSuccess": "Xóa thành công!",
+        "deleteFail": "Xóa thất bại!",
+        "addSuccess": "Thêm thành công!",
+        "errorNameLength6Char": "Tên phải có ít nhất 6 ký tự"
+    },
+    "account": {
+        "title": "Chỉnh sửa tài khoản",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "changePassword": "Thay đổi mật khẩu",
+        "deleteAccount": "Xóa tài khoản",
+        "changeAvatar": "Đổi ảnh",
+        "deleteConfirmation": "Bạn có chắc chắn muốn xóa tài khoản của bạn?",
+        "name": "Tên",
+        "nameDesc": "Tên của bạn sẽ được hiển thị trên hồ sơ của bạn",
+        "birthday": "Ngày sinh",
+        "birthdayDesc": "Ngày sinh của bạn sẽ được hiển thị trên hồ sơ của bạn",
+        "gender":  "Giới tính",
+        "genderDesc": "Giới tính của bạn sẽ được hiển thị trên trang hồ sơ của bạn"
+    },
+    "gender": {
+        "Female": "Nữ",
+        "Male" : "Nam",
+        "No disclosure": "Không tiết lộ"
+    }
+}
