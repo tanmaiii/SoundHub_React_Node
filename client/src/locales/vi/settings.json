@@ -12,6 +12,17 @@
         "cancel": "Hủy",
         "delete": "Xóa"
     },
+    "Account": "Tài khoản",
+    "Display mode": "Chế độ hiển thị",
+    "Other information and support": "Thông tin khác và hỗ trợ",
+    "Personal information": "Thông tin cá nhân",
+    "Password and security": "Mật khẩu và bảo mật",
+    "Identity verification": "Xác minh danh tính",
+    "Notifications": "Thông báo",
+    "Language": "Ngôn ngữ",
+    "Dark mode": "Chế độ tối",
+    "Help": "Trợ giúp",
+    "Account status": "Trạng thái tài khoản",
     "notify": {
         "updateSuccess": "Cập nhật thành công!",
         "updateFail": "Cập nhật thất bại!",

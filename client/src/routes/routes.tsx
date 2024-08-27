@@ -17,7 +17,6 @@ import { useAuth } from "../context/authContext";
 const helmetContext = {};
 
 export const Routes = () => {
-
   return (
     <BrowserRouter>
       <HelmetProvider context={helmetContext}>

@@ -2,258 +2,227 @@
 
 .Account {
   @include themify($themes) {
-    // padding: 0 $space-24;
-    // @include tablet {
-    //   padding: 0 $space-14;
-    // }
-    // @include mobile {
-    //   padding: 0 $space-12;
-    // }
-
-    min-height: 100vh;
-    @include flex(center, start, column);
-
-    &__wrapper {
-      width: 100%;
-      height: 100%;
-      @include flex(start, start, row);
-      &__nav {
-        // height: 100%;
-        // position: sticky !important;
-        // top: $height-header;
+    width: 100%;
+    &__content {
+      &__header {
+        margin-bottom: $space-24;
+        h4 {
+          font-size: $size-18;
+          font-weight: $font-medium;
+          color: themed("txt-main");
+          margin-bottom: $space-12;
+        }
       }
-      &__content {
-        height: 100%;
-        // background-color: themed("bg-2");
-        border-radius: $radius-8;
-        padding: $space-24;
-        max-width: 700px;
-        margin: 0 auto;
-        
-        @include mobile {
-          padding: 0 $space-12;
-        }
 
-        &__header {
+      &__body {
+        .Account__avatar {
+          @include flex(center, center);
+          gap: $space-12;
           margin-bottom: $space-24;
-          h4 {
-            font-size: $size-18;
-            font-weight: $font-medium;
-            color: themed("txt-main");
-            margin-bottom: $space-12;
-          }
-        }
-
-        &__body {
-          .Account__avatar {
-            @include flex(center, center);
-            gap: $space-12;
-            margin-bottom: $space-24;
-            background-color: themed("bg-3");
-            border-radius: $radius-16;
-            padding: $space-16;
-            &__img {
-              img {
-                --size: 60px;
-                width: var(--size);
-                height: var(--size);
-                border-radius: 50%;
-                object-fit: cover;
-                background-color: themed("bg-2");
-                // border: 1px solid themed("border");
-              }
-            }
-            &__desc {
-              flex: 1;
-              h5 {
-                font-size: $size-16;
-                font-weight: $font-medium;
-                color: themed("txt-main");
-              }
-              p {
-                font-size: $size-14;
-                font-weight: $font-light;
-                color: themed("txt-second");
-              }
-            }
-            & > button {
-              @include flex(center, center);
-              padding: $space-8 $space-12;
-              border-radius: $radius-4;
-              font-size: $size-14;
-              font-weight: $font-medium;
-              color: $color-white;
-              background-color: $color-primary1;
-              transition: all 0.3s;
-              cursor: pointer;
-              &:hover {
-                transform: scale(0.98);
-              }
+          background-color: themed("bg-3");
+          border-radius: $radius-16;
+          padding: $space-16;
+          &__img {
+            img {
+              --size: 60px;
+              width: var(--size);
+              height: var(--size);
+              border-radius: 50%;
+              object-fit: cover;
+              background-color: themed("bg-2");
+              // border: 1px solid themed("border");
             }
           }
-
-          .Account__item {
-            & > .title {
+          &__desc {
+            flex: 1;
+            h5 {
               font-size: $size-16;
               font-weight: $font-medium;
               color: themed("txt-main");
-              margin-bottom: $space-8;
             }
-            & > .desc {
+            p {
               font-size: $size-14;
               font-weight: $font-light;
               color: themed("txt-second");
-              margin-bottom: $space-8;
             }
-            &__body {
-              border-radius: $radius-8;
-              padding: $space-12;
-              border: 1px solid themed("border");
-              margin-bottom: $space-12;
-              @include flex(center, start, row);
-              gap: $space-8;
-              &.focus {
-                border: 1px solid themed("txt-main");
-              }
+          }
+          & > button {
+            @include flex(center, center);
+            padding: $space-8 $space-12;
+            border-radius: $radius-4;
+            font-size: $size-14;
+            font-weight: $font-medium;
+            color: $color-white;
+            background-color: $color-primary1;
+            transition: all 0.3s;
+            cursor: pointer;
+            &:hover {
+              transform: scale(0.98);
+            }
+          }
+        }
 
-              &.error {
-                border: 1px solid $color-red;
-              }
+        .Account__item {
+          & > .title {
+            font-size: $size-16;
+            font-weight: $font-medium;
+            color: themed("txt-main");
+            margin-bottom: $space-8;
+          }
+          & > .desc {
+            font-size: $size-14;
+            font-weight: $font-light;
+            color: themed("txt-second");
+            margin-bottom: $space-8;
+          }
+          &__body {
+            border-radius: $radius-8;
+            padding: $space-12;
+            border: 1px solid themed("border");
+            margin-bottom: $space-12;
+            @include flex(center, start, row);
+            gap: $space-8;
+            &.focus {
+              border: 1px solid themed("txt-main");
+            }
 
-              &__desc {
-                flex: 1;
-                &.edit {
-                  & > span {
-                    display: none;
-                  }
-                  & > input,
-                  & > .Account__radio {
-                    display: flex;
-                  }
-                }
+            &.error {
+              border: 1px solid $color-red;
+            }
+
+            &__desc {
+              flex: 1;
+              &.edit {
                 & > span {
-                  font-size: $size-16;
-                  font-weight: $font-light;
-                  color: themed("txt-main");
-                  display: block;
-                }
-                & > input {
-                  font-size: $size-16;
-                  font-weight: $font-light;
-                  color: themed("txt-main");
-                  width: 100%;
                   display: none;
                 }
-
+                & > input,
                 & > .Account__radio {
-                  @include flex(center, start, row);
-                  display: none;
-
-                  & > label {
-                    font-size: $size-16;
-                    font-weight: $font-light;
-                    color: themed("txt-main");
-                    margin-right: $space-12;
-                    @include flex(center, start, row);
-                    gap: $space-8;
-                  }
-                  input[type="radio"] {
-                    appearance: none;
-                    --webkit-appearance: none;
-                    height: $space-20;
-                    width: $space-20;
-                    border: 2px solid themed("border");
-                    border-radius: 50%;
-                    cursor: pointer;
-                    position: relative;
-                    @include flex(center, center);
-                    //   transition: all 0.3s ease-in-out;
-                    &:hover {
-                      border-color: $color-primary1;
-                    }
-                    &::after {
-                      content: "";
-                      font-weight: 999;
-                      display: none;
-                      width: 10px;
-                      height: 10px;
-                      background-color: themed("bg-2");
-                      border-radius: 50%;
-                      position: absolute;
-                      top: 50%;
-                      right: 50%;
-                      transform: translate(50%, -50%);
-                    }
-                    &:checked {
-                      border-color: $color-primary1;
-                      background-color: $color-primary1;
-                      &::after {
-                        display: block;
-                      }
-                    }
-                  }
+                  display: flex;
                 }
               }
-              &__buttons {
-                .btn-edit {
-                  transition: all 0.3s;
-                  cursor: pointer;
-                  i {
-                    --size: 32px;
-                    width: var(--size);
-                    height: var(--size);
-                    background-color: themed("bg-3");
-                    font-size: $size-14;
-                    @include flex(center, center);
-                    color: themed("txt-second");
-                    border-radius: 50%;
-                  }
-                  &:hover {
-                    transform: scale(0.96);
-                    i {
-                      //   color: themed("txt-main");
-                    }
-                  }
-                }
+              & > span {
+                font-size: $size-16;
+                font-weight: $font-light;
+                color: themed("txt-main");
+                display: block;
+              }
+              & > input {
+                font-size: $size-16;
+                font-weight: $font-light;
+                color: themed("txt-main");
+                width: 100%;
+                display: none;
+              }
 
-                .btn-clear {
-                  i {
-                    --size: 22px;
-                    width: var(--size);
-                    height: var(--size);
-                    // background-color: themed("bg-2");
-                    font-size: $size-16;
-                    @include flex(center, center);
-                    color: themed("txt-second");
+              & > .Account__radio {
+                @include flex(center, start, row);
+                display: none;
+
+                & > label {
+                  font-size: $size-16;
+                  font-weight: $font-light;
+                  color: themed("txt-main");
+                  margin-right: $space-12;
+                  @include flex(center, start, row);
+                  gap: $space-8;
+                }
+                input[type="radio"] {
+                  appearance: none;
+                  --webkit-appearance: none;
+                  height: $space-20;
+                  width: $space-20;
+                  border: 2px solid themed("border");
+                  border-radius: 50%;
+                  cursor: pointer;
+                  position: relative;
+                  @include flex(center, center);
+                  //   transition: all 0.3s ease-in-out;
+                  &:hover {
+                    border-color: $color-primary1;
+                  }
+                  &::after {
+                    content: "";
+                    font-weight: 999;
+                    display: none;
+                    width: 10px;
+                    height: 10px;
+                    background-color: themed("bg-2");
                     border-radius: 50%;
-                    cursor: pointer;
-                    &:hover {
-                      background-color: themed("bg-3");
+                    position: absolute;
+                    top: 50%;
+                    right: 50%;
+                    transform: translate(50%, -50%);
+                  }
+                  &:checked {
+                    border-color: $color-primary1;
+                    background-color: $color-primary1;
+                    &::after {
+                      display: block;
                     }
                   }
                 }
               }
             }
-
-            &__bottom {
-              &__buttons {
-                @include flex(center, end, row);
-                gap: $space-8;
-                button {
-                  transition: all 0.3s;
-                  cursor: pointer;
+            &__buttons {
+              .btn-edit {
+                transition: all 0.3s;
+                cursor: pointer;
+                i {
+                  --size: 32px;
+                  width: var(--size);
+                  height: var(--size);
+                  background-color: themed("bg-3");
                   font-size: $size-14;
-                  color: $color-white;
-                  background-color: $color-primary1;
-                  padding: $space-8 $space-16;
-                  border-radius: $radius-4;
-                  &:hover {
-                    transform: scale(0.96);
+                  @include flex(center, center);
+                  color: themed("txt-second");
+                  border-radius: 50%;
+                }
+                &:hover {
+                  transform: scale(0.96);
+                  i {
+                    //   color: themed("txt-main");
                   }
-                  &:first-child {
-                    color: themed("txt-main");
+                }
+              }
+
+              .btn-clear {
+                i {
+                  --size: 22px;
+                  width: var(--size);
+                  height: var(--size);
+                  // background-color: themed("bg-2");
+                  font-size: $size-16;
+                  @include flex(center, center);
+                  color: themed("txt-second");
+                  border-radius: 50%;
+                  cursor: pointer;
+                  &:hover {
                     background-color: themed("bg-3");
                   }
+                }
+              }
+            }
+          }
+
+          &__bottom {
+            &__buttons {
+              @include flex(center, end, row);
+              gap: $space-8;
+              button {
+                transition: all 0.3s;
+                cursor: pointer;
+                font-size: $size-14;
+                color: $color-white;
+                background-color: $color-primary1;
+                padding: $space-8 $space-16;
+                border-radius: $radius-4;
+                &:hover {
+                  transform: scale(0.96);
+                }
+                &:first-child {
+                  color: themed("txt-main");
+                  background-color: themed("bg-3");
                 }
               }
             }

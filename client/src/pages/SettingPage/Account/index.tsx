@@ -47,71 +47,66 @@ const Account = () => {
   return (
     <>
       <div className="Account">
-        <div className="Account__wrapper row no-gutters">
-          <div className="col pc-3 t-3 m-0">
-            <div className="Account__wrapper__nav">
-              <SettingPage />
-            </div>
+        <div className="Account__content">
+          <div className="Account__content__header">
+            <h4>{t("account.title")}</h4>
           </div>
-          <div className="col pc-9 t-9 m-12">
-            <div className="Account__wrapper__content">
-              <div className="Account__wrapper__content__header">
-                <h4>{t("account.title")}</h4>
-              </div>
-              <div className="Account__wrapper__content__body">
-                <div className="Account__avatar">
-                  <div className="Account__avatar__img">
-                    <ImageWithFallback
-                      src={currentUser?.image_path ?? ""}
-                      fallbackSrc={Images.AVATAR}
-                      alt=""
-                    />
-                  </div>
-                  <div className="Account__avatar__desc">
-                    <h5>{currentUser?.name}</h5>
-                    <p>{currentUser?.email}</p>
-                  </div>
-                  <button onClick={() => setOpenModalEditAvatar(true)}>
-                    {t("account.changeAvatar")}
-                  </button>
-                </div>
-
-                <ItemAccount
-                  title={t("account.name")}
-                  name="name"
-                  description={t("account.nameDesc")}
-                  value={currentUser?.name ?? ""}
-                  onSave={(name: string, value: string) =>
-                    mutationSave.mutate({ name, value })
-                  }
-                />
-                <ItemAccount
-                  title={t("account.birthday")}
-                  description={t("account.birthdayDesc")}
-                  name="brithday"
-                  value={moment(currentUser?.brithday).format("L") ?? ""}
-                  onSave={(name: string, value: string) =>
-                    mutationSave.mutate({ name, value })
-                  }
-                  date={true}
-                />
-                <ItemAccount
-                  title={t("account.gender")}
-                  description={t("account.genderDesc")}
-                  name="gender"
-                  radio={true}
-                  value={currentUser?.gender ?? ""}
-                  onSave={(name: string, value: string) =>
-                    mutationSave.mutate({ name, value })
-                  }
-                  option={[
-                    { id: "1", title: "Female" },
-                    { id: "2", title: "Male" },
-                    { id: "3", title: "No disclosure" },
-                  ]}
+          <div className="Account__content__body">
+            <div className="Account__avatar">
+              <div className="Account__avatar__img">
+                <ImageWithFallback
+                  src={currentUser?.image_path ?? ""}
+                  fallbackSrc={Images.AVATAR}
+                  alt=""
                 />
               </div>
+              <div className="Account__avatar__desc">
+                <h5>{currentUser?.name}</h5>
+                <p>{currentUser?.email}</p>
+              </div>
+              <button onClick={() => setOpenModalEditAvatar(true)}>
+                {t("account.changeAvatar")}
+              </button>
             </div>
+
+            <ItemAccount
+              title={t("account.name")}
+              name="name"
+              description={t("account.nameDesc")}
+              value={currentUser?.name ?? ""}
+              onSave={(name: string, value: string) =>
+                mutationSave.mutate({ name, value })
+              }
+            />
+            <ItemAccount
+              title={t("account.birthday")}
+              description={t("account.birthdayDesc")}
+              name="brithday"
+              value={
+                currentUser?.brithday
+                  ? moment(currentUser?.brithday).format("L")
+                  : "00/00/0000"
+              }
+              onSave={(name: string, value: string) =>
+                mutationSave.mutate({ name, value })
+              }
+              date={true}
+            />
+            <ItemAccount
+              title={t("account.gender")}
+              description={t("account.genderDesc")}
+              name="gender"
+              radio={true}
+              value={currentUser?.gender ?? ""}
+              onSave={(name: string, value: string) =>
+                mutationSave.mutate({ name, value })
+              }
+              option={[
+                { id: "1", title: "Female" },
+                { id: "2", title: "Male" },
+                { id: "3", title: "No disclosure" },
+              ]}
+            />
           </div>
         </div>
       </div>

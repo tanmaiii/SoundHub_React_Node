@@ -20,6 +20,17 @@
         "addSuccess": "Add successfully !",
         "errorNameLength6Char": "The name must have at least 6 characters"
     },
+    "Account": "Account",
+    "Display mode": "Display mode",
+    "Other information and support": "Other information and support",
+    "Personal information": "Personal information",
+    "Password and security": "Password and security",
+    "Identity verification": "Identity verification",
+    "Notifications": "Notifications",
+    "Language": "Language",
+    "Dark mode": "Dark mode",
+    "Help": "Help",
+    "Account status": "Account status",
     "account": {
         "title": "Edit Account",
         "email": "Email",

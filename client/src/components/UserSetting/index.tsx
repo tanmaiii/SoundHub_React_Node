@@ -191,7 +191,7 @@ export default function UserSetting() {
               <DropdownItem
                 iconLeft={<i className="fa-light fa-user"></i>}
                 title={"Account"}
-                func={() => navigate(PATH.ACCOUNT + PATH.EDIT)}
+                func={() => navigate(PATH.SETTINGS + PATH.ACCOUNT)}
               />
 
               <DropdownItem

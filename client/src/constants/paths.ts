@@ -1,7 +1,9 @@
-import { lazy, FunctionComponent } from "react";
+import { lazy, FunctionComponent, Children } from "react";
 import { ComponentType } from "react";
 import MyPlaylistPage from "../pages/MyPlaylistPage";
 import MyArtistPage from "../pages/MyArtistPage";
+import Password from "../pages/SettingPage/Password/index";
+import SettingPage from "../pages/SettingPage";
 
 const HomePage: FunctionComponent<any> = lazy(
   () => import("../pages/HomePage") as Promise<{ default: ComponentType<any> }>
@@ -31,6 +33,8 @@ const NotFoundPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
 const AuthLayout = lazy(() => import("../layout/AuthLayout/AuthLayout"));
 
 const AccountPage = lazy(() => import("../pages/SettingPage/Account"));
+const PasswordPage = lazy(() => import("../pages/SettingPage/Password"));
+const SettingsPage = lazy(() => import("../pages/SettingPage"));
 
 const PATH = {
   HOME: "/",
@@ -41,8 +45,9 @@ const PATH = {
 
   UPLOAD: "/upload",
 
+  SETTINGS: "/settings",
+  SETTINGS_SHOW: "/settings/:pathname",
   ACCOUNT: "/account",
-  EDIT: "/edit",
   NOTIFY: "/notify",
   CHANGE_PASSWORD: "/change-password",
   CHANGE_EMAIL: "/change-email",
@@ -78,7 +83,10 @@ const publicRoutes = [
   { path: PATH.FAVOURITE, layout: null, component: FavouritePage },
   { path: PATH.UPLOAD, layout: null, component: UploadPage },
 
-  { path: PATH.ACCOUNT + PATH.EDIT, layout: null, component: AccountPage },
+  // { path: PATH.SETTINGS + PATH.ACCOUNT, layout: null, component: AccountPage },
+  // { path: PATH.SETTINGS + PATH.CHANGE_PASSWORD, layout: null, component: SettingsPage },
+  { path: PATH.SETTINGS, layout: null, component: SettingsPage },
+  { path: PATH.SETTINGS_SHOW, layout: null, component: SettingsPage },
 
   { path: PATH.SEARCH, layout: null, component: SearchPage },
   { path: PATH.SEARCH_SHOW, layout: null, component: SearchPage },

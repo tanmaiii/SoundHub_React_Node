@@ -1,0 +1,151 @@
+@use "../../../scss/" as *;
+
+.Setting-password {
+  @include themify($themes) {
+    width: 100%;
+    &__content {
+      &__header {
+        margin-bottom: $space-24;
+        h4 {
+          font-size: $size-18;
+          font-weight: $font-medium;
+          color: themed("txt-main");
+        }
+        span {
+          font-size: $size-14;
+          font-weight: $font-light;
+          color: themed("txt-second");
+        }
+      }
+
+      &__body {
+        border-radius: $radius-8;
+        overflow: hidden;
+        &__item {
+          padding: $space-16;
+          //   border: 1px solid themed("txt-second");
+          //   margin-bottom: $space-12;
+          @include flex(center, start, row);
+          gap: $space-8;
+          background-color: themed("bg-2");
+          cursor: pointer;
+          transition: all 0.3s;
+          &:not(:first-child) {
+            border-top: 1px solid themed("border");
+          }
+          &:hover {
+            background-color: themed("bg-3");
+          }
+          &__title {
+            flex: 1;
+            @include flex(center, center, row);
+            h4 {
+              flex: 1;
+              font-size: $size-16;
+              font-weight: $font-medium;
+              color: themed("txt-main");
+            }
+            span {
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+            }
+          }
+          button {
+            i {
+              font-size: $size-18;
+              color: themed("txt-main");
+            }
+          }
+        }
+      }
+    }
+
+    &__modal {
+      padding: $space-8 $space-24 $space-24 $space-24;
+      @include flex(unset, start, column);
+      gap: $space-18;
+      width: 500px;
+
+      &__desc {
+        font-size: $size-14;
+        font-weight: $font-light;
+        color: themed("txt-second");
+      }
+
+      &__forget {
+        font-size: $size-14;
+        font-weight: $font-medium;
+        color: $color-blue;
+        cursor: pointer;
+        text-align: left;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      &__group {
+        width: 100%;
+        padding: $space-12 $space-12;
+        border-radius: $radius-8;
+        border: 1px solid themed("border");
+        color: themed("txt-main");
+        transition: $transition;
+        background-color: themed("bg-2");
+        @include flex(center, start, row);
+        position: relative;
+        label {
+          font-size: $size-16;
+          font-weight: $font-light;
+          color: themed("txt-second");
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          transition: $transition;
+        }
+        input {
+          width: 100%;
+          font-size: $size-16;
+          font-weight: $font-medium;
+          color: themed("txt-main");
+          transition: $transition;
+          height: 32px;
+          &:focus,
+          &:not(:placeholder-shown) {
+            padding-top: $space-12;
+          }
+          &:not(:placeholder-shown) + label,
+          &:focus + label {
+            top: 4px;
+            transform: translateY(0);
+            font-size: $size-12;
+          }
+        }
+        & > button {
+          i {
+            font-size: $size-16;
+            color: themed("txt-main");
+            &:hover {
+              background-color: themed("bg-2");
+            }
+          }
+        }
+      }
+
+      & > .btn-submit {
+        width: 100%;
+        padding: $space-12;
+        border-radius: $radius-8;
+        background-color: $color-primary1;
+        color: $color-white;
+        font-size: $size-16;
+        font-weight: $font-medium;
+        cursor: pointer;
+        transition: $transition;
+        &:hover {
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+}

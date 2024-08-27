@@ -3,66 +3,82 @@
 .SettingPage {
   @include themify($themes) {
     padding: 0 $space-12;
-    
-    &__wrapper {
-      background-color: themed("bg-2");
-      padding: $space-24 $space-12;
-      height: calc(100vh - $height-header - 20px);
-      border-radius: $radius-8;
-      overflow: auto;
-      // height: 200vh;
 
-      &__header {
-        margin-bottom: $space-24;
-        padding: 0 $space-12;
-        h4 {
-          font-size: $size-18;
-          font-weight: $font-medium;
-          color: themed("txt-main");
-          margin-bottom: $space-12;
-        }
-      }
-      &__body {
-        &__group {
-          margin-bottom: $space-8;
-          &__title {
-            padding: 0 $space-12;
-            font-size: $size-12;
+    &__wrapper {
+      &__nav {
+        background-color: themed("bg-2");
+        padding: $space-24 $space-12;
+        height: calc(100vh - $height-header - 20px);
+        border-radius: $radius-8;
+        overflow: auto;
+        // height: 200vh;
+        &__header {
+          margin-bottom: $space-24;
+          padding: 0 $space-12;
+          h4 {
+            font-size: $size-18;
             font-weight: $font-medium;
-            color: themed("txt-second");
-            margin-bottom: $space-4;
+            color: themed("txt-main");
+            margin-bottom: $space-12;
           }
-          &__list {
-            &__item {
-              @include flex(center, start);
-              gap: $space-12;
-              padding: $space-14 $space-12;
-              color: themed("txt-main");
-              border-radius: $radius-4;
-              transition: $transition;
-              cursor: pointer;
-              &:hover {
-                background-color: themed("bg-3");
+        }
+        &__body {
+          &__group {
+            margin-bottom: $space-8;
+            &__title {
+              padding: 0 $space-12;
+              font-size: $size-12;
+              font-weight: $font-medium;
+              color: themed("txt-second");
+              margin-bottom: $space-4;
+              @include text(1);
+            }
+            &__list {
+              @include flex(unset, center, column);
+              gap: $space-4;
+              &__item {
+                @include flex(center, start);
+                gap: $space-12;
+                padding: $space-14 $space-12;
                 color: themed("txt-main");
-              }
-              &.active {
-                background-color: themed("bg-3");
-                color: themed("txt-main");
-              }
-              &__icon {
-                --size: 20px;
-                width: var(--size);
-                height: var(--size);
-                @include flex(center, center);
-                font-size: $size-18;
-              }
-              &__title {
-                font-size: $size-16;
-                font-weight: $font-medium;
+                border-radius: $radius-4;
+                transition: $transition;
+                cursor: pointer;
+                &:hover {
+                  background-color: themed("bg-3");
+                  color: themed("txt-main");
+                }
+                &.active {
+                  background-color: $color-hover;
+                  color: themed("txt-main");
+                }
+                &__icon {
+                  --size: 20px;
+                  width: var(--size);
+                  height: var(--size);
+                  @include flex(center, center);
+                  font-size: $size-18;
+                }
+                &__title {
+                  font-size: $size-16;
+                  font-weight: $font-medium;
+                  @include text(1);
+                }
               }
             }
           }
         }
+      }
+
+      &__content {
+        height: 100%;
+        min-height: calc(100vh - $height-header - 20px);
+        border-radius: $radius-8;
+        max-width: 700px;
+        width: 100%;
+        margin: 0 auto;
+        // background-color: themed("bg-2");
+        padding: $space-12;
       }
     }
   }
