@@ -84,9 +84,7 @@ const SettingPage = () => {
     },
   ];
 
-  useEffect(() => {
-    console.log(pathname);
-  }, [pathname]);
+  useEffect(() => {}, [pathname]);
 
   return (
     <div className="SettingPage">
@@ -134,7 +132,7 @@ const SettingPage = () => {
           <div className="SettingPage__wrapper__content">
             {data.map((navbar, index) =>
               navbar.items.map((item, index) =>
-                pathname === item.path ? <item.item /> : null
+                pathname === item.path ? <item.item key={index} /> : null
               )
             )}
           </div>

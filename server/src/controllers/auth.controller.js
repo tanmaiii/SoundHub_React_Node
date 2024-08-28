@@ -216,6 +216,7 @@ export const sendVerifyAccount = (req, res) => {
   }
 };
 
+// Gửi xác thực email
 export const sendVerifyEmail = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -305,6 +306,7 @@ export const verifyAccount = async (req, res) => {
   }
 };
 
+// Xác thực email
 export const verifyEmail = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -319,7 +321,6 @@ export const verifyEmail = async (req, res) => {
           if (err || !verify) {
             return res.status(500).json({ conflictError: "Error during request processing" });
           }
-
           const codeSql = verify.code;
 
           console.log(codeSql, parseInt(code));
