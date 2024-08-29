@@ -51,6 +51,10 @@ const PATH = {
   NOTIFY: "/notify",
   CHANGE_PASSWORD: "/change-password",
   CHANGE_EMAIL: "/change-email",
+  DARK_MODE: "/dark-mode",
+  LANGUAGES: "/languages",
+  HELP: "/help",
+  STATUS: "/status",
 
   SEARCH: "/search",
   SEARCH_SHOW: "/search/:keyword",

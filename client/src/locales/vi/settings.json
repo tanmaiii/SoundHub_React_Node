@@ -9,6 +9,7 @@
     },
     "button": {
         "save": "Lưu",
+        "next": "Tiếp theo",
         "cancel": "Hủy",
         "delete": "Xóa"
     },
@@ -30,6 +31,31 @@
         "deleteFail": "Xóa thất bại!",
         "addSuccess": "Thêm thành công!",
         "errorNameLength6Char": "Tên phải có ít nhất 6 ký tự"
+    },
+    "security": {
+        "title": "Mật khẩu và Bảo mật",
+        "desc": "Để bảo vệ tài khoản của bạn, hãy sử dụng mật khẩu mạnh và không sử dụng mật khẩu của bạn cho các trang web khác.",
+        "password": "Mật khẩu",
+        "passwordDesc": "Mật khẩu của bạn phải có ít nhất 6 ký tự",
+        "email": "Email",
+        "titleChangePassword": "Thay đổi mật khẩu",
+        "descChangePassword": "Mật khẩu của bạn phải có tối thiểu 6 ký tự, đồng thời bao gồm cả chữ số, chữ cái và ký tự đặc biệt (!$@%).",
+        "currentPassword": "Mật khẩu hiện tại",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "forgotPassword": "Bạn quên mật khẩu ư ?",
+        "errNewPassword": "Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái viết hoa, chữ cái viết thường, số và ký tự đặc biệt",
+        "errNewPasswordMatch": "Mật khẩu mới không được trùng với mật khẩu cũ",
+        "errConfirmPassword": "Mật khẩu xác nhận không khớp",
+        "errOldPassword": "Mật khẩu cũ không chính xác",
+        "titleChangeEmail": "Thay đổi Email",
+        "descChangeEmail": "Để thay đổi email, vui lòng nhập email mới của bạn.",
+        "newEmail": "Email mới",
+        "descCode": "Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra email và nhập mã xác nhận.",
+        "code": "Mã xác nhận",
+        "errCode": "Mã xác nhận không chính xác",
+        "errEmail": "Email không hợp lệ",
+        "resendCode": "Gửi lại mã xác nhận"
     },
     "account": {
         "title": "Chỉnh sửa tài khoản",

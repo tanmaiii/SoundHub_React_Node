@@ -9,6 +9,9 @@ import Password from "./Password";
 const SettingPage = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation("settings");
+  const [nav, setNav] = React.useState(false);
+
+  // const [active, setActive] = React.useState(1);
 
   const data = [
     {
@@ -32,7 +35,7 @@ const SettingPage = () => {
           id: 3,
           title: t("Identity verification"),
           icon: <i className="fa-sharp-duotone fa-light fa-badge-check"></i>,
-          path: PATH.SETTINGS + "/verify",
+          path: PATH.SETTINGS + PATH.VERIFY,
           item: Account,
         },
       ],
@@ -44,21 +47,21 @@ const SettingPage = () => {
           id: 3,
           title: t("Notifications"),
           icon: <i className="fa-light fa-bell"></i>,
-          path: PATH.SETTINGS + "/notification",
+          path: PATH.SETTINGS + PATH.NOTIFY,
           item: Account,
         },
         {
           id: 4,
           title: t("Language"),
           icon: <i className="fa-sharp fa-light fa-globe"></i>,
-          path: PATH.SETTINGS + "/language",
+          path: PATH.SETTINGS + PATH.LANGUAGES,
           item: Account,
         },
         {
           id: 4,
           title: t("Dark mode"),
           icon: <i className="fa-light fa-moon"></i>,
-          path: PATH.SETTINGS + "/language",
+          path: PATH.SETTINGS + PATH.DARK_MODE,
           item: Account,
         },
       ],
@@ -70,26 +73,33 @@ const SettingPage = () => {
           id: 5,
           title: t("Help"),
           icon: <i className="fa-light fa-circle-question"></i>,
-          path: PATH.SETTINGS + "/help",
+          path: PATH.SETTINGS + PATH.HELP,
           item: Account,
         },
         {
           id: 6,
           title: t("Account status"),
           icon: <i className="fa-light fa-user"></i>,
-          path: PATH.SETTINGS + "/help",
+          path: PATH.SETTINGS + PATH.STATUS,
           item: Account,
         },
       ],
     },
   ];
 
-  useEffect(() => {}, [pathname]);
+  useEffect(() => {
+    const pathParts = pathname.split("/");
+    const targetValue = pathParts[2];
+    console.log(targetValue === undefined);
+    console.log(targetValue);
+    
+    setNav(targetValue === undefined);
+  }, [pathname]);
 
   return (
     <div className="SettingPage">
       <div className="SettingPage__wrapper row no-gutters">
-        <div className="col pc-2 t-3 m-0">
+        <div className={`col pc-2 t-3 ${nav ? "m-12" : "m-0"}`}>
           <div className="SettingPage__wrapper__nav">
             <div className="SettingPage__wrapper__nav__header">
               <h4>{t("settings.title")}</h4>
@@ -128,7 +138,7 @@ const SettingPage = () => {
             </div>
           </div>
         </div>
-        <div className="col pc-10 t-9 m-12">
+        <div className={`col pc-10 t-9 ${nav ? "m-0" : "m-12"}`}>
           <div className="SettingPage__wrapper__content">
             {data.map((navbar, index) =>
               navbar.items.map((item, index) =>

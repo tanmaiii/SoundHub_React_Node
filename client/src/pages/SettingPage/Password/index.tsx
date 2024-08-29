@@ -19,9 +19,7 @@ const Password = () => {
         <div className="Setting-password__content">
           <div className="Setting-password__content__header">
             <h4>{t("Password and security")}</h4>
-            <span>
-              Quản lý mật khẩu, tùy chọn đăng nhập và phương thức khôi phục.
-            </span>
+            <span>{t("security.desc")}</span>
           </div>
           <div className="Setting-password__content__body">
             <div
@@ -29,7 +27,7 @@ const Password = () => {
               onClick={() => setOpenModal(true)}
             >
               <div className="Setting-password__content__body__item__title">
-                <h4>Đổi mật khẩu</h4>
+                <h4>{t("security.titleChangePassword")}</h4>
                 <span>**********</span>
               </div>
               <button>
@@ -42,7 +40,7 @@ const Password = () => {
               onClick={() => setOpenModalEmail(true)}
             >
               <div className="Setting-password__content__body__item__title">
-                <h4>Email</h4>
+                <h4>{t("security.email")}</h4>
                 <span>{currentUser?.email}</span>
               </div>
               <button>
@@ -55,7 +53,7 @@ const Password = () => {
       <Modal
         openModal={openModal}
         setOpenModal={setOpenModal}
-        title="Thay đổi mật khẩu"
+        title={t("security.titleChangePassword")}
       >
         <ModalChangePassword
           openModal={openModal}
@@ -96,6 +94,7 @@ const ModalChangePassword = ({
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,30}$/;
   const { token } = useAuth();
+  const { t } = useTranslation("settings");
   const [stateOldPass, setStateOldPass] = React.useState<TInput>({
     value: "",
     err: "",
@@ -141,7 +140,14 @@ const ModalChangePassword = ({
   const handleCheck = () => {
     if (stateNewPass.value && !passwordRegex.test(stateNewPass.value)) {
       updateStateNewPass({
-        err: "Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái viết hoa, chữ cái viết thường, số và ký tự đặc biệt",
+        err: t("security.errNewPassword"),
+      });
+    } else if (
+      stateOldPass.value !== "" &&
+      stateOldPass.value === stateNewPass.value
+    ) {
+      updateStateNewPass({
+        err: t("security.errNewPasswordMatch"),
       });
     } else {
       updateStateNewPass({ err: "" });
@@ -151,20 +157,9 @@ const ModalChangePassword = ({
       stateReNewPass.value !== "" &&
       stateReNewPass.value !== stateNewPass.value
     ) {
-      updateStateReNewPass({ err: "Mật khẩu không khớp" });
+      updateStateReNewPass({ err: t("security.errConfirmPassword") });
     } else {
       updateStateReNewPass({ err: "" });
-    }
-
-    if (
-      stateOldPass.value !== "" &&
-      stateOldPass.value === stateNewPass.value
-    ) {
-      updateStateNewPass({
-        err: "Mật khẩu mới không được trùng với mật khẩu cũ",
-      });
-    } else {
-      updateStateNewPass({ err: "" });
     }
 
     if (stateOldPass.value !== "") {
@@ -195,23 +190,22 @@ const ModalChangePassword = ({
       );
       console.log(res);
 
-      toast.success("Đổi mật khẩu thành công");
+      toast.success(t("notify.updateSuccess"));
       updateStateNewPass({ value: "" });
       updateStateOldPass({ value: "" });
       updateStateReNewPass({ value: "" });
       closeModal();
     } catch (error) {
-      updateStateOldPass({ err: "Mật khẩu không đúng" });
+      updateStateOldPass({ err: t("security.errOldPassword") });
     }
   };
 
   return (
     <div className="Setting-password__modal">
       <span className="Setting-password__modal__desc">
-        Mật khẩu của bạn phải có tối thiểu 6 ký tự, đồng thời bao gồm cả chữ số,
-        chữ cái và ký tự đặc biệt (!$@%).
+        {t("security.descChangePassword")}
       </span>
-      <form action="">
+      <div>
         <div className="Setting-password__modal__group">
           <div
             className={`Setting-password__modal__group__input ${
@@ -226,7 +220,7 @@ const ModalChangePassword = ({
               value={stateOldPass.value}
               onChange={(e) => handleChangeOldPass(e.target.value)}
             />
-            <label htmlFor="oldPass">Mật khẩu hiện tại</label>
+            <label htmlFor="oldPass">{t("security.currentPassword")}</label>
             {stateOldPass.value && (
               <button
                 onClick={() =>
@@ -262,7 +256,7 @@ const ModalChangePassword = ({
               value={stateNewPass.value}
               onChange={(e) => handleChangeNewPass(e.target.value)}
             />
-            <label htmlFor="newPass">Mật khẩu mới (tối thiểu 6 ký tự)</label>
+            <label htmlFor="newPass">{t("security.newPassword")}</label>
             {stateNewPass.value && (
               <button
                 onClick={() =>
@@ -298,7 +292,7 @@ const ModalChangePassword = ({
               value={stateReNewPass.value}
               onChange={(e) => handleChangeReNewPass(e.target.value)}
             />
-            <label htmlFor="reNewPass">Xác nhận mật khẩu mới của bạn</label>
+            <label htmlFor="reNewPass">{t("security.confirmPassword")}</label>
             {stateReNewPass.value && (
               <button
                 onClick={() =>
@@ -323,10 +317,10 @@ const ModalChangePassword = ({
             </div>
           )}
         </div>
-      </form>
+      </div>
 
       <a className="Setting-password__modal__forget" href="">
-        Bạn quên mật khẩu ư?
+        {t("security.forgotPassword")}
       </a>
       <button
         onClick={() => handleSumbit()}
@@ -342,7 +336,7 @@ const ModalChangePassword = ({
         }
         className="btn-submit"
       >
-        Save
+        {t("button.save")}
       </button>
     </div>
   );
@@ -370,7 +364,9 @@ const ModalChangeEmail = ({
     loading: false,
   });
   const queryClient = useQueryClient();
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const { token } = useAuth();
+  const { t } = useTranslation("settings");
 
   const updateState = (newState: Partial<TInput>) => {
     setState((prevState) => ({ ...prevState, ...newState }));
@@ -381,7 +377,6 @@ const ModalChangeEmail = ({
   };
 
   const handleSubmit = async () => {
-    console.log("send email");
     updateState({ err: "" });
     try {
       updateState({ loading: true });
@@ -420,7 +415,7 @@ const ModalChangeEmail = ({
       }
       updateStateCode({ loading: false });
     } catch (error) {
-      updateStateCode({ err: "Mã xác nhận không đúng" });
+      updateStateCode({ err: t("security.errCode") });
     }
     updateStateCode({ loading: false });
   };
@@ -428,6 +423,11 @@ const ModalChangeEmail = ({
   const handleChange = (text: string) => {
     updateState({ value: text.trim() });
     updateState({ err: "" });
+    if (text && !emailRegex.test(text)) {
+      updateState({ err: t("security.errEmail") });
+    } else {
+      updateState({ err: "" });
+    }
   };
 
   const handleChangeCode = (text: string) => {
@@ -446,9 +446,7 @@ const ModalChangeEmail = ({
   return (
     <div className="Setting-email__modal">
       <span className="Setting-password__modal__desc">
-        {verify
-          ? "Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra email và nhập mã xác nhận."
-          : "Để thay đổi email, vui lòng nhập email mới của bạn."}
+        {verify ? t("security.descCode") : t("security.descChangeEmail")}
       </span>
       {!verify ? (
         <div>
@@ -466,7 +464,7 @@ const ModalChangeEmail = ({
                 autoComplete="off"
                 onChange={(e) => handleChange(e.target.value.trim())}
               />
-              <label htmlFor="newEmail">Email mới</label>
+              <label htmlFor="newEmail">{t("security.newEmail")}</label>
               {state?.value && (
                 <button onClick={() => updateState({ value: "" })}>
                   <i className="fa-solid fa-xmark"></i>
@@ -485,7 +483,7 @@ const ModalChangeEmail = ({
             disabled={state.loading || !state.value || state.err ? true : false}
             onClick={handleSubmit}
           >
-            {state.loading ? <div className="spinner"></div> : "Tiếp"}
+            {state.loading ? <div className="spinner"></div> : t("button.next")}
           </button>
         </div>
       ) : (
@@ -504,7 +502,7 @@ const ModalChangeEmail = ({
                 autoComplete="off"
                 onChange={(e) => handleChangeCode(e.target.value.trim())}
               />
-              <label htmlFor="code">Nhập mã xác nhận</label>
+              <label htmlFor="code">{t("security.descCode")}</label>
               {stateCode.value && (
                 <button onClick={() => updateStateCode({ value: "" })}>
                   <i className="fa-solid fa-xmark"></i>
@@ -525,7 +523,7 @@ const ModalChangeEmail = ({
             {state.loading ? (
               <div className="spinner"></div>
             ) : (
-              <span>Gửi lại mã</span>
+              <span>{t("security.resendCode")}</span>
             )}
           </div>
           <button
@@ -537,7 +535,11 @@ const ModalChangeEmail = ({
             }
             onClick={handleSubmitCode}
           >
-            {stateCode.loading ? <div className="spinner"></div> : "Gửi"}
+            {stateCode.loading ? (
+              <div className="spinner"></div>
+            ) : (
+              t("button.save")
+            )}
           </button>
         </div>
       )}

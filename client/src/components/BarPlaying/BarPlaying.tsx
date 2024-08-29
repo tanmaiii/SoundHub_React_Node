@@ -18,11 +18,13 @@ import { useAuth } from "../../context/authContext";
 import { apiConfig } from "../../configs";
 import { changeOpenWaiting } from "../../slices/waitingSlice";
 import ImageWithFallback from "../ImageWithFallback";
+import Slider from "../Slider";
 
 export default function BarPlaying() {
   // const songPlayId = useSelector(selectSongPlayId);
   const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
   const { token } = useAuth();
+  const [valueVolume, setValueVolume] = useState<string>("50");
 
   const songPlayId = useSelector(selectSongPlayId);
   const [song, setSong] = useState<TSong | null>(null);
@@ -49,10 +51,10 @@ export default function BarPlaying() {
         {song && <CardSong song={song} />}
       </div>
       <div className="barPlaying__center ">
-        {song && <ControlsBar song={song} />}
+        {song && <ControlsBar song={song} volume={valueVolume} />}
       </div>
       <div className="barPlaying__right ">
-        <ControlsRight />
+        <ControlsRight setVolume={setValueVolume} volume={valueVolume} />
       </div>
     </div>
   );
@@ -70,7 +72,7 @@ const CardSong = ({ song }: CardSongProps) => {
 
   const checkLiked = async () => {
     try {
-      const res: any = await songApi.checkLikedSong(song.id ?? '', token ?? "");
+      const res: any = await songApi.checkLikedSong(song.id ?? "", token ?? "");
       setLike(res.isLiked);
     } catch (error) {
       console.log(error);
@@ -83,8 +85,8 @@ const CardSong = ({ song }: CardSongProps) => {
 
   const likeMutation = useMutation(
     async (like: boolean) => {
-      if (!like) return songApi.likeSong(song.id ?? '', token ?? "");
-      return songApi.unLikeSong(song.id ?? '', token ?? "");
+      if (!like) return songApi.likeSong(song.id ?? "", token ?? "");
+      return songApi.unLikeSong(song.id ?? "", token ?? "");
     },
     {
       onSuccess: () => {
@@ -140,13 +142,13 @@ const CardSong = ({ song }: CardSongProps) => {
   );
 };
 
-const ControlsBar = ({ song }: CardSongProps) => {
+const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
   const songPlayId = useSelector(selectSongPlayId);
   const isPlaying = useSelector(selectIsPlaying);
   const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const clickRef = useRef<HTMLDivElement>(null);
-  // const [currentSong, setCurrentSong] = useState(song);
+  const [percentage, setPercentage] = useState(0);
+
   const [progress, setProgress] = useState<number>(0);
   let [minutes, setMinutes] = useState<string>("00");
   let [seconds, setSeconds] = useState<string>("00");
@@ -186,6 +188,11 @@ const ControlsBar = ({ song }: CardSongProps) => {
     }
   }, [songPlayId]);
 
+  //Thay đổi âm lượng
+  useEffect(() => {
+    audioRef.current!.volume = parseInt(volume || "0") / 100;
+  }, [volume]);
+
   const onPlaying = () => {
     const duration = audioRef.current?.duration;
     const ct: number | undefined = audioRef.current?.currentTime;
@@ -206,18 +213,12 @@ const ControlsBar = ({ song }: CardSongProps) => {
     ct && duration && setProgress((ct / duration) * 100);
   };
 
-  const checkWidth = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let width: number | undefined = clickRef.current?.clientWidth;
-    const offset = e.nativeEvent?.offsetX;
-    const duration = audioRef.current?.duration;
-
-    const divprogress: number | undefined = width && (offset / width) * 100;
-
-    // console.log(width, offset, divprogress);\
-
-    const time = divprogress && duration && (divprogress / 100) * duration;
-
-    // time && audioRef &&  audioRef.current?.currentTime == time;
+  const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const audio = audioRef.current;
+    if (audio && audio.duration) {
+      audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
+    }
+    setPercentage(parseFloat(e.target.value));
   };
 
   return (
@@ -251,10 +252,11 @@ const ControlsBar = ({ song }: CardSongProps) => {
           <i className="fa-light fa-repeat"></i>
         </button>
       </div>
+
       <div className="ControlsBar__bar">
         <span>{`${minutesPlay}:${secondsPlay}`}</span>
         <div className="progress">
-          <div
+          {/* <div
             className="progress_wrapper"
             onClick={(e) => checkWidth(e)}
             ref={clickRef}
@@ -267,7 +269,8 @@ const ControlsBar = ({ song }: CardSongProps) => {
               className="slider-handle"
               style={{ left: `${progress + "%"}` }}
             ></div>
-          </div>
+          </div> */}
+          <Slider percentage={percentage} onChange={onChangeSlider} />
         </div>
         <span>{`${minutes}:${seconds}`}</span>
       </div>
@@ -275,8 +278,15 @@ const ControlsBar = ({ song }: CardSongProps) => {
   );
 };
 
-const ControlsRight = (props: any) => {
+const ControlsRight = ({
+  setVolume,
+  volume,
+}: {
+  volume: string;
+  setVolume: (value: string) => void;
+}) => {
   const dispatch = useDispatch();
+  const ValRef = useRef<HTMLInputElement>(null);
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const handleOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
@@ -285,11 +295,36 @@ const ControlsRight = (props: any) => {
   return (
     <div className="ControlsRight">
       <div className="ControlsRight__volume">
-        <button className="btn__volume" data-tooltip={"Mute"}>
-          <i className="fa-light fa-volume"></i>
-          {/* <i className="fa-light fa-volume-xmark"></i> */}
+        <button
+          className="btn__volume"
+          data-tooltip={"Mute"}
+          onClick={() => {
+            setVolume(volume !== "0" ? "0" : "50");
+          }}
+        >
+          {volume !== "0" ? (
+            <i className="fa-light fa-volume"></i>
+          ) : (
+            <i className="fa-light fa-volume-slash"></i>
+          )}
         </button>
-        <div className="ControlsRight__volume__progressbar"></div>
+        <div className="volume-progress">
+          <span
+            className="slider-track"
+            style={{ width: `${volume ?? 0 * 100}%` }}
+          ></span>
+
+          <input
+            type="range"
+            name="volume"
+            className="max-val"
+            ref={ValRef}
+            onInput={(e) => setVolume(e.currentTarget?.value)}
+            max={100}
+            min={0}
+            value={volume}
+          />
+        </div>
       </div>
       <button
         onClick={handleOpenWaiting}
