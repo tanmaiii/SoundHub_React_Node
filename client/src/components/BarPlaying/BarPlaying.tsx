@@ -19,6 +19,9 @@ import { apiConfig } from "../../configs";
 import { changeOpenWaiting } from "../../slices/waitingSlice";
 import ImageWithFallback from "../ImageWithFallback";
 import Slider from "../Slider";
+import { toast } from "sonner";
+import { use } from "i18next";
+import { set } from "react-hook-form";
 
 export default function BarPlaying() {
   // const songPlayId = useSelector(selectSongPlayId);
@@ -108,11 +111,7 @@ const CardSong = ({ song }: CardSongProps) => {
     <div className="CardSong">
       <div className="CardSong__image">
         <ImageWithFallback
-          src={
-            song?.image_path
-              ? apiConfig.imageURL(song?.image_path)
-              : Images.SONG
-          }
+          src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
           alt=""
         />
@@ -148,8 +147,8 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
   const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [percentage, setPercentage] = useState(0);
+  const [isValid, setIsValid] = useState<boolean | null>(null);
 
-  const [progress, setProgress] = useState<number>(0);
   let [minutes, setMinutes] = useState<string>("00");
   let [seconds, setSeconds] = useState<string>("00");
 
@@ -164,7 +163,9 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
     }
   };
 
+  //Kiểm tra trạng thái phát nhạc
   useEffect(() => {
+    if (!isValid) return;
     if (isPlaying) {
       console.log("phát nhạc");
       audioRef.current?.play();
@@ -174,6 +175,20 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
   }, [isPlaying, songPlayId]);
 
   useEffect(() => {
+    console.log({ isValid });
+    
+    if (isValid === false) {
+      dispatch(stopSong());
+      setMinutes("00");
+      setSeconds("00");
+      setMinutesPlay("00");
+      setSecondsPlay("00");
+    }
+  }, [isValid, songPlayId]);
+
+  //Thay đổi thời gian bài hát
+  useEffect(() => {
+    setPercentage(0);
     if (audioRef.current?.duration) {
       setMinutes(
         Math.floor(audioRef.current?.duration / 60)
@@ -186,31 +201,22 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
           .padStart(2, "0")
       );
     }
-  }, [songPlayId]);
+  }, [songPlayId, isValid]);
 
-  //Thay đổi âm lượng
-  useEffect(() => {
-    audioRef.current!.volume = parseInt(volume || "0") / 100;
-  }, [volume]);
-
+  //Cập nhật thời gian phát
   const onPlaying = () => {
-    const duration = audioRef.current?.duration;
-    const ct: number | undefined = audioRef.current?.currentTime;
-
-    ct &&
+    if (audioRef.current?.currentTime) {
       setMinutesPlay(
-        Math.floor(ct / 60)
+        Math.floor(audioRef.current?.currentTime / 60)
           .toString()
           .padStart(2, "0")
       );
-    ct &&
       setSecondsPlay(
-        Math.floor(ct % 60)
+        Math.floor(audioRef.current?.currentTime % 60)
           .toString()
           .padStart(2, "0")
       );
-
-    ct && duration && setProgress((ct / duration) * 100);
+    }
   };
 
   const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,14 +227,52 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
     setPercentage(parseFloat(e.target.value));
   };
 
+  //Thay đổi âm lượng
+  useEffect(() => {
+    audioRef.current!.volume = parseInt(volume || "0") / 100;
+  }, [volume]);
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+
+    if (audioElement) {
+      const handleCanPlayThrough = () => {
+        setIsValid(true);
+      };
+
+      const handleError = () => {
+        dispatch(stopSong());
+        toast.error("Error when loading song");
+        setIsValid(false);
+      };
+
+      audioElement.addEventListener("canplaythrough", handleCanPlayThrough);
+      audioElement.addEventListener("error", handleError);
+
+      // Kiểm tra trạng thái tải hiện tại
+      audioElement.src = apiConfig.mp3Url(song?.song_path);
+      audioElement.load();
+
+      // Cleanup event listeners on unmount
+      return () => {
+        audioElement.removeEventListener(
+          "canplaythrough",
+          handleCanPlayThrough
+        );
+        audioElement.removeEventListener("error", handleError);
+      };
+    }
+  }, [song?.song_path]);
+
   return (
     <div className="ControlsBar">
       <audio
         ref={audioRef}
         id="audio"
-        src={song && apiConfig.mp3Url(song?.song_path)}
+        // src={song && apiConfig.mp3Url(song?.song_path)}
         autoPlay
         onTimeUpdate={onPlaying}
+        onError={(e) => console.log({ e })}
       ></audio>
 
       <div className="ControlsBar__actions">
@@ -256,20 +300,6 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
       <div className="ControlsBar__bar">
         <span>{`${minutesPlay}:${secondsPlay}`}</span>
         <div className="progress">
-          {/* <div
-            className="progress_wrapper"
-            onClick={(e) => checkWidth(e)}
-            ref={clickRef}
-          >
-            <div
-              className="seek_bar"
-              style={{ width: `${progress + "%"}` }}
-            ></div>
-            <div
-              className="slider-handle"
-              style={{ left: `${progress + "%"}` }}
-            ></div>
-          </div> */}
           <Slider percentage={percentage} onChange={onChangeSlider} />
         </div>
         <span>{`${minutes}:${seconds}`}</span>

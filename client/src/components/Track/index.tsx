@@ -97,9 +97,13 @@ export default function Track({
               className={`button-play ${
                 songPlayId === song?.id ? "active" : ""
               }`}
-              onClick={() => handleClickPlay(song?.id ?? '')}
+              onClick={() => handleClickPlay(song?.id ?? "")}
             >
-              {false ? <IconPlay /> : <i className="fa-solid fa-play"></i>}
+              {isPlaying && songPlayId === song?.id ? (
+                <IconPlay />
+              ) : (
+                <i className="fa-solid fa-play"></i>
+              )}
             </button>
           </div>
           <div className="track__wrapper__left__desc">
@@ -148,7 +152,7 @@ export default function Track({
           <div className="item__hover">
             <div className={`button-edit ${activeMenu ? " active" : ""}`}>
               <SongMenu
-                id={song?.id ?? ''}
+                id={song?.id ?? ""}
                 song={song}
                 playlistId={playlistId}
                 active={activeMenu}
