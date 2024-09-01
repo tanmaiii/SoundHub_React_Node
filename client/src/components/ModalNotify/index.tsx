@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { authorApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { TAuthor, TSong } from "../../types";
 import songApi from "../../apis/song/songApi";
 import ImageWithFallback from "../ImageWithFallback";

@@ -8,7 +8,7 @@ import { playlistApi, searchApi, songApi, userApi } from "../../apis";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { apiConfig } from "../../configs";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import numeral from "numeral";
 import Section from "../../components/Section";
 import { useTranslation } from "react-i18next";

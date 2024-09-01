@@ -12,7 +12,7 @@ import { authorApi, searchApi, songApi, userApi } from "../../apis";
 import CommentInput from "../../components/CommentInput/CommentInput";
 import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { PATH } from "../../constants/paths";
 import Modal from "../../components/Modal";
 import { toast } from "sonner";

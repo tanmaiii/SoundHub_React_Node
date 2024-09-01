@@ -4,7 +4,8 @@ import App from "./App";
 
 import { Provider } from "react-redux";
 import store from "./store";
-import { AuthContextProvider } from "./context/authContext";
+import { AudioContextProvider } from "./context/AudioContext";
+import { AuthContextProvider } from "./context/AuthContext";
 
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -15,11 +16,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <QueryClientProvider client={queryClient}>
-    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-
     <Provider store={store}>
       <AuthContextProvider>
-        <App />
+        <AudioContextProvider>
+          <App />
+        </AudioContextProvider>
       </AuthContextProvider>
     </Provider>
   </QueryClientProvider>

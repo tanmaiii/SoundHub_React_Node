@@ -3,7 +3,7 @@ import "./style.scss";
 import { TSong } from "../../types";
 import Track from "../Track";
 import Images from "../../constants/images";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { playlistApi } from "../../apis";
 import { useMutation, useQueryClient } from "react-query";

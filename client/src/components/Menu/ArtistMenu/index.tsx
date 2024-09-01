@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { TAuthor, TSong } from "../../../types";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";

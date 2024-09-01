@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./style.scss";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { imageApi, userApi } from "../../../apis";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "react-query";

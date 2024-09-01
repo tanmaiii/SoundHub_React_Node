@@ -3,7 +3,7 @@ import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
 import "./headerPage.scss";
 import moment from "moment";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 // import numeral from "numeral";
 import numeral from "numeral";
 import { apiConfig } from "../../configs";

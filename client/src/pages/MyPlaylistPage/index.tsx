@@ -5,7 +5,7 @@ import { favouriteApi, playlistApi } from "../../apis";
 import CardPlaylist from "../../components/CardPlaylist";
 import Modal from "../../components/Modal";
 import ModalAddPlaylist from "../../components/ModalPlaylist/AddPlaylist";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
 import "./style.scss";
 

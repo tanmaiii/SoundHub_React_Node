@@ -3,7 +3,7 @@ import "./authLayout.scss";
 
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { PATH } from "../../constants/paths";
 import Images from "../../constants/images";
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./style.scss";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import Modal from "../../../components/Modal";
 import ImageWithFallback from "../../../components/ImageWithFallback";
 import Images from "../../../constants/images";

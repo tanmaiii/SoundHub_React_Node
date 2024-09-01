@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./style.scss";
 import HeaderSection from "../../components/HeaderSection";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { TSong, TStateParams } from "../../types";
 import { favouriteApi } from "../../apis";
 import { useQuery } from "react-query";

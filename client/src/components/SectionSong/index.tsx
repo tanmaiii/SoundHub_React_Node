@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { TSong } from "../../types/song.type";
 import HeaderSection from "../HeaderSection";
 import TrackShort from "../TrackShort/index";

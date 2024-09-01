@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { genreApi, imageApi, playlistApi } from "../../../apis";
 import Images from "../../../constants/images";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import Dropdown from "../../Dropdown";
 import "./style.scss";
 

@@ -9,7 +9,7 @@ import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { songApi } from "../../apis";
 import { PATH } from "../../constants/paths";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import {
   playSong,
   setNowPlaying,

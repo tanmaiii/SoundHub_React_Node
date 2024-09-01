@@ -8,7 +8,7 @@ import React, {
 import "./style.scss";
 import { useTranslation } from "react-i18next";
 import playlistApi from "../../../apis/playlist/playlistApi";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../../apis";
 import Modal from "../../Modal";

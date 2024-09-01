@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { TPlaylist } from "../../../types";
 import { genreApi, imageApi, playlistApi } from "../../../apis";
 import { apiConfig } from "../../../configs";

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeOpenWaiting } from "../../slices/waitingSlice";
 import { searchApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "react-query";
 import TrackShort from "../TrackShort";
 

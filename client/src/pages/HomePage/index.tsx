@@ -11,7 +11,7 @@ import CardArtist from "../../components/CardArtist";
 import CardPlaylist from "../../components/CardPlaylist";
 import CardSong from "../../components/CardSong";
 import { PATH } from "../../constants/paths";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 
 function HomePage(props: any) {

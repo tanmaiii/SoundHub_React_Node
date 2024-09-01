@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Images from "../../constants/images";
 import { PATH } from "../../constants/paths";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { locales } from "../../i18n/i18n";
 import ImageWithFallback from "../ImageWithFallback";
 

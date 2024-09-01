@@ -10,7 +10,7 @@ import ImageWithFallback from "../ImageWithFallback";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { playlistApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import Modal from "../Modal";
 import { useTranslation } from "react-i18next";
 

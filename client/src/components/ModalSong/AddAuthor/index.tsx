@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useTransition } from "react";
 import { searchApi, userApi } from "../../../apis";
 import CustomInput from "../../../components/CustomInput";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { ResSoPaAr, TUser } from "../../../types";
 import "./style.scss";
 import ImageWithFallback from "../../ImageWithFallback";

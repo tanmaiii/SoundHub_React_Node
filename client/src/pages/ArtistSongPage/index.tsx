@@ -6,7 +6,7 @@ import "./style.scss";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import TableTrack from "../../components/TableTrack";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ArtistSongPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);

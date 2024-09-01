@@ -4,7 +4,7 @@ import "./auth.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import authApi from "../../apis/auth/authApi";
 
 export default function Login() {

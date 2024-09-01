@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../apis";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 
 type props = {
   song: TSong;

@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import CardPlaylist from "../../components/CardPlaylist";
 import HeaderSection from "../../components/HeaderSection";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import { TUser } from "../../types/user.type";
 

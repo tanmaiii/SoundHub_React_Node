@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import BarPlaying from "../../components/BarPlaying/BarPlaying";
 import Footer from "../../components/Footer";
 import WattingList from "../../components/WattingList";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { PATH } from "../../constants/paths";
 
 type MainLayoutProps = {

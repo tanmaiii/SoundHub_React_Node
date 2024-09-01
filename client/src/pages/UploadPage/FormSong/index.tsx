@@ -10,7 +10,7 @@ import Modal from "../../../components/Modal";
 import { ModalAddAuthor } from "../../../components/ModalSong";
 import { AuthorItem } from "../../../components/ModalSong/AddAuthor";
 import { PATH } from "../../../constants/paths";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import "./style.scss";
 
 interface TError {

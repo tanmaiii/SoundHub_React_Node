@@ -12,7 +12,7 @@ import Loading from "../components/Loading/Loading";
 import MainLayout from "../layout/MainLayout/MainLayout";
 
 import { PATH, publicRoutes } from "../constants/paths";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext";
 
 const helmetContext = {};
 

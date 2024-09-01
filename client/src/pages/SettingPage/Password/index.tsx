@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./style.scss";
 import { useTranslation } from "react-i18next";
 import Modal from "../../../components/Modal";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/AuthContext";
 import { authApi, userApi } from "../../../apis";
 import { toast } from "sonner";
 import { useQueryClient } from "react-query";

@@ -3,7 +3,7 @@ import "./style.scss";
 import HeaderSection from "../../components/HeaderSection";
 import { favouriteApi, playlistApi } from "../../apis";
 import { ResSoPaAr, TPlaylist, TStateParams } from "../../types";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "react-query";
 import CardPlaylist from "../../components/CardPlaylist";
 import CardArtist from "../../components/CardArtist";

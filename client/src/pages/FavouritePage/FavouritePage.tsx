@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { favouriteApi } from "../../apis";
 import Track from "../../components/Track";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { TSong, TStateParams } from "../../types";
 import "./favouritePage.scss";
 import TableTrack from "../../components/TableTrack";

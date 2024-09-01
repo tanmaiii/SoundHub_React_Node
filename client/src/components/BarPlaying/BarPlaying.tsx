@@ -14,7 +14,7 @@ import { TSong } from "../../types";
 import { songApi } from "../../apis";
 import Images from "../../constants/images";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { apiConfig } from "../../configs";
 import { changeOpenWaiting } from "../../slices/waitingSlice";
 import ImageWithFallback from "../ImageWithFallback";
@@ -176,7 +176,7 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
 
   useEffect(() => {
     console.log({ isValid });
-    
+
     if (isValid === false) {
       dispatch(stopSong());
       setMinutes("00");
@@ -201,7 +201,7 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
           .padStart(2, "0")
       );
     }
-  }, [songPlayId, isValid]);
+  }, [songPlayId, audioRef.current?.duration]);
 
   //Cập nhật thời gian phát
   const onPlaying = () => {

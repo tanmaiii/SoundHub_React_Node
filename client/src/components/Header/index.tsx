@@ -8,7 +8,7 @@ import { RootState } from "../../store";
 import { changeOpen } from "../../slices/navbarSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/paths";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import CustomInput from "../CustomInput";
 import ModalNotify from "../ModalNotify";
