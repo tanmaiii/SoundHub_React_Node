@@ -1,42 +1,39 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./barPlaying.scss";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { songApi } from "../../apis";
+import { apiConfig } from "../../configs";
+import Images from "../../constants/images";
+import { useAuth } from "../../context/AuthContext";
 import {
+  playSong,
   selectIsPlaying,
   selectSongPlayId,
-  setNowPlaying,
-  playSong,
   stopSong,
 } from "../../slices/nowPlayingSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { changeOpenWaiting } from "../../slices/waitingSlice";
 import { RootState } from "../../store";
 import { TSong } from "../../types";
-import { songApi } from "../../apis";
-import Images from "../../constants/images";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useAuth } from "../../context/AuthContext";
-import { apiConfig } from "../../configs";
-import { changeOpenWaiting } from "../../slices/waitingSlice";
 import ImageWithFallback from "../ImageWithFallback";
 import Slider from "../Slider";
-import { toast } from "sonner";
-import { use } from "i18next";
-import { set } from "react-hook-form";
+import "./style.scss";
+import { useAudio } from "../../context/AudioContext";
 
 export default function BarPlaying() {
+  // const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
   // const songPlayId = useSelector(selectSongPlayId);
-  const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
   const { token } = useAuth();
   const [valueVolume, setValueVolume] = useState<string>("50");
-
-  const songPlayId = useSelector(selectSongPlayId);
+  const { songPlayId, isPlaying, pauseSong, playSong } = useAudio();
   const [song, setSong] = useState<TSong | null>(null);
 
   const getSong = async () => {
     try {
       const res =
         songPlayId && (await songApi.getDetail(songPlayId ?? "", token ?? ""));
-      setSong(res);
+      res && setSong(res);
     } catch (error) {
       console.log(error);
     }

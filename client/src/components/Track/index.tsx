@@ -19,6 +19,7 @@ import { RootState } from "../../store";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import SongMenu from "../Menu/SongMenu";
+import { useAudio } from "../../context/AudioContext";
 
 interface TrackProps {
   song: TSong;
@@ -37,17 +38,22 @@ export default function Track({
   const dispatch = useDispatch();
   const { token, currentUser } = useAuth();
   const [activeMenu, setActiveMenu] = useState(false);
+  const { start, isPlaying, songPlayId, playSong, pauseSong } = useAudio();
 
-  const { isPlaying, songPlayId } = useSelector(
-    (state: RootState) => state.nowPlaying
-  );
+  // const { isPlaying, songPlayId } = useSelector(
+  //   (state: RootState) => state.nowPlaying
+  // );
 
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
-      dispatch(stopSong());
+      // dispatch(stopSong());
+      playSong();
+      pauseSong();
     } else {
-      dispatch(setNowPlaying({ id }));
-      dispatch(playSong());
+      start(id);
+      playSong();
+      // dispatch(setNowPlaying({ id }));
+      // dispatch(playSong());
     }
   };
 

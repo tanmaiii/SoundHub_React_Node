@@ -237,7 +237,6 @@ const EditSong = ({
               type="text"
               id="title"
               value={inputs?.title}
-              defaultValue={inputs?.title}
               placeholder={t("Upload.Title desc")}
               name="title"
               maxLength={100}

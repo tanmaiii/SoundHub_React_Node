@@ -5,7 +5,7 @@ import "./mainLayout.scss";
 
 import NavBar from "../../components/NavBar/NavBar";
 import Header from "../../components/Header";
-import BarPlaying from "../../components/BarPlaying/BarPlaying";
+import BarPlaying from "../../components/BarPlaying";
 import Footer from "../../components/Footer";
 import WattingList from "../../components/WattingList";
 import { useAuth } from "../../context/AuthContext";
