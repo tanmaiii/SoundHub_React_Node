@@ -16,7 +16,6 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import "../src/i18n/i18n";
 import { Toaster, toast } from "sonner";
 
-
 function App() {
   const darkMode = useSelector((state: RootState) => state.darkMode.state);
 
@@ -38,9 +37,6 @@ function App() {
     };
   }, [i18n]);
 
-  
-  
-
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
       <SkeletonTheme
@@ -50,7 +46,11 @@ function App() {
       >
         {/* <Loading /> */}
         <Routes />
-        <Toaster position={"bottom-center"} />
+        {/* <Toaster position="bottom-center"/> */}
+        <Toaster
+          position="bottom-center"
+          toastOptions={{ className: "toaster-bottom-center" }}
+        />
       </SkeletonTheme>
     </div>
   );

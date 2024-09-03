@@ -2,8 +2,8 @@
 
 html {
   // //
-   /* width */
-   ::-webkit-scrollbar {
+  /* width */
+  ::-webkit-scrollbar {
     width: 6px;
   }
 
@@ -18,13 +18,16 @@ html {
     border: none;
     border-radius: $radius-4;
   }
-  
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.toaster-bottom-center {
+  bottom: 80px !important;
 }
 
 html,

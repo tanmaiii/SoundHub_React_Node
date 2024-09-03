@@ -25,7 +25,6 @@ export default function BarPlaying() {
   // const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
   // const songPlayId = useSelector(selectSongPlayId);
   const { token } = useAuth();
-  const [valueVolume, setValueVolume] = useState<string>("50");
   const { songPlayId, isPlaying, pauseSong, playSong } = useAudio();
   const [song, setSong] = useState<TSong | null>(null);
 
@@ -51,10 +50,10 @@ export default function BarPlaying() {
         {song && <CardSong song={song} />}
       </div>
       <div className="barPlaying__center ">
-        {song && <ControlsBar song={song} volume={valueVolume} />}
+        {song && <ControlsBar song={song} />}
       </div>
       <div className="barPlaying__right ">
-        <ControlsRight setVolume={setValueVolume} volume={valueVolume} />
+        <ControlsRight />
       </div>
     </div>
   );
@@ -138,12 +137,11 @@ const CardSong = ({ song }: CardSongProps) => {
   );
 };
 
-const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
-  const songPlayId = useSelector(selectSongPlayId);
-  const isPlaying = useSelector(selectIsPlaying);
+const ControlsBar = ({ song }: { song: TSong }) => {
+  // const songPlayId = useSelector(selectSongPlayId);
+  // const isPlaying = useSelector(selectIsPlaying);
   const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [percentage, setPercentage] = useState(0);
   const [isValid, setIsValid] = useState<boolean | null>(null);
 
   let [minutes, setMinutes] = useState<string>("00");
@@ -152,125 +150,138 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
   let [minutesPlay, setMinutesPlay] = useState<string>("00");
   let [secondsPlay, setSecondsPlay] = useState<string>("00");
 
+  const {
+    playSong,
+    pauseSong,
+    percentage,
+    songPlayId,
+    timeSong,
+    timeSongPlay,
+    isPlaying,
+    onChangeSlider,
+  } = useAudio();
+
   const handleClickPlay = () => {
     if (!isPlaying) {
-      dispatch(playSong());
+      // dispatch(playSong());
+      playSong();
     } else {
-      dispatch(stopSong());
+      // dispatch(stopSong());
+      pauseSong();
     }
   };
 
   //Kiểm tra trạng thái phát nhạc
-  useEffect(() => {
-    if (!isValid) return;
-    if (isPlaying) {
-      console.log("phát nhạc");
-      audioRef.current?.play();
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [isPlaying, songPlayId]);
+  // useEffect(() => {
+  //   if (!isValid) return;
+  //   if (isPlaying) {
+  //     console.log("phát nhạc");
+  //     audioRef.current?.play();
+  //   } else {
+  //     audioRef.current?.pause();
+  //   }
+  // }, [isPlaying, songPlayId]);
 
-  useEffect(() => {
-    console.log({ isValid });
+  // useEffect(() => {
+  //   console.log({ isValid });
 
-    if (isValid === false) {
-      dispatch(stopSong());
-      setMinutes("00");
-      setSeconds("00");
-      setMinutesPlay("00");
-      setSecondsPlay("00");
-    }
-  }, [isValid, songPlayId]);
+  //   if (isValid === false) {
+  //     dispatch(stopSong());
+  //     setMinutes("00");
+  //     setSeconds("00");
+  //     setMinutesPlay("00");
+  //     setSecondsPlay("00");
+  //   }
+  // }, [isValid, songPlayId]);
 
   //Thay đổi thời gian bài hát
-  useEffect(() => {
-    setPercentage(0);
-    if (audioRef.current?.duration) {
-      setMinutes(
-        Math.floor(audioRef.current?.duration / 60)
-          .toString()
-          .padStart(2, "0")
-      );
-      setSeconds(
-        Math.floor(audioRef.current?.duration % 60)
-          .toString()
-          .padStart(2, "0")
-      );
-    }
-  }, [songPlayId, audioRef.current?.duration]);
+  // useEffect(() => {
+  //   setPercentage(0);
+  //   if (audioRef.current?.duration) {
+  //     setMinutes(
+  //       Math.floor(audioRef.current?.duration / 60)
+  //         .toString()
+  //         .padStart(2, "0")
+  //     );
+  //     setSeconds(
+  //       Math.floor(audioRef.current?.duration % 60)
+  //         .toString()
+  //         .padStart(2, "0")
+  //     );
+  //   }
+  // }, [songPlayId, audioRef.current?.duration]);
 
   //Cập nhật thời gian phát
-  const onPlaying = () => {
-    if (audioRef.current?.currentTime) {
-      setMinutesPlay(
-        Math.floor(audioRef.current?.currentTime / 60)
-          .toString()
-          .padStart(2, "0")
-      );
-      setSecondsPlay(
-        Math.floor(audioRef.current?.currentTime % 60)
-          .toString()
-          .padStart(2, "0")
-      );
-    }
-  };
+  // const onPlaying = () => {
+  //   if (audioRef.current?.currentTime) {
+  //     setMinutesPlay(
+  //       Math.floor(audioRef.current?.currentTime / 60)
+  //         .toString()
+  //         .padStart(2, "0")
+  //     );
+  //     setSecondsPlay(
+  //       Math.floor(audioRef.current?.currentTime % 60)
+  //         .toString()
+  //         .padStart(2, "0")
+  //     );
+  //   }
+  // };
 
-  const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (audio && audio.duration) {
-      audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
-    }
-    setPercentage(parseFloat(e.target.value));
-  };
+  // const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const audio = audioRef.current;
+  //   if (audio && audio.duration) {
+  //     audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
+  //   }
+  //   setPercentage(parseFloat(e.target.value));
+  // };
 
   //Thay đổi âm lượng
-  useEffect(() => {
-    audioRef.current!.volume = parseInt(volume || "0") / 100;
-  }, [volume]);
+  // useEffect(() => {
+  //   audioRef.current!.volume = parseInt(volume || "0") / 100;
+  // }, [volume]);
 
-  useEffect(() => {
-    const audioElement = audioRef.current;
+  // useEffect(() => {
+  //   const audioElement = audioRef.current;
 
-    if (audioElement) {
-      const handleCanPlayThrough = () => {
-        setIsValid(true);
-      };
+  //   if (audioElement) {
+  //     const handleCanPlayThrough = () => {
+  //       setIsValid(true);
+  //     };
 
-      const handleError = () => {
-        dispatch(stopSong());
-        toast.error("Error when loading song");
-        setIsValid(false);
-      };
+  //     const handleError = () => {
+  //       dispatch(stopSong());
+  //       toast.error("Error when loading song");
+  //       setIsValid(false);
+  //     };
 
-      audioElement.addEventListener("canplaythrough", handleCanPlayThrough);
-      audioElement.addEventListener("error", handleError);
+  //     audioElement.addEventListener("canplaythrough", handleCanPlayThrough);
+  //     audioElement.addEventListener("error", handleError);
 
-      // Kiểm tra trạng thái tải hiện tại
-      audioElement.src = apiConfig.mp3Url(song?.song_path);
-      audioElement.load();
+  //     // Kiểm tra trạng thái tải hiện tại
+  //     audioElement.src = apiConfig.mp3Url(song?.song_path);
+  //     audioElement.load();
 
-      // Cleanup event listeners on unmount
-      return () => {
-        audioElement.removeEventListener(
-          "canplaythrough",
-          handleCanPlayThrough
-        );
-        audioElement.removeEventListener("error", handleError);
-      };
-    }
-  }, [song?.song_path]);
+  //     // Cleanup event listeners on unmount
+  //     return () => {
+  //       audioElement.removeEventListener(
+  //         "canplaythrough",
+  //         handleCanPlayThrough
+  //       );
+  //       audioElement.removeEventListener("error", handleError);
+  //     };
+  //   }
+  // }, [song?.song_path]);
 
   return (
     <div className="ControlsBar">
-      <audio
+      {/* <audio
         ref={audioRef}
         id="audio"
         // src={song && apiConfig.mp3Url(song?.song_path)}
         autoPlay
         onTimeUpdate={onPlaying}
         onError={(e) => console.log({ e })}
-      ></audio>
+      ></audio> */}
 
       <div className="ControlsBar__actions">
         <button className="btn-random active" data-tooltip={"Play randomly"}>
@@ -295,28 +306,28 @@ const ControlsBar = ({ song, volume }: { song: TSong; volume: string }) => {
       </div>
 
       <div className="ControlsBar__bar">
-        <span>{`${minutesPlay}:${secondsPlay}`}</span>
+        <span>{`${timeSongPlay}`}</span>
         <div className="progress">
           <Slider percentage={percentage} onChange={onChangeSlider} />
         </div>
-        <span>{`${minutes}:${seconds}`}</span>
+        <span>{`${timeSong}`}</span>
       </div>
     </div>
   );
 };
 
-const ControlsRight = ({
-  setVolume,
-  volume,
-}: {
-  volume: string;
-  setVolume: (value: string) => void;
-}) => {
+const ControlsRight = ({}: {}) => {
   const dispatch = useDispatch();
   const ValRef = useRef<HTMLInputElement>(null);
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const handleOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
+  };
+  // const [volume, setVolume] = useState<number>(50);
+  const { changeVolume, volume } = useAudio();
+
+  const handleChangeVolume = (value: string) => {
+    changeVolume(value);
   };
 
   return (
@@ -326,7 +337,7 @@ const ControlsRight = ({
           className="btn__volume"
           data-tooltip={"Mute"}
           onClick={() => {
-            setVolume(volume !== "0" ? "0" : "50");
+            handleChangeVolume(volume !== "0" ? "0" : "50");
           }}
         >
           {volume !== "0" ? (
@@ -346,7 +357,7 @@ const ControlsRight = ({
             name="volume"
             className="max-val"
             ref={ValRef}
-            onInput={(e) => setVolume(e.currentTarget?.value)}
+            onInput={(e) => handleChangeVolume(e.currentTarget.value)}
             max={100}
             min={0}
             value={volume}

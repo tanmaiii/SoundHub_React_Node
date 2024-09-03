@@ -46,14 +46,11 @@ export default function Track({
 
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
-      // dispatch(stopSong());
       playSong();
       pauseSong();
     } else {
       start(id);
       playSong();
-      // dispatch(setNowPlaying({ id }));
-      // dispatch(playSong());
     }
   };
 
