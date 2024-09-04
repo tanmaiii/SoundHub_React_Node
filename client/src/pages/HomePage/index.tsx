@@ -127,7 +127,7 @@ function HomePage(props: any) {
   return (
     <div className="home">
       {songsFavorite && songsFavorite?.length > 0 && (
-        <Section title={t("section.favoriteSongs")} to={PATH.SONG}>
+        <Section title={t("section.favoriteSongs")}>
           {songsFavorite?.map((song, index) => (
             <CardSong
               key={index}
@@ -143,7 +143,7 @@ function HomePage(props: any) {
       )}
 
       {songNew && songNew.length > 0 && (
-        <Section title={t("section.newSongs")} to={PATH.SONG}>
+        <Section title={t("section.newSongs")}>
           {songNew?.map((song, index) => (
             <CardSong
               key={index}

@@ -2,18 +2,21 @@
 
 .TrackShort {
   @include themify($themes) {
-    @include flex(center, start, row);
+    @include flex(center, center, row);
     padding: $space-8;
-    // background-color: themed("bg-2");
     border-radius: $radius-8;
     width: 100%;
     transition: $transition;
     cursor: pointer;
     position: relative;
+    margin-bottom: $space-8;
     &::before {
       border-bottom: 1px solid themed("bg-2");
       position: absolute;
       bottom: 0;
+    }
+    &:hover {
+      background-color: $color-hover;
     }
     &:hover {
       background-color: $color-hover;
@@ -23,6 +26,17 @@
       .item-listen {
         display: none;
       }
+
+      & .button-play {
+        display: block;
+      }
+
+      & .item__hover {
+        visibility: visible;
+      }
+    }
+    &.play {
+      background-color: $color-hover;
     }
     &.activeMenu {
       background-color: $color-hover;
@@ -36,6 +50,7 @@
     &__left {
       @include flex(center, start, row);
       flex: 1;
+      gap: $space-4;
       &__num {
         @include flex(center, start, row);
         margin-right: $space-8;
@@ -66,16 +81,35 @@
       }
       &__image {
         --size: 60px;
+        min-width: var(--size);
+        min-height: var(--size);
         width: var(--size);
         height: var(--size);
-        margin-right: 10px;
+        position: relative;
         img {
-          min-width: 100%;
+          width: 100%;
           height: 100%;
-          border-radius: $radius-8;
           object-fit: cover;
-          aspect-ratio: 1/1;
+          overflow: hidden;
+          border-radius: $radius-8;
           background-color: themed("bg-2");
+        }
+        & > .button-play {
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          @include flex(center, center);
+          background-color: themed("bg-rgba");
+          cursor: pointer;
+          display: none;
+          i {
+            color: themed("txt-main");
+            font-size: $size-24;
+          }
+          &.active {
+            display: block;
+          }
         }
       }
       &__desc {

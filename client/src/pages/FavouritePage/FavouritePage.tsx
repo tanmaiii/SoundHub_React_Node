@@ -10,10 +10,12 @@ import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import Images from "../../constants/images";
 import { apiConfig } from "../../configs";
 import { Helmet } from "react-helmet-async";
+import { useAudio } from "../../context/AudioContext";
 
 export default function FavouritePage() {
   const [songs, setSongs] = useState<TSong[] | null>(null);
   const { token, currentUser } = useAuth();
+  const { queue, updateQueue } = useAudio();
 
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
@@ -87,7 +89,17 @@ export default function FavouritePage() {
         <div className="favourite__content__header">
           <div className="favourite__content__header__left">
             {songs && songs?.length > 0 && (
-              <button className="btn__play">
+              <button
+                className="btn__play"
+                onClick={() =>
+                  updateQueue(
+                    songs
+                      .filter((song) => song?.id)
+                      .map((song) => song!.id!)
+                      .filter(Boolean)
+                  )
+                }
+              >
                 <i className="fa-solid fa-play"></i>
               </button>
             )}
@@ -95,30 +107,6 @@ export default function FavouritePage() {
               <i className="fa-solid fa-ellipsis"></i>
             </button>
           </div>
-          {/* <div className="favourite__content__header__right">
-            {songs && songs?.length > 0 && (
-              <div className="dropdown">
-                <div
-                  className="dropdown__header"
-                  onClick={() => setActiveDropdown(!activeDropdown)}
-                >
-                  <i className="fa-light fa-bars-sort"></i>
-                  <span>Mới nhất</span>
-                  <i className="fa-light fa-chevron-down"></i>
-                </div>
-                <div
-                  className={`dropdown__content ${
-                    activeDropdown ? "active" : ""
-                  }`}
-                >
-                  <ul>
-                    <li>Mới nhất</li>
-                    <li>Phổ biến</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div> */}
         </div>
         <TableTrack songs={songs} isLoading={isLoading} />
       </div>

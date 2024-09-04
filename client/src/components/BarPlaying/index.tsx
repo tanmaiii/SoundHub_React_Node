@@ -22,10 +22,16 @@ import "./style.scss";
 import { useAudio } from "../../context/AudioContext";
 
 export default function BarPlaying() {
-  // const { isPlaying } = useSelector((state: RootState) => state.nowPlaying);
-  // const songPlayId = useSelector(selectSongPlayId);
   const { token } = useAuth();
-  const { songPlayId, isPlaying, pauseSong, playSong } = useAudio();
+  const {
+    songPlayId,
+    isPlaying,
+    pauseSong,
+    playSong,
+    queue,
+    nextSong,
+    prevSong,
+  } = useAudio();
   const [song, setSong] = useState<TSong | null>(null);
 
   const getSong = async () => {
@@ -45,14 +51,14 @@ export default function BarPlaying() {
   if (!songPlayId) return null;
 
   return (
-    <div className="barPlaying">
-      <div className="barPlaying__left ">
+    <div className="barPlaying row">
+      <div className="barPlaying__left col pc-3 t-3 m-0">
         {song && <CardSong song={song} />}
       </div>
-      <div className="barPlaying__center ">
+      <div className="barPlaying__center col pc-6 t-6 m-12">
         {song && <ControlsBar song={song} />}
       </div>
-      <div className="barPlaying__right ">
+      <div className="barPlaying__right col pc-3 t-3 m-0">
         <ControlsRight />
       </div>
     </div>
@@ -138,18 +144,6 @@ const CardSong = ({ song }: CardSongProps) => {
 };
 
 const ControlsBar = ({ song }: { song: TSong }) => {
-  // const songPlayId = useSelector(selectSongPlayId);
-  // const isPlaying = useSelector(selectIsPlaying);
-  const dispatch = useDispatch();
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isValid, setIsValid] = useState<boolean | null>(null);
-
-  let [minutes, setMinutes] = useState<string>("00");
-  let [seconds, setSeconds] = useState<string>("00");
-
-  let [minutesPlay, setMinutesPlay] = useState<string>("00");
-  let [secondsPlay, setSecondsPlay] = useState<string>("00");
-
   const {
     playSong,
     pauseSong,
@@ -158,136 +152,26 @@ const ControlsBar = ({ song }: { song: TSong }) => {
     timeSong,
     timeSongPlay,
     isPlaying,
+    nextSong,
+    prevSong,
     onChangeSlider,
   } = useAudio();
 
   const handleClickPlay = () => {
     if (!isPlaying) {
-      // dispatch(playSong());
       playSong();
     } else {
-      // dispatch(stopSong());
       pauseSong();
     }
   };
 
-  //Kiểm tra trạng thái phát nhạc
-  // useEffect(() => {
-  //   if (!isValid) return;
-  //   if (isPlaying) {
-  //     console.log("phát nhạc");
-  //     audioRef.current?.play();
-  //   } else {
-  //     audioRef.current?.pause();
-  //   }
-  // }, [isPlaying, songPlayId]);
-
-  // useEffect(() => {
-  //   console.log({ isValid });
-
-  //   if (isValid === false) {
-  //     dispatch(stopSong());
-  //     setMinutes("00");
-  //     setSeconds("00");
-  //     setMinutesPlay("00");
-  //     setSecondsPlay("00");
-  //   }
-  // }, [isValid, songPlayId]);
-
-  //Thay đổi thời gian bài hát
-  // useEffect(() => {
-  //   setPercentage(0);
-  //   if (audioRef.current?.duration) {
-  //     setMinutes(
-  //       Math.floor(audioRef.current?.duration / 60)
-  //         .toString()
-  //         .padStart(2, "0")
-  //     );
-  //     setSeconds(
-  //       Math.floor(audioRef.current?.duration % 60)
-  //         .toString()
-  //         .padStart(2, "0")
-  //     );
-  //   }
-  // }, [songPlayId, audioRef.current?.duration]);
-
-  //Cập nhật thời gian phát
-  // const onPlaying = () => {
-  //   if (audioRef.current?.currentTime) {
-  //     setMinutesPlay(
-  //       Math.floor(audioRef.current?.currentTime / 60)
-  //         .toString()
-  //         .padStart(2, "0")
-  //     );
-  //     setSecondsPlay(
-  //       Math.floor(audioRef.current?.currentTime % 60)
-  //         .toString()
-  //         .padStart(2, "0")
-  //     );
-  //   }
-  // };
-
-  // const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const audio = audioRef.current;
-  //   if (audio && audio.duration) {
-  //     audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
-  //   }
-  //   setPercentage(parseFloat(e.target.value));
-  // };
-
-  //Thay đổi âm lượng
-  // useEffect(() => {
-  //   audioRef.current!.volume = parseInt(volume || "0") / 100;
-  // }, [volume]);
-
-  // useEffect(() => {
-  //   const audioElement = audioRef.current;
-
-  //   if (audioElement) {
-  //     const handleCanPlayThrough = () => {
-  //       setIsValid(true);
-  //     };
-
-  //     const handleError = () => {
-  //       dispatch(stopSong());
-  //       toast.error("Error when loading song");
-  //       setIsValid(false);
-  //     };
-
-  //     audioElement.addEventListener("canplaythrough", handleCanPlayThrough);
-  //     audioElement.addEventListener("error", handleError);
-
-  //     // Kiểm tra trạng thái tải hiện tại
-  //     audioElement.src = apiConfig.mp3Url(song?.song_path);
-  //     audioElement.load();
-
-  //     // Cleanup event listeners on unmount
-  //     return () => {
-  //       audioElement.removeEventListener(
-  //         "canplaythrough",
-  //         handleCanPlayThrough
-  //       );
-  //       audioElement.removeEventListener("error", handleError);
-  //     };
-  //   }
-  // }, [song?.song_path]);
-
   return (
     <div className="ControlsBar">
-      {/* <audio
-        ref={audioRef}
-        id="audio"
-        // src={song && apiConfig.mp3Url(song?.song_path)}
-        autoPlay
-        onTimeUpdate={onPlaying}
-        onError={(e) => console.log({ e })}
-      ></audio> */}
-
       <div className="ControlsBar__actions">
         <button className="btn-random active" data-tooltip={"Play randomly"}>
           <i className="fa-light fa-shuffle"></i>
         </button>
-        <button>
+        <button onClick={() => prevSong()}>
           <i className="fa-solid fa-backward-step"></i>
         </button>
         <button className="btn_play" onClick={handleClickPlay}>
@@ -297,7 +181,7 @@ const ControlsBar = ({ song }: { song: TSong }) => {
             <i className="fa-solid fa-play"></i>
           )}
         </button>
-        <button>
+        <button onClick={() => nextSong()}>
           <i className="fa-solid fa-forward-step"></i>
         </button>
         <button className="btn-replay" data-tooltip={"Replay"}>

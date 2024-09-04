@@ -6,20 +6,14 @@ import Images from "../../constants/images";
 import IconPlay from "../IconPlay/IconPlay";
 import "./style.scss";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { songApi } from "../../apis";
 import { PATH } from "../../constants/paths";
+import { useAudio } from "../../context/AudioContext";
 import { useAuth } from "../../context/AuthContext";
-import {
-  playSong,
-  setNowPlaying,
-  stopSong,
-} from "../../slices/nowPlayingSlice";
-import { RootState } from "../../store";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import SongMenu from "../Menu/SongMenu";
-import { useAudio } from "../../context/AudioContext";
 
 interface TrackProps {
   song: TSong;
@@ -40,17 +34,13 @@ export default function Track({
   const [activeMenu, setActiveMenu] = useState(false);
   const { start, isPlaying, songPlayId, playSong, pauseSong } = useAudio();
 
-  // const { isPlaying, songPlayId } = useSelector(
-  //   (state: RootState) => state.nowPlaying
-  // );
-
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
-      playSong();
       pauseSong();
+    }else if(songPlayId === id && !isPlaying){
+      playSong();
     } else {
       start(id);
-      playSong();
     }
   };
 

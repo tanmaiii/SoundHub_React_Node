@@ -3,7 +3,6 @@
 .barPlaying {
   @include themify($themes) {
     height: $height-barPlaying;
-    width: 100%;
     background: linear-gradient(
       135deg,
       rgba(themed("bg-1"), 0.4),
@@ -13,28 +12,16 @@
     -webkit-backdrop-filter: blur(10px);
 
     border-top: 1px solid themed("border");
-    padding: 0 $space-12;
-    @include flex(center, space-between);
 
+    justify-content: center;
+    align-items: center;
     @include mobile {
-      display: none;
     }
     &__left {
-      flex: 1;
-      height: 100%;
-      @include flex(center, start);
     }
     &__center {
-      // width: 40%;
-      flex-grow: 1; /* Chiếm toàn bộ diện tích còn trống */
-      flex-shrink: 0; /* Không co lại khi không đủ không gian */
-      height: 100%;
-      @include flex(center, center);
     }
     &__right {
-      flex: 1;
-      height: 100%;
-      @include flex(center, end);
     }
   }
 }
@@ -43,7 +30,7 @@
   @include themify($themes) {
     height: 100%;
     @include flex(center, unset);
-    padding: $space-8 0;
+    padding: 0 $space-12;
     gap: $space-12;
     &__image {
       --size: 64px;
@@ -110,6 +97,8 @@
   @include themify($themes) {
     flex-direction: column;
     width: 100%;
+    padding: 0 $space-12;
+
     &__actions {
       @include flex(center, center);
       gap: $space-10;
@@ -172,48 +161,8 @@
         color: themed("txt-main");
       }
       .progress {
-        // flex: 1;
-        // width: 100%;
-        // height: 5px;
-        // border-radius: $radius-4;
-        // background-color: $color-gray;
         width: 100%;
-        padding: $space-4 0;
-        &:hover {
-          & .slider-handle {
-            visibility: visible;
-          }
-        }
-
-        &_wrapper {
-          min-width: 100%;
-          background-color: $color-hover;
-          height: 5px;
-          border-radius: 30px;
-          cursor: pointer;
-          position: relative;
-
-          .seek_bar {
-            width: 0;
-            height: 100%;
-            background-color: $color-primary1;
-            border-radius: 30px;
-          }
-          .slider-handle {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-left: -6px;
-            --size: 12px;
-            width: var(--size);
-            height: var(--size);
-            border-radius: 50%;
-            background-color: $color-primary1;
-            // display: none;
-            visibility: hidden;
-            transition: $transition;
-          }
-        }
+        max-width: 600px;
       }
     }
   }
@@ -221,9 +170,9 @@
 
 .ControlsRight {
   @include themify($themes) {
-    @include flex(center, unset);
+    @include flex(end, end);
     gap: $space-12;
-
+    padding: 0 $space-12;
     &__volume {
       @include flex(center, center);
       gap: $space-4;

@@ -3,7 +3,7 @@ import Joi from "joi";
 const bodySchema = {
   body: Joi.object().keys({
     title: Joi.string().min(0).max(255),
-    genre_id: Joi.number(),
+    genre_id: Joi.number().default(1),
     desc: Joi.string().min(0).max(500),
     image_path: Joi.string().min(0).max(255),
     song_path: Joi.string().min(0).max(255),

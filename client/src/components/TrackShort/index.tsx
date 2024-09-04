@@ -10,24 +10,35 @@ import { PATH } from "../../constants/paths";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { songApi } from "../../apis";
 import { useAuth } from "../../context/AuthContext";
+import { useAudio } from "../../context/AudioContext";
+import IconPlay from "../IconPlay/IconPlay";
 
 type props = {
-  song: TSong;
+  id: string;
   number?: number;
   loading?: boolean;
 };
 
-function TrackShort({ song, number, loading }: props) {
+function TrackShort({ id, number, loading }: props) {
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const { token, currentUser } = useAuth();
   const formattedNumber = number ? number.toString().padStart(2, "0") : "";
   const queryClient = useQueryClient();
+  const { isPlaying, songPlayId, pauseSong, playSong, start } = useAudio();
+
+  const { data: song } = useQuery({
+    queryKey: ["song", id],
+    queryFn: async () => {
+      const res = await songApi.getDetail(id, token);
+      return res;
+    },
+  });
 
   const { data: isLike, refetch: refetchLike } = useQuery({
     queryKey: ["like-song", song?.id],
     queryFn: async () => {
-      const res = await songApi.checkLikedSong(song?.id ?? "", token);
-      return res.isLiked;
+      const res = song && (await songApi.checkLikedSong(song?.id ?? "", token));
+      return res && res.isLiked;
     },
   });
 
@@ -46,8 +57,22 @@ function TrackShort({ song, number, loading }: props) {
     },
   });
 
+  const handleClickPlay = (id: string) => {
+    if (songPlayId === id && isPlaying) {
+      pauseSong();
+    } else if (songPlayId === id && !isPlaying) {
+      playSong();
+    } else {
+      start(id);
+    }
+  };
+
   return (
-    <div className={`TrackShort ${activeMenu ? "activeMenu" : ""} `}>
+    <div
+      className={`TrackShort ${songPlayId === song?.id ? "play" : ""} ${
+        activeMenu ? "activeMenu" : ""
+      } `}
+    >
       <div className="TrackShort__left">
         {number && (
           <div className="TrackShort__left__num">
@@ -57,11 +82,20 @@ function TrackShort({ song, number, loading }: props) {
         )}
         <div className="TrackShort__left__image">
           <ImageWithFallback
-            src={song?.image_path}
-            alt=""
+            src={song?.image_path ?? ""}
             fallbackSrc={Images.SONG}
+            alt=""
           />
-          {/* <img src={song?.image_path} alt="" /> */}
+          <button
+            className={`button-play ${songPlayId === song?.id ? "active" : ""}`}
+            onClick={() => handleClickPlay(song?.id ?? "")}
+          >
+            {isPlaying && songPlayId === song?.id ? (
+              <IconPlay />
+            ) : (
+              <i className="fa-solid fa-play"></i>
+            )}
+          </button>
         </div>
         <div className="TrackShort__left__desc">
           <Link to={`${PATH.SONG}/${song?.id}`}>
@@ -83,13 +117,15 @@ function TrackShort({ song, number, loading }: props) {
             )}
           </button>
           <div className={`button-edit ${activeMenu ? " active" : ""}`}>
-            <SongMenu
-              song={song}
-              id={song?.id ?? ""}
-              active={activeMenu}
-              onOpen={() => setActiveMenu(true)}
-              onClose={() => setActiveMenu(false)}
-            />
+            {song && (
+              <SongMenu
+                song={song}
+                id={song?.id ?? ""}
+                active={activeMenu}
+                onOpen={() => setActiveMenu(true)}
+                onClose={() => setActiveMenu(false)}
+              />
+            )}
           </div>
         </div>
         <div className="item-listen">
@@ -97,7 +133,7 @@ function TrackShort({ song, number, loading }: props) {
             <i className="fa-solid fa-heart"></i>
           </button>
           <span>
-            {numeral(song.count_listen ?? 0)
+            {numeral(song?.count_listen ?? 0)
               .format("0a")
               .toUpperCase()}
           </span>

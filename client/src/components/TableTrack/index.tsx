@@ -80,47 +80,7 @@ const TableTrack = ({
 
   return (
     <div className="table__track">
-      <div className="table__track__header">
-        {/* <div className="table__track__header__left">
-          {songs && songs?.length > 0 && (
-            <button className="btn__play">
-              <i className="fa-solid fa-play"></i>
-            </button>
-          )}
-          {userId && currentUser?.id !== userId && (
-            <button>
-              <i className="fa-light fa-heart"></i>
-            </button>
-          )}
-          <button>
-            <i className="fa-solid fa-ellipsis"></i>
-          </button>
-        </div>
-        <div className="table__track__header__right">
-          {songs && songs?.length > 0 && (
-            <div className="dropdown">
-              <div
-                className="dropdown__header"
-                onClick={() => setActiveDropdown(!activeDropdown)}
-              >
-                <i className="fa-light fa-bars-sort"></i>
-                <span>Mới nhất</span>
-                <i className="fa-light fa-chevron-down"></i>
-              </div>
-              <div
-                className={`dropdown__content ${
-                  activeDropdown ? "active" : ""
-                }`}
-              >
-                <ul>
-                  <li>Mới nhất</li>
-                  <li>Phổ biến</li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </div> */}
-      </div>
+      <div className="table__track__header"></div>
       {songs && songs?.length > 0 ? (
         <div className="table__track__body">
           <div className="table__track__body__header">

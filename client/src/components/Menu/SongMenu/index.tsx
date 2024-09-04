@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constants/paths";
 import { toast } from "sonner";
 import { EditSong } from "../../ModalSong";
+import { useAudio } from "../../../context/AudioContext";
 
 type Props = {
   id: string;
@@ -46,6 +47,7 @@ const SongMenu = ({
   const queryClient = useQueryClient();
   const navigation = useNavigate();
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
+  const { addQueue } = useAudio();
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -120,12 +122,6 @@ const SongMenu = ({
     },
   });
 
-  useEffect(() => {
-    // active
-    //   ? (document.body.style.overflow = "hidden")
-    //   : (document.body.style.overflow = "auto");
-  });
-
   return (
     <>
       <div ref={SongMenuRef} className={`SongMenu`}>
@@ -174,7 +170,7 @@ const SongMenu = ({
                 itemFunc={() => mutationLike.mutate(isLike)}
               />
             )}
-             {currentUser?.id === song.user_id && (
+            {currentUser?.id === song.user_id && (
               <ItemMenu
                 title={t("Menu.Edit song")}
                 icon={<i className="fa-light fa-pen-to-square"></i>}
@@ -191,7 +187,10 @@ const SongMenu = ({
             <ItemMenu
               title={t("Menu.Add to waiting list")}
               icon={<i className="fa-regular fa-list-music"></i>}
-              itemFunc={() => toast.success("Đã thêm vào danh sách chờ")}
+              itemFunc={() => {
+                addQueue(id);
+                onClose();
+              }}
             />
             <hr />
             <ItemMenu
@@ -217,17 +216,19 @@ const SongMenu = ({
           </button>
         </div>
       </div>
-      <Modal
-        title="Edit song"
-        openModal={openModalEdit}
-        setOpenModal={setOpenModalEdit}
-      >
-        <EditSong
-          songId={song?.id ?? ""}
-          open={openModalEdit}
-          closeModal={() => setOpenModalEdit(false)}
-        />
-      </Modal>
+      {openModalEdit && (
+        <Modal
+          title="Edit song"
+          openModal={openModalEdit}
+          setOpenModal={setOpenModalEdit}
+        >
+          <EditSong
+            songId={song?.id ?? ""}
+            open={openModalEdit}
+            closeModal={() => setOpenModalEdit(false)}
+          />
+        </Modal>
+      )}
     </>
   );
 };

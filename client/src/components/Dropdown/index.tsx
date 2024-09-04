@@ -8,6 +8,7 @@ type props = {
   defaultSelected: string;
   changeSelected: (selected: { id: string; title: string }) => void;
   search?: boolean;
+  error?: string;
 };
 
 const Dropdown = ({
@@ -16,11 +17,13 @@ const Dropdown = ({
   search = false,
   defaultSelected,
   changeSelected,
+  error,
 }: props) => {
   const [activeDropdown, setActiveDropdown] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<{ id: string; title: string }>(
-    options[1]
-  );
+  const [selected, setSelected] = React.useState<{
+    id: string;
+    title: string;
+  } | null>(null);
   const DropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -41,23 +44,23 @@ const Dropdown = ({
   }, []);
 
   useEffect(() => {
-    changeSelected(selected);
+    selected && changeSelected(selected);
     setActiveDropdown(false);
   }, [selected]);
 
   useEffect(() => {
-    // console.log(options.find((option) => option?.id === defaultSelected));
-    setSelected(
-      options.find((option) => option?.id === defaultSelected) || {
-        title: "",
-        id: "",
-      }
-    );
+    defaultSelected &&
+      setSelected(
+        options.find((option) => option?.id === defaultSelected) || {
+          title: "",
+          id: "",
+        }
+      );
   }, [defaultSelected]);
 
   return (
-    <div className="Dropdown" ref={DropdownRef}>
-      <div className="Dropdown__header">
+    <div className={`Dropdown ${error ? 'error' : ''}`} ref={DropdownRef}>
+      <div className={`Dropdown__header ${error ? 'error' : ''} `}>
         <input
           type="text"
           placeholder="  "

@@ -31,7 +31,11 @@ export default function SectionSong({ title, data }: props) {
             {groupedSongs[0] &&
               groupedSongs[0].map((item, index) => {
                 return (
-                  <TrackShort song={item} key={index} number={index + 1} />
+                  <TrackShort
+                    id={item?.id ?? ""}
+                    key={index}
+                    number={index + 1}
+                  />
                 );
               })}
           </div>
@@ -40,7 +44,7 @@ export default function SectionSong({ title, data }: props) {
               groupedSongs[1].map((item, index) => {
                 return (
                   <TrackShort
-                    song={item}
+                    id={item?.id ?? ""}
                     key={index}
                     number={index + 1 + chunkSize}
                   />
@@ -52,7 +56,7 @@ export default function SectionSong({ title, data }: props) {
               groupedSongs[2].map((item, index) => {
                 return (
                   <TrackShort
-                    song={item}
+                    id={item?.id ?? ""}
                     key={index}
                     number={index + 1 + chunkSize * 2}
                   />

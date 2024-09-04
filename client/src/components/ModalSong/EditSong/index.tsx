@@ -96,6 +96,8 @@ const EditSong = ({
           image_path: res.image_path,
           song_path: res.song_path,
         });
+
+      console.log("res", res);
     } catch (error) {}
   };
 
@@ -157,6 +159,7 @@ const EditSong = ({
 
       updatedInputs = { ...inputs, ...updatedInputs };
 
+      console.log("UPDATE SONG:", updatedInputs);
       const res = await songApi.updateSong(token, songId, updatedInputs);
 
       res && songId && navigate(`${PATH.SONG}/${songId}`);
@@ -216,6 +219,20 @@ const EditSong = ({
       updateError({ title: "" });
     }
 
+    if (inputs?.genre_id === "" || inputs?.genre_id === null) {
+      updateError({ genre_id: "Genre is required" });
+      return;
+    } else {
+      updateError({ genre_id: "" });
+    }
+
+    if (inputs?.public === null || inputs?.public === undefined) {
+      updateError({ public: "Visibility is required" });
+      return;
+    } else {
+      updateError({ public: "" });
+    }
+
     mutionSave.mutate();
   };
 
@@ -264,7 +281,8 @@ const EditSong = ({
             <div className="dropdowns__item col pc-6 t-12 m-12">
               <Dropdown
                 title={t("Upload.Genre")}
-                defaultSelected={genres?.[0]?.id ?? ""}
+                error={error.genre_id}
+                defaultSelected={inputs?.genre_id ?? ""}
                 changeSelected={(selected: { id: string; title: string }) =>
                   updateState({ genre_id: selected?.id })
                 }
