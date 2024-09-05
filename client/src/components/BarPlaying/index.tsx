@@ -20,6 +20,7 @@ import ImageWithFallback from "../ImageWithFallback";
 import Slider from "../Slider";
 import "./style.scss";
 import { useAudio } from "../../context/AudioContext";
+import { PATH } from "../../constants/paths";
 
 export default function BarPlaying() {
   const { token } = useAuth();
@@ -119,9 +120,14 @@ const CardSong = ({ song }: CardSongProps) => {
         />
       </div>
       <div className="CardSong__desc">
-        <span className="CardSong__desc__title">{song?.title}</span>
+        <Link
+          to={`${PATH.SONG + "/" + song?.id}`}
+          className="CardSong__desc__title"
+        >
+          {song?.title}
+        </Link>
         <div className="CardSong__desc__info">
-          <Link to={"/"}>
+          <Link to={`${PATH.SONG + "/" + song?.user_id}`}>
             <span>{song?.author}</span>
           </Link>
         </div>
@@ -155,6 +161,8 @@ const ControlsBar = ({ song }: { song: TSong }) => {
     nextSong,
     prevSong,
     onChangeSlider,
+    changeRandom,
+    random,
   } = useAudio();
 
   const handleClickPlay = () => {
@@ -168,7 +176,11 @@ const ControlsBar = ({ song }: { song: TSong }) => {
   return (
     <div className="ControlsBar">
       <div className="ControlsBar__actions">
-        <button className="btn-random active" data-tooltip={"Play randomly"}>
+        <button
+          className={`btn-random ${random ? "active" : ""}`}
+          onClick={() => changeRandom(!random)}
+          data-tooltip={`${random ? "Tắc trộn bài" : 'Bật trộn bài'}`}
+        >
           <i className="fa-light fa-shuffle"></i>
         </button>
         <button onClick={() => prevSong()}>

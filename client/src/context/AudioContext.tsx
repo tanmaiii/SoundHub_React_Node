@@ -14,14 +14,20 @@ interface TAudioContext {
   timeSongPlay: string;
   volume: string;
   queue: string[] | null;
+  random: boolean;
+
   start: (songId: string) => void;
   playSong: () => void;
   pauseSong: () => void;
   nextSong: () => void;
   prevSong: () => void;
+
   updateQueue: (songs: string[]) => void;
+  changePlaceQueue: (songs: string[]) => void;
   addQueue: (songNewId: string) => void;
+
   changeVolume: (value: string) => void;
+  changeRandom: (value: boolean) => void;
   onChangeSlider: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -150,6 +156,10 @@ export const AudioContextProvider = ({ children }: Props) => {
     toast.success("Cập nhật danh sách chờ thành công");
   };
 
+  const changePlaceQueue = (songs: string[]) => {
+    setQueue(songs);
+  };
+
   const addQueue = (songNewId: string) => {
     if (!queue?.includes(songNewId)) {
       setQueue(queue ? [...queue, songNewId] : [songNewId]);
@@ -163,6 +173,10 @@ export const AudioContextProvider = ({ children }: Props) => {
     setVolume(value);
     localStorage.setItem("volume", value);
     audioRef.current!.volume = parseInt(value) / 100;
+  };
+
+  const changeRandom = (value: boolean) => {
+    setRandom(value);
   };
 
   const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,14 +232,20 @@ export const AudioContextProvider = ({ children }: Props) => {
     timeSongPlay,
     volume,
     queue,
+    random,
+
     start,
     playSong,
     pauseSong,
     nextSong,
     prevSong,
+
     updateQueue,
+    changePlaceQueue,
     addQueue,
+
     changeVolume,
+    changeRandom,
     onChangeSlider,
   };
 
