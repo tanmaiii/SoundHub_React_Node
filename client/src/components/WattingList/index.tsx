@@ -74,11 +74,11 @@ const WattingList = ({}: Props) => {
         </div>
         <div className="wattingList__wrapper__body">
           <div className="wattingList__wrapper__body__header">
-            <h4>Đang phát</h4>
-            {songPlayId && <TrackShort id={songPlayId} />}
+            {/* <h4>Đang phát</h4> */}
+            {/* {songPlayId && <TrackShort id={songPlayId} />} */}
           </div>
           <div className="wattingList__wrapper__body__list">
-            <h4>Bài tiếp theo</h4>
+            {/* <h4>Bài tiếp theo</h4> */}
             <DragDropContext
               onDragEnd={onDragEnd}
               onDragStart={() => console.log("start")}
@@ -94,16 +94,23 @@ const WattingList = ({}: Props) => {
                           index={index}
                         >
                           {(provided) => {
-                            if (songPlayId === item)
-                              return <div ref={provided.innerRef}></div>; // Return an empty fragment instead of null
+                            // if (songPlayId === item)
+                            //   return <div ref={provided.innerRef}></div>; // Return an empty fragment instead of null
                             return (
                               <div
-                                className="wattingList__wrapper__body__list__item"
+                                className={`wattingList__wrapper__body__list__item ${
+                                  songPlayId === item ? "play" : ""
+                                }`}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
                                 <TrackShort id={item} key={index} />
+                                {songPlayId === item && (
+                                  <div>
+                                    <h4>Bài tiếp theo</h4>
+                                  </div>
+                                )}
                               </div>
                             );
                           }}
@@ -114,10 +121,6 @@ const WattingList = ({}: Props) => {
               </Droppable>
             </DragDropContext>
           </div>
-
-          {/* {queue?.map((item, index) => {
-            return <TrackShort id={item} key={index} />;
-          })} */}
         </div>
       </div>
     </div>

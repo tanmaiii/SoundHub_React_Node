@@ -158,10 +158,12 @@ const ControlsBar = ({ song }: { song: TSong }) => {
     timeSong,
     timeSongPlay,
     isPlaying,
+    replay,
     nextSong,
     prevSong,
     onChangeSlider,
     changeRandom,
+    changeReplay,
     random,
   } = useAudio();
 
@@ -179,7 +181,7 @@ const ControlsBar = ({ song }: { song: TSong }) => {
         <button
           className={`btn-random ${random ? "active" : ""}`}
           onClick={() => changeRandom(!random)}
-          data-tooltip={`${random ? "Tắc trộn bài" : 'Bật trộn bài'}`}
+          data-tooltip={`${random ? "Tắc trộn bài" : "Bật trộn bài"}`}
         >
           <i className="fa-light fa-shuffle"></i>
         </button>
@@ -196,7 +198,11 @@ const ControlsBar = ({ song }: { song: TSong }) => {
         <button onClick={() => nextSong()}>
           <i className="fa-solid fa-forward-step"></i>
         </button>
-        <button className="btn-replay" data-tooltip={"Replay"}>
+        <button
+          className={`btn-replay ${replay ? "active" : ""}`}
+          data-tooltip={`${replay ? "Tắc Replay" : "Bật Replay"}`}
+          onClick={() => changeReplay(!replay)}
+        >
           <i className="fa-light fa-repeat"></i>
         </button>
       </div>
@@ -216,6 +222,32 @@ const ControlsRight = ({}: {}) => {
   const dispatch = useDispatch();
   const ValRef = useRef<HTMLInputElement>(null);
   const openWatting = useSelector((state: RootState) => state.waiting.state);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const rangeRef = useRef<HTMLInputElement>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [position, setPosition] = useState(50);
+  const [percentage, setPercentage] = useState(50);
+  const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const [marginLeft, setMarginLeft] = useState(0);
+
+  useEffect(() => {
+    const rangeWidth = rangeRef.current?.getBoundingClientRect().width ?? 0;
+    const thumbWidth = thumbRef.current?.getBoundingClientRect().width ?? 0;
+    const centerThumb = (thumbWidth / 100) * percentage * -1;
+    const centerProgressBar =
+      thumbWidth +
+      (rangeWidth / 100) * percentage -
+      (thumbWidth / 100) * percentage;
+    setPosition(percentage);
+    setMarginLeft(centerThumb);
+    setProgressBarWidth(centerProgressBar);
+  }, [percentage]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleChangeVolume(e.target.value);
+    setPercentage(parseFloat(e.target.value));
+  };
+
   const handleOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
   };
@@ -225,6 +257,10 @@ const ControlsRight = ({}: {}) => {
   const handleChangeVolume = (value: string) => {
     changeVolume(value);
   };
+
+  useEffect(() => {
+    setPercentage(volume ? parseFloat(volume) : 50);
+  }, [volume]);
 
   return (
     <div className="ControlsRight">
@@ -242,21 +278,28 @@ const ControlsRight = ({}: {}) => {
             <i className="fa-light fa-volume-slash"></i>
           )}
         </button>
-        <div className="volume-progress">
-          <span
-            className="slider-track"
-            style={{ width: `${volume ?? 0 * 100}%` }}
-          ></span>
 
+        <div className="ControlsRight__volume__slider">
+          <div
+            className="ControlsRight__volume__slider__progress"
+            style={{ width: `${progressBarWidth}px` }}
+          ></div>
+          <div
+            className={`ControlsRight__volume__slider__thumb ${
+              isMouseDown ? "active" : ""
+            }`}
+            ref={thumbRef}
+            style={{ left: `${position}%`, marginLeft: `${marginLeft}px` }}
+          ></div>
           <input
             type="range"
-            name="volume"
-            className="max-val"
-            ref={ValRef}
-            onInput={(e) => handleChangeVolume(e.currentTarget.value)}
-            max={100}
-            min={0}
-            value={volume}
+            value={position}
+            ref={rangeRef}
+            step="0.01"
+            className="ControlsRight__volume__slider__range"
+            onMouseDown={() => setIsMouseDown(true)}
+            onMouseUp={() => setIsMouseDown(false)}
+            onChange={onChange}
           />
         </div>
       </div>

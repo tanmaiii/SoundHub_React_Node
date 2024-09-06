@@ -67,11 +67,7 @@
         width: 100%;
         height: 100%;
         padding: 0 $space-14;
-        h4 {
-          font-size: $size-16;
-          color: themed("txt-main");
-          margin-bottom: $space-8;
-        }
+
         &__header {
           width: 100%;
         }
@@ -81,6 +77,17 @@
           &__item {
             background-color: themed("bg-2");
             width: 100%;
+            h4 {
+              font-size: $size-16;
+              color: themed("txt-main");
+              margin-bottom: $space-8;
+            }
+            &.play {
+              // background-color: themed("bg-3");
+              position: sticky;
+              top: 60px;
+              z-index: 2;
+            }
           }
         }
       }
