@@ -5,6 +5,7 @@ import { songApi } from "../apis";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
 import { TRUE } from "sass";
+import playApi from "../apis/play/playApi";
 
 interface TAudioContext {
   isPlaying: boolean;
@@ -26,6 +27,7 @@ interface TAudioContext {
   updateQueue: (songs: string[]) => void;
   changePlaceQueue: (songs: string[]) => void;
   addQueue: (songNewId: string) => void;
+  removeSongQueue: (songId: string) => void;
 
   changeVolume: (value: string) => void;
   changeRandom: (value: boolean) => void;
@@ -102,7 +104,7 @@ export const AudioContextProvider = ({ children }: Props) => {
   }, [audioRef.current, song?.song_path]);
 
   useEffect(() => {
-    if (isValid) {
+    if (!isValid) {
       setTimeSongPlay("00:00");
       setPercentage(100);
       setTimeSong("00:00");
@@ -117,34 +119,56 @@ export const AudioContextProvider = ({ children }: Props) => {
 
   const getIndexRandom = () => {
     if (!queue) return 0;
-    if (queueRandom.length >= queue.length) {
-      console.log("Reset queueRandom");
-      setQueueRandom([]);
-      return Math.floor(Math.random() * queue.length);
+
+    // Nếu tất cả các bài hát đã được phát, làm mới danh sách random
+    if (queueRandom.length >= queue.length - 1) {
+      let randomIndex;
+
+      // Chọn một số ngẫu nhiên khác với vị trí hiện tại của songPlayId
+      do {
+        randomIndex = Math.floor(Math.random() * queue.length);
+      } while (randomIndex === queue.indexOf(songPlayId ?? ""));
+
+      setQueueRandom([randomIndex]);
+      return randomIndex;
     }
 
     let randomIndex;
 
-    randomIndex = Math.floor(Math.random() * queue.length);
+    // Lặp lại cho đến khi tìm được chỉ số ngẫu nhiên chưa xuất hiện trong queueRandom và khác songPlayId
+    do {
+      randomIndex = Math.floor(Math.random() * queue.length);
+    } while (
+      queueRandom.includes(randomIndex) ||
+      randomIndex === queue.indexOf(songPlayId ?? "")
+    );
 
     // Thêm chỉ số ngẫu nhiên hợp lệ vào queueRandom
-    randomIndex && setQueueRandom([...queueRandom, randomIndex]);
+    setQueueRandom([...queueRandom, randomIndex]);
+
     // Trả về chỉ số ngẫu nhiên
     return randomIndex;
   };
 
-  useEffect(() => {
-    console.log("queueRandom", queueRandom);
-  }, [queueRandom]);
+  useEffect(() => {}, [queue]);
 
   const start = async (songId: string) => {
-    if (songId === songPlayId) return;
+    if (audioRef.current?.currentTime) audioRef.current.currentTime = 0;
+    if (songId === songPlayId && audioRef.current?.currentTime) return;
     setLoading(true);
     try {
+      // Lấy chi tiết bài hát
       setSongPlayId(songId);
       const res = await songApi.getDetail(songId, token);
       setSong(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setLoading(false);
+    }
+
+    try {
+      await playApi.playSong(songId, token);
     } catch (error) {}
   };
 
@@ -164,7 +188,20 @@ export const AudioContextProvider = ({ children }: Props) => {
     } catch (error) {}
   };
 
-  const stope = () => {};
+  const stope = () => {
+    setSongPlayId(null);
+    setIsPlaying(false);
+    // setSong();
+    setQueue([]);
+    setQueueRandom([]);
+    setReplay(false);
+    setRandom(false);
+    setPercentage(0);
+    setTimeSong("00:00");
+    setTimeSongPlay("00:00");
+    setVolume("50");
+    audioRef.current?.pause();
+  };
 
   const nextSong = () => {
     if (loading) return;
@@ -195,6 +232,20 @@ export const AudioContextProvider = ({ children }: Props) => {
       } else {
         return queue && start(queue[queue.length - 1]);
       }
+    }
+  };
+
+  const removeSongQueue = (songId: string) => {
+    const newQueue = queue?.filter((item) => item !== songId);
+    if (queue?.length === 1) {
+      stope();
+      return pauseSong();
+    }
+    if (songId === songPlayId) {
+      nextSong();
+      newQueue && setQueue(newQueue);
+    } else {
+      newQueue && setQueue(newQueue);
     }
   };
 
@@ -236,6 +287,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     const audio = audioRef.current;
     if (audio && audio.duration) {
       audio.currentTime = (audio.duration / 100) * parseFloat(e.target.value);
+      audio.volume = parseInt(volume) / 100;
     }
     setPercentage(parseFloat(e.target.value));
   };
@@ -262,13 +314,11 @@ export const AudioContextProvider = ({ children }: Props) => {
   };
 
   const onEnd = () => {
-    console.log("End");
-    
-    if (replay) {
+    if (replay || queue?.length === 1) {
       start(songPlayId ?? "");
       const audio = audioRef.current;
       if (audio && audio.duration) {
-        audio.currentTime = (audio.duration / 100) * 0;
+        audio.currentTime = 0;
       }
     } else {
       nextSong();
@@ -311,6 +361,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     updateQueue,
     changePlaceQueue,
     addQueue,
+    removeSongQueue,
 
     changeVolume,
     changeRandom,
@@ -328,7 +379,6 @@ export const AudioContextProvider = ({ children }: Props) => {
         // src={song && apiConfig.mp3Url(song?.song_path)}
         autoPlay
         onTimeUpdate={onPlaying}
-        onError={(e) => console.log({ e })}
       ></audio>
       {children}
     </AudioContext.Provider>

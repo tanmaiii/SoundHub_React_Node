@@ -10,7 +10,7 @@
     cursor: pointer;
     position: relative;
     margin-bottom: $space-8;
-    background-color: themed("bg-2");
+    // background-color: themed("bg-2");
     
     &::before {
       border-bottom: 1px solid themed("bg-2");
@@ -131,7 +131,7 @@
       }
     }
     &__right {
-      min-width: 100px;
+      width: 100px;
       @include flex(end, center, column);
 
       & > .item-hover {

@@ -22,6 +22,7 @@ import ImageWithFallback from "../../components/ImageWithFallback";
 import numeral from "numeral";
 import { useTranslation } from "react-i18next";
 import { EditSong } from "../../components/ModalSong";
+import { useAudio } from "../../context/AudioContext";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -34,10 +35,11 @@ export default function SongPage() {
   const [authors, setAuthors] = useState<TAuthor[]>([]);
   const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
   const { t } = useTranslation("song");
+  const { playSong, start, isPlaying, songPlayId, pauseSong } = useAudio();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, []);
 
   const { data: song } = useQuery({
     queryKey: ["song", id],
@@ -60,10 +62,12 @@ export default function SongPage() {
       try {
         const res =
           id &&
+          currentUser?.id === song?.user_id &&
           (await authorApi.getAllUser(id, token, 1, 0, "", "new", "Accepted"));
         res && setAuthors(res.data);
         return res;
       } catch (error) {
+        console.log(error);
         return null;
       }
     },
@@ -111,6 +115,16 @@ export default function SongPage() {
     },
   });
 
+  const handleClickPlay = () => {
+    if (songPlayId === id && isPlaying) {
+      pauseSong();
+    } else if (songPlayId === id && !isPlaying) {
+      playSong();
+    } else {
+      start(song?.id ?? "");
+    }
+  };
+
   return (
     <>
       <div className="songPage">
@@ -136,8 +150,12 @@ export default function SongPage() {
         </div>
         <div className="songPage__content">
           <div className="songPage__content__header">
-            <button className="btn__play">
-              <i className="fa-solid fa-play"></i>
+            <button className="btn__play" onClick={handleClickPlay}>
+              {songPlayId === song?.id && isPlaying ? (
+                <i className="fa-solid fa-pause"></i>
+              ) : (
+                <i className="fa-solid fa-play"></i>
+              )}
             </button>
             <button
               className={`btn__like ${isLike ? "active" : ""}`}

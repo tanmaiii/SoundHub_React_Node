@@ -17,8 +17,9 @@ const WattingList = ({}: Props) => {
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const { token } = useAuth();
-  const { queue, updateQueue, changePlaceQueue, songPlayId } = useAudio();
+  const { queue, updateQueue, changePlaceQueue, songPlayId, replay } = useAudio();
   const [queueNew, setQueueNew] = useState<string[]>([]);
+  const itemRef = React.createRef<HTMLDivElement>();
 
   const handleChangeOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
@@ -26,6 +27,7 @@ const WattingList = ({}: Props) => {
 
   useEffect(() => {
     if (queue) setQueueNew(queue);
+    if (queue?.length === 0) dispatch(changeOpenWaiting(false));
   }, [queue]);
 
   useEffect(() => {
@@ -34,7 +36,6 @@ const WattingList = ({}: Props) => {
     } else {
       document.body.style.overflow = "auto";
     }
-
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -57,6 +58,14 @@ const WattingList = ({}: Props) => {
     changePlaceQueue(newItems);
   };
 
+  useEffect(() => {
+    // Sử dụng scrollIntoView nếu itemRef hiện tại không null
+    itemRef.current?.scrollIntoView({
+      behavior: "smooth", // Cuộn mượt
+      block: "start", // Cuộn tới đầu của phần tử
+    });
+  }, [songPlayId]);
+
   return (
     <div
       onClick={(e) => handleClick(e)}
@@ -73,12 +82,7 @@ const WattingList = ({}: Props) => {
           </button>
         </div>
         <div className="wattingList__wrapper__body">
-          <div className="wattingList__wrapper__body__header">
-            {/* <h4>Đang phát</h4> */}
-            {/* {songPlayId && <TrackShort id={songPlayId} />} */}
-          </div>
           <div className="wattingList__wrapper__body__list">
-            {/* <h4>Bài tiếp theo</h4> */}
             <DragDropContext
               onDragEnd={onDragEnd}
               onDragStart={() => console.log("start")}
@@ -86,7 +90,7 @@ const WattingList = ({}: Props) => {
               <Droppable direction="vertical" droppableId="droppable">
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {queue &&
+                    {queue && 
                       queue.map((item, index) => (
                         <Draggable
                           key={item}
@@ -94,23 +98,25 @@ const WattingList = ({}: Props) => {
                           index={index}
                         >
                           {(provided) => {
-                            // if (songPlayId === item)
-                            //   return <div ref={provided.innerRef}></div>; // Return an empty fragment instead of null
                             return (
                               <div
-                                className={`wattingList__wrapper__body__list__item ${
-                                  songPlayId === item ? "play" : ""
-                                }`}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
+                                className={`wattingList__wrapper__body__list__item ${
+                                  songPlayId === item ? "play" : ""
+                                }`}
                               >
-                                <TrackShort id={item} key={index} />
-                                {songPlayId === item && (
-                                  <div>
-                                    <h4>Bài tiếp theo</h4>
-                                  </div>
-                                )}
+                                <div ref={songPlayId === item ? itemRef : null}>
+                                  <TrackShort id={item} key={index} />
+                                  {songPlayId === item &&
+                                    queue.indexOf(songPlayId ?? "") !==
+                                      queue.length - 1 && (
+                                      <div className="title__nextSong">
+                                        <h4>Bài tiếp theo</h4>
+                                      </div>
+                                    )}
+                                </div>
                               </div>
                             );
                           }}

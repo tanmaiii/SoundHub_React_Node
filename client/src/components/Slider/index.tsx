@@ -19,20 +19,24 @@ const Slider = ({ percentage = 0, onChange }: props) => {
     const rangeWidth = rangeRef.current?.getBoundingClientRect().width ?? 0;
     const thumbWidth = thumbRef.current?.getBoundingClientRect().width ?? 0;
     const centerThumb = (thumbWidth / 100) * percentage * -1;
-    const centerProgressBar =
+    let centerProgressBar =
       thumbWidth +
       (rangeWidth / 100) * percentage -
       (thumbWidth / 100) * percentage;
+    if (percentage === 0) {
+      centerProgressBar = 0;
+    }
+
     setPosition(percentage);
     setMarginLeft(centerThumb);
-    setProgressBarWidth(centerProgressBar);
+    setProgressBarWidth(percentage);
   }, [percentage]);
 
   return (
     <div className="slider">
       <div
         className="slider__progress"
-        style={{ width: `${progressBarWidth}px` }}
+        style={{ width: `${progressBarWidth}%` }}
       ></div>
       <div
         className={`slider__thumb ${isMouseDown ? "active" : ""}`}

@@ -12,9 +12,9 @@
     -webkit-backdrop-filter: blur(10px);
 
     border-top: 1px solid themed("border");
-
     justify-content: center;
     align-items: center;
+    position: relative;
     @include mobile {
     }
     &__left {
@@ -23,70 +23,175 @@
     }
     &__right {
     }
-  }
-}
 
-.CardSong {
-  @include themify($themes) {
-    height: 100%;
-    @include flex(center, unset);
-    padding: 0 $space-12;
-    gap: $space-12;
-    &__image {
-      --size: 64px;
-      height: var(--size);
-      width: var(--size);
-      overflow: hidden;
-      @include flex(center, center);
-      img {
-        border-radius: $radius-4;
-        background-color: themed("bg-2");
-        height: auto;
-        width: 100%;
-        object-fit: cover;
+    &__progress {
+      position: absolute;
+      width: 100%;
+      bottom: 100%;
+      transform: translateY(50%);
+      left: 0;
+      display: none;
+
+      @include mobile {
+        display: block;
       }
     }
-    &__desc {
-      padding: $space-8 0;
-      @include mobile {
-        display: none;
+
+    &__mobile {
+      @include flex(center, space-between, row);
+      padding: 0 $space-12;
+      &__left {
+        @include flex(center, center, row);
+        gap: $space-8;
+        &__image {
+          --size: 50px;
+          height: var(--size);
+          width: var(--size);
+          overflow: hidden;
+          @include flex(center, center);
+          img {
+            border-radius: $radius-4;
+            background-color: themed("bg-2");
+            height: auto;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        &__desc {
+          padding: $space-8 0;
+          &__title {
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            @include text(1);
+          }
+          &__info {
+            a {
+              @include text(1);
+              font-size: $size-14;
+              font-weight: $font-light;
+              color: themed("txt-second");
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
       }
-      &__title {
-        font-size: $size-16;
-        font-weight: $font-light;
-        color: themed("txt-main");
-        @include text(1);
-      }
-      &__info {
-        a {
-          @include text(1);
-          font-size: $size-16;
-          font-weight: $font-light;
-          color: themed("txt-second");
+      &__right {
+        @include flex(center, space-between, row);
+        gap: $space-12;
+        & > .btn_next {
+          padding: $space-8;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: $transition;
+          color: themed("txt-main");
           &:hover {
-            text-decoration: underline;
+            background-color: $color-hover;
+          }
+          &.active {
+            color: $color-primary1;
+          }
+          i {
+            --size: 26px;
+            width: var(--size);
+            height: var(--size);
+            font-size: $size-18;
+            @include flex(center, center);
+          }
+
+          &.disabled {
+            opacity: 0.7;
+          }
+        }
+        & > .btn_play {
+          @include tooltip(center, center);
+          padding: $space-8;
+          background-color: $color-primary1;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: $transition;
+          color: $color-white;
+          &:hover {
+            transform: scale(1.06);
+          }
+          i {
+            @include flex(center, center);
+            --size: 26px;
+            width: var(--size);
+            height: var(--size);
+            font-size: $size-24;
           }
         }
       }
     }
-    &__control {
-      @include mobile {
-        display: none;
-      }
-      & > .button-like {
-        padding: $space-8;
-        color: themed("txt-second");
-        cursor: pointer;
-        transition: $transition;
-        @include tooltip(top, center);
-        &.active {
-          color: $color-red;
+  }
+}
+
+.barPlaying {
+  .CardSongPlaying {
+    @include themify($themes) {
+      height: 100%;
+      @include flex(center, unset);
+      padding: 0 $space-12;
+      gap: $space-12;
+      &__image {
+        --size: 50px;
+        height: var(--size);
+        width: var(--size);
+        overflow: hidden;
+        @include flex(center, center);
+        img {
+          border-radius: $radius-4;
+          background-color: themed("bg-2");
+          height: auto;
+          width: 100%;
+          object-fit: cover;
         }
-        // &:hover {
-        //   color: themed("txt-main");
-        // }
-        i {
-          font-size: 1.4rem;
+      }
+      &__desc {
+        padding: $space-8 0;
+        @include mobile {
+          display: none;
+        }
+        &__title {
+          font-size: $size-16;
+          font-weight: $font-light;
+          color: themed("txt-main");
+          @include text(1);
+        }
+        &__info {
+          a {
+            @include text(1);
+            font-size: $size-14;
+            font-weight: $font-light;
+            color: themed("txt-second");
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+      &__control {
+        @include mobile {
+          display: none;
+        }
+        & > .button-like {
+          padding: $space-8;
+          color: themed("txt-second");
+          cursor: pointer;
+          transition: $transition;
+          @include tooltip(top, center);
+          &.active {
+            color: $color-red;
+          }
+          // &:hover {
+          //   color: themed("txt-main");
+          // }
+          i {
+            font-size: 1.4rem;
+          }
         }
       }
     }
@@ -122,6 +227,10 @@
           font-size: $size-18;
           @include flex(center, center);
         }
+
+        &.disabled {
+          opacity: 0.7;
+        }
       }
 
       .btn-random {
@@ -150,6 +259,13 @@
           height: var(--size);
           font-size: $size-24;
         }
+      }
+
+      .btn_next {
+        @include tooltip(top, center);
+      }
+
+      .btn_prev {
       }
     }
     &__bar {

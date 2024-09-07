@@ -27,7 +27,7 @@ export default function SectionSong({ title, data }: props) {
       <HeaderSection title={title} />
       <div className="SectionSong__main">
         <div className="SectionSong__main__slide row">
-          <div className="SectionSong__main__slide__col pc-4 t-6 m-12">
+          <div className="SectionSong__main__slide__col col pc-4 t-6 m-12">
             {groupedSongs[0] &&
               groupedSongs[0].map((item, index) => {
                 return (
@@ -39,7 +39,7 @@ export default function SectionSong({ title, data }: props) {
                 );
               })}
           </div>
-          <div className="SectionSong__main__slide__col pc-4 t-6 m-12">
+          <div className="SectionSong__main__slide__col col pc-4 t-6 m-12">
             {groupedSongs[1] &&
               groupedSongs[1].map((item, index) => {
                 return (
@@ -51,7 +51,7 @@ export default function SectionSong({ title, data }: props) {
                 );
               })}
           </div>
-          <div className="SectionSong__main__slide__col pc-4 t-0 m-0">
+          <div className="SectionSong__main__slide__col col pc-4 t-0 m-0">
             {groupedSongs[2] &&
               groupedSongs[2].map((item, index) => {
                 return (

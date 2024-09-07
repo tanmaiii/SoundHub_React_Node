@@ -11,31 +11,38 @@
     background-color: themed("bg-rgba");
     @include flex(end, end, row);
     visibility: hidden;
+
+    @include mobile {
+      height: 100vh;
+      width: 100vw;
+    }
     &.open {
       visibility: visible;
     }
     &__wrapper {
       position: relative;
       min-width: 420px;
-      height: calc(100vh - $height-barPlaying);
       z-index: 100;
       background-color: themed("bg-2");
       transition: transform 0.3s ease-in-out;
-      overflow-y: scroll;
-      overflow-x: visible;
       display: none;
+      @include mobile {
+        height: 100vh;
+        width: 100vw;
+        min-width: 100%;
+      }
       &.open {
         display: block;
       }
 
       &__header {
         @include flex(center, space-between, row);
-        position: sticky;
         background-color: themed("bg-2");
         z-index: 1;
         width: 100%;
-        top: 0;
-        left: 0;
+        // position: sticky;
+        // top: 0;
+        // left: 0;
         height: 60px;
         padding: $space-16 $space-14;
         h3 {
@@ -65,28 +72,30 @@
         @include flex(start, start, column);
         gap: $space-8;
         width: 100%;
-        height: 100%;
+        // height: 100%;
         padding: 0 $space-14;
-
-        &__header {
-          width: 100%;
-        }
+        overflow-y: scroll;
+        overflow-x: visible;
+        height: calc(100vh - $height-barPlaying - 60px);
 
         &__list {
           width: 100%;
           &__item {
             background-color: themed("bg-2");
             width: 100%;
-            h4 {
-              font-size: $size-16;
-              color: themed("txt-main");
-              margin-bottom: $space-8;
+            .title__nextSong {
+              padding: $space-4 $space-8;
+              h4 {
+                font-size: $size-16;
+                color: themed("txt-main");
+              }
             }
+
             &.play {
-              // background-color: themed("bg-3");
-              position: sticky;
-              top: 60px;
               z-index: 2;
+              position: sticky;
+              top: 0;
+              // top: 60px;
             }
           }
         }

@@ -47,7 +47,16 @@ const SongMenu = ({
   const queryClient = useQueryClient();
   const navigation = useNavigate();
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
-  const { addQueue } = useAudio();
+  const {
+    addQueue,
+    queue,
+    updateQueue,
+    changePlaceQueue,
+    songPlayId,
+    pauseSong,
+    nextSong,
+    removeSongQueue,
+  } = useAudio();
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -184,14 +193,25 @@ const SongMenu = ({
                 itemFunc={() => mutationLikeDelete.mutate()}
               />
             )}
-            <ItemMenu
-              title={t("Menu.Add to waiting list")}
-              icon={<i className="fa-regular fa-list-music"></i>}
-              itemFunc={() => {
-                addQueue(id);
-                onClose();
-              }}
-            />
+            {queue?.includes(id) ? (
+              <ItemMenu
+                title={t("Menu.Remove from waiting list")}
+                icon={<i className="fa-light fa-trash"></i>}
+                itemFunc={() => {
+                  removeSongQueue(id);
+                  onClose();
+                }}
+              />
+            ) : (
+              <ItemMenu
+                title={t("Menu.Add to waiting list")}
+                icon={<i className="fa-regular fa-list-music"></i>}
+                itemFunc={() => {
+                  addQueue(id);
+                  onClose();
+                }}
+              />
+            )}
             <hr />
             <ItemMenu
               title={t("Menu.See details")}

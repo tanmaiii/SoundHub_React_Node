@@ -24,6 +24,7 @@ import { PATH } from "../../constants/paths";
 
 export default function BarPlaying() {
   const { token } = useAuth();
+  const dispatch = useDispatch();
   const {
     songPlayId,
     isPlaying,
@@ -32,6 +33,8 @@ export default function BarPlaying() {
     queue,
     nextSong,
     prevSong,
+    percentage,
+    onChangeSlider,
   } = useAudio();
   const [song, setSong] = useState<TSong | null>(null);
 
@@ -45,6 +48,23 @@ export default function BarPlaying() {
     }
   };
 
+  const handleClickPlay = () => {
+    if (!isPlaying) {
+      playSong();
+    } else {
+      pauseSong();
+    }
+  };
+
+  const handleNextSong = () => {
+    if (queue && queue?.length <= 1) return;
+    nextSong();
+  };
+
+  // const handleOpenWaiting = () => {
+  //   dispatch(changeOpenWaiting(true));
+  // };
+
   useEffect(() => {
     songPlayId && getSong();
   }, [songPlayId]);
@@ -53,10 +73,57 @@ export default function BarPlaying() {
 
   return (
     <div className="barPlaying row">
+      <div className="barPlaying__progress">
+        <Slider percentage={percentage} onChange={onChangeSlider} />
+      </div>
+      <div className="col pc-0 t-0 m-12">
+        <div className="barPlaying__mobile">
+          <div className="barPlaying__mobile__left">
+            <div className="barPlaying__mobile__left__image">
+              <ImageWithFallback
+                src={song?.image_path ?? ""}
+                fallbackSrc={Images.SONG}
+                alt=""
+              />
+            </div>
+            <div className="barPlaying__mobile__left__desc">
+              <Link
+                to={`${PATH.SONG + "/" + song?.id}`}
+                className="barPlaying__mobile__left__desc__title"
+              >
+                {song?.title}
+              </Link>
+              <div className="barPlaying__mobile__left__desc__info">
+                <Link to={`${PATH.SONG + "/" + song?.user_id}`}>
+                  <span>{song?.author}</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="barPlaying__mobile__right">
+            <button className="btn_play" onClick={handleClickPlay}>
+              {isPlaying ? (
+                <i className="fa-solid fa-pause"></i>
+              ) : (
+                <i className="fa-solid fa-play"></i>
+              )}
+            </button>
+            <button
+              onClick={handleNextSong}
+              className={`btn_next ${
+                queue && queue.length > 1 ? "" : "disabled"
+              }`}
+            >
+              <i className="fa-solid fa-forward-step"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="barPlaying__left col pc-3 t-3 m-0">
         {song && <CardSong song={song} />}
       </div>
-      <div className="barPlaying__center col pc-6 t-6 m-12">
+      <div className="barPlaying__center col pc-6 t-6 m-0">
         {song && <ControlsBar song={song} />}
       </div>
       <div className="barPlaying__right col pc-3 t-3 m-0">
@@ -111,28 +178,28 @@ const CardSong = ({ song }: CardSongProps) => {
   };
 
   return (
-    <div className="CardSong">
-      <div className="CardSong__image">
+    <div className="CardSongPlaying">
+      <div className="CardSongPlaying__image">
         <ImageWithFallback
           src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
           alt=""
         />
       </div>
-      <div className="CardSong__desc">
+      <div className="CardSongPlaying__desc">
         <Link
           to={`${PATH.SONG + "/" + song?.id}`}
-          className="CardSong__desc__title"
+          className="CardSongPlaying__desc__title"
         >
           {song?.title}
         </Link>
-        <div className="CardSong__desc__info">
+        <div className="CardSongPlaying__desc__info">
           <Link to={`${PATH.SONG + "/" + song?.user_id}`}>
             <span>{song?.author}</span>
           </Link>
         </div>
       </div>
-      <div className="CardSong__control">
+      <div className="CardSongPlaying__control">
         <button
           className={`button-like ${like ? "active" : ""}`}
           onClick={handleClickLike}
@@ -165,6 +232,7 @@ const ControlsBar = ({ song }: { song: TSong }) => {
     changeRandom,
     changeReplay,
     random,
+    queue,
   } = useAudio();
 
   const handleClickPlay = () => {
@@ -173,6 +241,16 @@ const ControlsBar = ({ song }: { song: TSong }) => {
     } else {
       pauseSong();
     }
+  };
+
+  const handlePrevSong = () => {
+    if (queue && queue?.length <= 1) return;
+    prevSong();
+  };
+
+  const handleNextSong = () => {
+    if (queue && queue?.length <= 1) return;
+    nextSong();
   };
 
   return (
@@ -185,7 +263,10 @@ const ControlsBar = ({ song }: { song: TSong }) => {
         >
           <i className="fa-light fa-shuffle"></i>
         </button>
-        <button onClick={() => prevSong()}>
+        <button
+          className={`btn_prev ${queue && queue.length > 1 ? "" : "disabled"}`}
+          onClick={() => handlePrevSong()}
+        >
           <i className="fa-solid fa-backward-step"></i>
         </button>
         <button className="btn_play" onClick={handleClickPlay}>
@@ -195,7 +276,10 @@ const ControlsBar = ({ song }: { song: TSong }) => {
             <i className="fa-solid fa-play"></i>
           )}
         </button>
-        <button onClick={() => nextSong()}>
+        <button
+          className={`btn_next ${queue && queue.length > 1 ? "" : "disabled"}`}
+          onClick={() => handleNextSong()}
+        >
           <i className="fa-solid fa-forward-step"></i>
         </button>
         <button
@@ -234,10 +318,15 @@ const ControlsRight = ({}: {}) => {
     const rangeWidth = rangeRef.current?.getBoundingClientRect().width ?? 0;
     const thumbWidth = thumbRef.current?.getBoundingClientRect().width ?? 0;
     const centerThumb = (thumbWidth / 100) * percentage * -1;
-    const centerProgressBar =
+    let centerProgressBar =
       thumbWidth +
       (rangeWidth / 100) * percentage -
       (thumbWidth / 100) * percentage;
+
+    if (percentage === 0) {
+      centerProgressBar = 0;
+    }
+
     setPosition(percentage);
     setMarginLeft(centerThumb);
     setProgressBarWidth(centerProgressBar);
@@ -251,6 +340,7 @@ const ControlsRight = ({}: {}) => {
   const handleOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
   };
+
   // const [volume, setVolume] = useState<number>(50);
   const { changeVolume, volume } = useAudio();
 
