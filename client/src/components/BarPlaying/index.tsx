@@ -2,25 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 import { songApi } from "../../apis";
-import { apiConfig } from "../../configs";
 import Images from "../../constants/images";
+import { PATH } from "../../constants/paths";
+import { useAudio } from "../../context/AudioContext";
 import { useAuth } from "../../context/AuthContext";
-import {
-  playSong,
-  selectIsPlaying,
-  selectSongPlayId,
-  stopSong,
-} from "../../slices/nowPlayingSlice";
+import { changeOpenLyric } from "../../slices/lyricSlice";
 import { changeOpenWaiting } from "../../slices/waitingSlice";
 import { RootState } from "../../store";
 import { TSong } from "../../types";
+import ControlsPlaying from "../ControlsPlaying";
 import ImageWithFallback from "../ImageWithFallback";
 import Slider from "../Slider";
 import "./style.scss";
-import { useAudio } from "../../context/AudioContext";
-import { PATH } from "../../constants/paths";
 
 export default function BarPlaying() {
   const { token } = useAuth();
@@ -60,10 +54,6 @@ export default function BarPlaying() {
     if (queue && queue?.length <= 1) return;
     nextSong();
   };
-
-  // const handleOpenWaiting = () => {
-  //   dispatch(changeOpenWaiting(true));
-  // };
 
   useEffect(() => {
     songPlayId && getSong();
@@ -129,6 +119,10 @@ export default function BarPlaying() {
       <div className="barPlaying__right col pc-3 t-3 m-0">
         <ControlsRight />
       </div>
+
+      <div className="barPlaying__lyric">
+        <h2>Lyric</h2>
+      </div>
     </div>
   );
 }
@@ -139,42 +133,35 @@ interface CardSongProps {
 
 const CardSong = ({ song }: CardSongProps) => {
   // const {songPlayId } = useSelector((state: RootState) => state.nowPlaying);
-  const [like, setLike] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { token } = useAuth();
+  const { currentUser } = useAuth();
 
-  const checkLiked = async () => {
-    try {
-      const res: any = await songApi.checkLikedSong(song.id ?? "", token ?? "");
-      setLike(res.isLiked);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const { isLoading, isError } = useQuery(["likePlaying", song.id], () => {
-    return checkLiked();
+  const { data: isLike, refetch: refetchLike } = useQuery({
+    queryKey: ["like-song", song?.id],
+    queryFn: async () => {
+      const res = await songApi.checkLikedSong(song?.id ?? "", token);
+      return res.isLiked;
+    },
   });
 
-  const likeMutation = useMutation(
-    async (like: boolean) => {
-      if (!like) return songApi.likeSong(song.id ?? "", token ?? "");
-      return songApi.unLikeSong(song.id ?? "", token ?? "");
+  const mutationLike = useMutation({
+    mutationFn: (like: boolean) => {
+      if (like) return songApi.unLikeSong(song?.id ?? "", token);
+      return songApi.likeSong(song?.id ?? "", token);
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["likePlaying", song.id]);
-        queryClient.invalidateQueries(["like", song.id]);
-        queryClient.invalidateQueries(["songs-like"]);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["like-song", song?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["songs-favorites", currentUser?.id],
+      });
+    },
+  });
 
   const handleClickLike = () => {
-    return likeMutation.mutate(like);
+    return isLike && mutationLike.mutate(isLike);
   };
 
   return (
@@ -201,11 +188,11 @@ const CardSong = ({ song }: CardSongProps) => {
       </div>
       <div className="CardSongPlaying__control">
         <button
-          className={`button-like ${like ? "active" : ""}`}
+          className={`button-like ${isLike ? "active" : ""}`}
           onClick={handleClickLike}
           data-tooltip={"Save to your library"}
         >
-          {like ? (
+          {isLike ? (
             <i className="fa-solid fa-heart"></i>
           ) : (
             <i className="fa-light fa-heart"></i>
@@ -217,79 +204,11 @@ const CardSong = ({ song }: CardSongProps) => {
 };
 
 const ControlsBar = ({ song }: { song: TSong }) => {
-  const {
-    playSong,
-    pauseSong,
-    percentage,
-    songPlayId,
-    timeSong,
-    timeSongPlay,
-    isPlaying,
-    replay,
-    nextSong,
-    prevSong,
-    onChangeSlider,
-    changeRandom,
-    changeReplay,
-    random,
-    queue,
-  } = useAudio();
-
-  const handleClickPlay = () => {
-    if (!isPlaying) {
-      playSong();
-    } else {
-      pauseSong();
-    }
-  };
-
-  const handlePrevSong = () => {
-    if (queue && queue?.length <= 1) return;
-    prevSong();
-  };
-
-  const handleNextSong = () => {
-    if (queue && queue?.length <= 1) return;
-    nextSong();
-  };
+  const { percentage, timeSong, timeSongPlay, onChangeSlider } = useAudio();
 
   return (
     <div className="ControlsBar">
-      <div className="ControlsBar__actions">
-        <button
-          className={`btn-random ${random ? "active" : ""}`}
-          onClick={() => changeRandom(!random)}
-          data-tooltip={`${random ? "Tắc trộn bài" : "Bật trộn bài"}`}
-        >
-          <i className="fa-light fa-shuffle"></i>
-        </button>
-        <button
-          className={`btn_prev ${queue && queue.length > 1 ? "" : "disabled"}`}
-          onClick={() => handlePrevSong()}
-        >
-          <i className="fa-solid fa-backward-step"></i>
-        </button>
-        <button className="btn_play" onClick={handleClickPlay}>
-          {isPlaying ? (
-            <i className="fa-solid fa-pause"></i>
-          ) : (
-            <i className="fa-solid fa-play"></i>
-          )}
-        </button>
-        <button
-          className={`btn_next ${queue && queue.length > 1 ? "" : "disabled"}`}
-          onClick={() => handleNextSong()}
-        >
-          <i className="fa-solid fa-forward-step"></i>
-        </button>
-        <button
-          className={`btn-replay ${replay ? "active" : ""}`}
-          data-tooltip={`${replay ? "Tắc Replay" : "Bật Replay"}`}
-          onClick={() => changeReplay(!replay)}
-        >
-          <i className="fa-light fa-repeat"></i>
-        </button>
-      </div>
+      <ControlsPlaying />
 
       <div className="ControlsBar__bar">
         <span>{`${timeSongPlay}`}</span>
@@ -304,7 +223,6 @@ const ControlsBar = ({ song }: { song: TSong }) => {
 
 const ControlsRight = ({}: {}) => {
   const dispatch = useDispatch();
-  const ValRef = useRef<HTMLInputElement>(null);
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const thumbRef = useRef<HTMLDivElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
@@ -354,6 +272,12 @@ const ControlsRight = ({}: {}) => {
 
   return (
     <div className="ControlsRight">
+      <button
+        className="btn-lyric"
+        onClick={() => dispatch(changeOpenLyric(true))}
+      >
+        <i className="fa-light fa-microphone-stand"></i>
+      </button>
       <div className="ControlsRight__volume">
         <button
           className="btn__volume"
@@ -395,7 +319,7 @@ const ControlsRight = ({}: {}) => {
       </div>
       <button
         onClick={handleOpenWaiting}
-        className={`ControlsRight__list ${openWatting ? "active" : ""}`}
+        className={`btn-waiting ${openWatting ? "active" : ""}`}
         data-tooltip={"Playlist"}
       >
         <i className="fa-duotone fa-list"></i>

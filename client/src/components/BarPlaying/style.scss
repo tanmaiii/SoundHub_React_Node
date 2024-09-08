@@ -126,6 +126,15 @@
         }
       }
     }
+
+    &__lyric {
+      position: fixed;
+      height: 100vh;
+      width: 100vw;
+      background-color: $color-primary1;
+      top: 100%;
+      left: 0;
+    }
   }
 }
 
@@ -142,8 +151,8 @@
         width: var(--size);
         overflow: hidden;
         @include flex(center, center);
+        border-radius: 50%;
         img {
-          border-radius: $radius-4;
           background-color: themed("bg-2");
           height: auto;
           width: 100%;
@@ -186,9 +195,6 @@
           &.active {
             color: $color-red;
           }
-          // &:hover {
-          //   color: themed("txt-main");
-          // }
           i {
             font-size: 1.4rem;
           }
@@ -200,15 +206,14 @@
 
 .ControlsBar {
   @include themify($themes) {
-    flex-direction: column;
     width: 100%;
     padding: 0 $space-12;
 
     &__actions {
-      @include flex(center, center);
+      @include flex(center, center, row);
       gap: $space-10;
 
-      button:not(.btn_play) {
+      & > button:not(.btn_play) {
         padding: $space-8;
         border-radius: 50%;
         cursor: pointer;
@@ -233,15 +238,15 @@
         }
       }
 
-      .btn-random {
+      & > .btn-random {
         @include tooltip(top, center);
       }
 
-      .btn-replay {
+      & > .btn-replay {
         @include tooltip(top, center);
       }
 
-      .btn_play {
+      & > .btn_play {
         @include tooltip(center, center);
         padding: $space-8;
         background-color: $color-primary1;
@@ -261,17 +266,18 @@
         }
       }
 
-      .btn_next {
+      & > .btn_next {
         @include tooltip(top, center);
       }
 
-      .btn_prev {
+      & > .btn_prev {
       }
     }
     &__bar {
       @include flex(center, center);
       gap: $space-12;
       width: 100%;
+      gap: $space-8;
       span {
         font-size: $size-14;
         color: themed("txt-main");
@@ -392,7 +398,31 @@
         }
       }
     }
-    &__list {
+
+    & > .btn-lyric {
+      cursor: pointer;
+      transition: $transition;
+      border-radius: 50%;
+      color: themed("txt-main");
+      @include tooltip(top, right);
+      // background-color: themed("bg-3");
+
+      &:hover {
+        background-color: themed("bg-2");
+      }
+      &.active {
+        background-color: $color-primary1;
+      }
+      i {
+        @include flex(center, center);
+        font-size: $size-16;
+        --size: 30px;
+        width: var(--size);
+        height: var(--size);
+      }
+    }
+
+    & > .btn-waiting {
       cursor: pointer;
       transition: $transition;
       border-radius: $radius-6;
@@ -412,6 +442,7 @@
         --size: 30px;
         width: var(--size);
         height: var(--size);
+        color: $color-white;
       }
     }
   }

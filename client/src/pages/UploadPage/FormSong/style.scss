@@ -3,7 +3,7 @@
 .FormSong {
   @include themify($themes) {
     @include flex(unset, space-between, column);
-    min-height: calc(100vh - $height-header - $space-10);
+    min-height: calc(100vh - $height-header - $height-barPlaying);
     gap: $space-12;
     padding-top: $space-24;
     &__danger {

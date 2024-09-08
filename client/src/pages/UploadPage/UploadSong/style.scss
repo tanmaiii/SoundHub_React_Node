@@ -3,7 +3,7 @@
 .UploadSong {
   @include themify($themes) {
     width: 100%;
-    min-height: calc(100vh - $height-header - $space-10);
+    min-height: calc(100vh - $height-header - $height-barPlaying);
 
     @include flex(center, center, column);
     padding: $space-24;

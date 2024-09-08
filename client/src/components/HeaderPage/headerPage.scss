@@ -11,7 +11,7 @@
 
     &__blur {
       z-index: -1;
-      .blur {
+      & > .blur {
         height: 100%;
         background-repeat: no-repeat;
         background-position: 50% top;
@@ -22,7 +22,7 @@
         display: block;
         background-color: $color-primary1;
       }
-      .bg-alpha {
+      & > .bg-alpha {
         background: linear-gradient(transparent, themed("bg-1"));
         height: 100%;
         width: 100%;

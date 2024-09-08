@@ -12,7 +12,7 @@
 
     &:before {
       content: "";
-      background-color: themed("bg-3");
+      background-color: rgba($color: themed("bg-3"), $alpha: 0.8);
       width: 99%;
       height: calc(var(--progress-bar-height) - 1px);
       display: block;

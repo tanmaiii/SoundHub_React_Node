@@ -131,7 +131,7 @@
       }
     }
     &__right {
-      width: 100px;
+      // width: 100px;
       @include flex(end, center, column);
 
       & > .item-hover {

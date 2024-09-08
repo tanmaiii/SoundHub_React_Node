@@ -2,26 +2,9 @@
 
 .wattingList {
   @include themify($themes) {
-    position: fixed;
-    z-index: 99;
-    top: 0;
-    right: 0;
-    height: calc(100vh - $height-barPlaying);
-    width: 100vw;
-    background-color: themed("bg-rgba");
-    @include flex(end, end, row);
-    visibility: hidden;
-
-    @include mobile {
-      height: 100vh;
-      width: 100vw;
-    }
-    &.open {
-      visibility: visible;
-    }
     &__wrapper {
       position: relative;
-      min-width: 420px;
+      width: 100%;
       z-index: 100;
       background-color: themed("bg-2");
       transition: transform 0.3s ease-in-out;
@@ -40,9 +23,6 @@
         background-color: themed("bg-2");
         z-index: 1;
         width: 100%;
-        // position: sticky;
-        // top: 0;
-        // left: 0;
         height: 60px;
         padding: $space-16 $space-14;
         h3 {
@@ -72,8 +52,7 @@
         @include flex(start, start, column);
         gap: $space-8;
         width: 100%;
-        // height: 100%;
-        padding: 0 $space-14;
+        padding: 0 $space-8;
         overflow-y: scroll;
         overflow-x: visible;
         height: calc(100vh - $height-barPlaying - 60px);

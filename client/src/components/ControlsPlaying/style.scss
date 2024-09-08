@@ -1,0 +1,70 @@
+@use "../../scss" as *;
+
+.ControlsPlaying {
+  @include themify($themes) {
+    width: 100%;
+    @include flex(center, center, row);
+    padding: 0 $space-12;
+    gap: $space-12;
+
+    & > button:not(.btn_play) {
+      padding: $space-8;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: $transition;
+      color: themed("txt-main");
+      &:hover {
+        background-color: $color-hover;
+      }
+      &.active {
+        color: $color-primary1;
+      }
+      i {
+        --size: 18px;
+        width: var(--size);
+        height: var(--size);
+        font-size: $size-18;
+        @include flex(center, center);
+      }
+
+      &.disabled {
+        opacity: 0.7;
+      }
+    }
+
+    & > .btn-random {
+      @include tooltip(top, center);
+    }
+
+    & > .btn-replay {
+      @include tooltip(top, center);
+    }
+
+    & > .btn_play {
+      @include tooltip(center, center);
+      padding: $space-8;
+      background-color: $color-primary1;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: $transition;
+      color: $color-white;
+      &:hover {
+        transform: scale(1.06);
+      }
+      i {
+        @include flex(center, center);
+        --size: 26px;
+        width: var(--size);
+        height: var(--size);
+        font-size: $size-24;
+      }
+    }
+
+    & > .btn_next {
+      @include tooltip(top, center);
+    }
+
+    & > .btn_prev {
+    }
+  }
+}

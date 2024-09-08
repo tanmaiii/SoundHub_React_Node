@@ -72,8 +72,8 @@ export default function Header() {
 
   return (
     <>
-      <div className="header" ref={headerRef}>
-        <div className="header__left">
+      <div className="header shrink" ref={headerRef}>
+        <div className="header__left ">
           <button
             className="header__left__menu"
             onClick={() => handleClickMenu()}

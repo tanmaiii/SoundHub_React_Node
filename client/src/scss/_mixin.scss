@@ -100,6 +100,7 @@ $themes: (
 
 @mixin tooltip($place1, $place2) {
   position: relative;
+  z-index: 999;
 
   &:hover {
     &[data-tooltip]::after {
@@ -135,8 +136,8 @@ $themes: (
     padding: $space-8 $space-12;
     border-radius: 12px;
     color: $color-white;
-    // background-color: rgba($color-gray, 0.8);
-    background-color: $color-bg-3-dark;
+    background-color: rgba($color-bg-3-dark, 0.9);
+    // background-color: $color-bg-3-dark;
     box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.2);
     font-size: $size-14;
     font-weight: $font-light;

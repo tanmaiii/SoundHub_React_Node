@@ -10,6 +10,11 @@ import Footer from "../../components/Footer";
 import WattingList from "../../components/WattingList";
 import { useAuth } from "../../context/AuthContext";
 import { PATH } from "../../constants/paths";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import ModalLyric from "../../components/ModalLyric";
+import { apiConfig } from "../../configs";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -21,10 +26,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const openWatting = useSelector((state: RootState) => state.waiting.state);
+  const openLyric = useSelector((state: RootState) => state.lyric.state);
+
   useEffect(() => {
     if (!currentUser) navigate(PATH.LOGIN);
     return;
   }, [currentUser]);
+
+  useEffect(() => {
+    console.log({ openLyric });
+  }, [openLyric]);
 
   return (
     <div className="MainLayout">
@@ -38,7 +51,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
             </div>
             <Footer />
           </div>
-          <div className={`MainLayout__top__main__waiting`}>
+          <div
+            className={`MainLayout__top__main__waiting ${
+              openWatting ? "open" : ""
+            }`}
+          >
             <WattingList />
           </div>
         </div>
@@ -46,6 +63,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       <div className="MainLayout__bottom">
         <BarPlaying />
+      </div>
+
+      <div className={`MainLayout__lyric ${openLyric ? "open" : ""}`}>
+        <ModalLyric />
       </div>
     </div>
   );

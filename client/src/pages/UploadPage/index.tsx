@@ -31,7 +31,7 @@ const UploadPage = () => {
       return setErrorFile(t("Upload.Error type file"));
     }
 
-    if (file && file?.size > 5000000) {
+    if (file && file?.size > 10000000) {
       console.log(file.size);
 
       setErrorFile(t("Upload.Error size file"));

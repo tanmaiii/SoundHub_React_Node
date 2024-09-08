@@ -1,0 +1,239 @@
+@use "../../scss/" as *;
+
+.ModalLyric {
+  @include themify($themes) {
+    height: 100%;
+    width: 100%;
+    &__container {
+      padding: $space-12;
+      @include flex(center, center, column);
+      height: 100%;
+
+      &.inactive {
+        .ModalLyric__container__header {
+          opacity: 0;
+        }
+        .ModalLyric__container__bottom {
+          opacity: 0;
+        }
+      }
+
+      &__blur {
+        z-index: -1;
+        & > .image {
+          background-repeat: no-repeat;
+          background-position: 50% top;
+          background-size: cover;
+          filter: blur(20px);
+          position: absolute;
+          inset: -100px;
+          display: block;
+          background-color: $color-primary1;
+        }
+        & > .overlay {
+          top: 0;
+          left: 0;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          background-color: rgba($color: $color-primary1, $alpha: 0.6);
+          position: absolute;
+        }
+      }
+
+      &__header {
+        @include flex(center, space-between, row);
+        width: 100%;
+        &__left {
+        }
+        &__center {
+          width: max-content;
+          margin: 0 auto;
+          position: relative;
+          ul {
+            background-color: rgba($color: themed("bg-2"), $alpha: 0.3);
+            padding: 4px;
+            border-radius: 26px;
+            li {
+              display: inline-block;
+              padding: $space-8 $space-14;
+              border-radius: 18px;
+              transition: all 0.3s;
+              &.active {
+                background-color: rgba($color: themed("bg-2"), $alpha: 0.4);
+              }
+
+              h4 {
+                color: $color-white;
+                font-size: $size-16;
+                font-weight: $font-medium;
+                cursor: pointer;
+                transition: $transition;
+                &:hover {
+                  // color: $color-primary1;
+                }
+              }
+            }
+          }
+        }
+        &__right {
+          @include flex(center, space-between, row);
+          gap: $space-8;
+          position: absolute;
+          right: 0;
+          right: $size-12;
+
+          & > button {
+            border-radius: 50%;
+            overflow: hidden;
+            color: themed("txt-main");
+            cursor: pointer;
+            background-color: rgba($color: themed("bg-2"), $alpha: 0.7);
+            transition: $transition;
+            &:hover {
+              background-color: rgba($color: themed("bg-2"), $alpha: 0.9);
+            }
+            i {
+              --size: 36px;
+              width: var(--size);
+              height: var(--size);
+              @include flex(center, center);
+              font-size: $size-18;
+            }
+          }
+        }
+      }
+
+      &__body {
+        flex: 1;
+        @include flex(center, center);
+
+        &__songPlay {
+          --size: 50vh;
+          max-width: 80vw;
+          gap: $space-24;
+          @include flex(center, center, row);
+          &__image {
+            width: var(--size);
+            height: var(--size);
+            min-width: var(--size);
+            min-height: var(--size);
+            border-radius: $radius-12;
+            overflow: hidden;
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+          &__lyric {
+            overflow: scroll;
+            height: var(--size);
+            overflow: hidden auto;
+            &::-webkit-scrollbar {
+              display: none; /* Ẩn thanh cuộn */
+            }
+            ul {
+              @include flex(start, center, column);
+              gap: $space-12;
+              li {
+                p {
+                  font-size: $size-30;
+                  color: $color-white;
+                  text-align: left;
+                  font-weight: $font-bold;
+                  margin: $space-4 0;
+                }
+                &.is-over {
+                  p {
+                    color: rgba($color: $color-white, $alpha: 0.8);
+                  }
+                }
+                &.active {
+                  p {
+                    color: $color-yellow;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &__bottom {
+        width: 800px;
+        @include flex(center, center, column);
+        gap: $space-8;
+        h6 {
+          font-size: $size-20;
+          color: $color-white;
+        }
+        &__bar {
+          @include flex(center, center);
+          width: 100%;
+          gap: $space-8;
+          span {
+            font-size: $size-14;
+            color: $color-white;
+          }
+          .progress {
+            width: 100%;
+            max-width: 600px;
+            & > .slider .slider__progress {
+              background-color: $color-white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ModalLyricWaitingList {
+  @include themify($themes) {
+    ul {
+      @include flex(center, center, row);
+      gap: $space-24;
+      li {
+        --size: 340px;
+        @include flex(center, center, column);
+        gap: $space-8;
+        border-radius: $radius-12;
+        transition: $transition;
+        cursor: pointer;
+        &:hover {
+          & > .info {
+            visibility: visible;
+          }
+        }
+        .image {
+          width: var(--size);
+          height: var(--size);
+          min-width: var(--size);
+          min-height: var(--size);
+          border-radius: $radius-12;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .info {
+          width: var(--size);
+          @include flex(center, center, column);
+          visibility: hidden;
+          h6 {
+            font-size: $size-24;
+            color: $color-white;
+          }
+          p {
+            font-size: $size-16;
+            color: $color-white;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}

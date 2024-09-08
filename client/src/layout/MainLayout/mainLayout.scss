@@ -19,6 +19,8 @@
           position: relative;
           max-width: 100%;
           // padding-bottom: $height-barPlaying;
+          height: 100vh;
+          overflow-y: scroll;
           @include tablet {
             max-width: calc(100%);
           }
@@ -29,21 +31,16 @@
         }
 
         &__waiting {
-          // background-color: $color-primary1;
-          // width: 360px;
-          // // display: none;
-          // height: 100vh;
-          // position: fixed;
-          // z-index: 99;
-          // top: 0;
-          // right: 0;
-          // transform: translateX(400px);
-          // transition: $transition;
-          // &.open {
-          //   transform: translateX(0);
-          // }
-          // @include tablet {
-          // }
+          width: $width-waiting;
+          height: calc(100vh - $height-header);
+          position: sticky;
+          top: 0;
+          right: 0;
+          display: none;
+
+          &.open {
+            display: block;
+          }
         }
       }
     }
@@ -53,6 +50,20 @@
       bottom: 0;
       left: 0;
       z-index: 1000;
+    }
+
+    &__lyric {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      transform: translateY(120%);
+      transition: transform 0.3s;
+      &.open {
+        transform: translateY(0);
+      }
     }
   }
 }
