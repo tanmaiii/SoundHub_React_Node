@@ -35,10 +35,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
     return;
   }, [currentUser]);
 
-  useEffect(() => {
-    console.log({ openLyric });
-  }, [openLyric]);
-
   return (
     <div className="MainLayout">
       <div className="MainLayout__top">

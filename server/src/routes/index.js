@@ -13,6 +13,7 @@ import songPlayRoute from "./songPlay.route.js";
 import userSongRoute from "./userSong.route.js";
 import favouriteRoute from "./favourite.route.js";
 import searchRoute from "./search.route.js";
+import lyricRoute from "./lyric.route.js";
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
@@ -27,5 +28,6 @@ router.use("/search", searchRoute);
 
 router.use("/image", imageRoute);
 router.use("/mp3", mp3Route);
+router.use("/lyric", lyricRoute);
 
 export default router;

@@ -7,6 +7,7 @@ export type TSong = {
   user_id?: string;
   genre_id?: string;
   song_path: string;
+  lyric_path?: string;
   public?: number;
   created_at?: string;
   num_song?: number;

@@ -7,24 +7,27 @@ import { changeOpenLyric } from "../../slices/lyricSlice";
 import { useAudio } from "../../context/AudioContext";
 import ImageWithFallback from "../ImageWithFallback";
 import { TSong } from "../../types";
-import { songApi } from "../../apis";
+import { lyricApi, songApi } from "../../apis";
 import { useAuth } from "../../context/AuthContext";
 import Images from "../../constants/images";
 import { apiConfig } from "../../configs";
 import ControlsPlaying from "../ControlsPlaying";
 import Slider from "../Slider";
+import { defaultNS } from "../../i18n/i18n";
+import { log } from "console";
+import { set } from "react-hook-form";
 
 const ModalLyric = () => {
   const dispatch = useDispatch();
   const openLyric = useSelector((state: RootState) => state.lyric.state);
   const { songPlayId } = useAudio();
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [song, setSong] = useState<TSong>();
   const containerRef = useRef<HTMLDivElement>(null);
   const { timeSong, timeSongPlay, percentage, onChangeSlider } = useAudio();
   const { token } = useAuth();
   const [active, setActive] = useState(1);
   const [isInactive, setIsInactive] = useState(false);
+  const [song, setSong] = useState<TSong>();
   let timer: NodeJS.Timeout | null = null; // Không cần lưu trong state
 
   const getSong = async () => {
@@ -173,65 +176,7 @@ const ModalLyric = () => {
           </div>
         </div>
         <div className="ModalLyric__container__body">
-          {active === 1 ? (
-            <div className="ModalLyric__container__body__songPlay">
-              <div className="ModalLyric__container__body__songPlay__image">
-                <ImageWithFallback
-                  src={song?.image_path ?? ""}
-                  fallbackSrc={Images.SONG}
-                  alt=""
-                />
-              </div>
-              <div className="ModalLyric__container__body__songPlay__lyric">
-                <ul>
-                  <li className="is-over">
-                    <p>And the vibe is feeling strong and what's</p>
-                  </li>
-                  <li className="is-over">
-                    <p>Small turn to a friendship, a friendship</p>
-                  </li>
-                  <li className="is-over">
-                    <p>Turn into a bond and that bond will never Be</p>
-                  </li>
-                  <li className="is-over">
-                    <p> broken and the love will never get lost And when</p>
-                  </li>
-                  <li className="is-over">
-                    <p>brotherhood come first then the line Will never be</p>
-                  </li>
-                  <li className="active">
-                    <p> crossed established it on our own When that line had</p>
-                  </li>
-                  <li>
-                    <p>to be drawn and that line is what</p>
-                  </li>
-                  <li>
-                    <p>And the vibe is feeling strong and what's</p>
-                  </li>
-                  <li>
-                    <p>Small turn to a friendship, a friendship</p>
-                  </li>
-                  <li>
-                    <p>Turn into a bond and that bond will never Be</p>
-                  </li>
-                  <li>
-                    <p> broken and the love will never get lost And when</p>
-                  </li>
-                  <li>
-                    <p>brotherhood come first then the line Will never be</p>
-                  </li>
-                  <li>
-                    <p> crossed established it on our own When that line had</p>
-                  </li>
-                  <li>
-                    <p>to be drawn and that line is what</p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          ) : (
-            <ModalLyricWaitingList />
-          )}
+          {active === 1 ? <ModalLyricSongPlay /> : <ModalLyricWaitingList />}
         </div>
         <div className="ModalLyric__container__bottom">
           <h6>
@@ -253,6 +198,90 @@ const ModalLyric = () => {
 
 export default ModalLyric;
 
+const ModalLyricSongPlay = () => {
+  const [song, setSong] = useState<TSong>();
+  const { songPlayId, currentTime } = useAudio();
+  const { token } = useAuth();
+  const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
+  const itemRef = React.createRef<HTMLLIElement>();
+
+  const getSong = async () => {
+    try {
+      const res = songPlayId && (await songApi.getDetail(songPlayId, token));
+      res && setSong(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLyric = async () => {
+    if (song && song?.lyric_path === null) return;
+    try {
+      const res = songPlayId && (await lyricApi.getLyric(songPlayId, token));
+      res && setLyrics(res);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    songPlayId && getSong();
+  }, [songPlayId]);
+
+  useEffect(() => {
+    setLyrics([]);
+    songPlayId && getLyric();
+  }, [song]);
+
+  useEffect(() => {
+    // Sử dụng scrollIntoView nếu itemRef hiện tại không null
+    if (itemRef.current) {
+      itemRef.current.scrollIntoView({
+        behavior: "smooth", // Cuộn mượt
+        block: "center", // Cuộn tới giữa của phần tử
+        inline: "nearest", // Cuộn tới phần tử gần nhất
+      });
+    }
+  }, [currentTime]);
+
+  return (
+    <div className="ModalLyric__container__body__songPlay">
+      <div className="ModalLyric__container__body__songPlay__image">
+        <ImageWithFallback
+          src={song?.image_path ?? ""}
+          fallbackSrc={Images.SONG}
+          alt=""
+        />
+      </div>
+      <div className="ModalLyric__container__body__songPlay__lyric">
+        {lyrics.length > 0 ? (
+          <ul>
+            {lyrics.map((lyric, index) => (
+              <li
+                ref={
+                  lyric.time <= currentTime && currentTime < lyric.time + 5
+                    ? itemRef
+                    : null
+                }
+                key={index}
+                className={`${
+                  lyric.time <= currentTime && currentTime < lyric.time + 5
+                    ? "active"
+                    : ""
+                } ${currentTime > lyric.time + 5 ? "is-over" : ""}`}
+              >
+                <p>{lyric.text}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-lyric">
+            <p>Chúng tôi vẫn đang tìm lời cho bài hát này</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ModalLyricWaitingList = () => {
   const { queue } = useAudio();
   return (
@@ -272,8 +301,8 @@ const Item = ({ songId }: { songId: string }) => {
   useEffect(() => {
     const getSong = async () => {
       try {
-        const res = await songApi.getDetail(songId, token ?? "");
-        setSong(res);
+        const res = songId && (await songApi.getDetail(songId, token));
+        res && setSong(res);
       } catch (error) {
         console.log(error);
       }

@@ -4,13 +4,15 @@ import { TSong } from "../types";
 import { songApi } from "../apis";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
-import { TRUE } from "sass";
 import playApi from "../apis/play/playApi";
+import { log } from "console";
 
 interface TAudioContext {
+  percentage: number;
+  currentTime: number;
+
   isPlaying: boolean;
   songPlayId: string | null;
-  percentage: number;
   timeSong: string;
   timeSongPlay: string;
   volume: string;
@@ -61,10 +63,29 @@ export const AudioContextProvider = ({ children }: Props) => {
   const [timeSong, setTimeSong] = useState<string>("00:00"); // Thời gian của bài hát
   const [timeSongPlay, setTimeSongPlay] = useState<string>("00:00"); // Thời gian của bài hát
   const [isValid, setIsValid] = useState<boolean>(true); // Trạng thái tải bài hát
-  const [percentage, setPercentage] = useState(0); // Phần trăm thời gian bài hát
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const [queueRandom, setQueueRandom] = useState<number[]>([]); //Danh sách bài hát random đã được phát
   const { token } = useAuth();
+
+  const [percentage, setPercentage] = useState(0); // Phần trăm thời gian bài hát
+  const [currentTime, setCurrentTime] = useState(0);
+
+  // Lắng nghe sự kiện thay đổi thời gian của audio
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+
+    // Hủy đăng ký sự kiện khi component unmount
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, []);
 
   // Xử lý lỗi file mp3
   useEffect(() => {
@@ -74,13 +95,13 @@ export const AudioContextProvider = ({ children }: Props) => {
       const handleCanPlayThrough = () => {
         setIsValid(true);
         audioElement.volume = parseInt(volume) / 100;
-        audioElement.play();
+        // audioElement.play();
         setIsPlaying(true);
       };
 
       const handleError = () => {
         toast.error("Error when loading song");
-        audioElement.pause();
+        // audioElement.pause();
         setIsPlaying(false);
         setIsValid(false);
       };
@@ -311,6 +332,8 @@ export const AudioContextProvider = ({ children }: Props) => {
 
       setPercentage(+percent);
     }
+
+    // console.log(audio?.currentTime);
   };
 
   const onEnd = () => {
@@ -324,6 +347,13 @@ export const AudioContextProvider = ({ children }: Props) => {
       nextSong();
     }
   };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    // console.log(audio?.onplay);
+    // console.log(songPlayId);
+    
+  },[songPlayId, isPlaying ])
 
   // Lấy thời gian bài hát
   useEffect(() => {
@@ -351,6 +381,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     queue,
     random,
     replay,
+    currentTime,
 
     start,
     playSong,

@@ -26,3 +26,4 @@ yarn-error.log*
 #data 
 /src/data/images
 /src/data/mp3
+/src/data/lyric

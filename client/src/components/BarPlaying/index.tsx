@@ -61,6 +61,8 @@ export default function BarPlaying() {
 
   if (!songPlayId) return null;
 
+
+
   return (
     <div className="barPlaying row">
       <div className="barPlaying__progress">
@@ -205,6 +207,7 @@ const CardSong = ({ song }: CardSongProps) => {
 
 const ControlsBar = ({ song }: { song: TSong }) => {
   const { percentage, timeSong, timeSongPlay, onChangeSlider } = useAudio();
+
 
   return (
     <div className="ControlsBar">
