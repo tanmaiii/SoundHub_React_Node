@@ -16,6 +16,8 @@ import Slider from "../Slider";
 import { defaultNS } from "../../i18n/i18n";
 import { log } from "console";
 import { set } from "react-hook-form";
+import IconPlay from "../IconPlay/IconPlay";
+import { use } from "i18next";
 
 const ModalLyric = () => {
   const dispatch = useDispatch();
@@ -204,6 +206,7 @@ const ModalLyricSongPlay = () => {
   const { token } = useAuth();
   const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
   const itemRef = React.createRef<HTMLLIElement>();
+  const [active, setActive] = useState(0);
 
   const getSong = async () => {
     try {
@@ -225,6 +228,15 @@ const ModalLyricSongPlay = () => {
   useEffect(() => {
     songPlayId && getSong();
   }, [songPlayId]);
+
+  useEffect(() => {
+    if (lyrics?.length < 0) return;
+    lyrics?.forEach((lyric, index) => {
+      if (lyric.time <= currentTime && currentTime < lyric.time + 5) {
+        setActive(index);
+      }
+    });
+  }, [songPlayId, lyrics, currentTime]);
 
   useEffect(() => {
     setLyrics([]);
@@ -256,17 +268,11 @@ const ModalLyricSongPlay = () => {
           <ul>
             {lyrics.map((lyric, index) => (
               <li
-                ref={
-                  lyric.time <= currentTime && currentTime < lyric.time + 5
-                    ? itemRef
-                    : null
-                }
+                ref={index === active ? itemRef : null}
                 key={index}
-                className={`${
-                  lyric.time <= currentTime && currentTime < lyric.time + 5
-                    ? "active"
-                    : ""
-                } ${currentTime > lyric.time + 5 ? "is-over" : ""}`}
+                className={`${index === active ? "active" : ""} ${
+                  index < active ? "is-over" : ""
+                }`}
               >
                 <p>{lyric.text}</p>
               </li>
@@ -284,19 +290,85 @@ const ModalLyricSongPlay = () => {
 
 const ModalLyricWaitingList = () => {
   const { queue } = useAudio();
+  const { songPlayId, currentTime } = useAudio();
+  const swapperRef = useRef<HTMLUListElement>(null);
+  const [active, setActive] = useState(0);
+  const itemRef = React.createRef<HTMLLIElement>();
+
+  const onClickLeft = () => {
+    console.log(window.innerWidth);
+    if (!queue) return;
+    if (active - 1 >= 0) {
+      setActive(active - 1);
+    }
+  };
+  const onClickRight = () => {
+    if (!queue) return;
+    if (active + 1 < queue?.length) {
+      setActive(active + 1);
+    }
+  };
+
+  useEffect(() => {
+    const slider = document.querySelector(".slider__track");
+    const screenWidth = window.innerWidth;
+
+    if (slider) {
+      (slider as HTMLElement).style.transform = `translateX(${
+        -1 * (360 * active) + screenWidth / 2
+      }px)`;
+    }
+  }, [window.innerWidth, active]);
+
+  useEffect(() => {
+    if (!queue) return;
+    queue.forEach((song, index) => {
+      if (song === songPlayId) {
+        setActive(index);
+      }
+    });
+  }, [songPlayId]);
+
   return (
     <div className="ModalLyricWaitingList">
-      <ul>
-        {queue &&
-          queue.map((song, index) => <Item key={index} songId={song} />)}
-      </ul>
+      <div className="ModalLyricWaitingList__swapper">
+        {active - 1 >= 0 && (
+          <div className="button btn-left">
+            <button onClick={onClickLeft}>
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
+          </div>
+        )}
+
+        <ul className="slider__track" ref={swapperRef}>
+          {queue &&
+            queue.map((song, index) => (
+              <li
+                ref={index === active ? itemRef : null}
+                className={`slider__item ${
+                  songPlayId === song ? "active" : ""
+                }`}
+              >
+                <Item key={index} songId={song} active={index === active} />
+              </li>
+            ))}
+        </ul>
+        {queue && active + 1 < queue?.length && (
+          <div className="button btn-right">
+            <button onClick={onClickRight}>
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-const Item = ({ songId }: { songId: string }) => {
+const Item = ({ songId, active }: { songId: string; active: boolean }) => {
   const { token } = useAuth();
   const [song, setSong] = useState<TSong>();
+  const { songPlayId, isPlaying, start, playSong, pauseSong } = useAudio();
 
   useEffect(() => {
     const getSong = async () => {
@@ -307,23 +379,37 @@ const Item = ({ songId }: { songId: string }) => {
         console.log(error);
       }
     };
-
     getSong();
   }, [songId, token]);
 
+  const handleClickPlay = (id: string) => {
+    if (songPlayId === id && isPlaying) {
+      pauseSong();
+    }else if(songPlayId === id && !isPlaying){
+      playSong();
+    } else {
+      start(id);
+    }
+  };
+
   return (
-    <li>
-      <div className="image">
+    <div className="item" onClick={() => handleClickPlay(songId)}>
+      <div className={`image ${active ? "active" : ""}`}>
         <ImageWithFallback
           src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
           alt=""
         />
+        {songPlayId === songId && isPlaying ? (
+          <div className="icon-play">
+            <IconPlay />
+          </div>
+        ) : null}
       </div>
-      <div className="info">
+      <div className={`info ${active ? "active" : ""}`}>
         <h6>{song?.title}</h6>
         <p>{song?.author}</p>
       </div>
-    </li>
+    </div>
   );
 };

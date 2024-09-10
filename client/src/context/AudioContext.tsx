@@ -95,13 +95,13 @@ export const AudioContextProvider = ({ children }: Props) => {
       const handleCanPlayThrough = () => {
         setIsValid(true);
         audioElement.volume = parseInt(volume) / 100;
-        // audioElement.play();
+        audioElement.play();
         setIsPlaying(true);
       };
 
       const handleError = () => {
         toast.error("Error when loading song");
-        // audioElement.pause();
+        audioElement.pause();
         setIsPlaying(false);
         setIsValid(false);
       };
@@ -235,7 +235,7 @@ export const AudioContextProvider = ({ children }: Props) => {
       if (index !== undefined && queue && index + 1 < queue.length) {
         start(queue[index + 1]);
       } else {
-        start(queue![0]);
+        console.log(queue![0]);
       }
     }
   };
@@ -337,6 +337,8 @@ export const AudioContextProvider = ({ children }: Props) => {
   };
 
   const onEnd = () => {
+    console.log("end");
+
     if (replay || queue?.length === 1) {
       start(songPlayId ?? "");
       const audio = audioRef.current;
@@ -347,13 +349,6 @@ export const AudioContextProvider = ({ children }: Props) => {
       nextSong();
     }
   };
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    // console.log(audio?.onplay);
-    // console.log(songPlayId);
-    
-  },[songPlayId, isPlaying ])
 
   // Lấy thời gian bài hát
   useEffect(() => {
