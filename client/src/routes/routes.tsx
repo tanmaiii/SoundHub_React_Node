@@ -9,7 +9,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async"; // quản lý các 
 
 import Loading from "../components/Loading/Loading";
 
-import MainLayout from "../layout/MainLayout/MainLayout";
+import MainLayout from "../layout/MainLayout";
 
 import { PATH, publicRoutes } from "../constants/paths";
 import { useAuth } from "../context/AuthContext";

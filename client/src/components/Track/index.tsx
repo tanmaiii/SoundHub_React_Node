@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import Images from "../../constants/images";
@@ -14,6 +14,7 @@ import { useAuth } from "../../context/AuthContext";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import SongMenu from "../Menu/SongMenu";
+import { openMenu } from "../../slices/menuSongSlide";
 
 interface TrackProps {
   song: TSong;
@@ -33,11 +34,12 @@ export default function Track({
   const { token, currentUser } = useAuth();
   const [activeMenu, setActiveMenu] = useState(false);
   const { start, isPlaying, songPlayId, playSong, pauseSong } = useAudio();
+  const btnMenuRef = React.createRef<HTMLButtonElement>();
 
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
       pauseSong();
-    }else if(songPlayId === id && !isPlaying){
+    } else if (songPlayId === id && !isPlaying) {
       playSong();
     } else {
       start(id);
@@ -66,6 +68,16 @@ export default function Track({
       });
     },
   });
+
+  const handleClickOpenMenu = () => {
+    const rect = btnMenuRef.current?.getBoundingClientRect();
+    console.log(rect);
+
+    rect &&
+      dispatch(
+        openMenu({ open: true, id: song?.id ?? "", left: rect.x, top: rect.y })
+      );
+  };
 
   return (
     <div className="track">
@@ -143,16 +155,21 @@ export default function Track({
           </div>
 
           <div className="item__hover">
-            <div className={`button-edit ${activeMenu ? " active" : ""}`}>
-              <SongMenu
+            <button
+              ref={btnMenuRef}
+              className={`button-edit ${activeMenu ? " active" : ""}`}
+              onClick={handleClickOpenMenu}
+            >
+              <i className="fa-solid fa-ellipsis"></i>
+            </button>
+            {/* <SongMenu
                 id={song?.id ?? ""}
                 song={song}
                 playlistId={playlistId}
                 active={activeMenu}
                 onOpen={() => setActiveMenu(true)}
                 onClose={() => setActiveMenu(false)}
-              />
-            </div>
+              /> */}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import "./mainLayout.scss";
+import "./style.scss";
 
 import NavBar from "../../components/NavBar/NavBar";
 import Header from "../../components/Header";
@@ -14,7 +14,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import ModalLyric from "../../components/ModalLyric";
-import { apiConfig } from "../../configs";
+import SongMenu from "../../components/Menu/SongMenu";
+import { openMenu, closeMenu } from "../../slices/menuSongSlide";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -22,25 +23,32 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   document.title = "Sound Hub";
-
+  const bodyRef = React.createRef<HTMLDivElement>();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const openLyric = useSelector((state: RootState) => state.lyric.state);
+  const openMenuSong = useSelector((state: RootState) => state.menuSong);
+  const location = useLocation();
+
+  console.log(openMenuSong);
 
   useEffect(() => {
     if (!currentUser) navigate(PATH.LOGIN);
     return;
   }, [currentUser]);
 
+  useEffect(() => {
+    bodyRef.current?.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <div className="MainLayout">
       <div className="MainLayout__top">
         <NavBar />
         <div className={`MainLayout__top__main`}>
-          <div className="MainLayout__top__main__content">
+          <div className="MainLayout__top__main__content" ref={bodyRef}>
             <Header />
             <div className={`MainLayout__top__main__content__body`}>
               {children}
@@ -63,6 +71,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       <div className={`MainLayout__lyric ${openLyric ? "open" : ""}`}>
         <ModalLyric />
+      </div>
+
+      <div>
+        <SongMenu
+          active={openMenuSong.open}
+          id={openMenuSong.id}
+          onOpen={() => dispatch(openMenu({ ...openMenuSong, open: true }))}
+          onClose={() => dispatch(closeMenu())}
+        />
       </div>
     </div>
   );

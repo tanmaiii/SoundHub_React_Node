@@ -10,13 +10,8 @@ const parseLrc = (lrcContent) => {
     line = line.trim(); // Loại bỏ khoảng trắng đầu và cuối dòng
 
     // Bỏ qua các dòng metadata như [length:], [re:], [ve:]
-    if (
-      line.startsWith("[length:") ||
-      line.startsWith("[re:") ||
-      line.startsWith("[ve:") ||
-      line.startsWith("[tool:")
-    ) {
-      continue; // Bỏ qua các dòng không cần thiết
+    if (line.startsWith("[") && line.endsWith("]")) {
+      continue; // Bỏ qua các dòng nằm trong cặp dấu []
     }
 
     // Kiểm tra xem dòng có chứa timestamp hay không

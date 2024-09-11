@@ -4,6 +4,7 @@ import navbarReducer from "./slices/navbarSlice";
 import darkModeReducer from "./slices/darkModeSlice";
 import waitingReducer from "./slices/waitingSlice";
 import lyricReducer from "./slices/lyricSlice";
+import menuSongReducer from "./slices/menuSongSlide";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     darkMode: darkModeReducer,
     waiting: waitingReducer,
     lyric: lyricReducer,
+    menuSong: menuSongReducer,
   },
 });
 

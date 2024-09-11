@@ -3,12 +3,14 @@ import { useTranslation } from "react-i18next";
 import FormSong from "./FormSong";
 import "./style.scss";
 import UploadSong from "./UploadSong";
+import { useAudio } from "../../context/AudioContext";
 
 const UploadPage = () => {
   const [openDrop, setOpenDrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [errorFile, setErrorFile] = useState("");
   const { t } = useTranslation("song");
+  const { updateQueue, playSong, pauseSong, isPlaying, stope } = useAudio();
 
   const onDragEnter = () => {
     setOpenDrop(true);
@@ -31,11 +33,15 @@ const UploadPage = () => {
       return setErrorFile(t("Upload.Error type file"));
     }
 
-    if (file && file?.size > 10000000) {
-      console.log(file.size);
-
+    if (file && file?.size > 11 * 1024 * 1024) {
       setErrorFile(t("Upload.Error size file"));
       return;
+    }
+  }, [file]);
+
+  useEffect(() => {
+    if (file) {
+      stope();
     }
   }, [file]);
 

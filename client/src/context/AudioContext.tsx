@@ -5,7 +5,6 @@ import { songApi } from "../apis";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
 import playApi from "../apis/play/playApi";
-import { log } from "console";
 
 interface TAudioContext {
   percentage: number;
@@ -21,6 +20,7 @@ interface TAudioContext {
   replay: boolean;
 
   start: (songId: string) => void;
+  stope: () => void;
   playSong: () => void;
   pauseSong: () => void;
   nextSong: () => void;
@@ -220,7 +220,6 @@ export const AudioContextProvider = ({ children }: Props) => {
     setPercentage(0);
     setTimeSong("00:00");
     setTimeSongPlay("00:00");
-    setVolume("50");
     audioRef.current?.pause();
   };
 
@@ -379,6 +378,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     currentTime,
 
     start,
+    stope,
     playSong,
     pauseSong,
     nextSong,

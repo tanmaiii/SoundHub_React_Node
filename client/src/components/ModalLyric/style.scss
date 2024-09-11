@@ -163,7 +163,7 @@
 
               li {
                 cursor: pointer;
-                &:hover {
+                &:hover:not(.no-time) {
                   p {
                     color: $color-white !important;
                   }
@@ -176,6 +176,9 @@
                   font-weight: $font-bold;
                   margin: $space-4 0;
                   transition: all 0.3s;
+                }
+                &.no-time{
+            
                 }
                 &.is-over {
                   p {

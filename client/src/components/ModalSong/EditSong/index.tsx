@@ -4,7 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { genreApi, imageApi, songApi } from "../../../apis";
+import { genreApi, imageApi, lyricApi, songApi } from "../../../apis";
 import { toast } from "sonner";
 import { PATH } from "../../../constants/paths";
 import Dropdown from "../../Dropdown";
@@ -18,6 +18,7 @@ interface TError {
   public: string;
   image_path: string;
   song_path: string;
+  lyric_path: string;
 }
 
 interface Inputs {
@@ -27,6 +28,7 @@ interface Inputs {
   public: number;
   image_path: string;
   song_path: string;
+  lyric_path: string;
 }
 
 const EditSong = ({
@@ -39,6 +41,7 @@ const EditSong = ({
   closeModal: () => void;
 }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [lyricFile, setLyricFile] = useState<File | null>(null);
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
   const { t } = useTranslation("song");
@@ -52,6 +55,7 @@ const EditSong = ({
     public: "",
     image_path: "",
     song_path: "",
+    lyric_path: "",
   });
 
   const [inputs, setInputs] = useState<Inputs>({
@@ -61,6 +65,7 @@ const EditSong = ({
     public: 1,
     image_path: "",
     song_path: "",
+    lyric_path: "",
   });
 
   const updateError = (newValue: Partial<TError>) => {
@@ -95,9 +100,8 @@ const EditSong = ({
           public: res.public,
           image_path: res.image_path,
           song_path: res.song_path,
+          lyric_path: res.lyric_path,
         });
-
-      console.log("res", res);
     } catch (error) {}
   };
 
@@ -118,6 +122,31 @@ const EditSong = ({
     }
   };
 
+  //Xử lý sự kiện thay đổi file lyric
+  const onChangeLyric = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]?.size > 1 * 1024 * 1024) {
+      setLyricFile(null);
+      updateError({ lyric_path: "Image size must be less than 5MB" });
+      return;
+    }
+
+    const isLrcFile = (fileName: string) => {
+      const extension = fileName.split(".").pop();
+      return extension === "lrc";
+    };
+
+    if (e.target.files && e.target.files[0]) {
+      const fileName = e.target.files[0].name;
+      if (!isLrcFile(fileName)) {
+        setLyricFile(null);
+        updateError({ lyric_path: "File must be in .lrc format" });
+        return;
+      }
+      setLyricFile(e.target.files[0]);
+      updateError({ lyric_path: "" });
+    }
+  };
+
   //Reset file input image
   const resetFileInputImage = () => {
     const fileInput = document.getElementById(
@@ -127,6 +156,16 @@ const EditSong = ({
       fileInput.value = "";
     }
     setImageFile(null);
+  };
+
+  const resetFileInputLyric = () => {
+    const fileInput = document.getElementById(
+      "input-lyric-song"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    setLyricFile(null);
   };
 
   //Xử lý sự kiện click nút submit
@@ -154,6 +193,19 @@ const EditSong = ({
 
         updatedInputs = {
           image_path: resImage.image,
+        };
+      }
+
+      if (lyricFile) {
+        const formDataLyric = new FormData();
+        lyricFile && formDataLyric.append("lyric", lyricFile);
+
+        //Tải lyric lên server
+        const resLyric = await lyricApi.upload(formDataLyric, token);
+
+        updatedInputs = {
+          ...updatedInputs,
+          lyric_path: resLyric.lyric,
         };
       }
 
@@ -311,42 +363,87 @@ const EditSong = ({
           </div>
         </div>
         <div className="EditSong__body__right">
-          <h4>{t("Upload.Image")}</h4>
-          <span>{t("Upload.Image desc")}</span>
           <div className="EditSong__body__right__image">
-            <img
-              src={
-                imageFile
-                  ? URL.createObjectURL(imageFile)
-                  : inputs.image_path
-                  ? apiConfig.imageURL(inputs.image_path ?? "")
-                  : Images.SONG
-              }
-              alt=""
-            />
-            <label
-              htmlFor="input-image-song"
-              className={`EditSong__body__right__image__default ${
-                error.image_path ? "error" : ""
-              }`}
-            >
-              <i className="fa-light fa-image"></i>
-              <span>{t("Upload.Upload image")}</span>
-              <input
-                type="file"
-                id="input-image-song"
-                onChange={onChangeImage}
-                accept="image/png, image/jpeg"
+            <h4>{t("Upload.Image")}</h4>
+            <span>{t("Upload.Image desc")}</span>
+            <div className="EditSong__body__right__image__swapper">
+              <img
+                src={
+                  imageFile
+                    ? URL.createObjectURL(imageFile)
+                    : inputs.image_path
+                    ? apiConfig.imageURL(inputs.image_path ?? "")
+                    : Images.SONG
+                }
+                alt=""
               />
-            </label>
-            {imageFile && (
-              <button
-                className="btn-delete-image"
-                onClick={() => resetFileInputImage()}
+              <label
+                htmlFor="input-image-song"
+                className={`EditSong__body__right__image__swapper__default ${
+                  error.image_path ? "error" : ""
+                }`}
               >
-                <i className="fa-regular fa-trash"></i>
-              </button>
-            )}
+                <i className="fa-light fa-image"></i>
+                <span>{t("Upload.Upload image")}</span>
+                <input
+                  type="file"
+                  id="input-image-song"
+                  onChange={onChangeImage}
+                  accept="image/png, image/jpeg"
+                />
+              </label>
+              {imageFile && (
+                <button
+                  className="btn-delete-image"
+                  onClick={() => resetFileInputImage()}
+                >
+                  <i className="fa-regular fa-trash"></i>
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="EditSong__body__right__lyric">
+            <h4>Lyric</h4>
+            <span>Allow file .lrc</span>
+            <div className="EditSong__body__right__lyric__swapper">
+              {lyricFile ? (
+                <div className="EditSong__body__right__lyric__swapper__file">
+                  <i className="fa-light fa-file-alt"></i>
+                  <span>{lyricFile.name}</span>
+                  <button className="btn-remove" onClick={resetFileInputLyric}>
+                    <i className="fa-regular fa-xmark"></i>
+                  </button>
+                </div>
+              ) : inputs?.lyric_path ? (
+                <div className="EditSong__body__right__lyric__swapper__file">
+                  <i className="fa-light fa-file-alt"></i>
+                  <span>{inputs?.lyric_path}</span>
+                  <button
+                    className="btn-remove"
+                    onClick={() => updateState({ lyric_path: "" })}
+                  >
+                    <i className="fa-regular fa-xmark"></i>
+                  </button>
+                </div>
+              ) : (
+                <label
+                  htmlFor="input-lyric-song"
+                  className={`EditSong__body__right__lyric__swapper__default ${
+                    error.lyric_path ? "error" : ""
+                  }`}
+                >
+                  <i className="fa-light fa-file-alt"></i>
+                  <span>Tải lên</span>
+                  <input
+                    type="file"
+                    id="input-lyric-song"
+                    accept="lrc"
+                    onChange={onChangeLyric}
+                  />
+                </label>
+              )}
+            </div>
           </div>
         </div>
       </div>

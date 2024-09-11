@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -10,9 +10,9 @@ import Modal from "../../components/Modal";
 import ModalEditPlaylist from "../../components/ModalPlaylist/EditPlaylist";
 import TableTrack from "../../components/TableTrack";
 import Images from "../../constants/images";
+import { useAudio } from "../../context/AudioContext";
 import { useAuth } from "../../context/AuthContext";
 import "./style.scss";
-import { useAudio } from "../../context/AudioContext";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -23,7 +23,7 @@ export default function PlaylistPage() {
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { t } = useTranslation("playlist");
-  const { updateQueue } = useAudio()
+  const { updateQueue } = useAudio();
 
   const {
     data: playlist,
@@ -89,10 +89,6 @@ export default function PlaylistPage() {
     },
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
-
   return (
     <div className="playlistPage">
       <Helmet>
@@ -119,7 +115,17 @@ export default function PlaylistPage() {
         <div className="playlistPage__content__header">
           <div className="playlistPage__content__header__left">
             {songs && songs?.length > 0 && (
-              <button className="btn__play" onClick={() => updateQueue(songs.filter(song => song?.id).map(song => song!.id!).filter(Boolean))}>
+              <button
+                className="btn__play"
+                onClick={() =>
+                  updateQueue(
+                    songs
+                      .filter((song) => song?.id)
+                      .map((song) => song!.id!)
+                      .filter(Boolean)
+                  )
+                }
+              >
                 <i className="fa-solid fa-play"></i>
               </button>
             )}

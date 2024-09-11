@@ -206,6 +206,7 @@ const ModalLyricSongPlay = () => {
   const { token } = useAuth();
   const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
   const itemRef = React.createRef<HTMLLIElement>();
+  const listRef = React.createRef<HTMLUListElement>();
   const [active, setActive] = useState(0);
 
   const getSong = async () => {
@@ -218,11 +219,15 @@ const ModalLyricSongPlay = () => {
   };
 
   const getLyric = async () => {
-    if (song && song?.lyric_path === null) return;
+    console.log(song && song?.lyric_path);
+
+    if (song && !song?.lyric_path) return;
     try {
       const res = songPlayId && (await lyricApi.getLyric(songPlayId, token));
       res && setLyrics(res);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -232,6 +237,7 @@ const ModalLyricSongPlay = () => {
   useEffect(() => {
     if (lyrics?.length < 0) return;
     lyrics?.forEach((lyric, index) => {
+      if (!lyric.time) return;
       if (lyric.time <= currentTime && currentTime < lyric.time + 5) {
         setActive(index);
       }
@@ -241,6 +247,14 @@ const ModalLyricSongPlay = () => {
   useEffect(() => {
     setLyrics([]);
     songPlayId && getLyric();
+    setActive(-1);
+    if (listRef.current) {
+      listRef.current.scrollIntoView({
+        behavior: "smooth", // Cuộn mượt
+        block: "start", // Cuộn tới giữa của phần tử
+        inline: "start", // Cuộn tới phần tử gần nhất
+      });
+    }
   }, [song]);
 
   useEffect(() => {
@@ -265,14 +279,14 @@ const ModalLyricSongPlay = () => {
       </div>
       <div className="ModalLyric__container__body__songPlay__lyric">
         {lyrics.length > 0 ? (
-          <ul>
+          <ul ref={listRef}>
             {lyrics.map((lyric, index) => (
               <li
                 ref={index === active ? itemRef : null}
                 key={index}
                 className={`${index === active ? "active" : ""} ${
                   index < active ? "is-over" : ""
-                }`}
+                } ${!lyric.time ? "no-time" : ""}`}
               >
                 <p>{lyric.text}</p>
               </li>
@@ -296,7 +310,6 @@ const ModalLyricWaitingList = () => {
   const itemRef = React.createRef<HTMLLIElement>();
 
   const onClickLeft = () => {
-    console.log(window.innerWidth);
     if (!queue) return;
     if (active - 1 >= 0) {
       setActive(active - 1);
@@ -344,6 +357,7 @@ const ModalLyricWaitingList = () => {
           {queue &&
             queue.map((song, index) => (
               <li
+                key={index}
                 ref={index === active ? itemRef : null}
                 className={`slider__item ${
                   songPlayId === song ? "active" : ""
@@ -385,7 +399,7 @@ const Item = ({ songId, active }: { songId: string; active: boolean }) => {
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
       pauseSong();
-    }else if(songPlayId === id && !isPlaying){
+    } else if (songPlayId === id && !isPlaying) {
       playSong();
     } else {
       start(id);

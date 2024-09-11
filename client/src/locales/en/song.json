@@ -16,7 +16,8 @@
     "See details": "See details",
     "Artist Access": "Artist Access",
     "Share": "Share",
-    "Close": "Close"
+    "Close": "Close",
+    "ToastDelete": "Song has been deleted"
   },
   "Upload": {
     "Post song": "Post song",

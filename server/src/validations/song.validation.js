@@ -7,6 +7,7 @@ const bodySchema = {
     desc: Joi.string().min(0).max(500),
     image_path: Joi.string().min(0).max(255),
     song_path: Joi.string().min(0).max(255),
+    lyric_path: Joi.string().min(0).max(255),
     public: Joi.number().valid(0, 1),
     is_deleted: Joi.number().valid(0, 1),
   }),

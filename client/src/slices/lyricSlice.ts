@@ -15,8 +15,6 @@ export const lyricModeSlide = createSlice({
   initialState,
   reducers: {
     changeOpenLyric: (state, action: PayloadAction<boolean>) => {
-      console.log({ action });
-      
       state.state = action.payload;
     },
   },

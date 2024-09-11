@@ -3,7 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { authorApi, genreApi, imageApi, mp3Api, songApi } from "../../../apis";
+import {
+  authorApi,
+  genreApi,
+  imageApi,
+  lyricApi,
+  mp3Api,
+  songApi,
+} from "../../../apis";
 import BoxAudio from "../../../components/BoxAudio";
 import Dropdown from "../../../components/Dropdown";
 import Modal from "../../../components/Modal";
@@ -20,6 +27,7 @@ interface TError {
   public: string;
   image_path: string;
   song_path: string;
+  lyric_path: string;
 }
 
 interface Inputs {
@@ -29,6 +37,7 @@ interface Inputs {
   public: number;
   image_path: string;
   song_path: string;
+  lyric_path: string;
 }
 
 type TFormSong = {
@@ -38,6 +47,7 @@ type TFormSong = {
 
 const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [lyricFile, setLyricFile] = useState<File | null>(null);
   const { token, currentUser } = useAuth();
   const queryClient = useQueryClient();
   const { t } = useTranslation("song");
@@ -66,6 +76,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
     public: "",
     image_path: "",
     song_path: "",
+    lyric_path: "",
   });
 
   const [inputs, setInputs] = useState<Inputs>({
@@ -75,6 +86,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
     public: 1,
     image_path: "",
     song_path: "",
+    lyric_path: "",
   });
 
   const updateError = (newValue: Partial<TError>) => {
@@ -111,6 +123,31 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
     }
   };
 
+  //Xử lý sự kiện thay đổi file lyric
+  const onChangeLyric = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]?.size > 1 * 1024 * 1024) {
+      setLyricFile(null);
+      updateError({ lyric_path: "Image size must be less than 5MB" });
+      return;
+    }
+
+    const isLrcFile = (fileName: string) => {
+      const extension = fileName.split(".").pop();
+      return extension === "lrc";
+    };
+
+    if (e.target.files && e.target.files[0]) {
+      const fileName = e.target.files[0].name;
+      if (!isLrcFile(fileName)) {
+        setLyricFile(null);
+        updateError({ lyric_path: "File must be in .lrc format" });
+        return;
+      }
+      setLyricFile(e.target.files[0]);
+      updateError({ lyric_path: "" });
+    }
+  };
+
   //Reset file input image
   const resetFileInputImage = () => {
     const fileInput = document.getElementById(
@@ -122,6 +159,16 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
     setImageFile(null);
   };
 
+  const resetFileInputLyric = () => {
+    const fileInput = document.getElementById(
+      "input-lyric-song"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    setLyricFile(null);
+  };
+
   //Xử lý sự kiện click nút submit
   const handleClickSubmit = async () => {
     try {
@@ -130,6 +177,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
         error.desc.trim() !== "" ||
         error.image_path.trim() !== "" ||
         error.song_path.trim() !== "" ||
+        error.lyric_path.trim() !== "" ||
         error.public.trim() !== "" ||
         error.genre_id.trim() !== ""
       ) {
@@ -137,12 +185,21 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
         return;
       }
       let updatedInputs;
+      let lyricPath = "";
 
       const formDataImage = new FormData();
       imageFile && formDataImage.append("image", imageFile);
 
       const formDataMp3 = new FormData();
       fileMp3 && formDataMp3.append("mp3", fileMp3);
+
+      if (lyricFile) {
+        const formDataLyric = new FormData();
+        lyricFile && formDataLyric.append("lyric", lyricFile);
+
+        const resLyric = await lyricApi.upload(formDataLyric, token);
+        resLyric.lyric && (lyricPath = resLyric.lyric);
+      }
 
       //Tải ảnh lên server
       const resImage = await imageApi.upload(formDataImage, token);
@@ -152,6 +209,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
         ...inputs,
         image_path: resImage.image,
         song_path: resMp3.mp3,
+        lyric_path: lyricPath,
       };
 
       const res = await songApi.createSong(token, updatedInputs);
@@ -188,8 +246,11 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
       public: 1,
       image_path: "",
       song_path: "",
+      lyric_path: "",
     });
     setFileMp3(null);
+    setImageFile(null);
+    setLyricFile(null);
     updateError({
       title: "",
       desc: "",
@@ -197,6 +258,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
       public: "",
       image_path: "",
       song_path: "",
+      lyric_path: "",
     });
   };
 
@@ -339,35 +401,75 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
             </div>
           </div>
           <div className="FormSong__body__right">
-            <h4>{t("Upload.Image")}</h4>
-            <span>{t("Upload.Image desc")}</span>
             <div className="FormSong__body__right__image">
-              {imageFile && (
-                <img src={imageFile && URL.createObjectURL(imageFile)} alt="" />
-              )}
-              <label
-                htmlFor="input-image-song"
-                className={`FormSong__body__right__image__default ${
-                  error.image_path ? "error" : ""
-                }`}
-              >
-                <i className="fa-light fa-image"></i>
-                <span>{t("Upload.Upload image")}</span>
-                <input
-                  type="file"
-                  id="input-image-song"
-                  onChange={onChangeImage}
-                  accept="image/png, image/jpeg"
-                />
-              </label>
-              {imageFile && (
-                <button
-                  className="btn-delete-image"
-                  onClick={() => resetFileInputImage()}
+              <h4>{t("Upload.Image")}</h4>
+              <span>{t("Upload.Image desc")}</span>
+              <div className="FormSong__body__right__image__swapper">
+                {imageFile && (
+                  <img
+                    src={imageFile && URL.createObjectURL(imageFile)}
+                    alt=""
+                  />
+                )}
+                <label
+                  htmlFor="input-image-song"
+                  className={`FormSong__body__right__image__swapper__default ${
+                    error.image_path ? "error" : ""
+                  }`}
                 >
-                  <i className="fa-regular fa-trash"></i>
-                </button>
-              )}
+                  <i className="fa-light fa-image"></i>
+                  <span>{t("Upload.Upload image")}</span>
+                  <input
+                    type="file"
+                    id="input-image-song"
+                    onChange={onChangeImage}
+                    accept="image/png, image/jpeg"
+                  />
+                </label>
+                {imageFile && (
+                  <button
+                    className="btn-delete-image"
+                    onClick={resetFileInputImage}
+                  >
+                    <i className="fa-regular fa-xmark"></i>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="FormSong__body__right__lyric">
+              <h4>Lyric</h4>
+              <span>Allow file .lrc</span>
+              <div className="FormSong__body__right__lyric__swapper">
+                {lyricFile ? (
+                  <div className="FormSong__body__right__lyric__swapper__file">
+                    <i className="fa-light fa-file-alt"></i>
+                    <span>{lyricFile.name}</span>
+                    <button
+                      className="btn-remove"
+                      onClick={resetFileInputLyric}
+                    >
+                      <i className="fa-regular fa-xmark"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="input-lyric-song"
+                    className={`FormSong__body__right__lyric__swapper__default ${
+                      error.lyric_path ? "error" : ""
+                    }`}
+                  >
+                    <i className="fa-light fa-file-alt"></i>
+                    <span>Tải lên</span>
+                    <input
+                      type="file"
+                      id="input-lyric-song"
+                      accept="lrc"
+                      onChange={onChangeLyric}
+                    />
+                  </label>
+                )}
+              </div>
             </div>
           </div>
         </div>

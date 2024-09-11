@@ -1,9 +1,7 @@
 import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import TrackArtist from "../../components/TrackArtist";
 import "./style.scss";
-
 import CommentItem from "../../components/CommentItem";
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -36,10 +34,6 @@ export default function SongPage() {
   const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
   const { t } = useTranslation("song");
   const { playSong, start, isPlaying, songPlayId, pauseSong } = useAudio();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const { data: song } = useQuery({
     queryKey: ["song", id],

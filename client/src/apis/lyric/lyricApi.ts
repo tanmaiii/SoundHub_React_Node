@@ -1,7 +1,7 @@
 import axiosClient from "../../configs/axios/axiosClient";
 
 const lyricApi = {
-  upload: (formdata: any, token: string): Promise<{ image: string }> => {
+  upload: (formdata: any, token: string): Promise<{ lyric: string }> => {
     const url = "lyric";
     return axiosClient.post(url, formdata, {
       headers: { "Content-Type": "multipart/form-data", authorization: token },

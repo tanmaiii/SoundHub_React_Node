@@ -21,13 +21,12 @@ import { PATH } from "../../../constants/paths";
 import { toast } from "sonner";
 import { EditSong } from "../../ModalSong";
 import { useAudio } from "../../../context/AudioContext";
-import { set } from "react-hook-form";
 
 type Props = {
   id: string;
+  song: TSong;
   playlistId?: string;
   active: boolean;
-  song?: TSong;
   placement?: "top-start" | "bottom-start" | "top-end" | "bottom-end";
   onOpen: () => void;
   onClose: () => void;
@@ -35,9 +34,9 @@ type Props = {
 
 const SongMenu = ({
   id,
+  song,
   playlistId,
   active,
-  song: TSong,
   onOpen,
   onClose,
   placement = "bottom-end",
@@ -49,7 +48,6 @@ const SongMenu = ({
   const navigation = useNavigate();
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const { id: songId } = useParams();
-  const [song, setSong] = useState<TSong>();
   const {
     addQueue,
     queue,
@@ -60,18 +58,6 @@ const SongMenu = ({
     nextSong,
     removeSongQueue,
   } = useAudio();
-
-  useEffect(() => {
-    const getSong = async () => {
-      try {
-        const res = songId && (await songApi.getDetail(songId, token));
-        res && setSong(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSong();
-  }, [songId, token]);
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -157,8 +143,17 @@ const SongMenu = ({
   return (
     <>
       <div ref={SongMenuRef} className={`SongMenu`}>
+        <button
+          className="SongMenu__button"
+          onClick={() => {
+            active ? onClose() : onOpen();
+          }}
+        >
+          <i className="fa-solid fa-ellipsis"></i>
+        </button>
+
         <div
-          className={`SongMenu__context active ${active ? "active" : ""}`}
+          className={`SongMenu__context ${active ? "active" : ""}`}
           data-placement={placement}
         >
           <ul className="SongMenu__context__list">
@@ -193,14 +188,14 @@ const SongMenu = ({
                 itemFunc={() => mutationLike.mutate(isLike)}
               />
             )}
-            {currentUser?.id === song?.user_id && (
+            {currentUser?.id === song.user_id && (
               <ItemMenu
                 title={t("Menu.Edit song")}
                 icon={<i className="fa-light fa-pen-to-square"></i>}
                 itemFunc={() => setOpenModalEdit(true)}
               />
             )}
-            {currentUser?.id === song?.user_id && (
+            {currentUser?.id === song.user_id && (
               <ItemMenu
                 title={t("Menu.Delete song")}
                 icon={<i className="fa-light fa-trash"></i>}
@@ -236,7 +231,7 @@ const SongMenu = ({
               title={t("Menu.Artist Access")}
               icon={<i className="fa-regular fa-user"></i>}
               itemFunc={() =>
-                id && navigation(`${PATH.ARTIST}/${song?.user_id}`)
+                id && navigation(`${PATH.ARTIST}/${song.user_id}`)
               }
             />
             <ItemMenu
@@ -250,7 +245,7 @@ const SongMenu = ({
           </button>
         </div>
       </div>
-      {/* {openModalEdit && (
+      {openModalEdit && (
         <Modal
           title="Edit song"
           openModal={openModalEdit}
@@ -262,7 +257,7 @@ const SongMenu = ({
             closeModal={() => setOpenModalEdit(false)}
           />
         </Modal>
-      )} */}
+      )}
     </>
   );
 };

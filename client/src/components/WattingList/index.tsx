@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "./style.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { changeOpenWaiting } from "../../slices/waitingSlice";
-import { searchApi } from "../../apis";
-import { useAuth } from "../../context/AuthContext";
-import { useQuery } from "react-query";
-import TrackShort from "../TrackShort";
-import { useAudio } from "../../context/AudioContext";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { useAudio } from "../../context/AudioContext";
+import { useAuth } from "../../context/AuthContext";
+import { changeOpenWaiting } from "../../slices/waitingSlice";
+import { RootState } from "../../store";
+import TrackShort from "../TrackShort";
+import "./style.scss";
 
 type Props = {};
 
@@ -17,7 +15,8 @@ const WattingList = ({}: Props) => {
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const { token } = useAuth();
-  const { queue, updateQueue, changePlaceQueue, songPlayId, replay } = useAudio();
+  const { queue, updateQueue, changePlaceQueue, songPlayId, replay } =
+    useAudio();
   const [queueNew, setQueueNew] = useState<string[]>([]);
   const itemRef = React.createRef<HTMLDivElement>();
 
@@ -77,9 +76,11 @@ const WattingList = ({}: Props) => {
       >
         <div className="wattingList__wrapper__header">
           <h3>Danh sách chờ</h3>
-          <button onClick={handleChangeOpenWaiting}>
-            <i className="fa-solid fa-times"></i>
-          </button>
+          <div className="wattingList__wrapper__header__list">
+            <button onClick={handleChangeOpenWaiting}>
+              <i className="fa-solid fa-times"></i>
+            </button>
+          </div>
         </div>
         <div className="wattingList__wrapper__body">
           <div className="wattingList__wrapper__body__list">
@@ -90,7 +91,7 @@ const WattingList = ({}: Props) => {
               <Droppable direction="vertical" droppableId="droppable">
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {queue && 
+                    {queue &&
                       queue.map((item, index) => (
                         <Draggable
                           key={item}
