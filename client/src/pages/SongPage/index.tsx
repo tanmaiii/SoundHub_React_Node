@@ -2,7 +2,7 @@ import HeaderPage from "../../components/HeaderPage/HeaderPage";
 import TrackArtist from "../../components/TrackArtist";
 import "./style.scss";
 import CommentItem from "../../components/CommentItem";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,6 +21,8 @@ import numeral from "numeral";
 import { useTranslation } from "react-i18next";
 import { EditSong } from "../../components/ModalSong";
 import { useAudio } from "../../context/AudioContext";
+import { useDispatch } from "react-redux";
+import { openMenu } from "../../slices/menuSongSlide";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -34,6 +36,8 @@ export default function SongPage() {
   const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
   const { t } = useTranslation("song");
   const { playSong, start, isPlaying, songPlayId, pauseSong } = useAudio();
+  const dispatch = useDispatch();
+  const btnMenuRef = React.createRef<HTMLButtonElement>();
 
   const { data: song } = useQuery({
     queryKey: ["song", id],
@@ -119,6 +123,21 @@ export default function SongPage() {
     }
   };
 
+  const handleClickOpenMenu = () => {
+    const rect = btnMenuRef.current?.getBoundingClientRect();
+    rect &&
+      dispatch(
+        openMenu({
+          open: true,
+          id: song?.id ?? "",
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        })
+      );
+  };
+
   return (
     <>
       <div className="songPage">
@@ -161,17 +180,12 @@ export default function SongPage() {
                 <i className="fa-light fa-heart"></i>
               )}
             </button>
-            <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
-              {song && (
-                <SongMenu
-                  song={song}
-                  id={id || ""}
-                  active={activeMenu}
-                  onOpen={() => setActiveMenu(true)}
-                  onClose={() => setActiveMenu(false)}
-                  placement="bottom-start"
-                />
-              )}
+            <button
+              ref={btnMenuRef}
+              className={`btn__menu ${activeMenu ? "active" : ""}`}
+              onClick={handleClickOpenMenu}
+            >
+              <i className="fa-solid fa-ellipsis"></i>
             </button>
           </div>
 

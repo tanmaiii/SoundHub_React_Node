@@ -2,6 +2,7 @@
 
 .MainLayout {
   @include themify($themes) {
+    position: relative;
     &__top {
       @include flex(unset, unset);
       flex-direction: row;

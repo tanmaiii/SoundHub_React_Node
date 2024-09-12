@@ -29,10 +29,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const openLyric = useSelector((state: RootState) => state.lyric.state);
-  const openMenuSong = useSelector((state: RootState) => state.menuSong);
+  const menuSong = useSelector((state: RootState) => state.menuSong);
   const location = useLocation();
-
-  console.log(openMenuSong);
 
   useEffect(() => {
     if (!currentUser) navigate(PATH.LOGIN);
@@ -42,6 +40,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
   useEffect(() => {
     bodyRef.current?.scrollTo(0, 0);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      dispatch(closeMenu());
+    };
+
+    menuSong.open && bodyRef.current?.addEventListener("scroll", handleScroll);
+    return () => {
+      bodyRef.current?.removeEventListener("scroll", handleScroll);
+    };
+  });
 
   return (
     <div className="MainLayout">
@@ -72,15 +81,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <div className={`MainLayout__lyric ${openLyric ? "open" : ""}`}>
         <ModalLyric />
       </div>
-
-      <div>
-        <SongMenu
-          active={openMenuSong.open}
-          id={openMenuSong.id}
-          onOpen={() => dispatch(openMenu({ ...openMenuSong, open: true }))}
-          onClose={() => dispatch(closeMenu())}
-        />
-      </div>
+      {menuSong.open && <SongMenu />}
     </div>
   );
 }

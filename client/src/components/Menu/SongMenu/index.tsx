@@ -1,47 +1,31 @@
 import React, {
+  JSXElementConstructor,
   ReactElement,
   useEffect,
   useRef,
   useState,
-  JSXElementConstructor,
 } from "react";
-import "./style.scss";
 import { useTranslation } from "react-i18next";
-import playlistApi from "../../../apis/playlist/playlistApi";
-import { useAuth } from "../../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { songApi } from "../../../apis";
-import Modal from "../../Modal";
+import playlistApi from "../../../apis/playlist/playlistApi";
+import Images from "../../../constants/images";
+import { PATH } from "../../../constants/paths";
+import { useAudio } from "../../../context/AudioContext";
+import { useAuth } from "../../../context/AuthContext";
+import { RootState } from "../../../store";
 import { TPlaylist, TSong, TStateParams } from "../../../types";
 import ImageWithFallback from "../../ImageWithFallback/index";
-import Images from "../../../constants/images";
+import Modal from "../../Modal";
 import { AddPlaylist } from "../../ModalPlaylist";
-import { useNavigate, useParams } from "react-router-dom";
-import { PATH } from "../../../constants/paths";
-import { toast } from "sonner";
-import { EditSong } from "../../ModalSong";
-import { useAudio } from "../../../context/AudioContext";
-import { set } from "react-hook-form";
+import "./style.scss";
+import { useDispatch } from "react-redux";
+import { closeMenu } from "../../../slices/menuSongSlide";
 
-type Props = {
-  id: string;
-  playlistId?: string;
-  active: boolean;
-  song?: TSong;
-  placement?: "top-start" | "bottom-start" | "top-end" | "bottom-end";
-  onOpen: () => void;
-  onClose: () => void;
-};
-
-const SongMenu = ({
-  id,
-  playlistId,
-  active,
-  song: TSong,
-  onOpen,
-  onClose,
-  placement = "bottom-end",
-}: Props) => {
+const SongMenu = () => {
   const { t } = useTranslation("song");
   const SongMenuRef = useRef<HTMLDivElement>(null);
   const { currentUser, token } = useAuth();
@@ -50,6 +34,25 @@ const SongMenu = ({
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const { id: songId } = useParams();
   const [song, setSong] = useState<TSong>();
+  const [placement, setPlacement] = useState<
+    "top-start" | "bottom-start" | "top-end" | "bottom-end"
+  >("bottom-end");
+
+  const {
+    id,
+    open,
+    playlistId,
+    left,
+    top,
+    width: widthBtn,
+    height: heightBtn,
+  } = useSelector((state: RootState) => state.menuSong);
+
+  const [placeTop, setPlaceTop] = useState<number>(0);
+  const [placeLeft, setPlaceLeft] = useState<number>(0);
+
+  const dispatch = useDispatch();
+
   const {
     addQueue,
     queue,
@@ -80,7 +83,7 @@ const SongMenu = ({
         SongMenuRef.current &&
         !SongMenuRef.current.contains(e.target as Node)
       ) {
-        onClose();
+        dispatch(closeMenu());
       }
     };
     document.addEventListener("mousedown", handleMousedown);
@@ -151,119 +154,141 @@ const SongMenu = ({
   });
 
   useEffect(() => {
-    console.log(songId);
-  }, [songId]);
+    //Bottom-end: hiển thị bên dưới bên phải
+    //Bottom-start: hiển thị bên dưới bên trái
+
+    //Top-end: hiển thị bên trên bên phải
+    //Top-start: hiển thị bên trên bên trái
+
+    if (SongMenuRef.current && left) {
+      if (left + SongMenuRef.current.clientWidth > window.innerWidth) {
+        if (top + SongMenuRef.current.clientHeight < window.innerHeight) {
+          setPlacement("bottom-end");
+          setPlaceLeft(
+            left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
+          );
+          setPlaceTop(top + (heightBtn ?? 100));
+        } else {
+          setPlacement("top-end");
+          setPlaceLeft(
+            left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
+          );
+          setPlaceTop(top - SongMenuRef.current.clientHeight);
+        }
+      } else {
+        if (top + SongMenuRef.current.clientHeight > window.innerHeight) {
+          setPlacement("top-start");
+          setPlaceLeft(left);
+          setPlaceTop(
+            top -
+              SongMenuRef.current.clientHeight -
+              (heightBtn ?? 100) -
+              (heightBtn ?? 100)
+          );
+        } else {
+          setPlacement("bottom-start");
+          setPlaceLeft(left);
+          setPlaceTop(top + (heightBtn ?? 100));
+        }
+      }
+    }
+  }, [window]);
 
   return (
-    <>
-      <div ref={SongMenuRef} className={`SongMenu`}>
-        <div
-          className={`SongMenu__context active ${active ? "active" : ""}`}
-          data-placement={placement}
-        >
-          <ul className="SongMenu__context__list">
-            <ItemMenu
-              title={t("Menu.Add to playlist")}
-              icon={<i className="fa-solid fa-plus"></i>}
-              itemFunc={() => console.log("Add to playlist")}
-            >
-              <AddSongToPlaylist
-                songId={id}
-                placement={placement}
-                closeMenu={() => onClose()}
-              />
-            </ItemMenu>
-            {playlistId && (
-              <ItemMenu
-                title={t("Menu.Remove to playlist")}
-                icon={<i className="fa-light fa-trash-can"></i>}
-                itemFunc={() => mutationRemoveSongFromPlaylist.mutate()}
-              />
-            )}
-            {!isLike ? (
-              <ItemMenu
-                title={t("Menu.Add to favorites list")}
-                icon={<i className="fa-regular fa-heart"></i>}
-                itemFunc={() => mutationLike.mutate(isLike ?? false)}
-              />
-            ) : (
-              <ItemMenu
-                title={t("Menu.Remove to favorites list")}
-                icon={<i className="fa-solid fa-heart"></i>}
-                itemFunc={() => mutationLike.mutate(isLike)}
-              />
-            )}
-            {currentUser?.id === song?.user_id && (
-              <ItemMenu
-                title={t("Menu.Edit song")}
-                icon={<i className="fa-light fa-pen-to-square"></i>}
-                itemFunc={() => setOpenModalEdit(true)}
-              />
-            )}
-            {currentUser?.id === song?.user_id && (
-              <ItemMenu
-                title={t("Menu.Delete song")}
-                icon={<i className="fa-light fa-trash"></i>}
-                itemFunc={() => mutationLikeDelete.mutate()}
-              />
-            )}
-            {queue?.includes(id) ? (
-              <ItemMenu
-                title={t("Menu.Remove from waiting list")}
-                icon={<i className="fa-light fa-trash"></i>}
-                itemFunc={() => {
-                  removeSongQueue(id);
-                  onClose();
-                }}
-              />
-            ) : (
-              <ItemMenu
-                title={t("Menu.Add to waiting list")}
-                icon={<i className="fa-regular fa-list-music"></i>}
-                itemFunc={() => {
-                  addQueue(id);
-                  onClose();
-                }}
-              />
-            )}
-            <hr />
-            <ItemMenu
-              title={t("Menu.See details")}
-              icon={<i className="fa-regular fa-music"></i>}
-              itemFunc={() => id && navigation(`${PATH.SONG}/${id}`)}
+    <div
+      ref={SongMenuRef}
+      className={`SongMenu ${open ? "active" : ""}`}
+      style={{ top: placeTop, left: placeLeft }}
+      data-placement={placement}
+    >
+      <div className={`SongMenu__context`}>
+        <ul className="SongMenu__context__list">
+          <ItemMenu
+            title={t("Menu.Add to playlist")}
+            icon={<i className="fa-solid fa-plus"></i>}
+            itemFunc={() => console.log("Add to playlist")}
+          >
+            <AddSongToPlaylist
+              songId={id}
+              placement={"bottom-end"}
+              closeMenu={() => dispatch(closeMenu())}
             />
+          </ItemMenu>
+          {playlistId && (
             <ItemMenu
-              title={t("Menu.Artist Access")}
-              icon={<i className="fa-regular fa-user"></i>}
-              itemFunc={() =>
-                id && navigation(`${PATH.ARTIST}/${song?.user_id}`)
-              }
+              title={t("Menu.Remove to playlist")}
+              icon={<i className="fa-light fa-trash-can"></i>}
+              itemFunc={() => mutationRemoveSongFromPlaylist.mutate()}
             />
+          )}
+          {!isLike ? (
             <ItemMenu
-              title={t("Menu.Share")}
-              icon={<i className="fa-solid fa-share"></i>}
-              itemFunc={() => console.log("Add to playlist")}
+              title={t("Menu.Add to favorites list")}
+              icon={<i className="fa-regular fa-heart"></i>}
+              itemFunc={() => mutationLike.mutate(isLike ?? false)}
             />
-          </ul>
-          <button className="btn-close" onClick={() => onClose()}>
-            <span>{t("Menu.Close")}</span>
-          </button>
-        </div>
-      </div>
-      {/* {openModalEdit && (
-        <Modal
-          title="Edit song"
-          openModal={openModalEdit}
-          setOpenModal={setOpenModalEdit}
-        >
-          <EditSong
-            songId={song?.id ?? ""}
-            open={openModalEdit}
-            closeModal={() => setOpenModalEdit(false)}
+          ) : (
+            <ItemMenu
+              title={t("Menu.Remove to favorites list")}
+              icon={<i className="fa-solid fa-heart"></i>}
+              itemFunc={() => mutationLike.mutate(isLike)}
+            />
+          )}
+          {currentUser?.id === song?.user_id && (
+            <ItemMenu
+              title={t("Menu.Edit song")}
+              icon={<i className="fa-light fa-pen-to-square"></i>}
+              itemFunc={() => setOpenModalEdit(true)}
+            />
+          )}
+          {currentUser?.id === song?.user_id && (
+            <ItemMenu
+              title={t("Menu.Delete song")}
+              icon={<i className="fa-light fa-trash"></i>}
+              itemFunc={() => mutationLikeDelete.mutate()}
+            />
+          )}
+          {queue?.includes(id) ? (
+            <ItemMenu
+              title={t("Menu.Remove from waiting list")}
+              icon={<i className="fa-light fa-trash"></i>}
+              itemFunc={() => {
+                removeSongQueue(id);
+                dispatch(closeMenu());
+              }}
+            />
+          ) : (
+            <ItemMenu
+              title={t("Menu.Add to waiting list")}
+              icon={<i className="fa-regular fa-list-music"></i>}
+              itemFunc={() => {
+                addQueue(id);
+                dispatch(closeMenu());
+              }}
+            />
+          )}
+          <hr />
+          <ItemMenu
+            title={t("Menu.See details")}
+            icon={<i className="fa-regular fa-music"></i>}
+            itemFunc={() => id && navigation(`${PATH.SONG}/${id}`)}
           />
-        </Modal>
-      )} */}
-    </>
+          <ItemMenu
+            title={t("Menu.Artist Access")}
+            icon={<i className="fa-regular fa-user"></i>}
+            itemFunc={() => id && navigation(`${PATH.ARTIST}/${song?.user_id}`)}
+          />
+          <ItemMenu
+            title={t("Menu.Share")}
+            icon={<i className="fa-solid fa-share"></i>}
+            itemFunc={() => console.log("Add to playlist")}
+          />
+        </ul>
+        <button className="btn-close" onClick={() => dispatch(closeMenu())}>
+          <span>{t("Menu.Close")}</span>
+        </button>
+      </div>
+    </div>
   );
 };
 

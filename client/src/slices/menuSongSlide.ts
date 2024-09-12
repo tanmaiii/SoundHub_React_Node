@@ -7,7 +7,9 @@ export interface menuSongState {
   id: string;
   left: number;
   top: number;
-  playListId?: string;
+  playlistId?: string;
+  width?: number;
+  height?: number;
 }
 
 const initialState: menuSongState = {
@@ -15,6 +17,8 @@ const initialState: menuSongState = {
   id: "",
   left: 0,
   top: 0,
+  width: 0,
+  height: 0,
 };
 
 export const munuSongSlide = createSlice({
@@ -22,15 +26,20 @@ export const munuSongSlide = createSlice({
   initialState,
   reducers: {
     openMenu: (state, action: PayloadAction<menuSongState>) => {
-      console.log(action.payload);
-
-      state.open = action.payload.open;
+      console.log("open");
+      console.log(action.payload.width, action.payload.height);
+    
+      state.open = true;
       state.id = action.payload.id;
       state.left = action.payload.left;
       state.top = action.payload.top;
-      state.playListId = action.payload.playListId;
+      state.playlistId = action.payload.playlistId;
+      state.width = action.payload.width;
+      state.height = action.payload.height;
     },
     closeMenu: (state) => {
+      console.log("close");
+
       state.open = false;
     },
   },

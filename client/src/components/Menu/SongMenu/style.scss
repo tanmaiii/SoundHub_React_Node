@@ -18,30 +18,38 @@
       border: none;
     }
 
+    // &[data-placement="top-start"] {
+    //   transform: translateY(-100%);
+    // }
+    // &[data-placement="top-end"] {
+    //   transform: translate(-100%, -100%);
+    // }
+    // &[data-placement="bottom-start"] {
+    //   // transform: translateX(100%);
+    // }
+    // &[data-placement="bottom-end"] {
+    //   transform: translateX(-100%);
+    // }
+
+    &.active {
+      display: flex;
+      position: absolute;
+      z-index: 999;
+    }
 
     &__context {
-      position: absolute;
       background-color: themed("bg-2");
       width: max-content;
       padding: $space-4;
       border-radius: $radius-8;
-      z-index: 10;
-      display: none;
       box-shadow: themed("box-shadow");
 
-      &.active {
-        display: flex;
-      }
-
       @include mobile {
-        position: fixed;
         top: $height-header !important;
-        left: 0 !important;
         width: 100%;
         height: calc(100vh - $height-header - $height-barPlaying);
         justify-content: space-between;
         flex-direction: column;
-        // z-index: 999;
       }
 
       &__list {

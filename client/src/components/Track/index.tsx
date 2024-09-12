@@ -14,7 +14,10 @@ import { useAuth } from "../../context/AuthContext";
 import { TSong } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import SongMenu from "../Menu/SongMenu";
-import { openMenu } from "../../slices/menuSongSlide";
+import { closeMenu, openMenu } from "../../slices/menuSongSlide";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { log } from "node:console";
 
 interface TrackProps {
   song: TSong;
@@ -35,6 +38,7 @@ export default function Track({
   const [activeMenu, setActiveMenu] = useState(false);
   const { start, isPlaying, songPlayId, playSong, pauseSong } = useAudio();
   const btnMenuRef = React.createRef<HTMLButtonElement>();
+  const menuSong = useSelector((state: RootState) => state.menuSong);
 
   const handleClickPlay = (id: string) => {
     if (songPlayId === id && isPlaying) {
@@ -71,11 +75,19 @@ export default function Track({
 
   const handleClickOpenMenu = () => {
     const rect = btnMenuRef.current?.getBoundingClientRect();
-    console.log(rect);
+
+    console.log({rect});
 
     rect &&
       dispatch(
-        openMenu({ open: true, id: song?.id ?? "", left: rect.x, top: rect.y })
+        openMenu({
+          open: true,
+          id: song?.id ?? "",
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        })
       );
   };
 
@@ -157,8 +169,12 @@ export default function Track({
           <div className="item__hover">
             <button
               ref={btnMenuRef}
-              className={`button-edit ${activeMenu ? " active" : ""}`}
-              onClick={handleClickOpenMenu}
+              className={`button-edit ${
+                menuSong?.open && menuSong?.id === song?.id ? " active" : ""
+              }`}
+              onClick={() =>
+                menuSong?.open ? dispatch(closeMenu()) : handleClickOpenMenu()
+              }
             >
               <i className="fa-solid fa-ellipsis"></i>
             </button>
