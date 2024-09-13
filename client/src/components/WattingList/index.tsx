@@ -77,6 +77,12 @@ const WattingList = ({}: Props) => {
         <div className="wattingList__wrapper__header">
           <h3>Danh sách chờ</h3>
           <div className="wattingList__wrapper__header__list">
+            <button
+              onClick={handleChangeOpenWaiting}
+              data-tooltip={"Clear waiting list"}
+            >
+              <i className="fa-light fa-trash"></i>
+            </button>
             <button onClick={handleChangeOpenWaiting}>
               <i className="fa-solid fa-times"></i>
             </button>

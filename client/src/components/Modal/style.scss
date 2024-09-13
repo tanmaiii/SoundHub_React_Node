@@ -25,7 +25,7 @@
     top: 0;
     left: 0;
     @include flex(center, center);
-    z-index: 99;
+    z-index: $z-index-modal;
     transform: translateY(-200%);
 
     &.active {

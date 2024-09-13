@@ -74,21 +74,22 @@ export default function Track({
   });
 
   const handleClickOpenMenu = () => {
-    const rect = btnMenuRef.current?.getBoundingClientRect();
-
-    console.log({rect});
-
-    rect &&
-      dispatch(
-        openMenu({
-          open: true,
-          id: song?.id ?? "",
-          left: rect.left,
-          top: rect.top,
-          width: rect.width,
-          height: rect.height,
-        })
-      );
+    if (menuSong?.open) {
+      dispatch(closeMenu());
+    } else {
+      const rect = btnMenuRef.current?.getBoundingClientRect();
+      rect &&
+        dispatch(
+          openMenu({
+            open: true,
+            id: song?.id ?? "",
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+          })
+        );
+    }
   };
 
   return (
@@ -172,20 +173,10 @@ export default function Track({
               className={`button-edit ${
                 menuSong?.open && menuSong?.id === song?.id ? " active" : ""
               }`}
-              onClick={() =>
-                menuSong?.open ? dispatch(closeMenu()) : handleClickOpenMenu()
-              }
+              onClick={handleClickOpenMenu}
             >
               <i className="fa-solid fa-ellipsis"></i>
             </button>
-            {/* <SongMenu
-                id={song?.id ?? ""}
-                song={song}
-                playlistId={playlistId}
-                active={activeMenu}
-                onOpen={() => setActiveMenu(true)}
-                onClose={() => setActiveMenu(false)}
-              /> */}
           </div>
         </div>
       </div>

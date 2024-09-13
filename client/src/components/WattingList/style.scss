@@ -38,6 +38,7 @@
             overflow: hidden;
             color: themed("txt-main");
             cursor: pointer;
+            @include tooltip(bottom, center);
             &:hover {
               background-color: $color-hover;
             }

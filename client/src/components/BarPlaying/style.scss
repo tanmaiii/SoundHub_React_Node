@@ -404,7 +404,7 @@
       transition: $transition;
       border-radius: 50%;
       color: themed("txt-main");
-      @include tooltip(top, right);
+      @include tooltip(top, center);
       // background-color: themed("bg-3");
 
       &:hover {

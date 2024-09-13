@@ -212,7 +212,6 @@ export const AudioContextProvider = ({ children }: Props) => {
   const stope = () => {
     setSongPlayId(null);
     setIsPlaying(false);
-    // setSong();
     setQueue([]);
     setQueueRandom([]);
     setReplay(false);
@@ -234,7 +233,7 @@ export const AudioContextProvider = ({ children }: Props) => {
       if (index !== undefined && queue && index + 1 < queue.length) {
         start(queue[index + 1]);
       } else {
-        console.log(queue![0]);
+        start(queue![0]);
       }
     }
   };
@@ -283,6 +282,9 @@ export const AudioContextProvider = ({ children }: Props) => {
     if (!queue?.includes(songNewId)) {
       setQueue(queue ? [...queue, songNewId] : [songNewId]);
       toast.success("Thêm bài hát vào danh sách chờ thành công");
+      if (queue?.length === 0) {
+        start(songNewId);
+      }
     } else {
       toast.success("Bài hát đã tồn tại trong danh sách chờ");
     }

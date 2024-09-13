@@ -1,5 +1,4 @@
 $mobile-width: 700px;
-// $tablet-width: 1133px;
 $tablet-width: 1250px;
 
 $width-navbar: 240px;
@@ -11,6 +10,12 @@ $height-header: 80px;
 $height-barPlaying: 82px;
 
 $height-header-modal: 60px;
+
+//Z-index
+// $z-index-player: 1;
+$z-index-song-bar: 99;
+$z-index-menu: 999;
+$z-index-modal: 9999;
 
 $transition: all 0.3s;
 
@@ -40,8 +45,8 @@ $color-black: #000000;
 $color-gray: #dadada;
 $color-blue: #007aff;
 $color-red: #ff3333;
-$color-green: #26B34B;
-$color-yellow: #EFC31A;
+$color-green: #26b34b;
+$color-yellow: #efc31a;
 
 $color-bg-1: #ffffff;
 $color-bg-2: #fafafa;

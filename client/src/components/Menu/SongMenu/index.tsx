@@ -24,6 +24,7 @@ import { AddPlaylist } from "../../ModalPlaylist";
 import "./style.scss";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../../../slices/menuSongSlide";
+import { EditSong } from "../../ModalSong";
 
 const SongMenu = () => {
   const { t } = useTranslation("song");
@@ -64,10 +65,14 @@ const SongMenu = () => {
     removeSongQueue,
   } = useAudio();
 
+  const handleCloseMenu = () => {
+    dispatch(closeMenu());
+  };
+
   useEffect(() => {
     const getSong = async () => {
       try {
-        const res = songId && (await songApi.getDetail(songId, token));
+        const res = id && (await songApi.getDetail(id, token));
         res && setSong(res);
       } catch (error) {
         console.log(error);
@@ -192,12 +197,16 @@ const SongMenu = () => {
         }
       }
     }
-  }, [window]);
+  }, [
+    window,
+    SongMenuRef.current?.clientWidth,
+    SongMenuRef.current?.clientHeight,
+  ]);
 
   return (
     <div
       ref={SongMenuRef}
-      className={`SongMenu ${open ? "active" : ""}`}
+      className={`SongMenu ${open && placeTop && placeLeft ? "active" : ""}`}
       style={{ top: placeTop, left: placeLeft }}
       data-placement={placement}
     >
@@ -210,8 +219,8 @@ const SongMenu = () => {
           >
             <AddSongToPlaylist
               songId={id}
-              placement={"bottom-end"}
-              closeMenu={() => dispatch(closeMenu())}
+              placement={placement}
+              closeMenu={() => handleCloseMenu()}
             />
           </ItemMenu>
           {playlistId && (
@@ -238,7 +247,9 @@ const SongMenu = () => {
             <ItemMenu
               title={t("Menu.Edit song")}
               icon={<i className="fa-light fa-pen-to-square"></i>}
-              itemFunc={() => setOpenModalEdit(true)}
+              itemFunc={() => {
+                setOpenModalEdit(true);
+              }}
             />
           )}
           {currentUser?.id === song?.user_id && (
@@ -254,7 +265,7 @@ const SongMenu = () => {
               icon={<i className="fa-light fa-trash"></i>}
               itemFunc={() => {
                 removeSongQueue(id);
-                dispatch(closeMenu());
+                handleCloseMenu();
               }}
             />
           ) : (
@@ -263,7 +274,7 @@ const SongMenu = () => {
               icon={<i className="fa-regular fa-list-music"></i>}
               itemFunc={() => {
                 addQueue(id);
-                dispatch(closeMenu());
+                handleCloseMenu();
               }}
             />
           )}
@@ -288,6 +299,19 @@ const SongMenu = () => {
           <span>{t("Menu.Close")}</span>
         </button>
       </div>
+      {openModalEdit && (
+        <Modal
+          title="Edit song"
+          openModal={openModalEdit}
+          setOpenModal={setOpenModalEdit}
+        >
+          <EditSong
+            songId={song?.id ?? ""}
+            open={openModalEdit}
+            closeModal={() => setOpenModalEdit(false)}
+          />
+        </Modal>
+      )}
     </div>
   );
 };
@@ -304,27 +328,44 @@ type PropsItemMenu = {
 
 const ItemMenu = ({ children, placement, ...props }: PropsItemMenu) => {
   const SongMenuItemRef = useRef<HTMLLIElement>(null);
+  const ButtonRef = useRef<HTMLButtonElement>(null);
+  const UlRef = useRef<HTMLUListElement>(null);
   const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 
   useEffect(() => {
-    if (SongMenuItemRef.current) {
+    if (SongMenuItemRef.current && ButtonRef.current && UlRef.current) {
       SongMenuItemRef.current.addEventListener("mouseenter", () => {
         setOpenSubMenu(true);
       });
-      SongMenuItemRef.current.addEventListener("mouseleave", () => {
+      ButtonRef.current.addEventListener("mouseleave", () => {
         setOpenSubMenu(false);
+      });
+      UlRef.current.addEventListener("mouseleave", () => {
+        setOpenSubMenu(true);
       });
     }
   }, []);
 
   return (
-    <li ref={SongMenuItemRef} className="SongMenu__context__list__item">
-      <button onClick={props.itemFunc}>
+    <li ref={SongMenuItemRef} className={`SongMenu__context__list__item`}>
+      <button
+        ref={ButtonRef}
+        className={` ${openSubMenu ? "active" : ""}`}
+        onClick={props.itemFunc}
+      >
         {props?.icon}
         <span>{props.title}</span>
         {children && <i className="icon-subMenu fa-solid fa-chevron-right"></i>}
       </button>
-      {children && openSubMenu && <ul>{children}</ul>}
+
+      <ul
+        ref={UlRef}
+        className={`SongMenu__context__list__item__submenu ${
+          openSubMenu ? "active" : ""
+        } `}
+      >
+        {children}
+      </ul>
     </li>
   );
 };
@@ -339,6 +380,7 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
   const { currentUser, token } = useAuth();
   const [openModalAddPlaylist, setOpenModalAddPlaylist] =
     useState<boolean>(false);
+  const subMenuRef = useRef<HTMLDivElement>(null);
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
     limit: 0,
@@ -349,6 +391,18 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
     keyword: "",
     sort: "new",
   });
+
+  // const {
+  //   id,
+  //   open,
+  //   playlistId,
+  //   left,
+  //   top,
+  //   width: widthBtn,
+  //   height: heightBtn,
+  // } = useSelector((state: RootState) => state.menuSong);
+  const [placeTop, setPlaceTop] = useState<number>(0);
+  const [placeLeft, setPlaceLeft] = useState<number>(0);
 
   const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
 
@@ -374,42 +428,82 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
     },
   });
 
+  // useEffect(() => {
+  //   const rectSubmenu = subMenuRef.current?.getBoundingClientRect();
+  //   console.log({ rectSubmenu });
+  //   console.log(window.innerHeight, window.innerWidth);
+  //   if (subMenuRef.current) {
+  //     if (left + subMenuRef.current?.clientWidth > window.innerWidth) {
+  //       if (top + subMenuRef.current?.clientHeight < window.innerHeight) {
+  //         // setPlacement("bottom-end");
+  //         setPlaceLeft(
+  //           left - subMenuRef.current?.clientWidth + (widthBtn ?? 100)
+  //         );
+  //         setPlaceTop(top + (heightBtn ?? 100));
+  //       } else {
+  //         // setPlacement("top-end");
+  //         setPlaceLeft(
+  //           left - subMenuRef.current?.clientWidth + (widthBtn ?? 100)
+  //         );
+  //         setPlaceTop(top - subMenuRef.current?.clientHeight);
+  //       }
+  //     } else {
+  //       if (top + subMenuRef.current?.clientHeight > window.innerHeight) {
+  //         // setPlacement("top-start");
+  //         setPlaceLeft(left);
+  //         setPlaceTop(
+  //           top -
+  //             rectSubmenu?.current.clientHeight -
+  //             (heightBtn ?? 100) -
+  //             (heightBtn ?? 100)
+  //         );
+  //       } else {
+  //         setPlacement("bottom-start");
+  //         setPlaceLeft(left);
+  //         setPlaceTop(top + (heightBtn ?? 100));
+  //       }
+  //     }
+  //   }
+  // }, [subMenuRef.current, window]);
+
   return (
     <>
-      <ul>
-        <div className="SongMenu__submenu" data-placement={placement}>
-          <div className="SongMenu__submenu__search">
-            <i className="fa-light fa-magnifying-glass"></i>
-            <input
-              type="text"
-              value={keyword}
-              placeholder="Tìm playlist..."
-              onChange={(e) => updateState({ keyword: e.target.value })}
-            />
-            {keyword.length > 0 && (
-              <button
-                className="btn_clear"
-                onClick={() => updateState({ keyword: "" })}
-              >
-                <i className="fa-light fa-xmark"></i>
-              </button>
-            )}
-          </div>
-          <button
-            className="SongMenu__submenu__item"
-            onClick={() => setOpenModalAddPlaylist(true)}
-          >
-            <i className="fa-light fa-plus"></i>
-            <span>Thêm playlist</span>
-          </button>
-          <hr />
-          {playlists?.map((playlist, index) => {
-            return (
-              <ItemPlaylist key={index} playlist={playlist} songId={songId} />
-            );
-          })}
+      <div
+        ref={subMenuRef}
+        className="SongMenu__submenu"
+        data-placement={placement}
+      >
+        <div className="SongMenu__submenu__search">
+          <i className="fa-light fa-magnifying-glass"></i>
+          <input
+            type="text"
+            value={keyword}
+            placeholder="Tìm playlist..."
+            onChange={(e) => updateState({ keyword: e.target.value })}
+          />
+          {keyword.length > 0 && (
+            <button
+              className="btn_clear"
+              onClick={() => updateState({ keyword: "" })}
+            >
+              <i className="fa-light fa-xmark"></i>
+            </button>
+          )}
         </div>
-      </ul>
+        <button
+          className="SongMenu__submenu__item"
+          onClick={() => setOpenModalAddPlaylist(true)}
+        >
+          <i className="fa-light fa-plus"></i>
+          <span>Thêm playlist</span>
+        </button>
+        <hr />
+        {playlists?.map((playlist, index) => {
+          return (
+            <ItemPlaylist key={index} playlist={playlist} songId={songId} />
+          );
+        })}
+      </div>
       <Modal
         title={"Thêm playlist mới"}
         openModal={openModalAddPlaylist}

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { log } from "node:console";
 
 export interface menuSongState {
   open: boolean;
@@ -26,9 +25,6 @@ export const munuSongSlide = createSlice({
   initialState,
   reducers: {
     openMenu: (state, action: PayloadAction<menuSongState>) => {
-      console.log("open");
-      console.log(action.payload.width, action.payload.height);
-    
       state.open = true;
       state.id = action.payload.id;
       state.left = action.payload.left;
@@ -38,8 +34,6 @@ export const munuSongSlide = createSlice({
       state.height = action.payload.height;
     },
     closeMenu: (state) => {
-      console.log("close");
-
       state.open = false;
     },
   },

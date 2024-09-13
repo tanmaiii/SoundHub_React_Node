@@ -2,13 +2,13 @@
 
 .EditSong {
   @include themify($themes) {
-    width: 60vw;
-    height: 70vh;
+    width: 50vw;
+    height: max-content;
     @include flex(unset, space-between, column);
 
     @include tablet {
       width: 80vw;
-      height: 70vh;
+      height: max-content;
     }
 
     @include mobile {
@@ -17,7 +17,7 @@
     }
 
     &__body {
-      padding: 0 $space-24;
+      padding: 0 $space-24 $space-24 $space-24;
       @include flex(unset, unset, row);
       gap: $space-24;
       flex: 1;

@@ -17,24 +17,15 @@
       background: themed("bg-3");
       border: none;
     }
+    opacity: 0;
 
-    // &[data-placement="top-start"] {
-    //   transform: translateY(-100%);
-    // }
-    // &[data-placement="top-end"] {
-    //   transform: translate(-100%, -100%);
-    // }
-    // &[data-placement="bottom-start"] {
-    //   // transform: translateX(100%);
-    // }
-    // &[data-placement="bottom-end"] {
-    //   transform: translateX(-100%);
-    // }
+    transition: opacity 0.3s;
 
     &.active {
       display: flex;
       position: absolute;
-      z-index: 999;
+      z-index: $z-index-menu;
+      opacity: 1;
     }
 
     &__context {
@@ -74,6 +65,9 @@
             gap: $space-8;
             width: 100%;
             transition: $transition;
+            &.active {
+              background-color: themed("bg-3");
+            }
 
             &:hover {
               background-color: themed("bg-3");
@@ -93,6 +87,15 @@
               margin-left: auto;
               font-size: $size-16;
               color: themed("txt-second");
+            }
+          }
+
+          &__submenu {
+            // display: none;
+            visibility: hidden;
+            &.active {
+              visibility: visible;
+              // display: block;
             }
           }
 

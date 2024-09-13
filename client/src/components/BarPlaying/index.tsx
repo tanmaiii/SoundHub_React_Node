@@ -277,6 +277,7 @@ const ControlsRight = ({}: {}) => {
     <div className="ControlsRight">
       <button
         className="btn-lyric"
+        data-tooltip={"Lyric"}
         onClick={() => dispatch(changeOpenLyric(true))}
       >
         <i className="fa-light fa-microphone-stand"></i>
