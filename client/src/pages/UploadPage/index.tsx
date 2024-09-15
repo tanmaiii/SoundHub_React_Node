@@ -10,7 +10,7 @@ const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [errorFile, setErrorFile] = useState("");
   const { t } = useTranslation("song");
-  const { updateQueue, playSong, pauseSong, isPlaying, stope } = useAudio();
+  const { updateQueue, playSong, pauseSong, isPlaying, stop } = useAudio();
 
   const onDragEnter = () => {
     setOpenDrop(true);
@@ -41,7 +41,7 @@ const UploadPage = () => {
 
   useEffect(() => {
     if (file) {
-      stope();
+      stop();
     }
   }, [file]);
 

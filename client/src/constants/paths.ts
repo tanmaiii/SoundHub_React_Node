@@ -10,7 +10,7 @@ const HomePage: FunctionComponent<any> = lazy(
 );
 const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
-const ArtistPage = lazy(() => import("../pages/ArtistPage/ArtistPage"));
+const ArtistPage = lazy(() => import("../pages/ArtistPage"));
 const ArtistSongPage = lazy(() => import("../pages/ArtistSongPage"));
 const ArtistPlaylistPage = lazy(() => import("../pages/ArtistPlaylistPage"));
 const PlaylistPage = lazy(() => import("../pages/PlaylistPage"));

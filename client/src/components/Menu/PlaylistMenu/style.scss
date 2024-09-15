@@ -2,40 +2,43 @@
 
 .PlaylistMenu {
   @include themify($themes) {
-    &__button {
+    opacity: 0;
+    transition: opacity 0.3s;
+    --width: 300px;
+    position: absolute;
+    z-index: $z-index-menu;
+
+    &.active {
+      display: flex;
+      position: absolute;
+      z-index: $z-index-menu;
+      opacity: 1;
     }
 
     &__context {
-      position: absolute;
       background-color: themed("bg-2");
-      width: max-content;
+      width: var(--width);
+      height: max-content;
       padding: $space-4;
       border-radius: $radius-8;
-      z-index: 10;
-      display: none;
-      &[data-placement="top-start"] {
-        bottom: 100%;
-        left: 0;
-      }
-      &[data-placement="bottom-start"] {
-        top: 100%;
-        left: 0;
-      }
-      &[data-placement="top-end"] {
-        bottom: 100%;
-        right: 0;
-      }
-      &[data-placement="bottom-end"] {
-        top: 100%;
-        right: 0;
+      box-shadow: themed("box-shadow");
+
+      @include mobile {
+        top: $height-header !important;
+        width: 100%;
+        height: calc(100vh - $height-header - $height-barPlaying);
+        justify-content: space-between;
+        flex-direction: column;
       }
 
-      &.active {
-        display: block;
-      }
       &__list {
         @include flex(start, unset);
         flex-direction: column;
+
+        hr {
+          width: 100%;
+          border-top: 1px solid themed("border");
+        }
 
         &__item {
           width: 100%;
@@ -63,6 +66,45 @@
               color: themed("txt-main");
             }
           }
+        }
+      }
+    }
+
+    &__modal__delete {
+      &__header {
+        // padding:30px;
+        padding: $space-8 $space-24;
+        h3 {
+          font-size: $size-16;
+          color: themed("txt-second");
+          font-weight: $font-medium;
+        }
+      }
+      &__body {
+        @include flex(center, end, row);
+        padding: $space-12 $space-24 $space-24;
+        margin-top: auto;
+        gap: $space-14;
+        @include mobile {
+        }
+
+        button {
+          padding: $space-12 $space-24;
+          border-radius: $radius-4;
+          font-size: $size-16;
+          font-weight: $font-medium;
+          color: $color-white;
+          background-color: $color-primary1;
+          cursor: pointer;
+          transition: all 0.3s;
+
+          &:hover {
+            scale: 0.98;
+          }
+        }
+        & > button:first-child {
+          background-color: themed("bg-3");
+          color: themed("txt-main");
         }
       }
     }

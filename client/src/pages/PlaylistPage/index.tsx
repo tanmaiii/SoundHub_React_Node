@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -13,6 +13,10 @@ import Images from "../../constants/images";
 import { useAudio } from "../../context/AudioContext";
 import { useAuth } from "../../context/AuthContext";
 import "./style.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
+import { openMenu } from "../../slices/menuPlaylistSlide";
 
 export default function PlaylistPage() {
   const navigation = useNavigate();
@@ -20,9 +24,12 @@ export default function PlaylistPage() {
   const { token, currentUser } = useAuth();
   const [totalCount, setTotalCount] = useState(0);
   const queryClient = useQueryClient();
-  const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { t } = useTranslation("playlist");
+  const menuPlaylist = useSelector((state: RootState) => state.menuPlaylist);
+  const dispatch = useDispatch();
+  const btnMenuRef = React.createRef<HTMLButtonElement>();
+
   const { updateQueue } = useAudio();
 
   const {
@@ -89,6 +96,23 @@ export default function PlaylistPage() {
     },
   });
 
+  const handleClickMenu = () => {
+    const rect = btnMenuRef.current?.getBoundingClientRect();
+
+    rect &&
+      playlist &&
+      dispatch(
+        openMenu({
+          open: true,
+          id: playlist?.id ?? "",
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        })
+      );
+  };
+
   return (
     <div className="playlistPage">
       <Helmet>
@@ -141,14 +165,12 @@ export default function PlaylistPage() {
                 )}
               </button>
             )}
-            <button className={`btn__menu ${activeMenu ? "active" : ""}`}>
-              <PlaylistMenu
-                id={id || ""}
-                active={activeMenu}
-                placement="bottom-start"
-                onOpen={() => setActiveMenu(true)}
-                onClose={() => setActiveMenu(false)}
-              />
+            <button
+              ref={btnMenuRef}
+              className={`btn__menu ${menuPlaylist.open ? "active" : ""}`}
+              onClick={handleClickMenu}
+            >
+              <i className="fa-solid fa-ellipsis"></i>
             </button>
           </div>
         </div>

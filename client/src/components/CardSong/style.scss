@@ -20,10 +20,6 @@
         width: 100%;
         height: 100%;
         position: relative;
-        // background-color: themed("bg-2");
-        // aspect-ratio: 1/1; // Ensure the image is always square
-        // border-radius: $radius-8;
-        // overflow: hidden;
         img {
           background-color: themed("bg-2");
           border-radius: $radius-8;
@@ -33,24 +29,43 @@
           object-fit: cover;
           aspect-ratio: 1/1; // Ensure the image is always square
         }
+
+        &__swapper {
+          position: absolute;
+          border-radius: $radius-8;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          padding: $space-12;
+          transition: $transition;
+          background-color: $color-rgba-black;
+          display: none;
+        }
+
         &__button {
           position: absolute;
           bottom: $space-10;
           right: $space-10;
-          background-color: $color-rgba-black;
-          padding: $space-14;
+          // padding: $space-14;
           border-radius: 50%;
           transition: $transition;
+          cursor: pointer;
           &:hover {
             transform: scale(1.09);
           }
           i {
-            color: $color-white;
-            font-size: $size-24;
-            --size: 18px;
+            padding: $space-12;
+            border-radius: 50%;
+            --size: 50px;
+            background-color: $color-rgba-black;
+            // background-color: $color-primary1;
             width: var(--size);
             height: var(--size);
+            font-size: 28px;
+            color: $color-white;
             @include flex(center, center);
+            transition: all 0.3s;
           }
         }
       }

@@ -9,10 +9,11 @@ import { ResSoPaAr } from "../../types";
 import ImageWithFallback from "../ImageWithFallback";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { playlistApi } from "../../apis";
+import { playlistApi, songApi } from "../../apis";
 import { useAuth } from "../../context/AuthContext";
 import Modal from "../Modal";
 import { useTranslation } from "react-i18next";
+import { useAudio } from "../../context/AudioContext";
 
 export interface CardPlaylistProps {
   className?: string;
@@ -41,6 +42,7 @@ function CardPlaylist({
   const queryClient = useQueryClient();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { t } = useTranslation("playlist");
+  const { addPlaylistQueue } = useAudio();
 
   const handleClick = () => {
     id && navigate(`${PATH.PLAYLIST}/${id}`);
@@ -89,6 +91,22 @@ function CardPlaylist({
     },
   });
 
+  const handleAddToQueue = async () => {
+    try {
+      const res = await songApi.getAllByPlaylistId(token, id || "", 1, 0);
+
+      res.data &&
+        addPlaylistQueue(
+          res.data
+            .filter((song) => song?.id)
+            .map((song) => song!.id!)
+            .filter(Boolean)
+        );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={`CardPlaylist ${className}`}>
       <div className="CardPlaylist__container">
@@ -106,20 +124,16 @@ function CardPlaylist({
                 className="CardPlaylist__container__image__swapper"
                 onClick={handleClick}
               ></div>
-              {currentUser?.id === userId ? (
-                <div className="CardPlaylist__container__image__button">
+              <div className="CardPlaylist__container__image__button">
+                {currentUser?.id === userId ? (
                   <button
-                    data-tooltip="Remove playlist"
                     className="btn__remove"
                     onClick={() => setOpenModal(true)}
                   >
                     <i className="fa-light fa-trash-can"></i>
                   </button>
-                </div>
-              ) : (
-                <div className="CardPlaylist__container__image__button">
+                ) : (
                   <button
-                    data-tooltip="Add to favorite"
                     className={`btn__like ${isLike ? "active" : ""}`}
                     onClick={() => mutationLike.mutate(isLike ?? false)}
                   >
@@ -129,8 +143,11 @@ function CardPlaylist({
                       <i className="fa-light fa-heart"></i>
                     )}
                   </button>
-                </div>
-              )}
+                )}
+              </div>
+              <button className="btn-play" onClick={handleAddToQueue}>
+                <i className="icon__play fa-solid fa-play"></i>
+              </button>
             </>
           )}
         </div>

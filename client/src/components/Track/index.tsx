@@ -17,7 +17,6 @@ import SongMenu from "../Menu/SongMenu";
 import { closeMenu, openMenu } from "../../slices/menuSongSlide";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { log } from "node:console";
 
 interface TrackProps {
   song: TSong;
@@ -85,6 +84,7 @@ export default function Track({
             id: song?.id ?? "",
             left: rect.left,
             top: rect.top,
+            playlistId: playlistId ?? undefined,
             width: rect.width,
             height: rect.height,
           })

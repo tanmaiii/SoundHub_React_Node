@@ -126,15 +126,6 @@
         }
       }
     }
-
-    &__lyric {
-      position: fixed;
-      height: 100vh;
-      width: 100vw;
-      background-color: $color-primary1;
-      top: 100%;
-      left: 0;
-    }
   }
 }
 
@@ -147,15 +138,16 @@
       gap: $space-12;
       &__image {
         --size: 50px;
-        height: var(--size);
+        height: auto;
         width: var(--size);
         overflow: hidden;
         @include flex(center, center);
         border-radius: 50%;
+        aspect-ratio: 1/1;
         img {
           background-color: themed("bg-2");
-          height: auto;
-          width: 100%;
+          height: 100%;
+          width: auto;
           object-fit: cover;
         }
       }

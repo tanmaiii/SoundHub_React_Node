@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { PATH } from "../../constants/paths";
 import Images from "../../constants/images";
 import ImageWithFallback from "../ImageWithFallback";
+import { useAudio } from "../../context/AudioContext";
 
 export interface CardSongProps {
   className?: string;
@@ -30,15 +31,26 @@ function CardSong({
   isPublic = 0,
 }: CardSongProps) {
   const navigate = useNavigate();
+  const { songPlayId, isPlaying, playSong, start, pauseSong } = useAudio();
 
   const handleClick = () => {
     id && navigate(`${PATH.SONG}/${id}`);
   };
 
+  const handleClickPlay = () => {
+    if (songPlayId === id && isPlaying) {
+      pauseSong();
+    } else if (songPlayId === id && !isPlaying) {
+      playSong();
+    } else {
+      id && start(id);
+    }
+  };
+
   return (
     <div className={`CardSong ${className}`}>
       <div className="CardSong__container">
-        <div className="CardSong__container__image" onClick={handleClick}>
+        <div className="CardSong__container__image">
           {loading ? (
             <Skeleton height={180} width={"100%"} />
           ) : (
@@ -48,9 +60,20 @@ function CardSong({
                 fallbackSrc={Images.SONG}
                 alt=""
               />
-              <div className="CardSong__container__image__button">
-                <i className="fa-solid fa-play"></i>
-              </div>
+              <div
+                className="CardSong__container__image__swapper"
+                onClick={handleClick}
+              ></div>
+              <button
+                className="CardSong__container__image__button"
+                onClick={handleClickPlay}
+              >
+                {songPlayId === id && isPlaying ? (
+                  <i className="fa-solid fa-pause"></i>
+                ) : (
+                  <i className="fa-solid fa-play"></i>
+                )}
+              </button>
             </>
           )}
         </div>

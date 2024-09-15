@@ -55,18 +55,15 @@
               }
             }
             &.btn__menu {
-              position: relative;
-              .PlaylistMenu__button {
-                cursor: pointer;
-                color: themed("txt-main");
-                border-radius: 50%;
-                & > i {
-                  --size: 36px;
-                  width: var(--size);
-                  height: var(--size);
-                  @include flex(center, center);
-                  font-size: $size-18;
-                }
+              cursor: pointer;
+              color: themed("txt-main");
+              border-radius: 50%;
+              & > i {
+                --size: 36px;
+                width: var(--size);
+                height: var(--size);
+                @include flex(center, center);
+                font-size: $size-18;
               }
             }
             &:not(.btn__play):hover {

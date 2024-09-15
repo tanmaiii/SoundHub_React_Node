@@ -23,6 +23,10 @@
         .CardPlaylist__container__image {
           background-color: $color-rgba-black;
         }
+        .CardPlaylist__container__image .btn-play {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
       &__image {
         width: 100%;
@@ -84,6 +88,32 @@
                 color: $color-red;
               }
             }
+          }
+        }
+
+        & > .btn-play {
+          position: absolute;
+          transition: $transition;
+          cursor: pointer;
+          right: 16px;
+          bottom: 16px;
+          transform: translateY(10px);
+          opacity: 0;
+          transition: all 0.3s;
+          &:hover i {
+            transform: scale(1.09);
+          }
+          i {
+            padding: $space-12;
+            border-radius: 50%;
+            --size: 50px;
+            background-color: $color-primary1;
+            width: var(--size);
+            height: var(--size);
+            font-size: 28px;
+            color: $color-white;
+            @include flex(center, center);
+            transition: all 0.3s;
           }
         }
       }

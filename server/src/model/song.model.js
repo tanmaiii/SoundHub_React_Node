@@ -235,7 +235,7 @@ Song.findByUserId = async (userId, userReqInfo, query, result) => {
   const userReqId = userReqInfo.id;
 
   const [data] = await promiseDb.query(
-    ` SELECT s.*, u.name as author, slc.count as count ` +
+    ` SELECT s.*, u.name as author, slc.count as count_listen ` +
       ` FROM songs as s ` +
       ` LEFT JOIN users AS u ON s.user_id = u.id` +
       ` LEFT JOIN song_listens_count AS slc ON s.id = slc.song_id ` +
@@ -304,7 +304,7 @@ Song.findAll = async (query, result) => {
   const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
-    ` SELECT s.*, u.name as author, slc.count as count ` +
+    ` SELECT s.*, u.name as author, slc.count as count_listen ` +
       ` FROM songs as s ` +
       ` LEFT JOIN users AS u ON s.user_id = u.id` +
       ` LEFT JOIN song_listens_count AS slc ON s.id = slc.song_id ` +

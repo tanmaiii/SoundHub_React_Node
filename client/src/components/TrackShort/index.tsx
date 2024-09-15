@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { TSong } from "../../types";
 import "./style.scss";
 import SongMenu from "../Menu/SongMenu";
@@ -12,6 +12,10 @@ import { songApi } from "../../apis";
 import { useAuth } from "../../context/AuthContext";
 import { useAudio } from "../../context/AudioContext";
 import IconPlay from "../IconPlay/IconPlay";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { closeMenu, openMenu } from "../../slices/menuSongSlide";
 
 type props = {
   id: string;
@@ -25,6 +29,10 @@ function TrackShort({ id, number, loading }: props) {
   const formattedNumber = number ? number.toString().padStart(2, "0") : "";
   const queryClient = useQueryClient();
   const { isPlaying, songPlayId, pauseSong, playSong, start } = useAudio();
+  const dispatch = useDispatch();
+  const {} = useAudio();
+  const menuSong = useSelector((state: RootState) => state.menuSong);
+  const btnMenuRef = React.createRef<HTMLButtonElement>();
 
   const { data: song } = useQuery({
     queryKey: ["song", id],
@@ -64,6 +72,25 @@ function TrackShort({ id, number, loading }: props) {
       playSong();
     } else {
       start(id);
+    }
+  };
+
+  const handleClickOpenMenu = () => {
+    if (menuSong?.open) {
+      dispatch(closeMenu());
+    } else {
+      const rect = btnMenuRef.current?.getBoundingClientRect();
+      rect &&
+        dispatch(
+          openMenu({
+            open: true,
+            id: song?.id ?? "",
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+          })
+        );
     }
   };
 
@@ -116,17 +143,15 @@ function TrackShort({ id, number, loading }: props) {
               <i className="fa-light fa-heart"></i>
             )}
           </button>
-          <div className={`button-edit ${activeMenu ? " active" : ""}`}>
-            {/* {song && (
-              <SongMenu
-                song={song}
-                id={song?.id ?? ""}
-                active={activeMenu}
-                onOpen={() => setActiveMenu(true)}
-                onClose={() => setActiveMenu(false)}
-              />
-            )} */}
-          </div>
+          <button
+            ref={btnMenuRef}
+            className={`button-edit ${
+              menuSong?.open && menuSong?.id === song?.id ? " active" : ""
+            }`}
+            onClick={handleClickOpenMenu}
+          >
+            <i className="fa-solid fa-ellipsis"></i>
+          </button>
         </div>
         <div className="item-listen">
           <button className={`button-like ${isLike ? "active" : ""}`}>

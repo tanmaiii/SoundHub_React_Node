@@ -11,7 +11,7 @@
     position: relative;
     margin-bottom: $space-8;
     // background-color: themed("bg-2");
-    
+
     &::before {
       border-bottom: 1px solid themed("bg-2");
       position: absolute;
@@ -157,25 +157,22 @@
           }
         }
         & > .button-edit {
-          position: relative;
+          cursor: pointer;
+          color: themed("txt-main");
+          border-radius: 50%;
           &.active {
             visibility: visible;
-            color: $color-red;
+            background-color: $color-hover;
           }
-          .SongMenu__button {
-            cursor: pointer;
-            color: themed("txt-main");
-            border-radius: 50%;
-            &:hover {
-              background-color: $color-hover;
-            }
-            & > i {
-              --size: 36px;
-              width: var(--size);
-              height: var(--size);
-              @include flex(center, center);
-              font-size: $size-18;
-            }
+          &:hover {
+            background-color: $color-hover;
+          }
+          & > i {
+            --size: 36px;
+            width: var(--size);
+            height: var(--size);
+            @include flex(center, center);
+            font-size: $size-18;
           }
         }
       }

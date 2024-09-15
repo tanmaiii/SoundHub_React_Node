@@ -61,8 +61,6 @@ export default function BarPlaying() {
 
   if (!songPlayId) return null;
 
-
-
   return (
     <div className="barPlaying row">
       <div className="barPlaying__progress">
@@ -121,10 +119,6 @@ export default function BarPlaying() {
       <div className="barPlaying__right col pc-3 t-3 m-0">
         <ControlsRight />
       </div>
-
-      <div className="barPlaying__lyric">
-        <h2>Lyric</h2>
-      </div>
     </div>
   );
 }
@@ -134,10 +128,10 @@ interface CardSongProps {
 }
 
 const CardSong = ({ song }: CardSongProps) => {
-  // const {songPlayId } = useSelector((state: RootState) => state.nowPlaying);
   const queryClient = useQueryClient();
-  const { token } = useAuth();
-  const { currentUser } = useAuth();
+  const { token, currentUser } = useAuth();
+  const { isPlaying } = useAudio();
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const { data: isLike, refetch: refetchLike } = useQuery({
     queryKey: ["like-song", song?.id],
@@ -166,9 +160,10 @@ const CardSong = ({ song }: CardSongProps) => {
     return isLike && mutationLike.mutate(isLike);
   };
 
+
   return (
     <div className="CardSongPlaying">
-      <div className="CardSongPlaying__image">
+      <div className="CardSongPlaying__image" ref={imageRef}>
         <ImageWithFallback
           src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
@@ -207,7 +202,6 @@ const CardSong = ({ song }: CardSongProps) => {
 
 const ControlsBar = ({ song }: { song: TSong }) => {
   const { percentage, timeSong, timeSongPlay, onChangeSlider } = useAudio();
-
 
   return (
     <div className="ControlsBar">

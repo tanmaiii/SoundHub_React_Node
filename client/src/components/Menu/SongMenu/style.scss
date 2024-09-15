@@ -18,8 +18,10 @@
       border: none;
     }
     opacity: 0;
-
     transition: opacity 0.3s;
+    --width: 300px;
+    position: absolute;
+    z-index: $z-index-menu;
 
     &.active {
       display: flex;
@@ -30,7 +32,8 @@
 
     &__context {
       background-color: themed("bg-2");
-      width: max-content;
+      width: var(--width);
+      height: max-content;
       padding: $space-4;
       border-radius: $radius-8;
       box-shadow: themed("box-shadow");
@@ -46,6 +49,7 @@
       &__list {
         @include flex(start, unset);
         flex-direction: column;
+        background-color: themed("bg-2");
         hr {
           width: 100%;
           border-top: 1px solid themed("border");
@@ -91,30 +95,27 @@
           }
 
           &__submenu {
-            // display: none;
             visibility: hidden;
             &.active {
               visibility: visible;
-              // display: block;
             }
           }
 
           .SongMenu__submenu {
             position: absolute;
-            min-width: 100%;
-            max-width: 300px;
+            width: var(--width);
             background-color: themed("bg-2");
             padding: $space-4;
             border-radius: $radius-8;
             box-shadow: themed("box-shadow");
             @include flex(start, start, column);
 
-            height: 400px;
+            max-height: 300px;
             overflow-y: auto;
 
             &[data-placement="top-start"] {
               top: 0;
-              right: 100%;
+              left: 100%;
             }
             &[data-placement="bottom-start"] {
               top: 0;
@@ -181,7 +182,6 @@
               @include flex(center, start);
               gap: $space-8;
               width: 100%;
-              transition: $transition;
 
               &:hover {
                 .icon-remove {
@@ -224,7 +224,6 @@
               i {
                 font-size: $size-16;
                 color: themed("txt-second");
-                transition: $transition;
 
                 &.icon-remove {
                   color: $color-red;
@@ -240,7 +239,6 @@
 
               span {
                 font-size: $size-16;
-                transition: all 0.3s;
                 color: themed("txt-main");
               }
             }

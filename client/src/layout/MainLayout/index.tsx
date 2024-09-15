@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "./style.scss";
 
-import NavBar from "../../components/NavBar/NavBar";
-import Header from "../../components/Header";
+import { useDispatch, useSelector } from "react-redux";
 import BarPlaying from "../../components/BarPlaying";
 import Footer from "../../components/Footer";
-import WattingList from "../../components/WattingList";
-import { useAuth } from "../../context/AuthContext";
-import { PATH } from "../../constants/paths";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import ModalLyric from "../../components/ModalLyric";
+import Header from "../../components/Header";
+import PlaylistMenu from "../../components/Menu/PlaylistMenu";
 import SongMenu from "../../components/Menu/SongMenu";
-import { openMenu, closeMenu } from "../../slices/menuSongSlide";
+import ModalLyric from "../../components/ModalLyric";
+import NavBar from "../../components/NavBar/NavBar";
+import WattingList from "../../components/WattingList";
+import { PATH } from "../../constants/paths";
+import { useAuth } from "../../context/AuthContext";
+import { closeMenu } from "../../slices/menuSongSlide";
+import { RootState } from "../../store";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -30,6 +30,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const openLyric = useSelector((state: RootState) => state.lyric.state);
   const menuSong = useSelector((state: RootState) => state.menuSong);
+  const menuPlaylist = useSelector((state: RootState) => state.menuPlaylist);
   const location = useLocation();
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         <ModalLyric />
       </div>
       {menuSong.open && <SongMenu />}
+      {menuPlaylist.open && <PlaylistMenu />}
     </div>
   );
 }

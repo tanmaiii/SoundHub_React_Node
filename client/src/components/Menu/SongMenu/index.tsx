@@ -25,6 +25,7 @@ import "./style.scss";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../../../slices/menuSongSlide";
 import { EditSong } from "../../ModalSong";
+import { set } from "react-hook-form";
 
 const SongMenu = () => {
   const { t } = useTranslation("song");
@@ -48,22 +49,9 @@ const SongMenu = () => {
     width: widthBtn,
     height: heightBtn,
   } = useSelector((state: RootState) => state.menuSong);
-
-  const [placeTop, setPlaceTop] = useState<number>(0);
-  const [placeLeft, setPlaceLeft] = useState<number>(0);
-
   const dispatch = useDispatch();
 
-  const {
-    addQueue,
-    queue,
-    updateQueue,
-    changePlaceQueue,
-    songPlayId,
-    pauseSong,
-    nextSong,
-    removeSongQueue,
-  } = useAudio();
+  const { addQueue, queue, removeSongQueue } = useAudio();
 
   const handleCloseMenu = () => {
     dispatch(closeMenu());
@@ -84,6 +72,8 @@ const SongMenu = () => {
   // Đóng menu khi click ra ngoài
   useEffect(() => {
     const handleMousedown = (e: MouseEvent) => {
+      console.log(e.target);
+
       if (
         SongMenuRef.current &&
         !SongMenuRef.current.contains(e.target as Node)
@@ -95,11 +85,24 @@ const SongMenu = () => {
     return () => document.removeEventListener("mousedown", handleMousedown);
   });
 
+  useEffect(() => {
+    const handleResize = () => {
+      dispatch(closeMenu());
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   // Xử lí xóa bài hát khỏi playlist
   const mutationRemoveSongFromPlaylist = useMutation({
     mutationFn: async () => {
       try {
         await playlistApi.removeSong(playlistId ?? "", id, token);
+        handleCloseMenu();
       } catch (error) {
         console.log(error);
       }
@@ -166,34 +169,31 @@ const SongMenu = () => {
     //Top-start: hiển thị bên trên bên trái
 
     if (SongMenuRef.current && left) {
-      if (left + SongMenuRef.current.clientWidth > window.innerWidth) {
-        if (top + SongMenuRef.current.clientHeight < window.innerHeight) {
+      if (left + SongMenuRef.current.clientWidth > window.innerWidth - 100) {
+        if (top + SongMenuRef.current.clientHeight < window.innerHeight - 100) {
           setPlacement("bottom-end");
-          setPlaceLeft(
+          SongMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          SongMenuRef.current.style.left = `${
             left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
-          );
-          setPlaceTop(top + (heightBtn ?? 100));
+          }px`;
         } else {
           setPlacement("top-end");
-          setPlaceLeft(
+          SongMenuRef.current.style.left = `${
             left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
-          );
-          setPlaceTop(top - SongMenuRef.current.clientHeight);
+          }px`;
+          SongMenuRef.current.style.bottom = `${window.innerHeight - top}px`;
         }
       } else {
-        if (top + SongMenuRef.current.clientHeight > window.innerHeight) {
+        if (top + SongMenuRef.current.clientHeight > window.innerHeight - 100) {
           setPlacement("top-start");
-          setPlaceLeft(left);
-          setPlaceTop(
-            top -
-              SongMenuRef.current.clientHeight -
-              (heightBtn ?? 100) -
-              (heightBtn ?? 100)
-          );
+          SongMenuRef.current.style.top = `${
+            top - SongMenuRef.current.clientHeight
+          }px`;
+          SongMenuRef.current.style.left = `${left}px`;
         } else {
           setPlacement("bottom-start");
-          setPlaceLeft(left);
-          setPlaceTop(top + (heightBtn ?? 100));
+          SongMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          SongMenuRef.current.style.left = `${left}px`;
         }
       }
     }
@@ -206,8 +206,7 @@ const SongMenu = () => {
   return (
     <div
       ref={SongMenuRef}
-      className={`SongMenu ${open && placeTop && placeLeft ? "active" : ""}`}
-      style={{ top: placeTop, left: placeLeft }}
+      className={`SongMenu ${open ? "active" : ""}`}
       data-placement={placement}
     >
       <div className={`SongMenu__context`}>
@@ -215,7 +214,7 @@ const SongMenu = () => {
           <ItemMenu
             title={t("Menu.Add to playlist")}
             icon={<i className="fa-solid fa-plus"></i>}
-            itemFunc={() => console.log("Add to playlist")}
+            itemFunc={() => console.log("")}
           >
             <AddSongToPlaylist
               songId={id}
@@ -291,7 +290,7 @@ const SongMenu = () => {
           />
           <ItemMenu
             title={t("Menu.Share")}
-            icon={<i className="fa-solid fa-share"></i>}
+            icon={<i className="fa-light fa-arrow-up-from-bracket"></i>}
             itemFunc={() => console.log("Add to playlist")}
           />
         </ul>
@@ -392,18 +391,6 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
     sort: "new",
   });
 
-  // const {
-  //   id,
-  //   open,
-  //   playlistId,
-  //   left,
-  //   top,
-  //   width: widthBtn,
-  //   height: heightBtn,
-  // } = useSelector((state: RootState) => state.menuSong);
-  const [placeTop, setPlaceTop] = useState<number>(0);
-  const [placeLeft, setPlaceLeft] = useState<number>(0);
-
   const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
 
   const updateState = (newState: Partial<TStateParams>) => {
@@ -427,44 +414,6 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
       }
     },
   });
-
-  // useEffect(() => {
-  //   const rectSubmenu = subMenuRef.current?.getBoundingClientRect();
-  //   console.log({ rectSubmenu });
-  //   console.log(window.innerHeight, window.innerWidth);
-  //   if (subMenuRef.current) {
-  //     if (left + subMenuRef.current?.clientWidth > window.innerWidth) {
-  //       if (top + subMenuRef.current?.clientHeight < window.innerHeight) {
-  //         // setPlacement("bottom-end");
-  //         setPlaceLeft(
-  //           left - subMenuRef.current?.clientWidth + (widthBtn ?? 100)
-  //         );
-  //         setPlaceTop(top + (heightBtn ?? 100));
-  //       } else {
-  //         // setPlacement("top-end");
-  //         setPlaceLeft(
-  //           left - subMenuRef.current?.clientWidth + (widthBtn ?? 100)
-  //         );
-  //         setPlaceTop(top - subMenuRef.current?.clientHeight);
-  //       }
-  //     } else {
-  //       if (top + subMenuRef.current?.clientHeight > window.innerHeight) {
-  //         // setPlacement("top-start");
-  //         setPlaceLeft(left);
-  //         setPlaceTop(
-  //           top -
-  //             rectSubmenu?.current.clientHeight -
-  //             (heightBtn ?? 100) -
-  //             (heightBtn ?? 100)
-  //         );
-  //       } else {
-  //         setPlacement("bottom-start");
-  //         setPlaceLeft(left);
-  //         setPlaceTop(top + (heightBtn ?? 100));
-  //       }
-  //     }
-  //   }
-  // }, [subMenuRef.current, window]);
 
   return (
     <>

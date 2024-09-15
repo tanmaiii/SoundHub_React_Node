@@ -20,7 +20,7 @@ interface TAudioContext {
   replay: boolean;
 
   start: (songId: string) => void;
-  stope: () => void;
+  stop: () => void;
   playSong: () => void;
   pauseSong: () => void;
   nextSong: () => void;
@@ -30,6 +30,7 @@ interface TAudioContext {
   changePlaceQueue: (songs: string[]) => void;
   addQueue: (songNewId: string) => void;
   removeSongQueue: (songId: string) => void;
+  addPlaylistQueue: (songs: string[]) => void;
 
   changeVolume: (value: string) => void;
   changeRandom: (value: boolean) => void;
@@ -138,6 +139,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     }
   }, [songPlayId]);
 
+
   const getIndexRandom = () => {
     if (!queue) return 0;
 
@@ -170,8 +172,6 @@ export const AudioContextProvider = ({ children }: Props) => {
     // Trả về chỉ số ngẫu nhiên
     return randomIndex;
   };
-
-  useEffect(() => {}, [queue]);
 
   const start = async (songId: string) => {
     if (audioRef.current?.currentTime) audioRef.current.currentTime = 0;
@@ -209,7 +209,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     } catch (error) {}
   };
 
-  const stope = () => {
+  const stop = () => {
     setSongPlayId(null);
     setIsPlaying(false);
     setQueue([]);
@@ -257,7 +257,7 @@ export const AudioContextProvider = ({ children }: Props) => {
   const removeSongQueue = (songId: string) => {
     const newQueue = queue?.filter((item) => item !== songId);
     if (queue?.length === 1) {
-      stope();
+      stop();
       return pauseSong();
     }
     if (songId === songPlayId) {
@@ -287,6 +287,15 @@ export const AudioContextProvider = ({ children }: Props) => {
       }
     } else {
       toast.success("Bài hát đã tồn tại trong danh sách chờ");
+    }
+  };
+
+  const addPlaylistQueue = async (songs: string[]) => {
+    const newQueue = songs.filter((song) => !queue?.includes(song));
+    setQueue(queue ? [...queue, ...newQueue] : newQueue);
+    toast.success("Thêm danh sách phát thành công");
+    if (queue?.length === 0) {
+      start(songs![0]);
     }
   };
 
@@ -380,7 +389,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     currentTime,
 
     start,
-    stope,
+    stop,
     playSong,
     pauseSong,
     nextSong,
@@ -390,6 +399,7 @@ export const AudioContextProvider = ({ children }: Props) => {
     changePlaceQueue,
     addQueue,
     removeSongQueue,
+    addPlaylistQueue,
 
     changeVolume,
     changeRandom,

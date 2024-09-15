@@ -15,7 +15,7 @@ const WattingList = ({}: Props) => {
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const { token } = useAuth();
-  const { queue, updateQueue, changePlaceQueue, songPlayId, replay } =
+  const { queue, updateQueue, changePlaceQueue, songPlayId, replay, stop } =
     useAudio();
   const [queueNew, setQueueNew] = useState<string[]>([]);
   const itemRef = React.createRef<HTMLDivElement>();
@@ -77,10 +77,7 @@ const WattingList = ({}: Props) => {
         <div className="wattingList__wrapper__header">
           <h3>Danh sách chờ</h3>
           <div className="wattingList__wrapper__header__list">
-            <button
-              onClick={handleChangeOpenWaiting}
-              data-tooltip={"Clear waiting list"}
-            >
+            <button onClick={() => stop()} data-tooltip={"Clear waiting list"}>
               <i className="fa-light fa-trash"></i>
             </button>
             <button onClick={handleChangeOpenWaiting}>

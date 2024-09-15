@@ -1,4 +1,4 @@
-import "./artistPage.scss";
+import "./style.scss";
 
 import Track from "../../components/Track";
 import Images from "../../constants/images";
@@ -24,7 +24,6 @@ export default function ArtistPage() {
   const { id } = useParams();
   const { currentUser, token } = useAuth();
   const queryClient = useQueryClient();
-  const { t } = useTranslation("home");
   const [openEditAvatar, setOpenEditAvatar] = useState(false);
 
   const { data: user, isLoading } = useQuery({
