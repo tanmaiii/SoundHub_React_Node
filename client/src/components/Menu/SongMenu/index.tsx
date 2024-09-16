@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { songApi } from "../../../apis";
@@ -16,16 +16,14 @@ import Images from "../../../constants/images";
 import { PATH } from "../../../constants/paths";
 import { useAudio } from "../../../context/AudioContext";
 import { useAuth } from "../../../context/AuthContext";
+import { closeMenu } from "../../../slices/menuSongSlide";
 import { RootState } from "../../../store";
 import { TPlaylist, TSong, TStateParams } from "../../../types";
 import ImageWithFallback from "../../ImageWithFallback/index";
 import Modal from "../../Modal";
 import { AddPlaylist } from "../../ModalPlaylist";
-import "./style.scss";
-import { useDispatch } from "react-redux";
-import { closeMenu } from "../../../slices/menuSongSlide";
 import { EditSong } from "../../ModalSong";
-import { set } from "react-hook-form";
+import "./style.scss";
 
 const SongMenu = () => {
   const { t } = useTranslation("song");
@@ -391,6 +389,16 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
     sort: "new",
   });
 
+  const {
+    id,
+    open,
+    playlistId,
+    left,
+    top,
+    width: widthBtn,
+    height: heightBtn,
+  } = useSelector((state: RootState) => state.menuSong);
+
   const { limit, page, loading, sort, totalPages, keyword, refreshing } = state;
 
   const updateState = (newState: Partial<TStateParams>) => {
@@ -414,6 +422,31 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
       }
     },
   });
+
+  useEffect(() => {
+    const rest = subMenuRef.current?.getBoundingClientRect();
+    if (subMenuRef.current && rest) {
+      console.log("rest", rest);
+
+      console.log("win width", window.innerWidth);
+
+      // if (rest?.right + rest?.width > window.innerWidth) {
+      //   subMenuRef.current.style.right = "100%";
+      //   subMenuRef.current.style.left = "unset";
+      //   subMenuRef.current.style.top = `0`;
+      //   return;
+      // } else {
+      //   subMenuRef.current.style.left = "100%";
+      //   subMenuRef.current.style.right = "unset";
+      //   subMenuRef.current.style.top = `0`;
+      //   return;
+      // }
+    }
+  }, [
+    window,
+    subMenuRef.current?.clientWidth,
+    subMenuRef.current?.clientHeight,
+  ]);
 
   return (
     <>

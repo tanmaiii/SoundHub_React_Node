@@ -132,7 +132,11 @@ function TrackShort({ id, number, loading }: props) {
         </div>
       </div>
       <div className="TrackShort__right">
-        <div className="item-hover">
+        <div
+          className={`item-hover ${
+            menuSong?.open && menuSong?.id === song?.id ? "active" : ""
+          }`}
+        >
           <button
             className={`button-like ${isLike ? "active" : ""}`}
             onClick={() => mutationLike.mutate(isLike ?? false)}
@@ -146,7 +150,7 @@ function TrackShort({ id, number, loading }: props) {
           <button
             ref={btnMenuRef}
             className={`button-edit ${
-              menuSong?.open && menuSong?.id === song?.id ? " active" : ""
+              menuSong?.open && menuSong?.id === song?.id ? "active" : ""
             }`}
             onClick={handleClickOpenMenu}
           >
@@ -154,9 +158,6 @@ function TrackShort({ id, number, loading }: props) {
           </button>
         </div>
         <div className="item-listen">
-          <button className={`button-like ${isLike ? "active" : ""}`}>
-            <i className="fa-solid fa-heart"></i>
-          </button>
           <span>
             {numeral(song?.count_listen ?? 0)
               .format("0a")

@@ -25,6 +25,7 @@
       .item-hover {
         display: flex;
       }
+
       .item-listen {
         display: none;
       }
@@ -32,10 +33,9 @@
       & .button-play {
         display: block;
       }
-
-      & .item__hover {
-        visibility: visible;
-      }
+      // & .item__hover {
+      //   visibility: visible;
+      // }
     }
     &.play {
       background-color: $color-hover;
@@ -138,6 +138,12 @@
         @include flex(center, center, row);
         gap: $space-4;
         display: none;
+        &.active {
+          display: flex;
+          & + .item-listen {
+            display: none;
+          }
+        }
         & > .button-like {
           border-radius: 50%;
           cursor: pointer;
@@ -160,9 +166,13 @@
           cursor: pointer;
           color: themed("txt-main");
           border-radius: 50%;
+
           &.active {
             visibility: visible;
             background-color: $color-hover;
+            & ~ .item-hover {
+              display: flex;
+            }
           }
           &:hover {
             background-color: $color-hover;
@@ -176,6 +186,7 @@
           }
         }
       }
+
       & > .item-listen {
         @include flex(center, center, row);
         gap: $space-4;
@@ -185,20 +196,6 @@
           font-size: $size-14;
           font-weight: $font-light;
           text-align: center;
-        }
-        .button-like {
-          visibility: hidden;
-          &.active {
-            visibility: visible;
-          }
-          i {
-            --size: 36px;
-            width: var(--size);
-            height: var(--size);
-            @include flex(center, center);
-            color: $color-primary1;
-            font-size: $size-18;
-          }
         }
       }
     }

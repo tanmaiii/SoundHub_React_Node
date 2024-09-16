@@ -15,6 +15,9 @@
       }
       &:hover {
         background-color: $color-hover;
+        .CardSong__container__image__swapper{
+          display: block;
+        }
       }
       &__image {
         width: 100%;

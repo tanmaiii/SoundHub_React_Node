@@ -113,13 +113,16 @@
             max-height: 300px;
             overflow-y: auto;
 
+            right: 100%;
+            top: 0;
+
             &[data-placement="top-start"] {
               top: 0;
               left: 100%;
             }
             &[data-placement="bottom-start"] {
               top: 0;
-              left: 100%;
+              right: 100%;
             }
             &[data-placement="top-end"] {
               top: 0;

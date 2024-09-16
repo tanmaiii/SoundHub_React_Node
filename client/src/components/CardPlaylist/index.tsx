@@ -94,8 +94,7 @@ function CardPlaylist({
   const handleAddToQueue = async () => {
     try {
       const res = await songApi.getAllByPlaylistId(token, id || "", 1, 0);
-
-      res.data &&
+      res.data.length > 0 &&
         addPlaylistQueue(
           res.data
             .filter((song) => song?.id)
