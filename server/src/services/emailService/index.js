@@ -21,14 +21,15 @@ export async function sendEmail(to, subject, html) {
 
 export async function sendResetPasswordEmail(to, token) {
   const subject = "Reset password";
-  const resetPasswordUrl = `${FRONTEND_URL}/reset-password?token=${token}`;
+  const resetPasswordUrl = `${FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
   const html = template.resetPassword(resetPasswordUrl, "music");
   return await sendEmail(to, subject, html);
 }
 
-export async function sendVerificationAccount(email, code) {
+export async function sendVerificationAccount(email, token) {
   const subject = "Email Verification";
-  const html = template.verifyAccount(code, APP_NAME);
+  const url = `${FRONTEND_URL}/verify-account?token=${token}&email=${email}`;
+  const html = template.verifyAccount(url, APP_NAME);
   return await sendEmail(email, subject, html);
 }
 

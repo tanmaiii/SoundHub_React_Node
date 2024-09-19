@@ -1,0 +1,64 @@
+@use "../../../scss/" as *;
+
+.VerifyAccout {
+  @include themify($themes) {
+    @include flex(center, center, column);
+    gap: $space-12;
+    .check {
+      font-size: 60px;
+      color: $color-blue;
+    }
+    &__header {
+      @include flex(center, unset, row);
+      gap: $space-8;
+
+      i {
+        font-size: $size-24;
+        color: themed("txt-main");
+      }
+      h1 {
+        font-size: $size-24;
+        font-weight: $font-bold;
+        color: themed("txt-main");
+      }
+    }
+    span {
+      text-align: center;
+      font-size: $size-16;
+      font-weight: $font-light;
+      color: themed("txt-second");
+    }
+    &__error {
+      @include flex(center, unset, column);
+      gap: $space-8;
+      & > div {
+        @include flex(center, unset, row);
+        gap: $space-8;
+      }
+      i {
+        font-size: $size-24;
+        color: $color-red;
+      }
+      h1 {
+        font-size: $size-24;
+        font-weight: $font-bold;
+        color: themed("txt-main");
+      }
+      span {
+        text-align: center;
+        font-size: $size-16;
+        font-weight: $font-light;
+        color: themed("txt-second");
+      }
+      button {
+        cursor: pointer;
+        font-size: $size-16;
+        font-weight: $font-light;
+        color: $color-blue;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

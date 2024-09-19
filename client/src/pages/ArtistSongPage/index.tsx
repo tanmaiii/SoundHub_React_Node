@@ -11,7 +11,7 @@ import { useAuth } from "../../context/AuthContext";
 export default function ArtistSongPage() {
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [songs, setSongs] = useState<TSong[] | null>(null);
-  const { token } = useAuth();
+  const { token, currentUser } = useAuth();
   const { id } = useParams();
 
   const handleGetSong = async () => {

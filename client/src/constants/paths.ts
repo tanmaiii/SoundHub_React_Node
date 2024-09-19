@@ -10,6 +10,9 @@ const HomePage: FunctionComponent<any> = lazy(
 );
 const LoginPage = lazy(() => import("../pages/AuthPages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/AuthPages/SignupPage"));
+const ForgotPasswordPage = lazy(() => import("../pages/AuthPages/ForgotPassword"));
+const ResetPasswordPage = lazy(() => import("../pages/AuthPages/ResetPassword"));
+const VerifyAccoutPage = lazy(() => import("../pages/AuthPages/VerifyAccout"));
 const ArtistPage = lazy(() => import("../pages/ArtistPage"));
 const ArtistSongPage = lazy(() => import("../pages/ArtistSongPage"));
 const ArtistPlaylistPage = lazy(() => import("../pages/ArtistPlaylistPage"));
@@ -30,7 +33,7 @@ const SearchPage = lazy(() => import("../pages/SearchPage"));
 
 const NotFoundPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
 
-const AuthLayout = lazy(() => import("../layout/AuthLayout/AuthLayout"));
+const AuthLayout = lazy(() => import("../layout/AuthLayout"));
 
 const AccountPage = lazy(() => import("../pages/SettingPage/Account"));
 const PasswordPage = lazy(() => import("../pages/SettingPage/Password"));
@@ -72,7 +75,9 @@ const PATH = {
 
   LOGIN: "/login",
   SIGNUP: "/signup",
-  VERIFY: "/verify-email",
+  RESET_PASSWORD: "/reset-password",
+  FORGOT_PASSWORD: "/forgot-password",
+  VERIFY_ACCOUNT: "/verify-account",
 
   MY_PROFILE: "/my-profile",
   MY_PLAYLIST: "/my-playlist",
@@ -87,17 +92,20 @@ const publicRoutes = [
   { path: PATH.FAVOURITE, layout: null, component: FavouritePage },
   { path: PATH.UPLOAD, layout: null, component: UploadPage },
 
-  // { path: PATH.SETTINGS + PATH.ACCOUNT, layout: null, component: AccountPage },
-  // { path: PATH.SETTINGS + PATH.CHANGE_PASSWORD, layout: null, component: SettingsPage },
   { path: PATH.SETTINGS, layout: null, component: SettingsPage },
   { path: PATH.SETTINGS_SHOW, layout: null, component: SettingsPage },
 
   { path: PATH.SEARCH, layout: null, component: SearchPage },
   { path: PATH.SEARCH_SHOW, layout: null, component: SearchPage },
 
+  //Auth
   { path: PATH.LOGIN, layout: AuthLayout, component: LoginPage },
   { path: PATH.SIGNUP, layout: AuthLayout, component: SignupPage },
-  { path: PATH.VERIFY, layout: AuthLayout, component: VerifyPage },
+  { path: PATH.FORGOT_PASSWORD, layout: AuthLayout, component: ForgotPasswordPage },
+  { path: PATH.VERIFY_ACCOUNT, layout: AuthLayout, component: VerifyAccoutPage },
+  { path: PATH.RESET_PASSWORD, layout: AuthLayout, component: ResetPasswordPage },
+
+  // { path: PATH.VERIFY, layout: AuthLayout, component: VerifyPage },
 
   { path: PATH.ARTIST_SHOW, layout: null, component: ArtistPage },
   { path: PATH.ARTIST_SONG_SHOW, layout: null, component: ArtistSongPage },

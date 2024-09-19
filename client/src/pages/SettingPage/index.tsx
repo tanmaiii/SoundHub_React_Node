@@ -35,7 +35,7 @@ const SettingPage = () => {
           id: 3,
           title: t("Identity verification"),
           icon: <i className="fa-sharp-duotone fa-light fa-badge-check"></i>,
-          path: PATH.SETTINGS + PATH.VERIFY,
+          path: PATH.SETTINGS + "/verify",
           item: Account,
         },
       ],

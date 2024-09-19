@@ -77,6 +77,14 @@
           }
         }
         &__desc {
+          a{
+            @include flex(center, unset);
+          }
+          .icon__private {
+            font-size: $size-14;
+            color: themed("txt-main");
+            margin-right: $space-4;
+          }
           &__title {
             font-size: $size-16;
             font-weight: $font-light;

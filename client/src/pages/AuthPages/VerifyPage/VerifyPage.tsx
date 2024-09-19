@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import queryString from "query-string";
 import { PATH } from "../../../constants/paths";
 import { authApi } from "../../../apis";
-import Loading from "../../../components/Loading/Loading";
+import Loading from "../../../components/Loading";
 
 export default function VerifyPage() {
   const { t } = useTranslation("auth");

@@ -8,9 +8,15 @@ const authApi = {
     const url = "auth/signin";
     return axiosClient.post(url, { email, password });
   },
-  signup(name: string, email: string, password: string): Promise<TUser> {
+  signup(
+    email: string,
+    password: string,
+    name: string,
+    brithday: string,
+    gender: string
+  ): Promise<TUser> {
     const url = "auth/signup";
-    return axiosClient.post(url, { name, email, password });
+    return axiosClient.post(url, { email, password, name, brithday, gender });
   },
 
   signout() {
@@ -21,7 +27,10 @@ const authApi = {
     const url = "user/email";
     return axiosClient.post(url, { email });
   },
-  sendVerifyEmail(token: string, email: string): Promise<{ success: boolean; data: string }> {
+  sendVerifyEmail(
+    token: string,
+    email: string
+  ): Promise<{ success: boolean; data: string }> {
     const url = "auth/send-verify-email";
     return axiosClient.post(
       url,
@@ -53,11 +62,17 @@ const authApi = {
     const url = "auth/send-verify-account";
     return axiosClient.post(url, { email });
   },
-  verifyAccount(email: string, code: string) {
+  verifyAccount(
+    email: string,
+    token: string
+  ): Promise<{ success: boolean; data: string }> {
     const url = "auth/verify-account";
-    return axiosClient.post(url, { email, code });
+    return axiosClient.post(url, { email, token });
   },
-  verifyForgotPassword(email: string, code: string): Promise<ResVerifyForgotPassword> {
+  verifyForgotPassword(
+    email: string,
+    code: string
+  ): Promise<ResVerifyForgotPassword> {
     const url = "auth/verify-forgot-password";
     return axiosClient.post(url, { email, code });
   },

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./authLayout.scss";
+import "./style.scss";
 
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -21,17 +21,21 @@ export default function AuthLayout({ children }: Props) {
   });
 
   return (
-    <div className="AuthLayout">
-      <div className="AuthLayout__left">
-        <div className="AuthLayout__left__header">
-          <Link to={PATH.HOME} className="AuthLayout__left__header__logo">
-            <img className="image__logo" src={Images.LOGO} alt="" />
-            <h2>Sound</h2>
-          </Link>
+    <div className="AuthLayout row no-gutters">
+      <div className="col pc-8 t-5 m-0">
+        <div className="AuthLayout__left">
+          <div className="AuthLayout__left__header">
+            <Link to={PATH.HOME} className="AuthLayout__left__header__logo">
+              <img className="image__logo" src={Images.LOGO} alt="" />
+              <h2>Sound</h2>
+            </Link>
+          </div>
+          <img className="image__main" src={Images.BG} alt="" />
         </div>
-        <img className="image__main" src={Images.BG} alt="" />
       </div>
-      <div className="AuthLayout__body">{children}</div>
+      <div className="col pc-4 t-7 m-12">
+        <div className="AuthLayout__body">{children}</div>
+      </div>
     </div>
   );
 }

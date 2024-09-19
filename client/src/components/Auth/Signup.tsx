@@ -4,7 +4,7 @@ import { PATH } from "../../constants/paths";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { userApi, authApi } from "../../apis";
-import Loading from "../Loading/Loading";
+import Loading from "../Loading";
 
 type PropsSignupPassword = {
   handleClickNext: () => void;
@@ -57,8 +57,10 @@ export default function Signup() {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      // await authApi.signup(email, password, name, birthDay, genre);
-      // await authApi.sendVerificationEmail(email);
+      const res = await authApi.signup(email, password, name, birthDay, genre);
+      try {
+        res.email && (await authApi.sendVerifyAccount(res.email));
+      } catch (error) {}
       setSuccess(true);
       setLoading(false);
     } catch (error: any) {
@@ -251,7 +253,7 @@ export function SignupPassword({
       setHasNumberOrSpecialChar(true);
     }
 
-    if (password.length >= 10) {
+    if (password.length >= 6) {
       setHasMinimumLength(true);
     }
     if (password.length >= 50) {
@@ -305,7 +307,7 @@ export function SignupPassword({
               ) : (
                 <i className="fa-light fa-circle"></i>
               )}
-              <span>{t("signup.PasswordOption.10 characters")}</span>
+              <span>{t("signup.PasswordOption.characters")}</span>
             </li>
           </ul>
         </div>
@@ -421,12 +423,12 @@ export function SignupInfo({
             <input
               type="radio"
               name="gender"
-              id="gender-man"
-              value={"man"}
-              checked={genre === "man"}
+              id="gender-male"
+              value={"Male"}
+              checked={genre === "Male"}
               onChange={(e) => setGenre(e.target.value)}
             />
-            <label htmlFor="gender-man">
+            <label htmlFor="gender-male">
               <span className="btn"></span>
               <span className="title">{t("signup.GenderOption.Man")}</span>
             </label>
@@ -436,12 +438,12 @@ export function SignupInfo({
             <input
               type="radio"
               name="gender"
-              id="gender-woman"
-              value={"woman"}
-              checked={genre === "woman"}
+              id="gender-female"
+              value={"Female"}
+              checked={genre === "Female"}
               onChange={(e) => setGenre(e.target.value)}
             />
-            <label htmlFor="gender-woman">
+            <label htmlFor="gender-female">
               <span className="btn"></span>
               <span className="title">{t("signup.GenderOption.Woman")}</span>
             </label>
@@ -452,8 +454,8 @@ export function SignupInfo({
               type="radio"
               name="gender"
               id="gender-other"
-              value={"other"}
-              checked={genre === "other"}
+              value={"No disclosure"}
+              checked={genre === "No disclosure"}
               onChange={(e) => setGenre(e.target.value)}
             />
             <label htmlFor="gender-other">

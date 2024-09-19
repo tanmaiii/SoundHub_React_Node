@@ -201,8 +201,6 @@ export const getAllSongByUser = async (req, res) => {
     const token = req.headers["authorization"];
     const userReqInfo = await jwtService.verifyToken(token);
 
-    console.log("USER REQ INFO: ", userReqInfo);
-
     Song.findByUserId(
       req.params.userId,
       userReqInfo,

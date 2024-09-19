@@ -5,8 +5,12 @@
     @include flex(center, unset);
     flex-direction: row;
     height: 100vh;
+    background-color: themed("bg-2");
     @include mobile {
       flex-direction: column-reverse;
+    }
+    & > div {
+      height: 100%;
     }
     &__left__header {
       position: fixed;
@@ -32,19 +36,12 @@
       }
     }
     &__left {
-      width: 50%;
       height: 100%;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       display: flex;
       overflow: hidden;
-      @include tablet {
-        width: 100%;
-      }
-      @include mobile {
-        height: 0;
-      }
       & > img {
         height: 100%;
         width: 100%;
@@ -52,18 +49,13 @@
       }
     }
     &__body {
-      width: 50%;
-      padding: 0 90px;
+      padding: 0 20px;
       background-color: themed("bg-2");
       height: 100%;
       margin: auto 0;
-      @include tablet {
-        width: auto;
-      }
       @include flex(center, center);
       @include mobile {
         padding: 90px 0;
-        width: 100%;
       }
     }
   }

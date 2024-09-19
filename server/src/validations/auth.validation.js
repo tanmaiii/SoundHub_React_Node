@@ -80,7 +80,7 @@ export default class authValidation {
         "string.empty": `Email is empty!`,
         "any.required": `Email is a required field!`,
       }),
-      code: Joi.number().required(),
+      token: Joi.string().required(),
     }),
   };
   static verifyForgotPassword = {
@@ -92,7 +92,7 @@ export default class authValidation {
         "string.empty": `Email is empty!`,
         "any.required": `Email is a required field!`,
       }),
-      code: Joi.number().required(),
+      token: Joi.string().required(),
     }),
   };
   static verifyEmail = {

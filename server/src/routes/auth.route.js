@@ -13,6 +13,11 @@ router.post(
   authController.verifyPassword
 );
 router.post(
+  "/forgot-password",
+  validate(authValidation.forgotPassword),
+  authController.forgotPassword
+);
+router.post(
   "/reset-password",
   validate(authValidation.resetPassword),
   authController.resetPassword
@@ -32,13 +37,11 @@ router.post(
   validate(authValidation.changePassword),
   authController.changePassword
 );
-
 router.post(
   "/send-verify-email",
   validate(authValidation.sendVerify),
   authController.sendVerifyEmail
 );
-
 router.post("/verify-email", validate(authValidation.verifyEmail), authController.verifyEmail);
 
 export default router;

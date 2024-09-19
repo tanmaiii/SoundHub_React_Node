@@ -13,13 +13,15 @@ export const signin = async (req, res) => {
 
     User.findByEmail(email, (err, user) => {
       if (err) return res.status(401).json({ conflictError: err });
-      
+
       if (!user) {
         return res.status(401).json({ conflictError: "User not found !" });
       }
 
       if (user.email_verified_at === null) {
-        return res.status(401).json({ conflictError: "User is not authenticated!" });
+        return res
+          .status(401)
+          .json({ conflictError: "User is not authenticated!" });
       }
 
       bcrypt.compare(password, user.password, (err, result) => {
@@ -55,7 +57,6 @@ export const signin = async (req, res) => {
         }
       });
     });
-    
   } catch (error) {
     const conflictError = "User credentials are not valid.";
     res.status(401).json({ conflictError });
@@ -107,8 +108,15 @@ export const forgotPassword = (req, res) => {
         return res.status(401).json({ conflictError: "Email not found!" });
       }
 
-      const resetPasswordToken = jwtService.generateToken({ id: user.id }, { expiresIn: "1h" });
-      await emailService.sendResetPasswordEmail(email, resetPasswordToken);
+      // const code = VerifyCode.create(user.id, randomstring.generate({ length: 4, charset: "numeric" }));
+
+      const token = jwtService.generateToken(
+        { id: user.id },
+        { expiresIn: "1h" }
+      );
+
+      await emailService.sendResetPasswordEmail(email, token);
+
       return res.json({
         success: true,
         data: "Sending email forgot password successfully!",
@@ -116,7 +124,9 @@ export const forgotPassword = (req, res) => {
       });
     });
   } catch (error) {
-    return res.status(500).json({ conflictError: "Error during request processing" });
+    return res
+      .status(500)
+      .json({ conflictError: "Error during request processing" });
   }
 };
 
@@ -184,13 +194,19 @@ export const sendVerifyAccount = (req, res) => {
         return res.status(401).json({ conflictError: "Email not found!" });
       }
 
-      // const token = jwtService.generateToken({ email }, { expiresIn: "1h" });
-      const code = randomstring.generate({
-        length: 4,
-        charset: "numeric",
-      });
+      if (user.email_verified_at !== null) {
+        return res.json({
+          success: true,
+          data: "Account has already been verified!",
+        });
+      }
 
-      const verificationResult = await emailService.sendVerificationAccount(email, code);
+      const token = jwtService.generateToken({ email }, { expiresIn: "1h" });
+
+      const verificationResult = await emailService.sendVerificationAccount(
+        email,
+        token
+      );
 
       if (!verificationResult.success)
         return res.json({
@@ -198,17 +214,9 @@ export const sendVerifyAccount = (req, res) => {
           data: "Đã xảy ra lỗi khi gửi email xác minh",
         });
 
-      VerifyCode.create(user.id, code, async (err, result) => {
-        if (err) {
-          return res.status(401).json({ conflictError: err });
-        }
-        console.log("✉️ Send verification email : " + email + " - code : " + code);
-
-        return res.json({
-          success: true,
-          data: "Email verification sent successfully !",
-          // code: code,
-        });
+      return res.json({
+        success: true,
+        data: "Email verification sent successfully !",
       });
     });
   } catch (error) {
@@ -232,7 +240,10 @@ export const sendVerifyEmail = async (req, res) => {
           charset: "numeric",
         });
 
-        const verificationResult = await emailService.sendVerificationEmail(email, code);
+        const verificationResult = await emailService.sendVerificationEmail(
+          email,
+          code
+        );
 
         if (!verificationResult.success)
           return res.json({
@@ -245,7 +256,9 @@ export const sendVerifyEmail = async (req, res) => {
             VerifyCode.delete(user.id, (err, result) => {});
             return res.status(401).json({ conflictError: err });
           }
-          console.log("✉️ Send verification email : " + email + " - code : " + code);
+          console.log(
+            "✉️ Send verification email : " + email + " - code : " + code
+          );
 
           return res.json({
             success: true,
@@ -263,46 +276,51 @@ export const sendVerifyEmail = async (req, res) => {
 // Xác thực tài khoản
 export const verifyAccount = async (req, res) => {
   try {
-    const { code, email } = req.body;
+    const { token, email } = req.body;
 
-    User.findByEmail(email, (err, user) => {
-      if (err || !user) return res.status(500).json({ conflictError: "User not found" });
+    User.findByEmail(email, async (err, user) => {
+      if (err || !user) {
+        return res.status(404).json({ conflictError: "User not found" });
+      }
+
       if (user.email_verified_at !== null) {
-        console.log(" Account has been verified! ");
+        console.log("Account has already been verified!");
         return res.json({
           success: true,
-          data: "Account has been verified! ",
+          data: "Account has already been verified!",
         });
-      } else {
-        VerifyCode.find(user.id, (err, verify) => {
-          if (err || !verify) {
-            return res.status(500).json({ conflictError: "Error during request processing" });
-          }
+      }
 
-          const codeSql = verify.code;
+      try {
+        const userInfo = await jwtService.verifyToken(token);
 
-          if (parseInt(codeSql) === parseInt(code)) {
-            // return res.json({ codeSql, code });
-            User.verify(email, (err, result) => {
-              if (err || !result) {
-                return res.status(401).json(err);
-              } else {
-                console.log("Verify Account", email - code);
-                VerifyCode.delete(user.id, (err, result) => {});
-                return res.json({
-                  success: true,
-                  data: "Email authentication successful!",
-                });
-              }
-            });
-          } else {
-            return res.status(500).json({ conflictError: "Code does not match" });
-          }
-        });
+        if (userInfo && userInfo.email === email) {
+          User.verify(email, (err, result) => {
+            if (err || !result) {
+              return res
+                .status(500)
+                .json({ conflictError: "Verification failed" });
+            } else {
+              console.log("Verify Account", email);
+              return res.json({
+                success: true,
+                data: "Email verification successful!",
+              });
+            }
+          });
+        } else {
+          return res.status(401).json({ conflictError: "Invalid token" });
+        }
+      } catch (error) {
+        return res
+          .status(500)
+          .json({ conflictError: "Error during request processing" });
       }
     });
   } catch (error) {
-    return res.status(500).json({ conflictError: "Error during request processing" });
+    return res
+      .status(500)
+      .json({ conflictError: "Error during request processing" });
   }
 };
 
@@ -319,7 +337,9 @@ export const verifyEmail = async (req, res) => {
       } else {
         VerifyCode.find(user.id, (err, verify) => {
           if (err || !verify) {
-            return res.status(500).json({ conflictError: "Error during request processing" });
+            return res
+              .status(500)
+              .json({ conflictError: "Error during request processing" });
           }
           const codeSql = verify.code;
 
@@ -327,15 +347,22 @@ export const verifyEmail = async (req, res) => {
 
           if (parseInt(codeSql) === parseInt(code)) {
             VerifyCode.delete(user.id, (err, result) => {});
-            return res.json({ success: true, data: "Verify email successful!" });
+            return res.json({
+              success: true,
+              data: "Verify email successful!",
+            });
           } else {
-            return res.status(500).json({ conflictError: "Code does not match" });
+            return res
+              .status(500)
+              .json({ conflictError: "Code does not match" });
           }
         });
       }
     });
   } catch (error) {
-    return res.status(500).json({ conflictError: "Error during request processing" });
+    return res
+      .status(500)
+      .json({ conflictError: "Error during request processing" });
   }
 };
 
@@ -349,7 +376,9 @@ export const verifyPassword = async (req, res) => {
       } else {
         VerifyCode.find(user.id, (err, verify) => {
           if (err || !verify) {
-            return res.status(500).json({ conflictError: "Error during request processing" });
+            return res
+              .status(500)
+              .json({ conflictError: "Error during request processing" });
           }
 
           const codeSql = verify.code;
@@ -363,9 +392,14 @@ export const verifyPassword = async (req, res) => {
             );
 
             VerifyCode.delete(user.id, (err, result) => {});
-            return res.json({ success: true, data: { resetPasswordToken: resetPasswordToken } });
+            return res.json({
+              success: true,
+              data: { resetPasswordToken: resetPasswordToken },
+            });
           } else {
-            return res.status(500).json({ conflictError: "Code does not match" });
+            return res
+              .status(500)
+              .json({ conflictError: "Code does not match" });
           }
         });
       }

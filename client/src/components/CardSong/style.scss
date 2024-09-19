@@ -81,7 +81,7 @@
           color: themed("txt-second");
           @include flex(center, start, row);
         }
-        .icon__private {
+        & > .icon__private {
           font-size: $size-14;
           color: themed("txt-main");
           margin-right: $space-4;

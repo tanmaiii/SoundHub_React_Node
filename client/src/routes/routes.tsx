@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async"; // quản lý các thẻ trong <head>
 
-import Loading from "../components/Loading/Loading";
+import Loading from "../components/Loading";
 
 import MainLayout from "../layout/MainLayout";
 

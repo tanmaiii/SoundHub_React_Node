@@ -126,6 +126,9 @@ export default function Track({
           </div>
           <div className="track__wrapper__left__desc">
             <Link to={`${PATH.SONG}/${song?.id}`}>
+              {song?.public === 0 && (
+                <i className="icon__private fa-light fa-lock"></i>
+              )}
               <h4 className="track__wrapper__left__desc__title">
                 {song?.title}
               </h4>

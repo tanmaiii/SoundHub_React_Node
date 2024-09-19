@@ -1,4 +1,4 @@
-export const verifyAccount = (code, appName) => {
+export const verifyAccount = (url, appName) => {
   return `
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -222,10 +222,11 @@ export const verifyAccount = (code, appName) => {
                                             cellspacing="0">
                                             <tr>
                                                 <td align="center">
-                                                    <div>
-                                                        <p>Your code is: </p> 
-                                                        <h2>${code && code}</h2>
-                                                      </div>
+                                                     <div>
+                                                        <a href="${url}" class="button button--blue">
+                                                            Verify Email
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
