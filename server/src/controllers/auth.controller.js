@@ -108,8 +108,6 @@ export const forgotPassword = (req, res) => {
         return res.status(401).json({ conflictError: "Email not found!" });
       }
 
-      // const code = VerifyCode.create(user.id, randomstring.generate({ length: 4, charset: "numeric" }));
-
       const token = jwtService.generateToken(
         { id: user.id },
         { expiresIn: "1h" }
@@ -120,7 +118,7 @@ export const forgotPassword = (req, res) => {
       return res.json({
         success: true,
         data: "Sending email forgot password successfully!",
-        token: resetPasswordToken,
+        token: token,
       });
     });
   } catch (error) {

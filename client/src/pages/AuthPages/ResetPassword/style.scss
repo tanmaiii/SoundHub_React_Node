@@ -1,1 +1,183 @@
-@use '../../../scss/' as *;
+@use "../../../scss/" as *;
+
+.ResetPassword {
+  @include themify($themes) {
+    &__container {
+      width: 380px;
+      @include mobile {
+        width: 100%;
+      }
+      & > .error {
+        background-color: $color-red;
+        @include flex(center, unset, row);
+        padding: $space-8 $space-12;
+        border-radius: $radius-8;
+        margin-bottom: $space-12;
+        span {
+          font-size: $size-16;
+          color: $color-white;
+        }
+        i {
+          margin-right: $space-8;
+          color: $color-white;
+        }
+      }
+
+      &__title {
+        @include flex(center, center, column);
+        gap: $space-8;
+        i{
+          font-size: $size-40;
+          color: $color-blue;
+        }
+        h2 {
+          @include flex(center, center);
+          font-size: $size-30;
+          text-align: center;
+          color: themed("txt-main");
+          font-weight: $font-bold;
+        }
+        span {
+          font-size: $size-16;
+          color: themed("txt-second");
+          margin-bottom: $space-32;
+          font-weight: $font-light;
+        }
+      }
+
+      &__group {
+        margin-bottom: $space-12;
+        @include flex(unset, unset);
+        flex-direction: column;
+        // gap: $space-12;
+        & > .title {
+          font-size: $size-16;
+          font-weight: $font-medium;
+          color: themed("txt-main");
+        }
+
+        & > .input {
+          background-color: themed("bg-1");
+          padding: $space-18 $space-24;
+          border-radius: $radius-8;
+          position: relative;
+          margin: $space-8 0;
+          &.error {
+            border: 1.4px solid $color-red;
+          }
+          input {
+            font-size: $size-16;
+            font-weight: $font-light;
+            color: themed("txt-main");
+            width: 100%;
+          }
+          .tooglePassword {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 10px;
+            cursor: pointer;
+            color: themed("txt-main");
+          }
+        }
+
+        & > .error {
+          i {
+            font-size: $size-18;
+            margin-right: $space-8;
+            color: $color-red;
+          }
+          span {
+            font-size: $size-16;
+            color: $color-red;
+          }
+        }
+
+        & > .desc {
+          h4 {
+            font-size: $size-14;
+            font-weight: $font-medium;
+            color: themed("txt-main");
+            margin-bottom: $space-4;
+          }
+
+          span {
+            font-size: $size-14;
+            font-weight: $font-light;
+            color: themed("txt-second");
+          }
+
+          ul {
+            li {
+              @include flex(center, unset);
+              gap: $space-8;
+              margin-bottom: $space-4;
+              color: themed("txt-second");
+              span {
+                font-size: $size-14;
+                font-weight: $font-light;
+              }
+              i {
+                // border: 3px solid $color-primary1;
+                color: $color-primary1;
+                font-size: $size-16;
+              }
+            }
+          }
+        }
+
+        & > .btn_submit {
+          background-color: $color-primary1;
+          width: 100%;
+          padding: $space-12 $space-14;
+          border-radius: $radius-25;
+          font-size: $size-16;
+          color: $color-white;
+          font-weight: $font-medium;
+          cursor: pointer;
+          transition: $transition;
+          margin-top: $space-12;
+          &:hover {
+            transform: scale(1.01);
+          }
+        }
+
+        & > .btn_loading{
+          @include flex(center, center);
+        }
+
+        & > .forgot {
+          @include flex(center, center);
+          font-size: $size-16;
+          color: themed("txt-second");
+          font-weight: $font-light;
+          text-decoration: underline;
+          cursor: pointer;
+          display: block;
+          &:hover {
+            color: $color-primary1;
+          }
+        }
+
+        & > .auth__navigation {
+          text-align: right;
+          font-size: $size-16;
+          color: themed("txt-second");
+          font-weight: $font-light;
+          display: block;
+          @include flex(center, center);
+          gap: $space-8;
+          margin: $space-12 0;
+          a {
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover {
+              color: $color-primary1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

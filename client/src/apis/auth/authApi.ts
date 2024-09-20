@@ -91,6 +91,10 @@ const authApi = {
       }
     );
   },
+  fogrotPassword(email: string) {
+    const url = "auth/forgot-password";
+    return axiosClient.post(url, { email });
+  },
   resetPassword(resetPasswordToken: string, password: string) {
     const url = "auth/reset-password";
     return axiosClient.post(`${url}?token=${resetPasswordToken}`, {

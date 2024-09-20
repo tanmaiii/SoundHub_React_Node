@@ -55,7 +55,9 @@ export default class authValidation {
         .min(6)
         .max(50)
         // .pattern(
-        //   new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$")
+        //   new RegExp(
+        //     "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{3,30}$"
+        //   )
         // )
         .required(),
     }),

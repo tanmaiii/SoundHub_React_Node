@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { userApi, authApi } from "../../apis";
 import Loading from "../Loading";
+import { set } from "react-hook-form";
 
 type PropsSignupPassword = {
   handleClickNext: () => void;
@@ -30,7 +31,6 @@ type PropsSignupInfo = {
 };
 
 export default function Signup() {
-  const [show, setShow] = useState(false);
   const [step, setStep] = useState(1);
   const { t } = useTranslation("auth");
   const [email, setEmail] = useState("");
@@ -40,6 +40,7 @@ export default function Signup() {
   const [genre, setGenre] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [signupFail, setSignupFail] = useState(false);
   const [err, setErr] = useState("");
 
   const maxStep = 3;
@@ -60,14 +61,27 @@ export default function Signup() {
       const res = await authApi.signup(email, password, name, birthDay, genre);
       try {
         res.email && (await authApi.sendVerifyAccount(res.email));
-      } catch (error) {}
+      } catch (error) {
+        setSignupFail(true);
+      }
       setSuccess(true);
       setLoading(false);
     } catch (error: any) {
-      setErr("Something went wrong !");
+      setSignupFail(true);
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!signupFail) {
+      setStep(1);
+      setEmail("");
+      setPassword("");
+      setName("");
+      setBirthDay("");
+      setGenre("");
+    }
+  }, [signupFail]);
 
   return (
     <div className="auth">
@@ -77,11 +91,24 @@ export default function Signup() {
           <h2>{t("signup.Title")}</h2>
         </div>
 
-        {success ? (
+        {signupFail ? (
+          <div className="auth__container__failed">
+            <i className="fa-regular fa-circle-exclamation"></i>
+            <h2>{t("signup.SignupFailed")}</h2>
+            <button
+              onClick={() => {
+                setSignupFail(false);
+              }}
+            >
+              <span>{t("signup.TryAgain")}</span>
+            </button>
+          </div>
+        ) : success ? (
           <div className="auth__container__success">
             <i className="fa-regular fa-circle-check"></i>
-            <h2>Account registration successful</h2>
-            <span>Please check your email and confirm</span>
+            <h2>{t("signup.SignupSuccessfully")}</h2>
+            <span>{t("signup.CheckEmail")}</span>
+            <Link to={PATH.LOGIN}>{t("login.Login")}</Link>
           </div>
         ) : (
           <>
@@ -245,17 +272,18 @@ export function SignupPassword({
     setHasNumberOrSpecialChar(false);
     setHasMinimumLength(false);
 
-    if (/[A-Za-z]/.test(password)) {
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) {
       setHasLetter(true);
     }
 
-    if (/[\d@#$%^&+=!]/.test(password)) {
+    if (/\d/.test(password) && /[@#$%^&+=!]/.test(password)) {
       setHasNumberOrSpecialChar(true);
     }
 
     if (password.length >= 6) {
       setHasMinimumLength(true);
     }
+
     if (password.length >= 50) {
       setHasMinimumLength(false);
     }

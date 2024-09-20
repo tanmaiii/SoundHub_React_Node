@@ -5,17 +5,21 @@ import ButtonLoading from "../../../components/Loading/Button";
 import { use } from "i18next";
 import { authApi } from "../../../apis";
 import { PATH } from "../../../constants/paths";
+import { useTranslation } from "react-i18next";
 
 const VerifyAccout = () => {
-  const params = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const [token, setToken] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [success, setSuccess] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState(false);
+  const [loadingResend, setLoadingResend] = React.useState(false);
+  const [resend, setResend] = React.useState(false);
+  const [errorResend, setErrorResend] = React.useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation("auth");
 
   useEffect(() => {
     const tokenUrl = queryParams.get("token");
@@ -30,15 +34,17 @@ const VerifyAccout = () => {
       try {
         const res =
           email && token && (await authApi.verifyAccount(email, token));
-        console.log(res);
         res && setSuccess(res?.success);
+        res && res?.success ? setError(false) : setError(true);
       } catch (error) {
-        setError("Xác thực tài khoản thất bại");
+        setError(true);
         console.log(error);
       }
       setLoading(false);
     };
-    verify();
+    setTimeout(() => {
+      verify();
+    }, 3000);
   }, [token, email]);
 
   useEffect(() => {
@@ -50,22 +56,41 @@ const VerifyAccout = () => {
   }, [success]);
 
   const handleClick = async () => {
-    try {
-      email && (await authApi.sendVerifyAccount(email));
-    } catch (error) {}
+    setLoadingResend(true);
+    setResend(false);
+
+    const sendEmail = async () => {
+      try {
+        email && (await authApi.sendVerifyAccount(email));
+        setLoadingResend(false);
+        setErrorResend(false);
+        setResend(true);
+      } catch (error) {
+        setErrorResend(true);
+      }
+      setTimeout(() => {
+        setErrorResend(false);
+        setResend(false);
+      }, 5000);
+      setLoadingResend(false);
+    };
+
+    setTimeout(() => {
+      sendEmail();
+    }, 3000);
   };
 
   return (
     <div className="VerifyAccout">
       {loading && (
         <>
-          <ButtonLoading />
+          <ButtonLoading size="L" />
           <div className="VerifyAccout__header">
             <i className="fa-regular fa-envelope"></i>
-            <h1>Xác thực tài khoản</h1>
+            <h1>{t("VerifyAccount.Title")}</h1>
           </div>
           <span>
-            Đang thực hiện xác thực tài khoản người dùng với email là{" "}
+            {t("VerifyAccount.Description")}
             <strong>{email}</strong>
           </span>
         </>
@@ -76,10 +101,24 @@ const VerifyAccout = () => {
           <div className="VerifyAccout__error">
             <div>
               <i className="fa-solid fa-circle-exclamation"></i>{" "}
-              <h1>{error}</h1>
+              <h1>{t("VerifyAccount.VerifyFailed")}</h1>
             </div>
-            <span>Vui lòng kiểm tra lại email</span>
-            <button onClick={handleClick}>Gửi lại email</button>
+            <span>{t("VerifyAccount.DescFailed")}</span>
+            {loadingResend ? (
+              <ButtonLoading size="S" />
+            ) : errorResend ? (
+              <span className="error">
+                <i className="fa-sharp fa-solid fa-circle-xmark"></i>{" "}
+                {t("VerifyAccount.ResendFailed")}
+              </span>
+            ) : resend ? (
+              <span className="success">
+                <i className="fa-sharp fa-solid fa-circle-check"></i>{" "}
+                {t("VerifyAccount.ResendSuccessfully")}
+              </span>
+            ) : (
+              <button onClick={handleClick}>{t("VerifyAccount.Resend")}</button>
+            )}
           </div>
         </>
       )}
@@ -90,12 +129,9 @@ const VerifyAccout = () => {
             <i className="fa-sharp fa-solid fa-circle-check"></i>
           </div>
           <div className="VerifyAccout__header">
-            <h1>Xác thực thành công</h1>
+            <h1>{t("VerifyAccount.VerifySuccessfully")}</h1>
           </div>
-          <span>
-            Tài khoản của bạn đã được xác thực thành công. Bạn sẽ được chuyển
-            hướng về trang đăng nhập sau 3s
-          </span>
+          <span>{t("VerifyAccount.DescSuccess")}</span>
         </>
       )}
     </div>

@@ -81,7 +81,9 @@ export default function Login() {
           </div>
         </div>
         <div className="auth__container__group">
-          <p className="forgot">{t("login.Forgot your password ?")}</p>
+          <Link to={PATH.FORGOT_PASSWORD} className="forgot">
+            {t("login.Forgot your password ?")}
+          </Link>
           <button className="btn_submit" onClick={() => handleClick()}>
             {t("login.Login")}
           </button>

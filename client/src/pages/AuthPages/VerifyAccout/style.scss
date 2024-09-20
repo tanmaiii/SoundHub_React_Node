@@ -34,10 +34,10 @@
       & > div {
         @include flex(center, unset, row);
         gap: $space-8;
-      }
-      i {
-        font-size: $size-24;
-        color: $color-red;
+        & > i {
+          font-size: $size-24;
+          color: $color-red;
+        }
       }
       h1 {
         font-size: $size-24;
@@ -57,6 +57,24 @@
         color: $color-blue;
         &:hover {
           text-decoration: underline;
+        }
+      }
+      .error{
+        color: $color-red;
+        font-size: $size-16;
+        font-weight: $font-light;
+        i{
+          font-size: $size-16;
+          color: $color-red;
+        }
+      }
+      .success{
+        color: themed('txt-main');
+        font-size: $size-16;
+        font-weight: $font-light;
+        i{
+          font-size: $size-16;
+          color: $color-blue;
         }
       }
     }

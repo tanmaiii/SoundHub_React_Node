@@ -20,6 +20,35 @@
       @include mobile {
         width: 100%;
       }
+      &__failed {
+        @include flex(center, center);
+        flex-direction: column;
+        gap: $space-8;
+        i {
+          font-size: 60px;
+          color: $color-red;
+        }
+        h2 {
+          font-size: $size-24;
+          color: themed("txt-main");
+        }
+        span {
+          font-size: $size-18;
+          color: themed("txt-second");
+        }
+        button {
+          span {
+            font-size: $size-16;
+            // color: themed("txt-second");
+            color: $color-blue;
+
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
       &__success {
         @include flex(center, center);
         flex-direction: column;
@@ -30,11 +59,21 @@
         }
         h2 {
           font-size: $size-24;
-          color: $color-blue;
+          color: themed("txt-main");
         }
         span {
           font-size: $size-18;
+          color: themed("txt-second");
+        }
+        a {
+          font-size: $size-16;
+          // color: themed("txt-second");
           color: $color-blue;
+
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
       &__title {

@@ -19,11 +19,11 @@ export async function sendEmail(to, subject, html) {
   }
 }
 
-export async function sendResetPasswordEmail(to, token) {
+export async function sendResetPasswordEmail(email, token) {
   const subject = "Reset password";
   const resetPasswordUrl = `${FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
   const html = template.resetPassword(resetPasswordUrl, "music");
-  return await sendEmail(to, subject, html);
+  return await sendEmail(email, subject, html);
 }
 
 export async function sendVerificationAccount(email, token) {
