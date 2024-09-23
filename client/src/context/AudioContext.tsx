@@ -139,7 +139,6 @@ export const AudioContextProvider = ({ children }: Props) => {
     }
   }, [songPlayId]);
 
-
   const getIndexRandom = () => {
     if (!queue) return 0;
 
@@ -343,7 +342,7 @@ export const AudioContextProvider = ({ children }: Props) => {
       setPercentage(+percent);
     }
 
-    // console.log(audio?.currentTime);
+    audioRef.current!.volume = parseInt(volume) / 100;
   };
 
   const onEnd = () => {

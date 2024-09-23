@@ -128,33 +128,39 @@ function HomePage(props: any) {
     <div className="home">
       {songsFavorite && songsFavorite?.length > 0 && (
         <Section title={t("section.favoriteSongs")}>
-          {songsFavorite?.map((song, index) => (
-            <CardSong
-              key={index}
-              title={song.title}
-              image={song.image_path}
-              author={song.author}
-              userId={song.user_id ?? ""}
-              id={song.id}
-              isPublic={song.public ?? 1}
-            />
-          ))}
+          {songsFavorite?.map((song, index) => {
+            if (song?.public === 0) return null;
+            return (
+              <CardSong
+                key={index}
+                title={song.title}
+                image={song.image_path}
+                author={song.author}
+                userId={song.user_id ?? ""}
+                id={song.id}
+                isPublic={song.public ?? 1}
+              />
+            );
+          })}
         </Section>
       )}
 
       {songNew && songNew.length > 0 && (
         <Section title={t("section.newSongs")}>
-          {songNew?.map((song, index) => (
-            <CardSong
-              key={index}
-              title={song.title}
-              image={song.image_path}
-              author={song.author}
-              userId={song.user_id ?? ""}
-              id={song.id}
-              isPublic={song.public ?? 1}
-            />
-          ))}
+          {songNew?.map((song, index) => {
+            if (song?.public === 0) return null;
+            return (
+              <CardSong
+                key={index}
+                title={song.title}
+                image={song.image_path}
+                author={song.author}
+                userId={song.user_id ?? ""}
+                id={song.id}
+                isPublic={song.public ?? 1}
+              />
+            );
+          })}
         </Section>
       )}
 
@@ -165,17 +171,20 @@ function HomePage(props: any) {
 
       {playlists && playlists.length > 0 && (
         <Section title={t("section.popularPlaylists")}>
-          {playlists?.map((playlist, index) => (
-            <CardPlaylist
-              key={index}
-              title={playlist.title}
-              image={playlist.image_path}
-              author={playlist.author}
-              id={playlist.id}
-              userId={playlist.user_id ?? ""}
-              isPublic={playlist.public ?? 1}
-            />
-          ))}
+          {playlists?.map((playlist, index) => {
+            if (playlist?.public === 0) return null;
+            return (
+              <CardPlaylist
+                key={index}
+                title={playlist.title}
+                image={playlist.image_path}
+                author={playlist.author}
+                id={playlist.id}
+                userId={playlist.user_id ?? ""}
+                isPublic={playlist.public ?? 1}
+              />
+            );
+          })}
         </Section>
       )}
 

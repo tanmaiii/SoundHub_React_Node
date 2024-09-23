@@ -15,6 +15,24 @@
         &__list{
             flex-wrap: wrap;
         }
+        &__loadMore {
+          width: 100%;
+          @include flex(center, center);
+          margin-top: $space-24;
+          button {
+            font-size: $radius-16;
+            color: themed("txt-main");
+            padding: $space-8 $space-16;
+            border-radius: $radius-10;
+            background-color: themed("bg-2");
+            cursor: pointer;
+            border: 1px solid themed("bg-3");
+            transition: $transition;
+            &:hover {
+              background-color: themed("bg-3");
+            }
+          }
+        }
       }
     }
   }

@@ -7,15 +7,11 @@ import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "react-query";
 import CardPlaylist from "../../components/CardPlaylist";
 import CardArtist from "../../components/CardArtist";
+import { useTranslation } from "react-i18next";
 
-type TFilter = "all" | "my";
 
 const MyArtistPage = () => {
-  const [filter, setFilter] = useState<TFilter>("all");
-
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, [filter]);
+  const { t } = useTranslation("home");
 
   const [data, setData] = useState<ResSoPaAr[] | null>(null);
   const { token } = useAuth();
@@ -81,7 +77,7 @@ const MyArtistPage = () => {
     <div className="MyArtistPage">
       <div className="MyArtistPage__container">
         <div className="MyArtistPage__container__header">
-          <HeaderSection title="Artist" />
+          <HeaderSection title={t("navbar.artists")} />
         </div>
         <div className="MyArtistPage__container__body">
           <div className="MyArtistPage__container__body__list">

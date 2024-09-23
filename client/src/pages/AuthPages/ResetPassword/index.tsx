@@ -4,7 +4,6 @@ import "./style.scss";
 import { PATH } from "../../../constants/paths";
 import { useTranslation } from "react-i18next";
 import { authApi } from "../../../apis";
-import { Value } from "sass";
 import Button from "../../../components/Loading/Button";
 
 type TInput = {
@@ -110,7 +109,7 @@ const ResetPassword = () => {
                 autoComplete="off"
                 type={`${password.view ? "text" : "password"}`}
                 name="password"
-                placeholder="Mật khẩu mới"
+                placeholder={t("ResetPassword.NewPassword")}
                 onChange={(e) =>
                   updatePassword({ value: e.target.value.trim() })
                 }
@@ -140,7 +139,7 @@ const ResetPassword = () => {
                 autoComplete="off"
                 type={`${rePassword.view ? "text" : "password"}`}
                 name="password"
-                placeholder="Nhập lại mật khẩu mới"
+                placeholder={t("ResetPassword.ReNewPassword")}
                 onChange={(e) =>
                   updateRePassword({ value: e.target.value.trim() })
                 }

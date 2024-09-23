@@ -67,26 +67,33 @@ SongPlay.findAllByUserId = async (userId, query, result) => {
   const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
-    ` SELECT DISTINCT s.*, u.name as author, slc.count as count, sp.created_at as created_at_play` +
-      ` FROM music.song_plays as sp` +
-      ` LEFT JOIN music.songs AS s ON sp.song_id = s.id` +
+    ` SELECT s.*, u.name AS author, slc.count AS count, MAX(sp.created_at) AS created_at_play ` +
+      ` FROM music.song_plays AS sp ` +
+      ` LEFT JOIN music.songs AS s ON sp.song_id = s.id ` +
       ` LEFT JOIN music.users AS u ON s.user_id = u.id ` +
       ` LEFT JOIN music.song_listens_count AS slc ON s.id = slc.song_id ` +
-      ` WHERE ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
+      ` WHERE  sp.created_at >= NOW() - INTERVAL 30 DAY ` +
+      ` AND ((s.public = 1 AND sp.user_id = '${userId}') ` +
+      `        OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) ` +
+      ` AND s.is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} ` +
-      ` ORDER BY sp.created_at ${sort === "new" ? "DESC" : "ASC"} ` +
+      ` GROUP BY s.id, u.name, slc.count ` +
+      ` ORDER BY MAX(sp.created_at) ${sort === "new" ? "DESC" : "ASC"} ` +
       ` ${
         !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
       } `
   );
 
   const [totalCount] = await promiseDb.query(
-    ` SELECT count(DISTINCT sp.song_id) as totalCount ` +
-      ` FROM music.song_plays as sp` +
-      ` LEFT JOIN music.songs AS s ON sp.song_id = s.id` +
+    ` SELECT COUNT(DISTINCT s.id) AS totalCount ` +
+      ` FROM music.song_plays AS sp ` +
+      ` LEFT JOIN music.songs AS s ON sp.song_id = s.id ` +
       ` LEFT JOIN music.users AS u ON s.user_id = u.id ` +
       ` LEFT JOIN music.song_listens_count AS slc ON s.id = slc.song_id ` +
-      ` WHERE ((s.public = 1 AND sp.user_id = '${userId}' ) OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) AND is_deleted = 0 ` +
+      ` WHERE  sp.created_at >= NOW() - INTERVAL 30 DAY ` +
+      ` AND ((s.public = 1 AND sp.user_id = '${userId}') ` +
+      `        OR (sp.user_id = '${userId}' AND s.user_id = sp.user_id)) ` +
+      ` AND s.is_deleted = 0 ` +
       ` ${q ? ` AND s.title LIKE "%${q}%" ` : ""} `
   );
 

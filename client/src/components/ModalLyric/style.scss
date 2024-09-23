@@ -42,14 +42,11 @@
       }
 
       &__header {
-        @include flex(center, space-between, row);
         width: 100%;
-        &__left {
-        }
-        &__center {
-          width: max-content;
-          margin: 0 auto;
-          position: relative;
+        &__navigation {
+          width: 100%;
+          @include flex(center, center, row);
+          padding: $space-8 0;
           ul {
             background-color: rgba($color: themed("bg-2"), $alpha: 0.3);
             padding: 4px;
@@ -59,29 +56,28 @@
               padding: $space-8 $space-14;
               border-radius: 18px;
               transition: all 0.3s;
+              font-size: $size-16;
+              @include mobile {
+                padding: $space-6 $space-8;
+                font-size: $size-14;
+              }
               &.active {
                 background-color: rgba($color: themed("bg-2"), $alpha: 0.4);
               }
 
               h4 {
                 color: $color-white;
-                font-size: $size-16;
                 font-weight: $font-medium;
                 cursor: pointer;
                 transition: $transition;
-                &:hover {
-                  // color: $color-primary1;
-                }
               }
             }
           }
         }
-        &__right {
-          @include flex(center, space-between, row);
+        &__buttons {
+          @include flex(center, right, row);
+          width: 100%;
           gap: $space-8;
-          position: absolute;
-          right: 0;
-          right: $size-12;
 
           & > button {
             border-radius: 50%;
@@ -106,13 +102,29 @@
 
       &__body {
         flex: 1;
+        height: 100%;
+        width: 100%;
+        // background-color: red;
         @include flex(center, center);
 
         &__songPlay {
+          @include flex(center, center, row);
           --size: 50vh;
           max-width: 80vw;
           gap: $space-24;
+
           @include flex(center, center, row);
+
+          @include tablet {
+            --size: 30vh;
+          }
+
+          @include mobile {
+            --size: 60vh;
+            width: 100%;
+            max-width: 100vw;
+          }
+
           &__image {
             width: var(--size);
             height: var(--size);
@@ -120,6 +132,9 @@
             min-height: var(--size);
             border-radius: $radius-12;
             overflow: hidden;
+            @include mobile {
+              display: none;
+            }
             img {
               width: 100%;
               height: 100%;
@@ -176,9 +191,15 @@
                   font-weight: $font-bold;
                   margin: $space-4 0;
                   transition: all 0.3s;
+                  @include tablet {
+                    font-size: $size-24;
+                  }
+
+                  @include mobile {
+                    font-size: $size-24;
+                  }
                 }
-                &.no-time{
-            
+                &.no-time {
                 }
                 &.is-over {
                   p {
@@ -209,6 +230,8 @@
           @include flex(center, center);
           width: 100%;
           gap: $space-8;
+          max-width: 100vw;
+          padding: 0 $space-12;
           span {
             font-size: $size-14;
             color: $color-white;
@@ -269,6 +292,7 @@
         flex-wrap: nowrap;
         width: 100%;
         margin-left: calc(-1 * var(--size) / 2);
+        transition: tranform 0.3s;
         &::-webkit-scrollbar {
           display: none; /* Ẩn thanh cuộn */
         }
@@ -276,17 +300,20 @@
           @include flex(center, center, column);
           gap: $space-8;
           border-radius: $radius-12;
-          transition: $transition;
           cursor: pointer;
           height: 100%;
           position: relative;
           min-width: var(--size);
           width: var(--size);
+          height: var(--size);
+          transition: tranform 0.3s;
           &.active {
             // --size: 400px;
           }
           & > .item {
             padding: $space-14;
+            width: 100%;
+            height: 100%;
             &:hover {
               & .info {
                 visibility: visible;

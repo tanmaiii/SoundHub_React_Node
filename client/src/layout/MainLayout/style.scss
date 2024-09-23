@@ -38,6 +38,9 @@
           top: 0;
           right: 0;
           display: none;
+          @include mobile {
+            display: none !important;
+          }
 
           &.open {
             display: block;

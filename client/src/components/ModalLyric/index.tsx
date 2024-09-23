@@ -138,8 +138,25 @@ const ModalLyric = () => {
         </div>
 
         <div className="ModalLyric__container__header">
-          <div className="ModalLyric__container__header__left"></div>
-          <div className="ModalLyric__container__header__center">
+          <div className="ModalLyric__container__header__buttons">
+            <button
+              onClick={() =>
+                !isFullscreen ? goFullScreen() : exitFullScreen()
+              }
+            >
+              {!isFullscreen ? (
+                <i className="fa-sharp fa-light fa-arrow-up-right-and-arrow-down-left-from-center"></i>
+              ) : (
+                <i className="fa-light fa-arrow-down-left-and-arrow-up-right-to-center"></i>
+              )}
+            </button>
+            {!isFullscreen && (
+              <button onClick={() => dispatch(changeOpenLyric(false))}>
+                <i className="fa-light fa-chevron-down"></i>
+              </button>
+            )}
+          </div>
+          <div className="ModalLyric__container__header__navigation">
             <ul>
               <li
                 onClick={() => setActive(1)}
@@ -154,27 +171,6 @@ const ModalLyric = () => {
                 <h4>Danh sách phát</h4>
               </li>
             </ul>
-          </div>
-          <div className="ModalLyric__container__header__right">
-            <button
-              onClick={() =>
-                !isFullscreen ? goFullScreen() : exitFullScreen()
-              }
-            >
-              {!isFullscreen ? (
-                <i className="fa-sharp fa-light fa-arrow-up-right-and-arrow-down-left-from-center"></i>
-              ) : (
-                <i className="fa-light fa-arrow-down-left-and-arrow-up-right-to-center"></i>
-              )}
-            </button>
-            <button>
-              <i className="fa-light fa-gear"></i>
-            </button>
-            {!isFullscreen && (
-              <button onClick={() => dispatch(changeOpenLyric(false))}>
-                <i className="fa-light fa-chevron-down"></i>
-              </button>
-            )}
           </div>
         </div>
         <div className="ModalLyric__container__body">
@@ -298,6 +294,34 @@ const ModalLyricSongPlay = () => {
           </div>
         )}
       </div>
+      {/* <div className="ModalLyric__container__body__songPlay__image">
+        <ImageWithFallback
+          src={song?.image_path ?? ""}
+          fallbackSrc={Images.SONG}
+          alt=""
+        />
+      </div>
+      <div className="ModalLyric__container__body__songPlay__lyric">
+        {lyrics.length > 0 ? (
+          <ul ref={listRef}>
+            {lyrics.map((lyric, index) => (
+              <li
+                ref={index === active ? itemRef : null}
+                key={index}
+                className={`${index === active ? "active" : ""} ${
+                  index < active ? "is-over" : ""
+                } ${!lyric.time ? "no-time" : ""}`}
+              >
+                <p>{lyric.text}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-lyric">
+            <p>Chúng tôi vẫn đang tìm lời cho bài hát này</p>
+          </div>
+        )}
+      </div> */}
     </div>
   );
 };
@@ -359,9 +383,7 @@ const ModalLyricWaitingList = () => {
               <li
                 key={index}
                 ref={index === active ? itemRef : null}
-                className={`slider__item ${
-                  songPlayId === song ? "active" : ""
-                }`}
+                className={`slider__item`}
               >
                 <Item key={index} songId={song} active={index === active} />
               </li>

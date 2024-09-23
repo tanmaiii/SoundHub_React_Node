@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import HeaderSection from "../../components/HeaderSection";
 import { useAuth } from "../../context/AuthContext";
 import { TSong, TStateParams } from "../../types";
-import { favouriteApi } from "../../apis";
+import { favouriteApi, playApi } from "../../apis";
 import { useQuery } from "react-query";
 import CardSong from "../../components/CardSong";
+import { useTranslation } from "react-i18next";
 
 export default function RecentlyPage() {
   const [songs, setSongs] = useState<TSong[] | null>(null);
   const { token, currentUser } = useAuth();
+  const { t } = useTranslation("home");
 
   const [state, setState] = React.useState<TStateParams>({
     page: 1,
-    limit: 0,
+    limit: 12,
     loading: false,
     totalPages: 1,
     totalCount: 0,
@@ -37,37 +39,51 @@ export default function RecentlyPage() {
     setState((prevState) => ({ ...prevState, ...newValue }));
   };
 
-  const getData = async (newPage?: number) => {
-    newPage && updateState({ page: newPage });
-    const res = await favouriteApi.getSongs(
-      token,
-      newPage || page,
-      limit,
-      sort
-    );
-    if (res.pagination.page === 1) {
-      setSongs(null);
-      updateState({ totalPages: res.pagination.totalPages });
-      updateState({ totalCount: res.pagination.totalCount });
-      setSongs(res.data);
-    } else {
-      setSongs((prevSongs) => prevSongs && [...prevSongs, ...res.data]);
-    }
-    return res;
+  const getAllData = async (newPage?: number) => {
+    updateState({ loading: true });
+    try {
+      const res = await playApi.getAllSongRecently(
+        token ?? "",
+        newPage ?? page,
+        limit,
+        keyword,
+        sort
+      );
+      if (res.pagination.page === 1 && res.data) {
+        setSongs(null);
+        setSongs(res.data);
+      } else {
+        setSongs((prev) => [...(prev ?? []), ...res.data]);
+      }
+      updateState({
+        loading: false,
+        page: res?.pagination.page,
+        totalPages: res?.pagination.totalPages,
+        totalCount: res?.pagination.totalCount,
+      });
+    } catch (error) {}
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["songs-favorites", currentUser?.id],
+    queryKey: ["songs-recently", currentUser?.id],
     queryFn: async () => {
-      return await getData(1);
+      return await getAllData(1);
     },
   });
+
+  const loadMore = () => {
+    page < totalPages && updateState({ page: page + 1 });
+  };
+
+  useEffect(() => {
+    getAllData();
+  }, [page]);
 
   return (
     <div className="recently">
       <div className="recently__container">
         <div className="recently__container__header">
-          <HeaderSection title={"Recently"} />
+          <HeaderSection title={t("navbar.recently")} />
         </div>
         <div className="recently__container__body">
           <div className="recently__container__body__list row sm-gutter">
@@ -84,6 +100,9 @@ export default function RecentlyPage() {
                 </div>
               );
             })}
+          </div>
+          <div className="recently__container__body__loadMore">
+            {page < totalPages && <button onClick={loadMore}>Load More</button>}
           </div>
         </div>
       </div>

@@ -426,10 +426,6 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
   useEffect(() => {
     const rest = subMenuRef.current?.getBoundingClientRect();
     if (subMenuRef.current && rest) {
-      console.log("rest", rest);
-
-      console.log("win width", window.innerWidth);
-
       // if (rest?.right + rest?.width > window.innerWidth) {
       //   subMenuRef.current.style.right = "100%";
       //   subMenuRef.current.style.left = "unset";

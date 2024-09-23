@@ -80,6 +80,7 @@
           font-weight: $font-light;
           color: themed("txt-second");
           @include flex(center, start, row);
+          gap: $space-4;
         }
         & > .icon__private {
           font-size: $size-14;

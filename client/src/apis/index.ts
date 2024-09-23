@@ -9,3 +9,4 @@ export { default as searchApi } from "./search/searchApi";
 export { default as mp3Api } from "./mp3/mp3Api";
 export { default as authorApi } from "./author/authorApi";
 export { default as lyricApi } from "./lyric/lyricApi";
+export { default as playApi } from "./play/playApi";

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { authorApi, searchApi, songApi, userApi } from "../../apis";
+import { authorApi, lyricApi, searchApi, songApi, userApi } from "../../apis";
 import CommentInput from "../../components/CommentInput/CommentInput";
 import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
@@ -23,6 +23,8 @@ import { EditSong } from "../../components/ModalSong";
 import { useAudio } from "../../context/AudioContext";
 import { useDispatch } from "react-redux";
 import { openMenu } from "../../slices/menuSongSlide";
+import Section from "../../components/Section";
+import CardSong from "../../components/CardSong";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -38,6 +40,8 @@ export default function SongPage() {
   const { playSong, start, isPlaying, songPlayId, pauseSong } = useAudio();
   const dispatch = useDispatch();
   const btnMenuRef = React.createRef<HTMLButtonElement>();
+  const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
+  const [seeMore, setSeeMore] = useState<boolean>(false);
 
   const { data: song } = useQuery({
     queryKey: ["song", id],
@@ -138,6 +142,35 @@ export default function SongPage() {
       );
   };
 
+  const { data: songs, isLoading: loadingSongNew } = useQuery({
+    queryKey: ["songs"],
+    queryFn: async () => {
+      const res = await searchApi.getSongs(
+        token ?? "",
+        1,
+        10,
+        undefined,
+        "new"
+      );
+      return res.data;
+    },
+  });
+
+  useEffect(() => {
+    const getLyric = async () => {
+      console.log(song && song?.lyric_path);
+
+      if (song && !song?.lyric_path) return;
+      try {
+        const res = song?.id && (await lyricApi.getLyric(song?.id, token));
+        res && setLyrics(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getLyric();
+  }, [song?.id]);
+
   return (
     <>
       <div className="songPage">
@@ -190,65 +223,82 @@ export default function SongPage() {
           </div>
 
           <div className="songPage__content__body row">
-            <div className="songPage__content__body__comment col pc-8 t-12 ">
-              <CommentInput avatarUrl={Images.AVATAR} />
-
-              <div className="songPage__content__body__comment__header">
-                <div className="quantity">
-                  <i className="fa-light fa-comment"></i>
-                  <span>123 comments</span>
+            <div className="songPage__content__body__left col pc-8 t-12 ">
+              {lyrics.length > 0 && (
+                <div className="songPage__content__body__left__lyrics">
+                  <h4>Lời bài hát</h4>
+                  {lyrics.slice(0, 10).map((lyric, index) => (
+                    <p key={index}>{lyric.text}</p>
+                  ))}
+                  {seeMore &&
+                    lyrics
+                      .slice(10, lyrics.length)
+                      .map((lyric, index) => <p key={index}>{lyric.text}</p>)}
+                  <button onClick={() => setSeeMore(!seeMore)}>
+                    <span>{seeMore ? "Ẩn bớt" : "...Xem thêm"}</span>
+                  </button>
                 </div>
-                <div className="dropdown">
-                  <div className="dropdown__header">
-                    <i className="fa-light fa-bars-sort"></i>
-                    <span>Mới nhất</span>
-                    <i className="fa-light fa-chevron-down"></i>
+              )}
+              <div className="songPage__content__body__left__comment">
+                <CommentInput avatarUrl={Images.AVATAR} />
+
+                <div className="songPage__content__body__left__comment__header">
+                  <div className="quantity">
+                    <i className="fa-light fa-comment"></i>
+                    <span>123 comments</span>
                   </div>
-                  <div className={`dropdown__content`}>
-                    <ul>
-                      <li>Mới nhất</li>
-                      <li>Phổ biến</li>
-                    </ul>
+                  <div className="dropdown">
+                    <div className="dropdown__header">
+                      <i className="fa-light fa-bars-sort"></i>
+                      <span>Mới nhất</span>
+                      <i className="fa-light fa-chevron-down"></i>
+                    </div>
+                    <div className={`dropdown__content`}>
+                      <ul>
+                        <li>Mới nhất</li>
+                        <li>Phổ biến</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="songPage__content__body__comment__list">
-                <CommentItem
-                  avatarUrl={Images.AVATAR}
-                  name="Tấn Mãi"
-                  time="2 hours ago"
-                  content="Hay quá anh ơi"
-                  level={0}
-                />
-                <CommentItem
-                  avatarUrl={Images.AVATAR}
-                  name="Tấn Mãi"
-                  content="Hay quá anh ơi"
-                  level={1}
-                  time="2 hours ago"
-                />
-                <CommentItem
-                  avatarUrl={Images.AVATAR}
-                  name="Tấn Mãi"
-                  level={2}
-                  content="Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh
+                <div className="songPage__content__body__left__comment__list">
+                  <CommentItem
+                    avatarUrl={Images.AVATAR}
+                    name="Tấn Mãi"
+                    time="2 hours ago"
+                    content="Hay quá anh ơi"
+                    level={0}
+                  />
+                  <CommentItem
+                    avatarUrl={Images.AVATAR}
+                    name="Tấn Mãi"
+                    content="Hay quá anh ơi"
+                    level={1}
+                    time="2 hours ago"
+                  />
+                  <CommentItem
+                    avatarUrl={Images.AVATAR}
+                    name="Tấn Mãi"
+                    level={2}
+                    content="Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh
                 Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh "
-                  time="2 hours ago"
-                />
-                <CommentItem
-                  avatarUrl={Images.AVATAR}
-                  name="Tấn Mãi"
-                  level={3}
-                  content="Hay quá anh ơi"
-                  time="2 hours ago"
-                />
-                <CommentItem
-                  avatarUrl={Images.AVATAR}
-                  name="Tấn Mãi"
-                  content="Hay quá anh ơi"
-                  time="2 hours ago"
-                />
+                    time="2 hours ago"
+                  />
+                  <CommentItem
+                    avatarUrl={Images.AVATAR}
+                    name="Tấn Mãi"
+                    level={3}
+                    content="Hay quá anh ơi"
+                    time="2 hours ago"
+                  />
+                  <CommentItem
+                    avatarUrl={Images.AVATAR}
+                    name="Tấn Mãi"
+                    content="Hay quá anh ơi"
+                    time="2 hours ago"
+                  />
+                </div>
               </div>
             </div>
             <div className="songPage__content__body__artist col pc-4 t-12">
@@ -299,6 +349,27 @@ export default function SongPage() {
                 </>
               )}
             </div>
+          </div>
+
+          <div className="songPage__content__footer">
+            {songs && songs.length > 0 && (
+              <Section title="Đề xuất">
+                {songs?.map((song, index) => {
+                  if (song?.id === id) return null;
+                  return (
+                    <CardSong
+                      key={index}
+                      title={song.title}
+                      image={song.image_path}
+                      author={song.author}
+                      userId={song.user_id ?? ""}
+                      id={song.id}
+                      isPublic={song.public ?? 1}
+                    />
+                  );
+                })}
+              </Section>
+            )}
           </div>
         </div>
       </div>
