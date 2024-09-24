@@ -27,6 +27,7 @@ export default function UserSetting() {
   const location = useLocation();
 
   const changeLanguage = (lng: string) => {
+    localStorage.setItem("language", lng);
     i18n.changeLanguage(lng);
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TSong } from "../../types";
 import "./style.scss";
 import SongMenu from "../Menu/SongMenu";
@@ -78,8 +78,10 @@ function TrackShort({ id, number, loading }: props) {
   const handleClickOpenMenu = () => {
     if (menuSong?.open) {
       dispatch(closeMenu());
+      setActiveMenu(false);
     } else {
       const rect = btnMenuRef.current?.getBoundingClientRect();
+      setActiveMenu(true);
       rect &&
         dispatch(
           openMenu({
@@ -93,6 +95,14 @@ function TrackShort({ id, number, loading }: props) {
         );
     }
   };
+
+  useEffect(() => {
+    if (menuSong?.id === song?.id && menuSong?.open) {
+      setActiveMenu(true);
+    } else {
+      setActiveMenu(false);
+    }
+  }, [menuSong]);
 
   return (
     <div
@@ -149,10 +159,8 @@ function TrackShort({ id, number, loading }: props) {
           </button>
           <button
             ref={btnMenuRef}
-            className={`button-edit ${
-              menuSong?.open && menuSong?.id === song?.id ? "active" : ""
-            }`}
-            onClick={handleClickOpenMenu}
+            className={`button-edit ${activeMenu ? "active" : ""}`}
+            onClick={() => handleClickOpenMenu()}
           >
             <i className="fa-solid fa-ellipsis"></i>
           </button>

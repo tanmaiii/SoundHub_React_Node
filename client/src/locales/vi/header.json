@@ -20,5 +20,15 @@
       "Change email": "Đổi email",
       "Change username": "Đổi tên người dùng"
     }
+  },
+  "Notification": {
+    "title": "Thông báo",
+    "Confirm": "Xác nhận",
+    "Refuse": "Từ chối",
+    "Toast": {
+      "Confirm": "Bạn đã chấp nhận lời mời tham gia",
+      "Refuse": "Bạn đã từ chối lời mời tham gia"
+    },
+    "sentRequestToJoinTheSong": "đã gửi yêu cầu tham gia bài hát"
   }
 }

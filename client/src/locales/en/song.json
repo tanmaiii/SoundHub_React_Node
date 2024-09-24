@@ -39,11 +39,19 @@
     "Genre": "Genre",
     "Image": "Image",
     "Image desc": "Choose a standout thumbnail image to attract viewers' attention",
-    "Upload image": "Upload image",
+    "Upload": "Upload",
+    "Lyric": "Lyric",
+    "Lyric desc": "Add the lyrics of the song(.lrc)",
+    "Author": "Author",
+    "Author desc": "Enter artist name",
+    "List of artists": "List of artists",
     "Cancel": "Cancel",
     "Post": "Post",
     "Save": "Save",
-    "Exit": "Exit"
+    "Exit": "Exit",
+    "Are you sure you want to exit": "Are you sure you want to exit",
+    "ToastAddSuccess": "Add song successfully",
+    "ToastAddError": "Add song error"
   },
   "Author": {
     "Enter artist name": "Enter artist name",

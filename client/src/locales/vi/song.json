@@ -39,11 +39,19 @@
     "Genre": "Thể loại",
     "Image": "Hình ảnh",
     "Image desc": "Chọn hình thu nhỏ nổi bật để thu hút sự chú ý của người xem",
-    "Upload image": "Tải hình ảnh lên",
+    "Upload": "Tải lên",
+    "Lyric": "Lời bài hát",
+    "Lyric desc": "Thêm lời bài hát(.lrc)",
+    "Author": "Tác giả",
+    "Author desc": "Nhập tên nghệ sĩ",
+    "List of artists": "Danh sách nghệ sĩ",
     "Cancel": "Hủy",
     "Post": "Đăng",
-    "Save" : "Lưu",
-    "Exit": "Thoát"
+    "Save": "Lưu",
+    "Exit": "Thoát",
+    "Are you sure you want to exit": "Bạn có chắc chắn muốn thoát không?",
+    "ToastAddSuccess": "Thêm bài hát thành công",
+    "ToastAddError": "Thêm bài hát thất bại"
   },
   "Author": {
     "Enter artist name": "Nhập tên nghệ sĩ",

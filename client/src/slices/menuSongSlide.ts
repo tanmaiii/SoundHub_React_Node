@@ -25,6 +25,8 @@ export const munuSongSlide = createSlice({
   initialState,
   reducers: {
     openMenu: (state, action: PayloadAction<menuSongState>) => {
+      console.log("openMenu", action.payload);
+
       state.open = true;
       state.id = action.payload.id;
       state.left = action.payload.left;
@@ -34,6 +36,8 @@ export const munuSongSlide = createSlice({
       state.height = action.payload.height;
     },
     closeMenu: (state) => {
+      console.log("closeMenu");
+
       state.open = false;
     },
   },

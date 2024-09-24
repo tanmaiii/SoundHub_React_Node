@@ -22,6 +22,7 @@
           // padding-bottom: $height-barPlaying;
           height: 100vh;
           overflow-y: scroll;
+          overflow-x: hidden;
           @include tablet {
             max-width: calc(100%);
           }

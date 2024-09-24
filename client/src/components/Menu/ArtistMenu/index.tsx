@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import { authorApi, songApi } from "../../../apis";
 import { PATH } from "../../../constants/paths";
+import { use } from "i18next";
 
 type Props = {
   id: string;
@@ -64,7 +65,7 @@ const ArtistMenu = ({
 
   const handleSuccess = () => {
     onClose();
-    
+
     queryClient.invalidateQueries(["notify-detail", [songId, currentUser?.id]]);
 
     queryClient.invalidateQueries({
@@ -76,21 +77,24 @@ const ArtistMenu = ({
     queryClient.invalidateQueries({
       queryKey: ["authors-pending", songId],
     });
+    queryClient.invalidateQueries({
+      queryKey: ["author", { id, songId }],
+    });
+  };
+  const getAuthor = async () => {
+    try {
+      const res = await authorApi.getDetail(token, id, songId ?? "");
+      res && setAuthor(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const {} = useQuery({
-    queryKey: ["author", [id, songId]],
-    queryFn: async () => {
-      try {
-        const res =
-          id && songId && (await authorApi.getDetail(token, id, songId || ""));
-        res && setAuthor(res);
-        return res;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+  useEffect(() => {
+      getAuthor();
+  }, [songId, id]);
+
 
   // Xóa người dùng khỏi danh sách tác giả của bài hát bởi chính người dùng đó
   const mutationRemoveAuthor = useMutation(
@@ -135,7 +139,6 @@ const ArtistMenu = ({
         <div className="ArtistMenu__context__list">
           {author &&
             author?.status === "Accepted" &&
-            songId &&
             currentUser?.id === id && (
               <ItemMenu
                 title={"Rời khỏi danh sách tác giả"}

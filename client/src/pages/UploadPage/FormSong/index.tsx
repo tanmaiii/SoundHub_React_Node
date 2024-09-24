@@ -181,7 +181,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
         error.public.trim() !== "" ||
         error.genre_id.trim() !== ""
       ) {
-        toast.error("Vui lòng kiểm tra lại thông tin");
+        toast.error("Please check the information again");
         return;
       }
       let updatedInputs;
@@ -217,9 +217,9 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
       res?.id && navigate(`${PATH.SONG}/${res.id}`);
       handleSendAuthor(res.id);
       resetInput();
-      toast.success("Thêm bài hát thành công");
+      toast.success(t("Upload.ToastAddSuccess"));
     } catch (error) {
-      toast.error("Thêm bài hát thất bại");
+      toast.error(t("Upload.ToastAddError"));
       console.log(error);
     }
   };
@@ -378,13 +378,15 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
                 onClick={() => setOpenModalAuthor(true)}
               >
                 <div className="Form-author__input__label">
-                  <span>Author:</span>
+                  <span>{t("Upload.Author")}</span>
                 </div>
-                <h4>Nhập tên tác giả</h4>
+                <h4>{t("Upload.Author desc")}</h4>
               </div>
               {selectedAuthors.length > 0 && (
                 <div>
-                  <h4 className="Form-author__title">Danh sách tác giả:</h4>
+                  <h4 className="Form-author__title">
+                    {t("Upload.List of artists")}
+                  </h4>
                 </div>
               )}
               <div className="Form-author__list row sm-gutter">
@@ -418,7 +420,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
                   }`}
                 >
                   <i className="fa-light fa-image"></i>
-                  <span>{t("Upload.Upload image")}</span>
+                  <span>{t("Upload.Upload")}</span>
                   <input
                     type="file"
                     id="input-image-song"
@@ -438,8 +440,8 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
             </div>
 
             <div className="FormSong__body__right__lyric">
-              <h4>Lyric</h4>
-              <span>Allow file .lrc</span>
+              <h4>{t("Upload.Lyric")}</h4>
+              <span>{t("Upload.Lyric desc")}</span>
               <div className="FormSong__body__right__lyric__swapper">
                 {lyricFile ? (
                   <div className="FormSong__body__right__lyric__swapper__file">
@@ -460,7 +462,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
                     }`}
                   >
                     <i className="fa-light fa-file-alt"></i>
-                    <span>Tải lên</span>
+                    <span>{t("Upload.Upload")}</span>
                     <input
                       type="file"
                       id="input-lyric-song"
@@ -493,7 +495,7 @@ const FormSong = ({ file: fileMp3, setFile: setFileMp3 }: TFormSong) => {
       </div>
       <Modal openModal={exit} setOpenModal={setExit}>
         <div className="FormSong__modal">
-          <h4>Bạn có chắc chắn muốn thoát không !</h4>
+          <h4>{t("Upload.Are you sure you want to exit")}</h4>
           <div className="FormSong__modal__footer">
             <button className="btn-cancel" onClick={() => setExit(false)}>
               {t("Upload.Cancel")}

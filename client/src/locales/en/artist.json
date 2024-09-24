@@ -1,0 +1,13 @@
+{
+    "Edit": {
+        "title": "Edit Artist",
+        "EditAvatar": "Edit Avatar",
+        "EditCover": "Edit Cover",
+        "RemoveCurrentPhoto" :  "Remove current photo",
+        "UploadPhoto":  "Upload a photo",
+        "Cancel": "Cancel",
+        "UploadAvatarSuccess": "Upload avatar successfully",
+        "RemoveAvatarSuccess": "Remove avatar successfully",
+        "PhotoSizeLess1MB" : "Photo size must be less than 1MB"
+    }
+}

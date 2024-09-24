@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { imageApi, userApi } from "../../../apis";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "react-query";
+import { useTranslation } from "react-i18next";
 
 const EditAvatar = ({
   open,
@@ -15,13 +16,14 @@ const EditAvatar = ({
   const { currentUser, token } = useAuth();
   const InputRef = React.useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const { t } = useTranslation("artist");
 
   const mutaionDelete = useMutation(
     async () => {
       try {
         currentUser?.image_path &&
           (await imageApi.delete(currentUser?.image_path, token));
-        toast.success("Xóa ảnh đại diện thành công");
+        toast.success(t("Edit.RemoveAvatarSuccess"));
         await userApi.update(token, { image_path: "" });
         closeModal();
       } catch (error) {
@@ -38,7 +40,7 @@ const EditAvatar = ({
 
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]?.size > 1 * 1024 * 1024) {
-      toast.error("Kích thước ảnh phải nhỏ hơn 1MB");
+      toast.error(t("Edit.PhotoSizeLess1MB"));
       return;
     }
     if (e.target.files && e.target.files[0]) {
@@ -62,7 +64,7 @@ const EditAvatar = ({
 
         const res = await imageApi.upload(formDataImage, token);
         res.image && (await userApi.update(token, { image_path: res.image }));
-        toast.success("Cập nhật ảnh đại diện thành công");
+        toast.success(t("Edit.UploadAvatarSuccess"));
         closeModal();
       } catch (error) {
         console.log(error);
@@ -85,15 +87,15 @@ const EditAvatar = ({
   return (
     <div className="Modal__edit__avatar">
       <div>
-        <h3>Đổi ảnh đại diện</h3>
+        <h3>{t("Edit.EditAvatar")}</h3>
       </div>
       {(currentUser?.image_path?.length ?? 0) > 0 && (
         <button className="btn-delete" onClick={() => mutaionDelete.mutate()}>
-          <h4>Gỡ ảnh hiện tại</h4>
+          <h4>{t("Edit.RemoveCurrentPhoto")}</h4>
         </button>
       )}
       <label htmlFor="input-image-avatar" className="btn-submit">
-        <h4>Tải ảnh lên</h4>
+        <h4>{t("Edit.UploadPhoto")}</h4>
         <input
           ref={InputRef}
           type="file"
@@ -103,7 +105,7 @@ const EditAvatar = ({
         />
       </label>
       <button className="btn-cancel" onClick={() => closeModal()}>
-        <h4>Hủy</h4>
+        <h4>{t("Edit.Cancel")}</h4>
       </button>
     </div>
   );

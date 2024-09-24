@@ -12,6 +12,12 @@ router.get(
   userSongController.getAllSongByMe
 );
 
+router.get(
+  "/:songId/accepted",
+  validate(userSongValodation.getAllUser),
+  userSongController.getAllUserAccepted
+);
+
 //Kiem tra xem nguoi dung da xac nhan tham gia vao bai hat chua
 router.get(
   "/detail",

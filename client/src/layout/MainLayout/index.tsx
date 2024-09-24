@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import "./style.scss";
@@ -16,6 +16,7 @@ import { PATH } from "../../constants/paths";
 import { useAuth } from "../../context/AuthContext";
 import { closeMenu } from "../../slices/menuSongSlide";
 import { RootState } from "../../store";
+import { log } from "console";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -43,15 +44,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
   }, [location.pathname]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      dispatch(closeMenu());
-    };
-
-    menuSong.open && bodyRef.current?.addEventListener("scroll", handleScroll);
-    return () => {
-      bodyRef.current?.removeEventListener("scroll", handleScroll);
-    };
-  });
+    if (menuSong.open && bodyRef.current) {
+        bodyRef.current.style.overflow = "hidden";
+    }else {
+      if (bodyRef.current) bodyRef.current.style.overflow = "auto";
+    }
+  }, [menuSong.open]);
 
   return (
     <div className="MainLayout">

@@ -39,11 +39,13 @@
       box-shadow: themed("box-shadow");
 
       @include mobile {
-        top: $height-header !important;
-        width: 100%;
-        height: calc(100vh - $height-header - $height-barPlaying);
-        justify-content: space-between;
-        flex-direction: column;
+        display: none;
+        // position: fixed;
+        // top: $height-header !important;
+        // width: 100vw;
+        // height: calc(100vh - $height-header - $height-barPlaying);
+        // justify-content: space-between;
+        // flex-direction: column;
       }
 
       &__list {
@@ -113,25 +115,7 @@
             max-height: 300px;
             overflow-y: auto;
 
-            right: 100%;
             top: 0;
-
-            &[data-placement="top-start"] {
-              top: 0;
-              left: 100%;
-            }
-            &[data-placement="bottom-start"] {
-              top: 0;
-              right: 100%;
-            }
-            &[data-placement="top-end"] {
-              top: 0;
-              right: 100%;
-            }
-            &[data-placement="bottom-end"] {
-              top: 0;
-              right: 100%;
-            }
 
             &__search {
               @include flex(start, center, row);

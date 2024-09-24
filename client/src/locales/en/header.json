@@ -20,5 +20,15 @@
       "Change email": "Change email",
       "Change username": "Change username"
     }
+  },
+  "Notification": {
+    "title": "Notification",
+    "Confirm": "Confirm",
+    "Refuse": "Refuse",
+    "Toast": {
+     "Confirm": "You have accepted the invitation to join",
+      "Refuse": "You have refused the invitation to join"
+    },
+    "sentRequestToJoinTheSong": "sent you a request to join the song"
   }
 }

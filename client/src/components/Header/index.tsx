@@ -21,6 +21,7 @@ export default function Header() {
   const { currentUser } = useAuth();
   const { t } = useTranslation("header");
   const { t: tSong } = useTranslation("song");
+  const { t: tArtist } = useTranslation("artist");
   const navigation = useNavigate();
   const [keyword, setKeyword] = useState("");
   const { pathname } = useLocation();
@@ -118,7 +119,7 @@ export default function Header() {
               <button
                 className="header__right__notify"
                 onClick={() => setOpenModalNotify(true)}
-                data-tooltip={"Notification"}
+                data-tooltip={t('Notification.title')}
               >
                 <i className="fa-light fa-bell"></i>
                 <div className="header__right__notify__num">
@@ -147,7 +148,7 @@ export default function Header() {
       <Modal
         openModal={openModalNotify}
         setOpenModal={setOpenModalNotify}
-        title="Notification"
+        title={t('Notification.title')}
       >
         <ModalNotify onClose={() => setOpenModalNotify(false)} />
       </Modal>

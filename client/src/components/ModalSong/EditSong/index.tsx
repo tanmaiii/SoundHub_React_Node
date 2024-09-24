@@ -179,7 +179,7 @@ const EditSong = ({
         error.public.trim() !== "" ||
         error.genre_id.trim() !== ""
       ) {
-        toast.error("Vui lòng kiểm tra lại thông tin");
+        toast.error("Please check the information again");
         return;
       }
       let updatedInputs;
@@ -218,9 +218,9 @@ const EditSong = ({
       resetInput();
       closeModal();
       resetInput();
-      toast.success("Thêm bài hát thành công");
+      toast.success(t("Upload.ToastAddSuccess"));
     } catch (error) {
-      toast.error("Thêm bài hát thất bại");
+      toast.error(t("Upload.ToastAddError"));
       console.log(error);
     }
   };
@@ -305,7 +305,7 @@ const EditSong = ({
             <input
               type="text"
               id="title"
-              value={inputs?.title}
+              value={inputs?.title || ""}
               placeholder={t("Upload.Title desc")}
               name="title"
               maxLength={100}
@@ -320,7 +320,7 @@ const EditSong = ({
             </div>
             <textarea
               id="desc"
-              value={inputs?.desc}
+              value={inputs?.desc || ""}
               placeholder={t("Upload.Describe desc")}
               name="desc"
               maxLength={400}
@@ -384,7 +384,7 @@ const EditSong = ({
                 }`}
               >
                 <i className="fa-light fa-image"></i>
-                <span>{t("Upload.Upload image")}</span>
+                <span>{t("Upload.Upload")}</span>
                 <input
                   type="file"
                   id="input-image-song"
@@ -404,8 +404,8 @@ const EditSong = ({
           </div>
 
           <div className="EditSong__body__right__lyric">
-            <h4>Lyric</h4>
-            <span>Allow file .lrc</span>
+            <h4>{t('Upload.Lyric')}</h4>
+            <span>{t('Upload.Lyric desc')}</span>
             <div className="EditSong__body__right__lyric__swapper">
               {lyricFile ? (
                 <div className="EditSong__body__right__lyric__swapper__file">
@@ -434,7 +434,7 @@ const EditSong = ({
                   }`}
                 >
                   <i className="fa-light fa-file-alt"></i>
-                  <span>Tải lên</span>
+                  <span>{t("Upload.Upload")}</span>
                   <input
                     type="file"
                     id="input-lyric-song"

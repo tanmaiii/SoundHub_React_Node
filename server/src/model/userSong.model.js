@@ -159,6 +159,7 @@ UserSong.findAllSong = async (userId, query, result) => {
     `SELECT us.* from user_songs as us ` +
       ` LEFT JOIN songs as s ON us.song_id = s.id ` +
       ` WHERE us.user_id = "${userId}" ` +
+      ` AND is_deleted = 0 and public = 1 ` +
       ` ${q ? ` AND u.title LIKE "%${q}%" AND` : ""} ` +
       ` ORDER BY us.created_at ${sort === "new" ? "DESC" : "ASC"} ` +
       ` ${
@@ -168,7 +169,9 @@ UserSong.findAllSong = async (userId, query, result) => {
 
   const [totalCount] = await promiseDb.query(
     `SELECT COUNT(*) as total FROM user_songs as us ` +
-      ` WHERE us.user_id = "${userId}" `
+      ` LEFT JOIN songs as s ON us.song_id = s.id ` +
+      ` WHERE us.user_id = "${userId}" ` +
+      ` AND is_deleted = 0 and public = 1 `
   );
 
   if (data && totalCount) {

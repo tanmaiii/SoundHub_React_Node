@@ -70,8 +70,6 @@ const SongMenu = () => {
   // Đóng menu khi click ra ngoài
   useEffect(() => {
     const handleMousedown = (e: MouseEvent) => {
-      console.log(e.target);
-
       if (
         SongMenuRef.current &&
         !SongMenuRef.current.contains(e.target as Node)
@@ -82,18 +80,6 @@ const SongMenu = () => {
     document.addEventListener("mousedown", handleMousedown);
     return () => document.removeEventListener("mousedown", handleMousedown);
   });
-
-  useEffect(() => {
-    const handleResize = () => {
-      dispatch(closeMenu());
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   // Xử lí xóa bài hát khỏi playlist
   const mutationRemoveSongFromPlaylist = useMutation({
@@ -426,17 +412,15 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
   useEffect(() => {
     const rest = subMenuRef.current?.getBoundingClientRect();
     if (subMenuRef.current && rest) {
-      // if (rest?.right + rest?.width > window.innerWidth) {
-      //   subMenuRef.current.style.right = "100%";
-      //   subMenuRef.current.style.left = "unset";
-      //   subMenuRef.current.style.top = `0`;
-      //   return;
-      // } else {
-      //   subMenuRef.current.style.left = "100%";
-      //   subMenuRef.current.style.right = "unset";
-      //   subMenuRef.current.style.top = `0`;
-      //   return;
-      // }
+      if (rest?.right + rest?.width > window.innerWidth - 20) {
+        subMenuRef.current.style.right = `100%`;
+        subMenuRef.current.style.left = `unset`;
+        return;
+      } else {
+        subMenuRef.current.style.left = `${rest?.width - 10}px`;
+        subMenuRef.current.style.right = `unset`;
+        return;
+      }
     }
   }, [
     window,
@@ -455,7 +439,7 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
           <i className="fa-light fa-magnifying-glass"></i>
           <input
             type="text"
-            value={keyword}
+            value={keyword || ""}
             placeholder="Tìm playlist..."
             onChange={(e) => updateState({ keyword: e.target.value })}
           />

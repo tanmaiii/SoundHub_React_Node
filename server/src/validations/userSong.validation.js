@@ -20,6 +20,13 @@ export default class songValidation {
     }),
   };
 
+  static getAllUserAccepted = {
+    ...querySchema,
+    params: Joi.object().keys({
+      songId: Joi.string().min(0).max(36).required(),
+    }),
+  };
+
   static getAllSongByMe = {
     ...querySchema,
   };

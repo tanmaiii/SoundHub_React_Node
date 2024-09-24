@@ -1,0 +1,13 @@
+{
+    "Edit": {
+        "title": "Chỉnh sửa",
+        "EditAvatar": "Chỉnh sửa ảnh đại diện",
+        "EditCover": "Chỉnh sửa ảnh bìa",
+        "RemoveCurrentPhoto" :  "Xóa ảnh hiện tại",
+        "UploadPhoto":  "Tải ảnh lên",
+        "Cancel": "Hủy",
+        "UploadAvatarSuccess": "Tải ảnh đại diện thành công",
+        "RemoveAvatarSuccess": "Xóa ảnh đại diện thành công",
+        "PhotoSizeLess1MB" : "Kích thước ảnh phải nhỏ hơn 1MB"
+    }
+}

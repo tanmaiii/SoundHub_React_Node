@@ -64,8 +64,8 @@ export default function SongPage() {
       try {
         const res =
           id &&
-          currentUser?.id === song?.user_id &&
           (await authorApi.getAllUser(id, token, 1, 0, "", "new", "Accepted"));
+
         res && setAuthors(res.data);
         return res;
       } catch (error) {
@@ -321,8 +321,9 @@ export default function SongPage() {
                   />
                 )}
                 {authors &&
-                  authors.map((author) => (
+                  authors.map((author, index) => (
                     <TrackArtist
+                      key={index}
                       id={author.user_id}
                       songId={song?.id}
                       className="col pc-12 t-6 m-12"
@@ -338,8 +339,9 @@ export default function SongPage() {
                   )}
                   <div className="row">
                     {authorPending &&
-                      authorPending.map((author) => (
+                      authorPending.map((author, index) => (
                         <TrackArtist
+                          key={index}
                           id={author.user_id}
                           songId={song?.id}
                           className="col pc-12 t-6 m-12"
@@ -373,7 +375,7 @@ export default function SongPage() {
           </div>
         </div>
       </div>
-      {song && (
+      {song?.user_id === currentUser?.id && (
         <Modal openModal={openModalAuthor} setOpenModal={setOpenModalAuthor}>
           <div>
             <ModalAuthor songId={song?.id ?? ""} />
@@ -381,17 +383,19 @@ export default function SongPage() {
         </Modal>
       )}
 
-      <Modal
-        title="Edit song"
-        openModal={openModalEdit}
-        setOpenModal={setOpenModalEdit}
-      >
-        <EditSong
-          songId={song?.id ?? ""}
-          open={openModalEdit}
-          closeModal={() => setOpenModalEdit(false)}
-        />
-      </Modal>
+      {song?.user_id === currentUser?.id && (
+        <Modal
+          title="Edit song"
+          openModal={openModalEdit}
+          setOpenModal={setOpenModalEdit}
+        >
+          <EditSong
+            songId={song?.id ?? ""}
+            open={openModalEdit}
+            closeModal={() => setOpenModalEdit(false)}
+          />
+        </Modal>
+      )}
     </>
   );
 }
@@ -482,7 +486,6 @@ const AuthorItem = ({ id, songId }: { id: string; songId: string }) => {
         return res && res.status;
       } catch (error) {
         console.log(error);
-
         return null;
       }
     },

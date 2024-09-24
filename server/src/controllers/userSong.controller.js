@@ -16,7 +16,7 @@ export const getAllUser = async (req, res) => {
       if (!song) {
         return res.status(404).json({ conflictError: "Không tìm thấy !" });
       }
-      if (song.user_id !== userInfo.id) {
+      if (req.query?.status !== "Accepted" && song.user_id !== userInfo.id) {
         return res.status(401).json({ conflictError: "Không có quyền xem" });
       }
 
@@ -44,7 +44,7 @@ export const checkUserConfirm = async (req, res) => {
         return res.status(401).json({ conflictError: err });
       }
       if (!song) {
-        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+        return res.status(400).json({ conflictError: "Không tìm thấy !" });
       }
       UserSong.find(req.query.userId, req.query.songId, (err, data) => {
         if (err || !data) {
@@ -64,7 +64,34 @@ export const checkUserConfirm = async (req, res) => {
 };
 
 //Lấy tất cả bài hát mà người dùng đã tham gia
+const getAllUserAccepted = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
 
+    Song.findById(req.params.songId, userInfo.id, (err, song) => {
+      if (err) {
+        return res.status(401).json({ conflictError: err });
+      }
+      if (!song) {
+        return res.status(404).json({ conflictError: "Không tìm thấy !" });
+      }
+      // if (song.user_id !== userInfo.id) {
+      //   return res.status(401).json({ conflictError: "Không có quyền xem" });
+      // }
+
+      UserSong.findAllUser(req.params.songId, req.query, (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 //Lấy tất cả các yêu cầu cuả người dùng
 export const getAllSongByMe = async (req, res) => {
   try {
@@ -300,6 +327,7 @@ export const deleteUserSong = async (req, res) => {
 export default {
   getAllUser,
   getAllSongByMe,
+  getAllUserAccepted,
   checkUserConfirm,
   createUserSong,
   confirmUserSong,

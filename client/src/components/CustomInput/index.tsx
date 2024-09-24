@@ -39,7 +39,7 @@ const CustomInput = (props: props) => {
     <div style={{ position: "relative", width: "100%" }}>
       <input
         style={{ width: "100%", paddingRight: "20px" }}
-        value={keyword}
+        value={keyword || ""}
         type="text"
         placeholder={placeholder && placeholder}
         onChange={onChangeInput}

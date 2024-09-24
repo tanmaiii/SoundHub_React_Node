@@ -49,6 +49,8 @@ export default function RecentlyPage() {
         keyword,
         sort
       );
+      console.log(res);
+      
       if (res.pagination.page === 1 && res.data) {
         setSongs(null);
         setSongs(res.data);
@@ -96,6 +98,7 @@ export default function RecentlyPage() {
                     author={song?.author}
                     image={song?.image_path}
                     userId={song?.user_id ?? ""}
+                    isPublic={song?.public}
                   />
                 </div>
               );

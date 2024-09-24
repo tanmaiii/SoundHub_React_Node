@@ -103,9 +103,9 @@ export default function FavouritePage() {
                 <i className="fa-solid fa-play"></i>
               </button>
             )}
-            <button>
+            {/* <button>
               <i className="fa-solid fa-ellipsis"></i>
-            </button>
+            </button> */}
           </div>
         </div>
         <TableTrack songs={songs} isLoading={isLoading} />

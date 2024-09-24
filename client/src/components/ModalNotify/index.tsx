@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/paths";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const ModalNotify = ({ onClose }: { onClose: () => void }) => {
   const { token } = useAuth();
@@ -18,7 +19,7 @@ const ModalNotify = ({ onClose }: { onClose: () => void }) => {
   const handleGetNotify = async () => {
     // get notify
     try {
-      const res = await authorApi.getAllUserRequest(token, 1, 10);
+      const res = await authorApi.getAllUserRequest(token, 1, 0);
       setData(res.data);
     } catch (error) {}
   };
@@ -32,8 +33,8 @@ const ModalNotify = ({ onClose }: { onClose: () => void }) => {
       <div className="Notify__header"></div>
       <div className="Notify__body">
         <div className="Notify__body__list">
-          {data.map((item) => (
-            <Item key={item.song_id} id={item.song_id} onClose={onClose} />
+          {data.map((item, index) => (
+            <Item key={index} id={item.song_id} onClose={onClose} />
           ))}
         </div>
       </div>
@@ -54,16 +55,23 @@ const Item = (props: props) => {
   const { token, currentUser } = useAuth();
   const navigation = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation("header");
 
   useEffect(() => {
     const getSong = async () => {
       try {
         const res = await songApi.getDetail(props.id, token);
-        res && setSong(res || undefined);
-      } catch (error) {}
+        if (res.public === 0) {
+          setSong(undefined);
+        } else {
+          res && setSong(res || undefined);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
     getSong();
-  }, []);
+  }, [props.id]);
 
   const {} = useQuery({
     queryKey: ["notify-detail", [props.id, currentUser?.id]],
@@ -75,7 +83,9 @@ const Item = (props: props) => {
           props.id
         );
         res && setDetail(res || undefined);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -124,7 +134,7 @@ const Item = (props: props) => {
       <div className="notify__item__body">
         <div className="notify__item__body__desc" onClick={handleClick}>
           <a>{song?.author} </a>
-          <span>đã gửi yêu cầu tham gia bài hát</span>
+          <span>{t("Notification.sentRequestToJoinTheSong")}</span>
           <a> {song?.title}</a>
           <p>{moment(detail?.created_at).fromNow()}</p>
         </div>
@@ -135,21 +145,21 @@ const Item = (props: props) => {
                 className="btn-submit"
                 onClick={() => mutationSubmit.mutate()}
               >
-                Xác nhận
+                {t("Notification.Confirm")}
               </button>
               <button
                 className="btn-remove"
                 onClick={() => mutationRemove.mutate()}
               >
-                Từ chối
+                {t("Notification.Refuse")}
               </button>
             </>
           )}
           {detail?.status === "Accepted" && (
-            <span>Bạn đã chấp nhận lời mời tham gia</span>
+            <span> {t("Notification.Toast.Confirm")}</span>
           )}
           {detail?.status === "Rejected" && (
-            <span>Bạn đã từ chối lời mời tham gia</span>
+            <span> {t("Notification.Toast.Refuse")}</span>
           )}
         </div>
       </div>
