@@ -14,6 +14,7 @@ import userSongRoute from "./userSong.route.js";
 import favouriteRoute from "./favourite.route.js";
 import searchRoute from "./search.route.js";
 import lyricRoute from "./lyric.route.js";
+import commentRoute from "./comment.route.js";
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
@@ -25,6 +26,7 @@ router.use("/songPlay", songPlayRoute);
 router.use("/userSong", userSongRoute);
 router.use("/favourite", favouriteRoute);
 router.use("/search", searchRoute);
+router.use("/comment", commentRoute);
 
 router.use("/image", imageRoute);
 router.use("/mp3", mp3Route);

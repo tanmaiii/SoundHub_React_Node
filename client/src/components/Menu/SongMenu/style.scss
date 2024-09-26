@@ -117,6 +117,8 @@
 
             top: 0;
 
+            display: none;
+
             &__search {
               @include flex(start, center, row);
               width: 100%;
@@ -201,6 +203,7 @@
                   font-size: $size-16;
                   color: themed("txt-main");
                   @include text(1);
+                  text-align: left;
                 }
               }
 

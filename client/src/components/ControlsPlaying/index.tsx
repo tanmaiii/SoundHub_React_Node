@@ -1,25 +1,21 @@
-import React from "react";
-import "./style.scss";
+import { useTranslation } from "react-i18next";
 import { useAudio } from "../../context/AudioContext";
+import "./style.scss";
 
 const ControlsPlaying = () => {
   const {
     playSong,
     pauseSong,
-    percentage,
-    songPlayId,
-    timeSong,
-    timeSongPlay,
     isPlaying,
     replay,
     nextSong,
     prevSong,
-    onChangeSlider,
     changeRandom,
     changeReplay,
     random,
     queue,
   } = useAudio();
+  const { t } = useTranslation("song");
 
   const handleClickPlay = () => {
     if (!isPlaying) {
@@ -44,7 +40,9 @@ const ControlsPlaying = () => {
       <button
         className={`btn-random ${random ? "active" : ""}`}
         onClick={() => changeRandom(!random)}
-        data-tooltip={`${random ? "Tắc trộn bài" : "Bật trộn bài"}`}
+        data-tooltip={`${
+          random ? t("playing.TurnOffShuffle") : t("playing.TurnOnShuffle")
+        }`}
       >
         <i className="fa-light fa-shuffle"></i>
       </button>
@@ -69,7 +67,9 @@ const ControlsPlaying = () => {
       </button>
       <button
         className={`btn-replay ${replay ? "active" : ""}`}
-        data-tooltip={`${replay ? "Tắc Replay" : "Bật Replay"}`}
+        data-tooltip={`${
+          replay ? t("playing.TurnOffRepeat") : t("playing.TurnOnRepeat")
+        }`}
         onClick={() => changeReplay(!replay)}
       >
         <i className="fa-light fa-repeat"></i>

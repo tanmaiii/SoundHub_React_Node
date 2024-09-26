@@ -15,6 +15,7 @@ import ControlsPlaying from "../ControlsPlaying";
 import ImageWithFallback from "../ImageWithFallback";
 import Slider from "../Slider";
 import "./style.scss";
+import { useTranslation } from "react-i18next";
 
 export default function BarPlaying() {
   const { token } = useAuth();
@@ -133,7 +134,7 @@ const CardSong = ({ song }: CardSongProps) => {
   const { isPlaying } = useAudio();
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const { data: isLike, refetch: refetchLike } = useQuery({
+  const { data: isLike } = useQuery({
     queryKey: ["like-song", song?.id],
     queryFn: async () => {
       const res = await songApi.checkLikedSong(song?.id ?? "", token);
@@ -151,15 +152,13 @@ const CardSong = ({ song }: CardSongProps) => {
         queryKey: ["like-song", song?.id],
       });
       queryClient.invalidateQueries({
+        queryKey: ["song", song?.id],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["songs-favorites", currentUser?.id],
       });
     },
   });
-
-  const handleClickLike = () => {
-    return isLike && mutationLike.mutate(isLike);
-  };
-
 
   return (
     <div className="CardSongPlaying">
@@ -186,7 +185,7 @@ const CardSong = ({ song }: CardSongProps) => {
       <div className="CardSongPlaying__control">
         <button
           className={`button-like ${isLike ? "active" : ""}`}
-          onClick={handleClickLike}
+          onClick={() => mutationLike.mutate(isLike ?? false)}
           data-tooltip={"Save to your library"}
         >
           {isLike ? (
@@ -218,7 +217,7 @@ const ControlsBar = ({ song }: { song: TSong }) => {
   );
 };
 
-const ControlsRight = ({}: {}) => {
+const ControlsRight = () => {
   const dispatch = useDispatch();
   const openWatting = useSelector((state: RootState) => state.waiting.state);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -228,6 +227,7 @@ const ControlsRight = ({}: {}) => {
   const [percentage, setPercentage] = useState(50);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
   const [marginLeft, setMarginLeft] = useState(0);
+  const { t } = useTranslation("song");
 
   useEffect(() => {
     const rangeWidth = rangeRef.current?.getBoundingClientRect().width ?? 0;
@@ -271,7 +271,7 @@ const ControlsRight = ({}: {}) => {
     <div className="ControlsRight">
       <button
         className="btn-lyric"
-        data-tooltip={"Lyric"}
+        data-tooltip={t("playing.Lyrics")}
         onClick={() => dispatch(changeOpenLyric(true))}
       >
         <i className="fa-light fa-microphone-stand"></i>
@@ -318,7 +318,7 @@ const ControlsRight = ({}: {}) => {
       <button
         onClick={handleOpenWaiting}
         className={`btn-waiting ${openWatting ? "active" : ""}`}
-        data-tooltip={"Playlist"}
+        data-tooltip={t("playing.WaitingList")}
       >
         <i className="fa-duotone fa-list"></i>
       </button>

@@ -29,7 +29,7 @@ Song.create = (userId, newSong, result) => {
 
 Song.update = (songId, newSong, result) => {
   db.query(
-    `update songs set ? , update_at = '${moment(Date.now()).format(
+    `update songs set ?, update_at = '${moment(Date.now()).format(
       "YYYY-MM-DD HH:mm:ss"
     )}' where id = '${songId}'`,
     newSong,

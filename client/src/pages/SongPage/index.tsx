@@ -158,8 +158,6 @@ export default function SongPage() {
 
   useEffect(() => {
     const getLyric = async () => {
-      console.log(song && song?.lyric_path);
-
       if (song && !song?.lyric_path) return;
       try {
         const res = song?.id && (await lyricApi.getLyric(song?.id, token));
@@ -226,7 +224,7 @@ export default function SongPage() {
             <div className="songPage__content__body__left col pc-8 t-12 ">
               {lyrics.length > 0 && (
                 <div className="songPage__content__body__left__lyrics">
-                  <h4>Lời bài hát</h4>
+                  <h4>{t("Lyrics")}</h4>
                   {lyrics.slice(0, 10).map((lyric, index) => (
                     <p key={index}>{lyric.text}</p>
                   ))}
@@ -355,7 +353,7 @@ export default function SongPage() {
 
           <div className="songPage__content__footer">
             {songs && songs.length > 0 && (
-              <Section title="Đề xuất">
+              <Section title={t("Propose")}>
                 {songs?.map((song, index) => {
                   if (song?.id === id) return null;
                   return (

@@ -153,22 +153,22 @@ const SongMenu = () => {
     //Top-start: hiển thị bên trên bên trái
 
     if (SongMenuRef.current && left) {
-      if (left + SongMenuRef.current.clientWidth > window.innerWidth - 100) {
-        if (top + SongMenuRef.current.clientHeight < window.innerHeight - 100) {
+      if (left + SongMenuRef.current.clientWidth > window.innerWidth - 200) {
+        if (top + SongMenuRef.current.clientHeight < window.innerHeight - 200) {
           setPlacement("bottom-end");
-          SongMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          SongMenuRef.current.style.top = `${top + (heightBtn ?? 200)}px`;
           SongMenuRef.current.style.left = `${
-            left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
+            left - SongMenuRef.current.clientWidth + (widthBtn ?? 200)
           }px`;
         } else {
           setPlacement("top-end");
           SongMenuRef.current.style.left = `${
-            left - SongMenuRef.current.clientWidth + (widthBtn ?? 100)
+            left - SongMenuRef.current.clientWidth + (widthBtn ?? 200)
           }px`;
           SongMenuRef.current.style.bottom = `${window.innerHeight - top}px`;
         }
       } else {
-        if (top + SongMenuRef.current.clientHeight > window.innerHeight - 100) {
+        if (top + SongMenuRef.current.clientHeight > window.innerHeight - 200) {
           setPlacement("top-start");
           SongMenuRef.current.style.top = `${
             top - SongMenuRef.current.clientHeight
@@ -176,7 +176,7 @@ const SongMenu = () => {
           SongMenuRef.current.style.left = `${left}px`;
         } else {
           setPlacement("bottom-start");
-          SongMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          SongMenuRef.current.style.top = `${top + (heightBtn ?? 200)}px`;
           SongMenuRef.current.style.left = `${left}px`;
         }
       }
@@ -415,10 +415,12 @@ const AddSongToPlaylist = ({ songId, placement }: props) => {
       if (rest?.right + rest?.width > window.innerWidth - 20) {
         subMenuRef.current.style.right = `100%`;
         subMenuRef.current.style.left = `unset`;
+        subMenuRef.current.style.display = `flex`;
         return;
       } else {
         subMenuRef.current.style.left = `${rest?.width - 10}px`;
         subMenuRef.current.style.right = `unset`;
+        subMenuRef.current.style.display = `flex`;
         return;
       }
     }

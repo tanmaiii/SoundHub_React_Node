@@ -7,6 +7,7 @@ import { changeOpenWaiting } from "../../slices/waitingSlice";
 import { RootState } from "../../store";
 import TrackShort from "../TrackShort";
 import "./style.scss";
+import { useTranslation } from "react-i18next";
 
 type Props = {};
 
@@ -19,6 +20,7 @@ const WattingList = ({}: Props) => {
     useAudio();
   const [queueNew, setQueueNew] = useState<string[]>([]);
   const itemRef = React.createRef<HTMLDivElement>();
+  const { t } = useTranslation("song");
 
   const handleChangeOpenWaiting = () => {
     dispatch(changeOpenWaiting(!openWatting));
@@ -75,7 +77,7 @@ const WattingList = ({}: Props) => {
         className={`wattingList__wrapper ${openWatting ? "open" : ""}`}
       >
         <div className="wattingList__wrapper__header">
-          <h3>Danh sách chờ</h3>
+          <h3>{t("playing.WaitingList")}</h3>
           <div className="wattingList__wrapper__header__list">
             <button onClick={() => stop()} data-tooltip={"Clear waiting list"}>
               <i className="fa-light fa-trash"></i>
@@ -117,7 +119,7 @@ const WattingList = ({}: Props) => {
                                     queue.indexOf(songPlayId ?? "") !==
                                       queue.length - 1 && (
                                       <div className="title__nextSong">
-                                        <h4>Bài tiếp theo</h4>
+                                        <h4>{t("playing.NextSong")}</h4>
                                       </div>
                                     )}
                                 </div>

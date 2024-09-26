@@ -1,11 +1,9 @@
-import { promiseDb, db } from "../config/connect.js";
-import User from "../model/user.model.js";
 import bcrypt from "bcrypt";
-import jwtService from "../services/jwtService.js";
-import emailService from "../services/emailService/index.js";
 import randomstring from "randomstring";
+import User from "../model/user.model.js";
 import VerifyCode from "../model/verifyCode.model.js";
-import nodemailer from "nodemailer";
+import emailService from "../services/emailService/index.js";
+import jwtService from "../services/jwtService.js";
 
 export const signin = async (req, res) => {
   try {

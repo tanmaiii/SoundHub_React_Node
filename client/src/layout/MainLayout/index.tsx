@@ -45,11 +45,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   useEffect(() => {
     if (menuSong.open && bodyRef.current) {
-        bodyRef.current.style.overflow = "hidden";
-    }else {
+      bodyRef.current.style.overflow = "hidden";
+    } else {
       if (bodyRef.current) bodyRef.current.style.overflow = "auto";
     }
   }, [menuSong.open]);
+
+  useEffect(() => {
+    if (menuPlaylist.open && bodyRef.current) {
+      bodyRef.current.style.overflow = "hidden";
+    } else {
+      if (bodyRef.current) bodyRef.current.style.overflow = "auto";
+    }
+  }, [menuPlaylist.open]);
 
   return (
     <div className="MainLayout">

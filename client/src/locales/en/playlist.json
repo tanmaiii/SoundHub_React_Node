@@ -35,6 +35,13 @@
   "Menu" : {
     "EditPlaylist": "Edit Playlist",
     "DeletePlaylist": "Delete Playlist",
-    "AddToWaitingList": "Add to waiting list"
+    "AddToWaitingList": "Add to waiting list",
+    "UnLike": "UnLike",
+    "Like": "Like",
+    "Share": "Share",
+    "RemoveFromLibrary": "Remove from library?",
+    "AreYouSureDelete" : "Are you sure to delete this playlist from Library?",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel"
   }
 }

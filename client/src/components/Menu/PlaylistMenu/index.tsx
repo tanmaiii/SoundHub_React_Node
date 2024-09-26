@@ -15,12 +15,11 @@ import { useAudio } from "../../../context/AudioContext";
 import { playlistApi, songApi } from "../../../apis";
 import { useAuth } from "../../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import playApi from "../../../apis/play/playApi";
-import { use } from "i18next";
 import { TPlaylist } from "../../../types";
 import Modal from "../../Modal";
 import { EditPlaylist } from "../../ModalPlaylist";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const PlaylistMenu = () => {
   const { t } = useTranslation("playlist");
@@ -45,8 +44,6 @@ const PlaylistMenu = () => {
   // Đóng menu khi click ra ngoài
   useEffect(() => {
     const handleMousedown = (e: MouseEvent) => {
-      console.log(e.target);
-
       if (
         PlaylistMenuRef.current &&
         !PlaylistMenuRef.current.contains(e.target as Node)
@@ -74,21 +71,21 @@ const PlaylistMenu = () => {
     if (PlaylistMenuRef.current && left) {
       if (
         left + PlaylistMenuRef.current.clientWidth >
-        window.innerWidth - 100
+        window.innerWidth - 200
       ) {
         if (
           top + PlaylistMenuRef.current.clientHeight <
-          window.innerHeight - 100
+          window.innerHeight - 200
         ) {
           // setPlacement("bottom-end");
-          PlaylistMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          PlaylistMenuRef.current.style.top = `${top + (heightBtn ?? 200)}px`;
           PlaylistMenuRef.current.style.left = `${
-            left - PlaylistMenuRef.current.clientWidth + (widthBtn ?? 100)
+            left - PlaylistMenuRef.current.clientWidth + (widthBtn ?? 200)
           }px`;
         } else {
           // setPlacement("top-end");
           PlaylistMenuRef.current.style.left = `${
-            left - PlaylistMenuRef.current.clientWidth + (widthBtn ?? 100)
+            left - PlaylistMenuRef.current.clientWidth + (widthBtn ?? 200)
           }px`;
           PlaylistMenuRef.current.style.bottom = `${
             window.innerHeight - top
@@ -97,7 +94,7 @@ const PlaylistMenu = () => {
       } else {
         if (
           top + PlaylistMenuRef.current.clientHeight >
-          window.innerHeight - 100
+          window.innerHeight - 200
         ) {
           // setPlacement("top-start");
           PlaylistMenuRef.current.style.top = `${
@@ -106,24 +103,13 @@ const PlaylistMenu = () => {
           PlaylistMenuRef.current.style.left = `${left}px`;
         } else {
           // setPlacement("bottom-start");
-          PlaylistMenuRef.current.style.top = `${top + (heightBtn ?? 100)}px`;
+          PlaylistMenuRef.current.style.top = `${top + (heightBtn ?? 200)}px`;
           PlaylistMenuRef.current.style.left = `${left}px`;
         }
       }
     }
   }, [PlaylistMenuRef, left, top, heightBtn, widthBtn]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      dispatch(closeMenu());
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const handleAddToQueue = async () => {
     try {
@@ -191,15 +177,18 @@ const PlaylistMenu = () => {
       className={`PlaylistMenu ${open ? "active" : ""}`}
     >
       <div className={`PlaylistMenu__context`}>
+        <Helmet>
+          <title>{`${playlist?.title ?? "Untitled"} | Sound hub`}</title>
+        </Helmet>
         <ul className="PlaylistMenu__context__list">
           <ItemMenu
-            title={"Thêm vào danh sách chờ"}
+            title={t("Menu.AddToWaitingList")}
             icon={<i className="fa-light fa-rectangle-history-circle-plus"></i>}
             itemFunc={() => handleAddToQueue()}
           />
           {currentUser?.id !== playlist?.user_id && (
             <ItemMenu
-              title={isLike ? "Bỏ thích" : "Thêm vào danh sách yêu thích"}
+              title={isLike ? t("Menu.UnLike") : t("Menu.Like")}
               icon={
                 isLike ? (
                   <i className="fa-solid fa-heart"></i>
@@ -211,20 +200,20 @@ const PlaylistMenu = () => {
             />
           )}
           <ItemMenu
-            title={"Chỉnh sửa"}
+            title={t("Menu.EditPlaylist")}
             icon={<i className="fa-regular fa-pen"></i>}
             itemFunc={() => setOpenModalEdit(true)}
           />
           {currentUser?.id === playlist?.user_id && (
             <ItemMenu
-              title={"Xóa"}
+              title={t("Menu.Delete")}
               icon={<i className="fa-regular fa-trash"></i>}
               itemFunc={() => setOpenModalDelete(true)}
             />
           )}
           <hr />
           <ItemMenu
-            title={"Chia sẻ"}
+            title={t("Menu.Share")}
             icon={<i className="fa-light fa-arrow-up-from-bracket"></i>}
             itemFunc={() => console.log("Add to favorites list")}
           />
@@ -232,7 +221,7 @@ const PlaylistMenu = () => {
       </div>
       {openModalEdit && playlist && (
         <Modal
-          title="Edit song"
+          title={t("EditPlaylist.Title")}
           openModal={openModalEdit}
           setOpenModal={setOpenModalEdit}
         >
@@ -245,17 +234,21 @@ const PlaylistMenu = () => {
       )}
       {openModalDelete && (
         <Modal
-          title="Xóa khỏi thư viện ?"
+          title={t("Menu.RemoveFromLibrary")}
           openModal={openModalDelete}
           setOpenModal={setOpenModalDelete}
         >
           <div className="PlaylistMenu__modal__delete">
             <div className="PlaylistMenu__modal__delete__header">
-              <h3>Bạn có chắc chắn sẽ xóa {playlist?.title} khỏi Thư viện.</h3>
+              <h3>{t("Menu.AreYouSureDelete")}</h3>
             </div>
             <div className="PlaylistMenu__modal__delete__body">
-              <button onClick={() => setOpenModalDelete(false)}>Hủy</button>
-              <button onClick={() => mutationDelete.mutate()}>Xóa</button>
+              <button onClick={() => setOpenModalDelete(false)}>
+                {t("Menu.Cancel")}
+              </button>
+              <button onClick={() => mutationDelete.mutate()}>
+                {t("Menu.Delete")}
+              </button>
             </div>
           </div>
         </Modal>

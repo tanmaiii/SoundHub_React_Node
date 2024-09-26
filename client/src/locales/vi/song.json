@@ -4,6 +4,8 @@
   "comments": "Bình luận",
   "Artist": "Nghệ sĩ",
   "Invitation sent": "Đã gửi lời mời",
+  "Lyrics": "Lời bài hát",
+  "Propose": "Đề xuất",
   "Menu": {
     "Add to playlist": "Thêm vào danh sách phát",
     "Remove to playlist": "Xóa khỏi danh sách phát này",
@@ -64,5 +66,14 @@
     "Error": "Error",
     "Warning": "Warning",
     "Info": "Info"
+  },
+  "playing": {
+    "Lyrics": "Lời bài hát",
+    "WaitingList": "Danh sách chờ",
+    "TurnOffShuffle": "Tắt trộn bài",
+    "TurnOnShuffle": "Bật trộn bài",
+    "TurnOffRepeat": "Tắt lặp lại",
+    "TurnOnRepeat": "Bật lặp lại",
+    "NextSong": "Bài hát tiếp theo"
   }
 }

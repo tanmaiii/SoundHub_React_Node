@@ -11,7 +11,7 @@
     "Private": "Riêng tư",
     "Save": "Lưu",
     "Cancel": "Hủy",
-     "EditImage": "Chỉnh sửa hình ảnh"
+    "EditImage": "Chỉnh sửa hình ảnh"
   },
   "AddNewPlaylist": {
     "AddNewPlaylist": "Thêm playlist mới",
@@ -24,12 +24,24 @@
     "Private": "Riêng tư",
     "Save": "Lưu",
     "Cancel": "Hủy",
-     "EditImage": "Chỉnh sửa hình ảnh"
+    "EditImage": "Chỉnh sửa hình ảnh"
   },
   "DeletePlaylist": {
     "DeletePlaylist": "Xóa playlist",
     "AreYouSure": "Bạn có chắc chắn muốn xóa playlist này không?",
     "Delete": "Xóa",
     "Cancel": "Hủy"
+  },
+  "Menu": {
+    "EditPlaylist": "Chỉnh sửa playlist",
+    "DeletePlaylist": "Xóa playlist",
+    "AddToWaitingList": "Thêm vào danh sách chờ",
+    "UnLike": "Bỏ thích",
+    "Like": "Thích",
+    "Share": "Chia sẻ",
+    "RemoveFromLibrary": "Xóa khỏi thư viện ?",
+    "AreYouSureDelete" : "Bạn có chắc chắn muốn xóa playlist này khỏi thư viện không?",
+    "Delete" : "Xóa",
+    "Cancel" : "Hủy"
   }
 }

@@ -4,6 +4,8 @@
   "comments": "Comments",
   "Artist": "Artist",
   "Invitation sent": "Invitation sent",
+  "Lyrics": "Lyrics",
+  "Propose": "Propose",
   "Menu": {
     "Add to playlist": "Add to playlist",
     "Remove to playlist": "Remove to playlist",
@@ -64,5 +66,14 @@
     "Error": "Error",
     "Warning": "Warning",
     "Info": "Info"
+  },
+  "playing": {
+    "Lyrics": "Lyrics",
+    "WaitingList": "Waiting List",
+    "TurnOffShuffle": "Turn off shuffle",
+    "TurnOnShuffle": "Turn on shuffle",
+     "TurnOffRepeat": "Turn off repeat",
+    "TurnOnRepeat": "Turn on repeat",
+    "NextSong": "Next Song"
   }
 }
