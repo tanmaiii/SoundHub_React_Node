@@ -9,7 +9,7 @@ const createComment = async (req, res) => {
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err || !song) {
-        return res.status(401).json("Song not found");
+        return res.status(401).json({ conflictError: "Song not found"});
       }
       Comment.create(
         userInfo.id,
@@ -29,14 +29,14 @@ const createComment = async (req, res) => {
   }
 };
 
-const getAllComments = async (req, res) => {
+const getAllCommentsBySongId = async (req, res) => {
   try {
     const token = req.headers["authorization"];
     const userInfo = await jwtService.verifyToken(token);
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err || !song) {
-        return res.status(401).json("Song not found");
+        return res.status(401).json({ conflictError: "Song not found"});
       }
       Comment.findAllBySongId(req.params.songId, req.query, (err, data) => {
         if (err) {
@@ -51,6 +51,27 @@ const getAllComments = async (req, res) => {
   }
 };
 
+const getAllRelatedComments = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Comment.findAllRepliesByCommentId(
+      req.params.commentId,
+      req.query,
+      (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        } else {
+          return res.json(data);
+        }
+      }
+    );
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 const likeComment = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -58,7 +79,7 @@ const likeComment = async (req, res) => {
 
     Comment.findById(req.params.commentId, (err, comment) => {
       if (err || !comment) {
-        return res.status(401).json("Comment not found");
+        return res.status(401).json({ conflictError: "Comment not found" });
       }
 
       Comment.findUserLikeComment(req.params.commentId, (err, data) => {
@@ -81,6 +102,7 @@ const likeComment = async (req, res) => {
     res.status(400).json(error);
   }
 };
+
 const unLikeComment = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -88,13 +110,35 @@ const unLikeComment = async (req, res) => {
 
     Comment.findById(req.params.commentId, (err, comment) => {
       if (err || !comment) {
-        return res.status(401).json("Comment not found");
+        return res.status(401).json({ conflictError: "Comment not found" });
       }
       Comment.unLike(req.params.commentId, userInfo.id, (err, data) => {
         if (err) {
           return res.status(401).json({ conflictError: err });
         } else {
           return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+const countLikeComment = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Comment.findById(req.params.commentId, (err, comment) => {
+      if (err || !comment) {
+        return res.status(401).json({ conflictError: "Comment not found" });
+      }
+      Comment.findUserLikeComment(req.params.commentId, (err, data) => {
+        if (data) {
+          return res.status(200).json(data.length);
+        } else {
+          return res.status(200).json(0);
         }
       });
     });
@@ -110,7 +154,7 @@ const checkLikeComment = async (req, res) => {
 
     Comment.findById(req.params.commentId, (err, comment) => {
       if (err || !comment) {
-        return res.status(401).json("Comment not found");
+        return res.status(401).json({ conflictError: "Comment not found" });
       }
       Comment.findUserLikeComment(req.params.commentId, (err, data) => {
         if (data) {
@@ -128,8 +172,10 @@ const checkLikeComment = async (req, res) => {
 
 export default {
   createComment,
-  getAllComments,
+  getAllCommentsBySongId,
+  getAllRelatedComments,
   likeComment,
   unLikeComment,
+  countLikeComment,
   checkLikeComment,
 };

@@ -3,9 +3,11 @@ const router = Router();
 import commentController from "../controllers/comment.controller.js";
 
 router.post("/:songId", commentController.createComment);
-router.get("/:songId", commentController.getAllComments);
+router.get("/reply/:commentId", commentController.getAllRelatedComments);
+router.get("/:songId", commentController.getAllCommentsBySongId);
 router.post("/like/:commentId", commentController.likeComment);
 router.delete("/like/:commentId", commentController.unLikeComment);
-router.get("/checkLiked/:commentId", commentController.checkLikeComment);
+router.get("/like/:commentId", commentController.countLikeComment);
+router.get("/check-like/:commentId", commentController.checkLikeComment);
 
 export default router;

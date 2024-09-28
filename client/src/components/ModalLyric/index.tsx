@@ -198,7 +198,7 @@ export default ModalLyric;
 
 const ModalLyricSongPlay = () => {
   const [song, setSong] = useState<TSong>();
-  const { songPlayId, currentTime } = useAudio();
+  const { songPlayId, currentTime, isPlaying } = useAudio();
   const { token } = useAuth();
   const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
   const itemRef = React.createRef<HTMLLIElement>();
@@ -266,7 +266,11 @@ const ModalLyricSongPlay = () => {
 
   return (
     <div className="ModalLyric__container__body__songPlay">
-      <div className="ModalLyric__container__body__songPlay__image">
+      <div
+        className={`ModalLyric__container__body__songPlay__image ${
+          isPlaying ? "play" : ""
+        }`}
+      >
         <ImageWithFallback
           src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
@@ -294,34 +298,6 @@ const ModalLyricSongPlay = () => {
           </div>
         )}
       </div>
-      {/* <div className="ModalLyric__container__body__songPlay__image">
-        <ImageWithFallback
-          src={song?.image_path ?? ""}
-          fallbackSrc={Images.SONG}
-          alt=""
-        />
-      </div>
-      <div className="ModalLyric__container__body__songPlay__lyric">
-        {lyrics.length > 0 ? (
-          <ul ref={listRef}>
-            {lyrics.map((lyric, index) => (
-              <li
-                ref={index === active ? itemRef : null}
-                key={index}
-                className={`${index === active ? "active" : ""} ${
-                  index < active ? "is-over" : ""
-                } ${!lyric.time ? "no-time" : ""}`}
-              >
-                <p>{lyric.text}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="no-lyric">
-            <p>Chúng tôi vẫn đang tìm lời cho bài hát này</p>
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };
@@ -389,6 +365,7 @@ const ModalLyricWaitingList = () => {
               </li>
             ))}
         </ul>
+
         {queue && active + 1 < queue?.length && (
           <div className="button btn-right">
             <button onClick={onClickRight}>

@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { openMenu } from "../../slices/menuSongSlide";
 import Section from "../../components/Section";
 import CardSong from "../../components/CardSong";
+import Comment from "../../components/Comment";
 
 export default function SongPage() {
   const navigation = useNavigate();
@@ -34,6 +35,7 @@ export default function SongPage() {
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [openModalAuthor, setOpenModalAuthor] = useState<boolean>(false);
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
+  const [openModalCommnent, setOpenModalCommnent] = useState<boolean>(false);
   const [authors, setAuthors] = useState<TAuthor[]>([]);
   const [authorPending, setAuthorPending] = useState<TAuthor[]>([]);
   const { t } = useTranslation("song");
@@ -86,7 +88,7 @@ export default function SongPage() {
         res && setAuthorPending(res?.data);
         return res;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   });
@@ -192,6 +194,7 @@ export default function SongPage() {
             fnOpenEdit={() => setOpenModalEdit(true)}
           />
         </div>
+
         <div className="songPage__content">
           <div className="songPage__content__header">
             <button className="btn__play" onClick={handleClickPlay}>
@@ -210,6 +213,13 @@ export default function SongPage() {
               ) : (
                 <i className="fa-light fa-heart"></i>
               )}
+            </button>
+            <button
+              className={`btn__comment`}
+              onClick={() => setOpenModalCommnent(!openModalCommnent)}
+            >
+              <span>223</span>
+              <i className="fa-light fa-comment"></i>
             </button>
             <button
               ref={btnMenuRef}
@@ -237,67 +247,9 @@ export default function SongPage() {
                   </button>
                 </div>
               )}
-              <div className="songPage__content__body__left__comment">
-                <CommentInput avatarUrl={Images.AVATAR} />
-
-                <div className="songPage__content__body__left__comment__header">
-                  <div className="quantity">
-                    <i className="fa-light fa-comment"></i>
-                    <span>123 comments</span>
-                  </div>
-                  <div className="dropdown">
-                    <div className="dropdown__header">
-                      <i className="fa-light fa-bars-sort"></i>
-                      <span>Mới nhất</span>
-                      <i className="fa-light fa-chevron-down"></i>
-                    </div>
-                    <div className={`dropdown__content`}>
-                      <ul>
-                        <li>Mới nhất</li>
-                        <li>Phổ biến</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="songPage__content__body__left__comment__list">
-                  <CommentItem
-                    avatarUrl={Images.AVATAR}
-                    name="Tấn Mãi"
-                    time="2 hours ago"
-                    content="Hay quá anh ơi"
-                    level={0}
-                  />
-                  <CommentItem
-                    avatarUrl={Images.AVATAR}
-                    name="Tấn Mãi"
-                    content="Hay quá anh ơi"
-                    level={1}
-                    time="2 hours ago"
-                  />
-                  <CommentItem
-                    avatarUrl={Images.AVATAR}
-                    name="Tấn Mãi"
-                    level={2}
-                    content="Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh
-                Hay quá anh ơi em yeue anh Hay quá anh ơi em yeue anh "
-                    time="2 hours ago"
-                  />
-                  <CommentItem
-                    avatarUrl={Images.AVATAR}
-                    name="Tấn Mãi"
-                    level={3}
-                    content="Hay quá anh ơi"
-                    time="2 hours ago"
-                  />
-                  <CommentItem
-                    avatarUrl={Images.AVATAR}
-                    name="Tấn Mãi"
-                    content="Hay quá anh ơi"
-                    time="2 hours ago"
-                  />
-                </div>
-              </div>
+              {/* <div className="songPage__content__body__left__comment">
+                {song?.id && <Comment songId={song?.id} />}
+              </div> */}
             </div>
             <div className="songPage__content__body__artist col pc-4 t-12">
               <div className="songPage__content__body__artist__header">
@@ -378,6 +330,16 @@ export default function SongPage() {
           <div>
             <ModalAuthor songId={song?.id ?? ""} />
           </div>
+        </Modal>
+      )}
+
+      {song?.id && openModalCommnent && (
+        <Modal
+          title={song?.title}
+          openModal={openModalCommnent}
+          setOpenModal={setOpenModalCommnent}
+        >
+          <Comment songId={song?.id} />
         </Modal>
       )}
 

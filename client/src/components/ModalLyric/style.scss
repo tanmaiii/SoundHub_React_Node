@@ -112,7 +112,7 @@
           @include flex(center, center, row);
           --size: 50vh;
           max-width: 80vw;
-          gap: $space-24;
+          gap: 30px;
 
           @include flex(center, center, row);
 
@@ -131,8 +131,27 @@
             height: var(--size);
             min-width: var(--size);
             min-height: var(--size);
-            border-radius: $radius-12;
+            // border-radius: $radius-12;
+            border-radius: 50%;
             overflow: hidden;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            animation: spin 8s linear infinite;
+            background-color: themed("bg-2");
+            animation-play-state: paused;
+
+            &.play {
+              animation-play-state: running;
+            }
+
+            /* Định nghĩa hiệu ứng xoay */
+            @keyframes spin {
+              from {
+                transform: rotate(0deg);
+              }
+              to {
+                transform: rotate(360deg);
+              }
+            }
             @include mobile {
               display: none;
             }

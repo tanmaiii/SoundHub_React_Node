@@ -37,7 +37,7 @@ Comment.createReply = (userId, songId, content, parentId, result) => {
 
 Comment.update = (commentId, newUpdate, result) => {
   db.query(
-    `UPDATE SET ?, update_at = '${moment(Date.now()).format(
+    `UPDATE SET ?, updated_at = '${moment(Date.now()).format(
       "YYYY-MM-DD HH:mm:ss"
     )}' where id = ?`,
     [newUpdate, commentId],
@@ -93,11 +93,69 @@ Comment.findAllBySongId = async (songId, query, result) => {
   const limit = query?.limit;
   const sort = query?.sort || "new";
 
-  const [data] = await promiseDb.query();
-  const [totalCount] = await promiseDb.query();
+  const [data] = await promiseDb.query(
+    ` SELECT  c.id AS comment_id, c.song_id, c.user_id, u.name, u.image_path, c.content, c.created_at, c.updated_at,  ` +
+      ` ( SELECT COUNT(*) FROM comments AS replies WHERE replies.parent_id = c.id ) AS replies_count ` +
+      ` FROM  comments AS c ` +
+      ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` WHERE  c.parent_id IS NULL ` +
+      ` AND c.song_id = '${songId}' ` +
+      ` ORDER BY c.created_at ${sort === "new" ? "ASC" : "DESC"} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
+  );
+  const [totalCount] = await promiseDb.query(
+    ` SELECT COUNT(*) AS totalCount ` +
+      ` FROM  comments AS c ` +
+      ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` WHERE  c.parent_id IS NULL ` +
+      ` AND c.song_id = '${songId}' `
+  );
 
   if (data && totalCount) {
-    const totalPages = Math.ceil(totalCount[0].totalCount / limit);
+    const totalPages = Math.ceil(totalCount[0]?.totalCount / limit);
+
+    result(null, {
+      data,
+      pagination: {
+        page: +page,
+        limit: +limit,
+        totalCount: totalCount[0].totalCount,
+        totalPages,
+      },
+    });
+    return;
+  }
+  result(null, null);
+};
+
+Comment.findAllRepliesByCommentId = async (commentId, query, result) => {
+  const q = query?.q;
+  const page = query?.page;
+  const limit = query?.limit;
+  const sort = query?.sort || "new";
+
+  const [data] = await promiseDb.query(
+    ` SELECT  c.id AS comment_id, c.song_id, c.user_id, u.name, u.image_path, c.content, c.created_at, c.updated_at,  ` +
+      ` ( SELECT COUNT(*) FROM comments AS replies WHERE replies.parent_id = c.id ) AS replies_count ` +
+      ` FROM  comments AS c ` +
+      ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` WHERE c.parent_id = '${commentId}' ` +
+      ` ORDER BY c.created_at ${sort === "new" ? "ASC" : "DESC"} ` +
+      ` ${
+        !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
+      } `
+  );
+  const [totalCount] = await promiseDb.query(
+    ` SELECT COUNT(*) AS totalCount ` +
+      ` FROM  comments AS c ` +
+      ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` WHERE c.parent_id =  '${commentId}'`
+  );
+
+  if (data && totalCount) {
+    const totalPages = Math.ceil(totalCount[0]?.totalCount / limit);
 
     result(null, {
       data,
@@ -139,25 +197,6 @@ Comment.unLike = (commentId, userId, result) => {
         return;
       }
       result(null, { commentId, userId });
-    }
-  );
-};
-
-Comment.countLikes = (songId, result) => {
-  db.query(
-    `SELECT count as totalCount FROM comment_likes_count where comment_id = ?`,
-    [songId],
-    (err, song) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
-
-      if (song.length) {
-        result(null, song[0].totalCount);
-        return;
-      }
-      result("Không tìm thấy !", null);
     }
   );
 };

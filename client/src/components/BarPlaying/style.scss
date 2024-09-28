@@ -144,6 +144,20 @@
         @include flex(center, center);
         border-radius: 50%;
         aspect-ratio: 1/1;
+        animation: spin 10s linear infinite;
+        animation-play-state: paused;
+
+        &.play {
+          animation-play-state: running;
+        }
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
         img {
           background-color: themed("bg-2");
           height: 100%;

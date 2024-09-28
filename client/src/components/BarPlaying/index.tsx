@@ -162,7 +162,7 @@ const CardSong = ({ song }: CardSongProps) => {
 
   return (
     <div className="CardSongPlaying">
-      <div className="CardSongPlaying__image" ref={imageRef}>
+      <div className={`CardSongPlaying__image ${isPlaying ? 'play' : ''}`} ref={imageRef}>
         <ImageWithFallback
           src={song?.image_path ?? ""}
           fallbackSrc={Images.SONG}
