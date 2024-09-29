@@ -78,6 +78,9 @@
                 color: themed("txt-second");
                 font-size: $size-16;
               }
+              &.like i {
+                color: $color-primary1;
+              }
             }
           }
         }

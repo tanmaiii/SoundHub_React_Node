@@ -85,7 +85,7 @@ User.getAll = async (query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "count";
+  const sort = query?.sortBy || "count";
 
   const offset = (page - 1) * limit;
 

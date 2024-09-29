@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { authorApi, lyricApi, searchApi, songApi, userApi } from "../../apis";
-import CommentInput from "../../components/CommentInput/CommentInput";
+import CommentInput from "../../components/CommentInput";
 import SongMenu from "../../components/Menu/SongMenu";
 import Images from "../../constants/images";
 import { useAuth } from "../../context/AuthContext";

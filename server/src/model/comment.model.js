@@ -91,16 +91,19 @@ Comment.findAllBySongId = async (songId, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
     ` SELECT  c.id AS comment_id, c.song_id, c.user_id, u.name, u.image_path, c.content, c.created_at, c.updated_at,  ` +
-      ` ( SELECT COUNT(*) FROM comments AS replies WHERE replies.parent_id = c.id ) AS replies_count ` +
+      ` ( SELECT COUNT(*) FROM comments AS replies WHERE replies.parent_id = c.id ) AS replies_count, clc.count as count_like ` +
       ` FROM  comments AS c ` +
       ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` LEFT JOIN comment_likes_count as clc on clc.comment_id = c.id ` +
       ` WHERE  c.parent_id IS NULL ` +
       ` AND c.song_id = '${songId}' ` +
-      ` ORDER BY c.created_at ${sort === "new" ? "ASC" : "DESC"} ` +
+      `  ${sort === "new" ? " ORDER BY created_at DESC " : ""}` +
+      `  ${sort === "old" ? " ORDER BY created_at ASC " : ""}` +
+      `  ${sort === "pupular" ? " ORDER BY clc.count DESC " : ""}` +
       ` ${
         !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
       } `
@@ -109,6 +112,7 @@ Comment.findAllBySongId = async (songId, query, result) => {
     ` SELECT COUNT(*) AS totalCount ` +
       ` FROM  comments AS c ` +
       ` LEFT JOIN users AS u ON c.user_id = u.id ` +
+      ` LEFT JOIN comment_likes_count as clc on clc.comment_id = c.id ` +
       ` WHERE  c.parent_id IS NULL ` +
       ` AND c.song_id = '${songId}' `
   );
@@ -123,6 +127,7 @@ Comment.findAllBySongId = async (songId, query, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        sort,
       },
     });
     return;
@@ -134,7 +139,7 @@ Comment.findAllRepliesByCommentId = async (commentId, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
     ` SELECT  c.id AS comment_id, c.song_id, c.user_id, u.name, u.image_path, c.content, c.created_at, c.updated_at,  ` +
@@ -164,6 +169,7 @@ Comment.findAllRepliesByCommentId = async (commentId, query, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        sort,
       },
     });
     return;

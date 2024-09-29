@@ -180,7 +180,7 @@ Song.findByPlaylistId = async (userId, playlistId, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sortBy || "new";
 
   // const offset = (page - 1) * limit;
 
@@ -230,7 +230,7 @@ Song.findByUserId = async (userId, userReqInfo, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sortBy || "new";
 
   const userReqId = userReqInfo.id;
 
@@ -333,6 +333,7 @@ Song.findAll = async (query, result) => {
         limit: +limit,
         totalCount: totalCount[0].totalCount,
         totalPages,
+        sort
       },
     });
     return;
@@ -344,7 +345,7 @@ Song.findMe = async (userId, query, result) => {
   const q = query?.q;
   const page = query?.page;
   const limit = query?.limit;
-  const sort = query?.sort || "new";
+  const sort = query?.sortBy || "new";
 
   const [data] = await promiseDb.query(
     `SELECT * FROM songs WHERE ` +

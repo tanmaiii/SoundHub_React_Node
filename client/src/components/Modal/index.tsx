@@ -14,7 +14,7 @@ export default function Modal({
   openModal,
   setOpenModal,
 }: ModalProps) {
-  const modalBodyRef = useRef<HTMLInputElement>(null);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (openModal === true) {
@@ -25,18 +25,13 @@ export default function Modal({
   }, [openModal]);
 
   useEffect(() => {
-    function handleMousedown(event: MouseEvent) {
-      const node = event.target as Node;
-
-      if (!modalBodyRef.current?.contains(node)) {
+    const handleMousedown = (event: MouseEvent) => {
+      if (!modalBodyRef.current?.contains(event.target as Node)) {
         setOpenModal(false);
       }
-    }
-    document.addEventListener("mousedown", (event) => handleMousedown(event));
-    return () =>
-      document.removeEventListener("mousedown", (event) =>
-        handleMousedown(event)
-      );
+    };
+    document.addEventListener("mousedown", handleMousedown);
+    return () => document.removeEventListener("mousedown", handleMousedown);
   });
 
   return (
