@@ -5,7 +5,7 @@
     @include flex(end, center, row);
     max-width: 100%;
     --size: 44px;
-    padding: $size-14 0;
+    padding: $size-8 0;
     &__avatar {
       width: var(--size);
       height: var(--size);

@@ -4,12 +4,21 @@ import commentController from "../controllers/comment.controller.js";
 import commentValidation from "../validations/comment.validation.js";
 import validate from "../middlewares/validate.js";
 
+// Tạo comment
 router.post(
   "/:songId",
   validate(commentValidation.createComment),
   commentController.createComment
 );
+//Xóa comment
+router.delete(
+  "/:commentId",
+  validate(commentValidation.deleteComment),
+  commentController.deleteComment
+);
+// Trả lời comment
 router.get("/reply/:commentId", commentController.getAllRelatedComments);
+
 router.get(
   "/:songId",
   validate(commentValidation.getAllCommentsBySongId),

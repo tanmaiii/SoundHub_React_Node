@@ -4,13 +4,14 @@
   @include themify($themes) {
     &__container {
       width: 600px;
-      height: 500px;
+      height: 700px;
       padding: $size-12 $size-24 $size-24 $size-24;
       border-top: 1px solid themed("border");
       position: relative;
+      overflow-y: scroll;
       @include tablet {
         width: 500px;
-        height: 400px;
+        height: 600px;
       }
       @include mobile {
         width: 100%;
@@ -84,6 +85,7 @@
       left: 0;
       width: 100%;
       padding: $space-8;
+      background-color: themed("bg-1");
     }
   }
 }

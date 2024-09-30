@@ -9,7 +9,7 @@ const createComment = async (req, res) => {
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err || !song) {
-        return res.status(401).json({ conflictError: "Song not found"});
+        return res.status(401).json({ conflictError: "Song not found" });
       }
       Comment.create(
         userInfo.id,
@@ -29,6 +29,31 @@ const createComment = async (req, res) => {
   }
 };
 
+const deleteComment = async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    const userInfo = await jwtService.verifyToken(token);
+
+    Comment.findById(req.params.commentId, (err, comment) => {
+      if (err || !comment) {
+        return res.status(401).json({ conflictError: "Comment not found" });
+      }
+      if (comment.user_id !== userInfo.id) {
+        return res.status(401).json({ conflictError: "You are not the owner" });
+      }
+      Comment.delete(req.params.commentId, (err, data) => {
+        if (err) {
+          return res.status(401).json({ conflictError: err });
+        } else {
+          return res.json(data);
+        }
+      });
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 const getAllCommentsBySongId = async (req, res) => {
   try {
     const token = req.headers["authorization"];
@@ -36,7 +61,7 @@ const getAllCommentsBySongId = async (req, res) => {
 
     Song.findById(req.params.songId, userInfo.id, (err, song) => {
       if (err || !song) {
-        return res.status(401).json({ conflictError: "Song not found"});
+        return res.status(401).json({ conflictError: "Song not found" });
       }
       Comment.findAllBySongId(req.params.songId, req.query, (err, data) => {
         if (err) {
@@ -172,6 +197,7 @@ const checkLikeComment = async (req, res) => {
 
 export default {
   createComment,
+  deleteComment,
   getAllCommentsBySongId,
   getAllRelatedComments,
   likeComment,

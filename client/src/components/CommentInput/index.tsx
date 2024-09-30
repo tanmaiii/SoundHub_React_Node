@@ -7,11 +7,13 @@ import { useAuth } from "../../context/AuthContext";
 interface CommentInputProps {
   avatarUrl: string;
   level?: number;
+  onPost: (value: string) => void;
 }
 
 export default function CommentInput({
   avatarUrl,
   level = 0,
+  onPost,
 }: CommentInputProps) {
   const marginLeft = level * 40;
   const [value, setValue] = useState<string>("");
@@ -34,6 +36,15 @@ export default function CommentInput({
     }
   };
 
+  const handleClickPost = () => {
+    if (value !== "") {
+      onPost(value);
+      setValue("");
+      if (chatInputRef.current)
+        chatInputRef.current.style.height = `${inputInitHeight}px`;
+    }
+  };
+
   return (
     <div className="comment__form" style={{ marginLeft: `${marginLeft}px` }}>
       <div className="comment__form__avatar">
@@ -50,7 +61,7 @@ export default function CommentInput({
           />
         </div>
         <div className="comment__form__swapper__right">
-          <button className="btn-submit">
+          <button className="btn-submit" onClick={() => handleClickPost()}>
             <i className="fa-solid fa-paper-plane-top"></i>
           </button>
         </div>

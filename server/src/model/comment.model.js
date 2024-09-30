@@ -103,7 +103,7 @@ Comment.findAllBySongId = async (songId, query, result) => {
       ` AND c.song_id = '${songId}' ` +
       `  ${sort === "new" ? " ORDER BY created_at DESC " : ""}` +
       `  ${sort === "old" ? " ORDER BY created_at ASC " : ""}` +
-      `  ${sort === "pupular" ? " ORDER BY clc.count DESC " : ""}` +
+      `  ${sort === "popular" ? " ORDER BY clc.count DESC " : ""}` +
       ` ${
         !+limit == 0 ? ` limit ${+limit} offset ${+(page - 1) * limit}` : ""
       } `

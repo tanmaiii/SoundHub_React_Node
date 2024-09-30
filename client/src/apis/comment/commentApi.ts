@@ -23,7 +23,27 @@ const commentApi = {
       },
     });
   },
-  checkLiked(commentId: string, token: string):Promise<{isLiked: boolean}> {
+  addComment(songId: string, content: string, token: string) {
+    const url = "comment/";
+    return axiosClient.post(
+      url + songId,
+      { content },
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+  },
+  deleteComment(commentId: string, token: string) {
+    const url = "comment/";
+    return axiosClient.delete(url + commentId, {
+      headers: {
+        authorization: token,
+      },
+    });
+  },
+  checkLiked(commentId: string, token: string): Promise<{ isLiked: boolean }> {
     const url = "comment/check-like/";
     return axiosClient.get(url + commentId, {
       headers: {

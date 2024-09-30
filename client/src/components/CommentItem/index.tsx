@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.scss";
 
 import CommentInput from "../CommentInput";
@@ -8,12 +8,18 @@ import moment from "moment";
 import { use } from "i18next";
 import numeral from "numeral";
 import { commentApi } from "../../apis";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router-dom";
+import { PATH } from "../../constants/paths";
+import { current } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 interface CommentItemProps {
   id: string;
   name: string;
+  userId: string;
+  songId: string;
   content?: string;
   avatarUrl: string;
   level?: number;
@@ -25,6 +31,8 @@ interface CommentItemProps {
 export default function CommentItem({
   id,
   name,
+  userId,
+  songId,
   content,
   avatarUrl,
   level = 0,
@@ -34,10 +42,26 @@ export default function CommentItem({
 }: CommentItemProps) {
   const [openInput, setOpenInput] = useState(false);
   const [like, setLike] = useState<boolean>(false);
-  const { token } = useAuth();
-
-  const marginLeft = level * 40;
+  const { token, currentUser } = useAuth();
   const [likeCount, setLikeCount] = useState(count_like);
+  const [openEdit, setOpenEdit] = useState(false);
+  const btnMoreRef = useRef<HTMLDivElement>(null);
+  const marginLeft = level * 40;
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (btnMoreRef.current) {
+      const handleClick = (e: MouseEvent) => {
+        if (!btnMoreRef.current?.contains(e.target as Node)) {
+          setOpenEdit(false);
+        }
+      };
+      document.addEventListener("click", handleClick);
+      return () => {
+        document.removeEventListener("click", handleClick);
+      };
+    }
+  });
 
   const { data } = useQuery({
     queryKey: ["like-commnet", id],
@@ -62,53 +86,103 @@ export default function CommentItem({
     onSuccess: () => {},
   });
 
+  const mutionDelete = useMutation({
+    mutationFn: async () => {
+      await commentApi.deleteComment(id, token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["comments", songId]);
+      toast.success("Xóa bình luận thành công");
+      setOpenEdit(false);
+    },
+  });
+
+  const handleOpenMenu = () => {
+    setOpenEdit(!openEdit);
+  };
+
   return (
     <div className="commentItem">
       <div className="commentItem__main" style={{ marginLeft: marginLeft }}>
         <div className="commentItem__main__avatar">
-          <ImageWithFallback
-            src={avatarUrl}
-            alt=""
-            fallbackSrc={Images.AVATAR}
-          />
+          <Link to={PATH.ARTIST + "/" + userId}>
+            <ImageWithFallback
+              src={avatarUrl}
+              alt=""
+              fallbackSrc={Images.AVATAR}
+            />
+          </Link>
         </div>
 
         <div className="commentItem__main__content">
           <div className="commentItem__main__content__top">
             <div className="commentItem__main__content__top__info">
               <div className="commentItem__main__content__top__info__top">
-                <a>{name}</a>
+                <Link to={PATH.ARTIST + "/" + userId}>{name}</Link>
               </div>
               <span>{content}</span>
             </div>
-            <div className="commentItem__main__content__top__like">
-              <button
-                onClick={() => mutionLike.mutate(like)}
-                className={like ? "like" : ""}
-              >
-                {like ? (
-                  <i className="fa-solid fa-heart"></i>
-                ) : (
-                  <i className="fa-regular fa-heart"></i>
+            <div className="commentItem__main__content__top__more">
+              <div className="btn-more" ref={btnMoreRef}>
+                <button
+                  className={openEdit ? "active" : ""}
+                  onClick={() => setOpenEdit(!openEdit)}
+                >
+                  <i className="fa-solid fa-ellipsis"></i>
+                </button>
+                {openEdit && (
+                  <div className="btn-more__list">
+                    <ul>
+                      {currentUser?.id === userId && (
+                        <li onClick={() => mutionDelete.mutate()}>
+                          <i className="fa-light fa-trash-can"></i>
+                          <span>Xóa</span>
+                        </li>
+                      )}
+                      {currentUser?.id === userId && (
+                        <li onClick={() => mutionDelete.mutate()}>
+                          <i className="fa-light fa-pen-to-square"></i>
+                          <span>Chỉnh sửa</span>
+                        </li>
+                      )}
+                      <li>
+                        <i className="fa-light fa-flag"></i>
+                        <span>Báo cáo bình luận</span>
+                      </li>
+                    </ul>
+                  </div>
                 )}
-              </button>
+              </div>
             </div>
           </div>
           <div className="commentItem__main__content__bottom">
-            <span className="commentItem__main__content__bottom__time">
-              {moment(time).fromNow(true)}
-            </span>
-            {likeCount > 0 && (
-              <span className="commentItem__main__content__bottom__likes">
-                {numeral(likeCount).format("0a").toUpperCase()} likes
+            <div className={"commentItem__main__content__bottom__left"}>
+              <span className="commentItem__main__content__bottom__left__time">
+                {moment(time).fromNow(true)}
               </span>
-            )}
-            <button
-              className="commentItem__main__content__bottom__reply"
-              onClick={() => setOpenInput(!openInput)}
-            >
-              <span>Reply</span>
-            </button>
+              <button
+                onClick={() => mutionLike.mutate(like)}
+                className={`commentItem__main__content__bottom__left__like ${
+                  like ? "active" : ""
+                }`}
+              >
+                <span>Like</span>
+              </button>
+              <button
+                className="commentItem__main__content__bottom__left__reply"
+                onClick={() => setOpenInput(!openInput)}
+              >
+                <span>Reply</span>
+              </button>
+            </div>
+            <div className="commentItem__main__content__bottom__right">
+              {likeCount > 0 && (
+                <button>
+                  <span>{likeCount}</span>
+                  <i className="fa-solid fa-circle-heart"></i>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -120,8 +194,31 @@ export default function CommentItem({
           </button>
         )}
       </div>
+      {/* {openEdit && (
+        <div className="btn-more__list">
+          <ul>
+            {currentUser?.id === userId && (
+              <li onClick={() => mutionDelete.mutate()}>
+                <i className="fa-light fa-trash-can"></i>
+                <span>Xóa</span>
+              </li>
+            )}
+            <li>
+              <i className="fa-light fa-flag"></i>
+              <span>Báo cáo bình luận</span>
+            </li>
+          </ul>
+        </div>
+      )} */}
       {openInput && (
-        <CommentInput avatarUrl={Images.AVATAR} level={level + 1} />
+        <CommentInput
+          onPost={(value) => {
+            console.log(value);
+            return {};
+          }}
+          avatarUrl={currentUser?.image_path ?? ""}
+          level={level + 1}
+        />
       )}
     </div>
   );

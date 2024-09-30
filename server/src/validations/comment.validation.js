@@ -22,6 +22,11 @@ export default class commentValidation {
       songId: Joi.string().min(0).max(36).required(),
     }),
   };
+  static deleteComment = {
+    params: Joi.object().keys({
+      commentId: Joi.string().min(0).max(36).required(),
+    }),
+  };
   static getAllCommentsBySongId = {
     ...querySchema,
     params: Joi.object().keys({
